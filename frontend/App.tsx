@@ -488,6 +488,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 ...state,
                 status: newStatus,
                 lastOutcome: null,
+                currentScenario: null,
                 playerStats: newStats,
                 date: newDate,
                 currentProject: newProject,

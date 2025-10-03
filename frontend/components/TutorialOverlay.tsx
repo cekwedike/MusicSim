@@ -220,6 +220,13 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           background: rgba(0, 0, 0, 0.5);
           z-index: 10000;
           pointer-events: auto;
+          overflow: hidden;
+        }
+
+        @media (max-width: 480px) {
+          .tutorial-overlay {
+            background: rgba(0, 0, 0, 0.6);
+          }
         }
 
         .tutorial-highlight-box {

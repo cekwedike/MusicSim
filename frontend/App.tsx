@@ -124,6 +124,10 @@ function gameReducer(state: GameState, action: Action): GameState {
         }
         case 'SELECT_CHOICE': {
             const { outcome } = action.payload;
+            
+            // Track decision in statistics
+            const updatedStatistics = recordDecision(state.statistics, action.payload.text);
+            
             const newStats: PlayerStats = {
                 cash: state.playerStats.cash + outcome.cash,
                 fame: Math.min(100, Math.max(0, state.playerStats.fame + outcome.fame)),
@@ -236,6 +240,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 contractsViewed: newContractsViewed,
                 lessonsViewed: newLessonsViewed,
                 modal: outcome.viewContract ? 'contract' : state.modal,
+                statistics: updatedStatistics,
             };
         }
         case 'DISMISS_OUTCOME': {
@@ -301,6 +306,24 @@ function gameReducer(state: GameState, action: Action): GameState {
                 newDate.year++;
             }
             
+            // Record historical data point every 4 weeks
+            const totalWeeks = (newDate.year - 1) * 48 + (newDate.month - 1) * 4 + newDate.week;
+            let newHistory = [...state.currentHistory];
+            if (totalWeeks % 4 === 0) {
+                newHistory.push({
+                    week: totalWeeks,
+                    cash: newStats.cash,
+                    fame: newStats.fame,
+                    wellBeing: newStats.wellBeing,
+                    hype: newStats.hype,
+                    careerProgress: newStats.careerProgress,
+                    eventDescription: eventsThisWeek.join(' ')
+                });
+            }
+
+            // Update statistics
+            let newStatistics = updateStatistics({...state, playerStats: newStats, date: newDate}, state.statistics);
+
             // 6. Update Staff Contracts
             newStaff.forEach(s => s.contractLength--);
             const expiredStaff = newStaff.find(s => s.contractLength === 0);
@@ -322,6 +345,44 @@ function gameReducer(state: GameState, action: Action): GameState {
                 newGameOverReason = 'burnout';
             }
 
+            // Handle game end
+            if (newStatus === 'gameOver' && newGameOverReason) {
+                // Determine outcome
+                const outcome = newGameOverReason === 'debt' ? 'debt' : 'burnout';
+
+                // Record game end
+                newStatistics = recordGameEnd(
+                    {...state, playerStats: newStats, status: 'gameOver', gameOverReason: newGameOverReason},
+                    newStatistics,
+                    outcome
+                );
+
+                // Save career history
+                const careerHistory: CareerHistory = {
+                    gameId: `game_${Date.now()}`,
+                    artistName: state.artistName,
+                    genre: state.artistGenre,
+                    startDate: state.sessionStartTime,
+                    endDate: Date.now(),
+                    finalStats: newStats,
+                    weeksPlayed: totalWeeks,
+                    outcome: outcome,
+                    historicalData: newHistory,
+                    majorEvents: state.careerLog.map(e => e.description).slice(0, 10),
+                    achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
+                    lessonsLearned: state.lessonsViewed,
+                    contractsSigned: state.currentLabel ? [state.currentLabel.name] : [],
+                    highestCash: Math.max(...newHistory.map(h => h.cash), state.playerStats.cash),
+                    lowestCash: Math.min(...newHistory.map(h => h.cash), state.playerStats.cash),
+                    peakFame: Math.max(...newHistory.map(h => h.fame), state.playerStats.fame),
+                    peakCareerProgress: Math.max(...newHistory.map(h => h.careerProgress), state.playerStats.careerProgress)
+                };
+                saveCareerHistory(careerHistory);
+            }
+
+            // Save statistics after each turn
+            saveStatistics(newStatistics);
+
 
             const milestoneCheck = checkAchievements({...state, achievements: updatedAchievements}, newStats);
             const newCareerLog = eventsThisWeek.length > 0 ? [...state.careerLog, { date: newDate, description: eventsThisWeek.join(' ') }] : state.careerLog;
@@ -340,14 +401,45 @@ function gameReducer(state: GameState, action: Action): GameState {
                 debtTurns: newDebtTurns,
                 burnoutTurns: newBurnoutTurns,
                 gameOverReason: newGameOverReason,
+                statistics: newStatistics,
+                currentHistory: newHistory,
             };
         }
         case 'RESTART': {
-             const newState = generateInitialState(state.artistName, state.artistGenre);
-             return {
-                 ...newState,
-                 status: 'loading',
-             };
+            // Record abandoned career if there was an active game
+            if (state.artistName && state.date.week > 1) {
+                const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+                const updatedStats = recordGameEnd(state, state.statistics, 'abandoned');
+                
+                const careerHistory: CareerHistory = {
+                    gameId: `game_${Date.now()}`,
+                    artistName: state.artistName,
+                    genre: state.artistGenre,
+                    startDate: state.sessionStartTime,
+                    endDate: Date.now(),
+                    finalStats: state.playerStats,
+                    weeksPlayed: totalWeeks,
+                    outcome: 'abandoned',
+                    historicalData: state.currentHistory,
+                    majorEvents: state.careerLog.map(e => e.description).slice(0, 10),
+                    achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
+                    lessonsLearned: state.lessonsViewed,
+                    contractsSigned: state.currentLabel ? [state.currentLabel.name] : [],
+                    highestCash: Math.max(...state.currentHistory.map(h => h.cash), state.playerStats.cash),
+                    lowestCash: Math.min(...state.currentHistory.map(h => h.cash), state.playerStats.cash),
+                    peakFame: Math.max(...state.currentHistory.map(h => h.fame), state.playerStats.fame),
+                    peakCareerProgress: Math.max(...state.currentHistory.map(h => h.careerProgress), state.playerStats.careerProgress)
+                };
+                saveCareerHistory(careerHistory);
+                saveStatistics(updatedStats);
+            }
+
+            const newState = generateInitialState(state.artistName, state.artistGenre);
+            return {
+                ...newState,
+                status: 'loading',
+                statistics: state.statistics // Preserve statistics across restarts
+            };
         }
         case 'VIEW_MANAGEMENT_HUB':
             return { ...state, modal: 'management', unseenAchievements: [] };

@@ -22,3 +22,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.webm
+*.m4v
+*.3gp
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

@@ -143,6 +143,13 @@ export interface ChoiceOutcome {
   fireStaff?: StaffRole;
   renewStaff?: StaffRole;
   signLabel?: string; // ID of the label to sign with
+  lesson?: {
+    title: string;
+    explanation: string; // WHY this outcome happened
+    realWorldExample?: string; // Real artist/industry example
+    tipForFuture: string;
+    conceptTaught?: string; // Links to learning module
+  };
 }
 
 export interface Choice {

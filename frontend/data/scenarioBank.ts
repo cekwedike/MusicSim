@@ -108,6 +108,13 @@ export const scenarioBank: Scenario[] = [
                     text: "You put out feelers and a respected local manager agrees to take you on. Their services aren't cheap, but the relief is immediate.",
                     cash: 0, fame: 0, wellBeing: 10, careerProgress: 0, hype: 0,
                     hireStaff: 'Manager',
+                    lesson: {
+                        title: "The Value of Professional Management",
+                        explanation: "A good manager handles business so you can focus on creativity. They take 10-20% of your income but often increase your earnings by far more through better deals and opportunities.",
+                        realWorldExample: "Davido's manager helped negotiate his Sony Music deal and international collaborations. The 15% management fee paid for itself through better contract terms and global opportunities.",
+                        tipForFuture: "Look for managers with industry connections and a track record of growing artists' careers. Their network and experience are worth the commission.",
+                        conceptTaught: "Contract Basics"
+                    }
                 }
             },
             {
@@ -115,6 +122,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You decide to tough it out, saving the money. Your well-being suffers as you spend another night answering emails instead of writing music.",
                     cash: 0, fame: 0, wellBeing: -10, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "The Hidden Costs of DIY Management",
+                        explanation: "While saving money on management fees seems smart, the time and stress of handling business yourself can hurt your creativity and limit opportunities you might miss.",
+                        realWorldExample: "Many independent artists burn out trying to do everything themselves. Burna Boy initially managed himself but hired professional management as his career grew, allowing him to focus on music.",
+                        tipForFuture: "Calculate the true cost: if you spend 20 hours a week on admin instead of music, what opportunities are you missing? Sometimes paying for help creates more value than it costs.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             }
         ]

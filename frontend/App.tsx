@@ -21,6 +21,7 @@ import ModuleViewer from './components/ModuleViewer';
 import { ContractViewer } from './components/ContractViewer';
 import { StatisticsModal } from './components/StatisticsModal';
 import { TutorialOverlay } from './components/TutorialOverlay';
+import { MistakeWarning } from './components/MistakeWarning';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -704,6 +705,29 @@ function gameReducer(state: GameState, action: Action): GameState {
     }
 }
 
+// Helper function to detect bad choices for beginner mode
+const isBadChoice = (outcome: any, difficulty: Difficulty): boolean => {
+    if (difficulty !== 'beginner') return false;
+    
+    // Define what constitutes a "bad" choice for warnings
+    if (outcome.cash < -1000) return true;
+    if (outcome.wellBeing < -20) return true;
+    if (outcome.fame < -10) return true;
+    if (outcome.careerProgress < -5) return true;
+    
+    return false;
+};
+
+const getPredictedOutcome = (outcome: any): string => {
+    const negativeEffects = [];
+    if (outcome.cash < -500) negativeEffects.push(`lose $${Math.abs(outcome.cash).toLocaleString()}`);
+    if (outcome.wellBeing < -10) negativeEffects.push(`lose ${Math.abs(outcome.wellBeing)} well-being`);
+    if (outcome.fame < -5) negativeEffects.push(`lose ${Math.abs(outcome.fame)} fame`);
+    if (outcome.careerProgress < -3) negativeEffects.push(`lose ${Math.abs(outcome.careerProgress)} career progress`);
+    
+    if (negativeEffects.length === 0) return "This choice might have unexpected negative consequences.";
+    return `This choice will likely make you ${negativeEffects.join(", ")}.`;
+};
 
 const GameScreen: React.FC<{ onStart: () => void, title: string, message: string, buttonText: string }> = ({ onStart, title, message, buttonText }) => (
     <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
@@ -720,6 +744,8 @@ const GameScreen: React.FC<{ onStart: () => void, title: string, message: string
 
 const App: React.FC = () => {
     const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
+    const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
+    const [showMistakeWarning, setShowMistakeWarning] = useState(false);
     const { status, playerStats, currentScenario, lastOutcome, artistName, careerLog, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason } = state;
 
     const fetchNextScenario = useCallback(async (currentState: GameState) => {
@@ -777,7 +803,28 @@ const App: React.FC = () => {
         }
     }, [status, state.statistics.totalGamesPlayed, state.tutorial.completed, state.tutorial.skipped, state.tutorial.active]);
 
-    const handleChoiceSelect = (choice: Choice) => dispatch({ type: 'SELECT_CHOICE', payload: choice });
+    const handleChoiceSelect = (choice: Choice) => {
+        // Check for bad choices in beginner mode
+        if (state.difficulty === 'beginner' && isBadChoice(choice.outcome, state.difficulty)) {
+            setPendingChoice(choice);
+            setShowMistakeWarning(true);
+        } else {
+            dispatch({ type: 'SELECT_CHOICE', payload: choice });
+        }
+    };
+
+    const handleMistakeProceed = () => {
+        if (pendingChoice) {
+            dispatch({ type: 'SELECT_CHOICE', payload: pendingChoice });
+            setPendingChoice(null);
+        }
+        setShowMistakeWarning(false);
+    };
+
+    const handleMistakeReconsider = () => {
+        setPendingChoice(null);
+        setShowMistakeWarning(false);
+    };
     const handleContinue = () => dispatch({ type: 'DISMISS_OUTCOME' });
     const handleStartGame = () => dispatch({ type: 'START_SETUP' });
     const handleRestart = () => dispatch({ type: 'RESTART' });
@@ -864,6 +911,16 @@ const App: React.FC = () => {
                 />
             )}
             {modal === 'statistics' && <StatisticsModal state={state} onClose={handleCloseModal} />}
+
+            {showMistakeWarning && pendingChoice && currentScenario && (
+                <MistakeWarning
+                    scenarioTitle={currentScenario.title}
+                    choiceText={pendingChoice.text}
+                    predictedOutcome={getPredictedOutcome(pendingChoice.outcome)}
+                    onProceed={handleMistakeProceed}
+                    onReconsider={handleMistakeReconsider}
+                />
+            )}
 
             <TutorialOverlay 
                 currentStep={state.tutorial.currentStep}

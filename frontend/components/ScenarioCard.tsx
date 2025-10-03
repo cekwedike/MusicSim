@@ -1,10 +1,12 @@
-import React from 'react';
-import type { Scenario, Choice } from '../types';
+import React, { useState } from 'react';
+import type { Scenario, Choice, Difficulty } from '../types';
+import { getDifficultySettings } from '../data/difficultySettings';
 
 interface ScenarioCardProps {
     scenario: Scenario;
     onChoiceSelect: (choice: Choice) => void;
     disabled: boolean;
+    difficulty: Difficulty;
 }
 
 const ChoiceButton: React.FC<{ choice: Choice; onClick: () => void; disabled: boolean }> = ({ choice, onClick, disabled }) => {

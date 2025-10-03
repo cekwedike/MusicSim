@@ -2,6 +2,10 @@
 
 A strategic business simulation game where players manage music industry careers, making decisions that affect success and reputation.
 
+## 🎬 Demo Video
+
+Watch MusicSim in action: [**View Demo Video**](https://drive.google.com/file/d/1E2-obzi3AOg1L0EgI5tKIaxw-ENmdXg5/view?usp=drive_link)
+
 ## Project Structure
 
 ```

@@ -43,4 +43,10 @@ export const achievements: Omit<Achievement, 'unlocked'>[] = [
     // Learning Achievements
     { id: 'EAGER_STUDENT', name: 'Eager Student', description: 'View 10 different lessons from game scenarios.' },
     { id: 'KNOWLEDGE_SEEKER', name: 'Knowledge Seeker', description: 'View 25 different lessons from game scenarios.' },
+    
+    // Statistics Achievements
+    { id: 'SURVIVOR', name: 'Survivor', description: 'Survive 52 weeks (1 year) in a single career.' },
+    { id: 'VETERAN', name: 'Veteran', description: 'Complete 10 careers.' },
+    { id: 'PERSISTENT', name: 'Persistent', description: 'Survive 104 weeks (2 years) in a single career.' },
+    { id: 'LEGENDARY_CAREER', name: 'Legendary Career', description: 'Survive 208 weeks (4 years) in a single career.' },
 ];

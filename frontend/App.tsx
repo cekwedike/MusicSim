@@ -18,6 +18,7 @@ import SaveLoadModal from './components/SaveLoadModal';
 import LearningHub from './components/LearningHub';
 import ModuleViewer from './components/ModuleViewer';
 import { ContractViewer } from './components/ContractViewer';
+import { StatisticsModal } from './components/StatisticsModal';
 
 const GRACE_PERIOD_WEEKS = 8;
 
@@ -89,6 +90,13 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     // Learning Achievements
     checkAndUnlock('EAGER_STUDENT', state.lessonsViewed.length >= 10);
     checkAndUnlock('KNOWLEDGE_SEEKER', state.lessonsViewed.length >= 25);
+    
+    // Statistics Achievements
+    const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+    checkAndUnlock('SURVIVOR', totalWeeks >= 52);
+    checkAndUnlock('PERSISTENT', totalWeeks >= 104);
+    checkAndUnlock('LEGENDARY_CAREER', totalWeeks >= 208);
+    checkAndUnlock('VETERAN', state.statistics.totalGamesPlayed >= 10);
     
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
@@ -613,6 +621,7 @@ const App: React.FC = () => {
     const handleShowManagementHub = () => dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
     const handleShowSaveLoad = () => dispatch({ type: 'VIEW_SAVE_LOAD' });
     const handleShowLearningHub = () => dispatch({ type: 'VIEW_LEARNING_HUB' });
+    const handleShowStatistics = () => dispatch({ type: 'VIEW_STATISTICS' });
     const handleOpenModule = (module: LearningModule) => dispatch({ type: 'OPEN_MODULE', payload: module });
     const handleCompleteModule = (moduleId: string, score: number, conceptsMastered: string[]) => 
         dispatch({ type: 'COMPLETE_MODULE', payload: { moduleId, score, conceptsMastered } });
@@ -654,6 +663,7 @@ const App: React.FC = () => {
                 onShowManagementHub={handleShowManagementHub}
                 onShowSaveLoad={handleShowSaveLoad}
                 onShowLearningHub={handleShowLearningHub}
+                onShowStatistics={handleShowStatistics}
                 hasUnseenAchievements={unseenAchievements.length > 0}
             />
             
@@ -683,6 +693,7 @@ const App: React.FC = () => {
                     onDecline={handleDeclineContract}
                 />
             )}
+            {modal === 'statistics' && <StatisticsModal state={state} onClose={handleCloseModal} />}
 
             <footer className="text-center p-4 text-gray-500 text-sm">
                 A Music Industry Simulation

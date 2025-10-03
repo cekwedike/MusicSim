@@ -53,18 +53,22 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 // Start server with database connection
+let server;
+let isDatabaseConnected = false;
+
 const startServer = async () => {
   try {
     // Test database connection
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully.');
+    isDatabaseConnected = true;
 
     // Sync models (create tables if they don't exist)
     await sequelize.sync({ alter: false }); // Set to true only during development
     console.log('✅ Database models synchronized.');
 
     // Start listening
-    app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
       console.log(`🚀 MusicSim Backend running on port ${PORT}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
@@ -75,24 +79,66 @@ const startServer = async () => {
     console.error('🔄 Server starting without database connection...');
     
     // Start server anyway (for development)
-    app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
       console.log(`⚠️  MusicSim Backend running on port ${PORT} (NO DATABASE)`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth (limited functionality)`);
       console.log('Database connection failed - some features may not work');
     });
   }
 };
 
 // Graceful shutdown
-process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, shutting down gracefully...');
-  await sequelize.close();
+let isShuttingDown = false;
+
+const gracefulShutdown = async (signal) => {
+  if (isShuttingDown) return;
+  isShuttingDown = true;
+  console.log(`${signal} received, shutting down gracefully...`);
+  
+  try {
+    // Close server first
+    if (server) {
+      await new Promise((resolve) => {
+        server.close(resolve);
+      });
+      console.log('Server closed successfully');
+    }
+    
+    // Close database connection if it was established
+    if (isDatabaseConnected) {
+      await sequelize.close();
+      console.log('Database connection closed successfully');
+    }
+  } catch (error) {
+    console.error('Error during shutdown:', error);
+  }
+  
+  console.log('Shutdown complete');
   process.exit(0);
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  if (!isShuttingDown) {
+    console.log('Exiting due to uncaught exception...');
+    process.exit(1);
+  }
 });
 
-process.on('SIGINT', async () => {
-  console.log('SIGINT received, shutting down gracefully...');
-  await sequelize.close();
-  process.exit(0);
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't exit the process for unhandled rejections in development
+  if (process.env.NODE_ENV === 'production' && !isShuttingDown) {
+    console.log('Exiting due to unhandled rejection in production...');
+    process.exit(1);
+  }
 });
 
 startServer();

@@ -145,6 +145,13 @@ export const scenarioBank: Scenario[] = [
                     text: "You connect with a local booker who has connections to all the best venues. Gigs start rolling in almost immediately.",
                     cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: 0,
                     hireStaff: 'Booker',
+                    lesson: {
+                        title: "The Power of Industry Connections",
+                        explanation: "Bookers have relationships that take years to build. Their network and reputation can open doors that would remain closed to new artists trying to book directly.",
+                        realWorldExample: "Successful booking agents in Lagos and Johannesburg often represent multiple artists, giving them leverage when negotiating with venues and festivals.",
+                        tipForFuture: "Invest in people who have the relationships you need. Their connections are often worth more than their fees.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             },
             {
@@ -152,6 +159,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You spend hours calling venues and promoters with little success. It's a frustrating and demoralizing process.",
                     cash: 0, fame: 0, wellBeing: -10, careerProgress: -2, hype: -5,
+                    lesson: {
+                        title: "The Hidden Costs of DIY Booking",
+                        explanation: "Booking shows requires relationships, negotiation skills, and time. When you do it yourself, you're trading potential creative time for business development.",
+                        realWorldExample: "Many independent artists spend 50% of their time on booking and admin instead of music. This can slow artistic development and limit the quality of new material.",
+                        tipForFuture: "Calculate the true cost: if booking takes 20 hours but only saves you $200, you're working for $10/hour instead of making music.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             }
         ]

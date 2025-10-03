@@ -14,6 +14,8 @@ import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
 import ManagementModal from './components/ManagementModal';
 import SaveLoadModal from './components/SaveLoadModal';
+import LearningHub from './components/LearningHub';
+import ModuleViewer from './components/ModuleViewer';
 
 const GRACE_PERIOD_WEEKS = 8;
 

@@ -50,11 +50,35 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           calculateTooltipPosition(position, currentTutorialStep.position || 'bottom');
         } else {
           setTargetPosition(null);
-          setTooltipPosition({ top: window.innerHeight / 2, left: window.innerWidth / 2 });
+          // Center tooltip when no target element found (mobile-friendly)
+          const isMobile = window.innerWidth <= 480;
+          if (isMobile) {
+            setTooltipPosition({ 
+              top: window.innerHeight / 2 - 100, 
+              left: 8 
+            });
+          } else {
+            setTooltipPosition({ 
+              top: window.innerHeight / 2 - 100, 
+              left: window.innerWidth / 2 - 200 
+            });
+          }
         }
       } else {
         setTargetPosition(null);
-        setTooltipPosition({ top: window.innerHeight / 2, left: window.innerWidth / 2 });
+        // Center tooltip when no target (mobile-friendly)
+        const isMobile = window.innerWidth <= 480;
+        if (isMobile) {
+          setTooltipPosition({ 
+            top: window.innerHeight / 2 - 100, 
+            left: 8 
+          });
+        } else {
+          setTooltipPosition({ 
+            top: window.innerHeight / 2 - 100, 
+            left: window.innerWidth / 2 - 200 
+          });
+        }
       }
     };
 
@@ -63,10 +87,24 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
       if (!tooltipElement) return;
 
       const tooltipRect = tooltipElement.getBoundingClientRect();
-      const margin = 20;
+      const isMobile = window.innerWidth <= 480;
+      const margin = isMobile ? 8 : 20;
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
       let top = 0;
       let left = 0;
 
+      // For mobile, always position at bottom with simpler logic
+      if (isMobile) {
+        // Position tooltip at bottom of screen on mobile
+        top = viewportHeight - tooltipRect.height - margin - 60; // Extra space for mobile UI
+        left = margin;
+        setTooltipPosition({ top, left });
+        return;
+      }
+
+      // Desktop positioning logic
       switch (position) {
         case 'top':
           top = targetPos.top - tooltipRect.height - margin;
@@ -86,15 +124,12 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           break;
         case 'center':
         default:
-          top = window.innerHeight / 2 - tooltipRect.height / 2;
-          left = window.innerWidth / 2 - tooltipRect.width / 2;
+          top = viewportHeight / 2 - tooltipRect.height / 2;
+          left = viewportWidth / 2 - tooltipRect.width / 2;
           break;
       }
 
-      // Ensure tooltip stays within viewport
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      
+      // Ensure tooltip stays within viewport (desktop only)
       if (left < margin) left = margin;
       if (left + tooltipRect.width > viewportWidth - margin) {
         left = viewportWidth - tooltipRect.width - margin;
@@ -198,23 +233,42 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           animation: tutorial-glow 2s ease-in-out infinite;
         }
 
+        @media (max-width: 480px) {
+          .tutorial-highlight-box {
+            border-width: 2px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 15px #4CAF50;
+          }
+        }
+
         .tutorial-tooltip {
-          position: absolute;
+          position: fixed;
           background: #fff;
           border-radius: 12px;
           padding: 16px;
-          max-width: min(400px, calc(100vw - 2rem));
-          min-width: min(250px, calc(100vw - 2rem));
-          width: calc(100vw - 2rem);
+          max-width: calc(100vw - 2rem);
+          min-width: 280px;
+          width: auto;
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
           z-index: 10002;
           font-family: 'Inter', sans-serif;
+          transform-origin: center;
         }
 
-        @media (min-width: 480px) {
+        @media (max-width: 480px) {
           .tutorial-tooltip {
-            width: auto;
+            min-width: calc(100vw - 2rem);
+            max-width: calc(100vw - 1rem);
+            left: 0.5rem !important;
+            right: 0.5rem;
+            width: calc(100vw - 1rem);
+            margin: 0;
+          }
+        }
+
+        @media (min-width: 481px) {
+          .tutorial-tooltip {
             min-width: 300px;
+            max-width: 400px;
             padding: 20px;
           }
         }
@@ -270,16 +324,27 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           justify-content: space-between;
           align-items: center;
           margin-top: 16px;
+          gap: 8px;
         }
 
         .tutorial-button {
-          padding: 8px 16px;
+          padding: 12px 16px;
           border: none;
           border-radius: 6px;
           cursor: pointer;
           font-size: 14px;
           font-weight: 500;
           transition: all 0.2s;
+          min-height: 44px;
+          min-width: 80px;
+          flex: 1;
+        }
+
+        @media (max-width: 480px) {
+          .tutorial-button {
+            font-size: 13px;
+            padding: 10px 12px;
+          }
         }
 
         .tutorial-button.primary {

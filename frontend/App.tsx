@@ -364,7 +364,9 @@ const App: React.FC = () => {
     const handleRestart = () => dispatch({ type: 'RESTART' });
     const handleSetupSubmit = (name: string, genre: string) => dispatch({ type: 'SUBMIT_SETUP', payload: { name, genre } });
     const handleShowManagementHub = () => dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
+    const handleShowSaveLoad = () => dispatch({ type: 'VIEW_SAVE_LOAD' });
     const handleCloseModal = () => dispatch({ type: 'CLOSE_MODAL' });
+    const handleLoadGame = (gameState: GameState) => dispatch({ type: 'LOAD_GAME', payload: gameState });
 
     const renderGameContent = () => {
         switch (status) {
@@ -397,6 +399,7 @@ const App: React.FC = () => {
             <Header 
                 artistName={artistName || undefined} 
                 onShowManagementHub={handleShowManagementHub}
+                onShowSaveLoad={handleShowSaveLoad}
                 hasUnseenAchievements={unseenAchievements.length > 0}
             />
             
@@ -410,6 +413,7 @@ const App: React.FC = () => {
 
             {lastOutcome && <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />}
             {modal === 'management' && <ManagementModal achievements={achievements} events={careerLog} staff={staff} onClose={handleCloseModal}/>}
+            {modal === 'saveload' && <SaveLoadModal isOpen={true} onClose={handleCloseModal} onLoadGame={handleLoadGame} currentGameState={state} />}
 
             <footer className="text-center p-4 text-gray-500 text-sm">
                 A Music Industry Simulation

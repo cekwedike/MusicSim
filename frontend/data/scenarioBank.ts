@@ -339,10 +339,10 @@ export const scenarioBank: Scenario[] = [
                     cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
                     viewContract: 'Vinyl Heart Records',
                     lesson: {
-                        title: "Indie Labels vs Major Labels",
-                        explanation: "Indie labels typically offer smaller advances but better royalty rates and creative control. They're more nimble and can give new artists more personal attention.",
-                        realWorldExample: "Chocolate City is a prominent indie label in Nigeria that maintained artists' creative freedom while providing industry connections. Artists like M.I Abaga thrived under their more flexible approach.",
-                        tipForFuture: "Indie deals often have better terms for digital revenue and shorter contract periods. Consider if creative control and higher royalty percentages outweigh smaller advances.",
+                        title: "Smart Contract Review",
+                        explanation: "Always review contracts carefully before signing. Understanding terms, royalty rates, and creative control clauses can save your career from predatory deals.",
+                        realWorldExample: "Many successful artists credit reading their contracts carefully with avoiding career-damaging deals. Frank Ocean famously reviewed his contract loopholes to regain control of his music.",
+                        tipForFuture: "Never sign a music contract without understanding every clause. When in doubt, consult a music attorney or experienced industry professional.",
                         conceptTaught: "Contract Basics"
                     }
                 }
@@ -391,10 +391,10 @@ export const scenarioBank: Scenario[] = [
                     cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
                     viewContract: 'Visionary Music Group',
                     lesson: {
-                        title: "Long-term Value vs Short-term Money",
-                        explanation: "Higher royalty rates mean you earn more from each sale/stream over time. If your music has staying power, this can be far more valuable than a large advance.",
-                        realWorldExample: "Taylor Swift's conflicts with her label over master ownership show the importance of long-term rights. Artists with better royalty deals often earn more over their careers than those who took bigger advances.",
-                        tipForFuture: "Consider your confidence in your music's longevity. If you believe your music will sell/stream well long-term, higher royalties often outperform large advances.",
+                        title: "Comparing Multiple Offers",
+                        explanation: "When you have multiple label offers, compare them systematically: advance amounts, royalty rates, creative control, marketing support, and contract length.",
+                        realWorldExample: "Successful artists often have multiple labels bidding for them. The key is comparing the total package, not just the upfront money.",
+                        tipForFuture: "Create a comparison chart of all contract terms when evaluating multiple offers. The best deal balances money, creative freedom, and career support.",
                         conceptTaught: "Rights and Royalties"
                     }
                 }

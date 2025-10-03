@@ -16,14 +16,72 @@ export interface Staff {
 }
 
 export interface PlayerStats {
-  cash: number;
-  fame: number;
-  wellBeing: number;
-  careerProgress: number;
-  hype: number;
+    cash: number;
+    fame: number;
+    wellBeing: number;
+    careerProgress: number;
+    hype: number;
 }
 
-export interface Project {
+export interface GameStatistics {
+    totalWeeksPlayed: number;
+    totalGamesPlayed: number;
+    longestCareerWeeks: number;
+    averageCareerLength: number;
+    totalCashEarned: number;
+    totalCashSpent: number;
+    highestCash: number;
+    lowestCash: number;
+    timesInDebt: number;
+    totalDecisionsMade: number;
+    choiceDistribution: Record<string, number>;
+    achievementsUnlocked: number;
+    modulesCompleted: number;
+    averageQuizScore: number;
+    lessonsViewed: number;
+    conceptsMastered: string[];
+    gamesLostToDebt: number;
+    gamesLostToBurnout: number;
+    careersAbandoned: number;
+    highestFameReached: number;
+    highestHypeReached: number;
+    highestCareerProgressReached: number;
+    projectsReleased: number;
+    firstGameDate: number;
+    lastGameDate: number;
+    favoriteGenre: string;
+    totalPlayTimeMinutes: number;
+}
+
+export interface HistoricalDataPoint {
+    week: number;
+    cash: number;
+    fame: number;
+    wellBeing: number;
+    hype: number;
+    careerProgress: number;
+    eventDescription?: string;
+}
+
+export interface CareerHistory {
+    gameId: string;
+    artistName: string;
+    genre: string;
+    startDate: number;
+    endDate: number;
+    finalStats: PlayerStats;
+    weeksPlayed: number;
+    outcome: 'debt' | 'burnout' | 'abandoned';
+    historicalData: HistoricalDataPoint[];
+    majorEvents: string[];
+    achievementsEarned: string[];
+    lessonsLearned: string[];
+    contractsSigned: string[];
+    highestCash: number;
+    lowestCash: number;
+    peakFame: number;
+    peakCareerProgress: number;
+}export interface Project {
     id: string;
     name: string;
     progress: number;
@@ -124,30 +182,38 @@ export interface PlayerKnowledge {
 }
 
 export interface GameState {
-  status: 'start' | 'setup' | 'playing' | 'loading' | 'gameOver' | 'gameWon';
-  playerStats: PlayerStats;
-  artistName: string;
-  artistGenre: string;
-  currentScenario: Scenario | null;
-  lastOutcome: ChoiceOutcome | null;
-  careerLog: GameEvent[];
-  date: GameDate;
-  usedScenarioTitles: string[];
-  achievements: Achievement[];
-  currentProject: Project | null;
-  unseenAchievements: string[];
-  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer' | 'contract';
-  currentModule: LearningModule | null;
-  playerKnowledge: PlayerKnowledge;
-  lessonsViewed: string[];
-  currentLabelOffer: RecordLabel | null;
-  contractsViewed: string[];
-  consecutiveFallbackCount: number;
-  staff: Staff[];
-  currentLabel: RecordLabel | null;
-  debtTurns: number;
-  burnoutTurns: number;
-  gameOverReason: 'debt' | 'burnout' | null;
+    status: 'start' | 'setup' | 'playing' | 'loading' | 'gameOver';
+    playerStats: PlayerStats;
+    artistName: string;
+    artistGenre: string;
+    currentScenario: Scenario | null;
+    lastOutcome: ChoiceOutcome | null;
+    careerLog: { date: GameDate, description: string }[];
+    date: GameDate;
+    usedScenarioTitles: string[];
+    achievements: Achievement[];
+    currentProject: Project | null;
+    unseenAchievements: string[];
+    modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer' | 'contract' | 'statistics';
+    currentModule: LearningModule | null;
+    playerKnowledge: {
+        completedModules: string[];
+        moduleScores: Record<string, number>;
+        quizAttempts: Record<string, number>;
+        conceptsMastered: string[];
+    };
+    lessonsViewed: string[];
+    consecutiveFallbackCount: number;
+    staff: Staff[];
+    currentLabel: RecordLabel | null;
+    currentLabelOffer: RecordLabel | null;
+    contractsViewed: string[];
+    debtTurns: number;
+    burnoutTurns: number;
+    gameOverReason: 'debt' | 'burnout' | null;
+    statistics: GameStatistics;
+    currentHistory: HistoricalDataPoint[];
+    sessionStartTime: number;
 }
 
 export interface ChoiceOutcome {
@@ -216,6 +282,7 @@ export type Action =
   | { type: 'VIEW_MANAGEMENT_HUB' }
   | { type: 'VIEW_SAVE_LOAD' }
   | { type: 'VIEW_LEARNING_HUB' }
+  | { type: 'VIEW_STATISTICS' }
   | { type: 'OPEN_MODULE'; payload: LearningModule }
   | { type: 'COMPLETE_MODULE'; payload: { moduleId: string; score: number; conceptsMastered: string[] } }
   | { type: 'CLOSE_MODULE' }

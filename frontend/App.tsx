@@ -2,6 +2,7 @@ import React, { useReducer, useCallback, useEffect, useState } from 'react';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { autoSave, loadGame, isStorageAvailable } from './services/storageService';
+import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory } from './services/statisticsService';
 import { achievements as allAchievements } from './data/achievements';
 import { projects as allProjects } from './data/projects';
 import { staff as allStaff } from './data/staff';
@@ -58,6 +59,9 @@ const generateInitialState = (artistName = '', artistGenre = ''): GameState => {
         debtTurns: 0,
         burnoutTurns: 0,
         gameOverReason: null,
+        statistics: loadStatistics(),
+        currentHistory: [],
+        sessionStartTime: Date.now(),
     };
 };
 

@@ -79,6 +79,10 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     checkAndUnlock('CAREER_50', newStats.careerProgress >= 50);
     checkAndUnlock('STAFF_FULL_TEAM', state.staff.length === 3);
     
+    // Learning Achievements
+    checkAndUnlock('EAGER_STUDENT', state.lessonsViewed.length >= 10);
+    checkAndUnlock('KNOWLEDGE_SEEKER', state.lessonsViewed.length >= 25);
+    
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
 
@@ -170,7 +174,13 @@ function gameReducer(state: GameState, action: Action): GameState {
                 }
             }
 
-            const milestoneCheck = checkAchievements({...state, staff: newStaff}, newStats);
+            // Track lesson viewing
+            let newLessonsViewed = [...state.lessonsViewed];
+            if (outcome.lesson && !newLessonsViewed.includes(outcome.lesson.title)) {
+                newLessonsViewed.push(outcome.lesson.title);
+            }
+
+            const milestoneCheck = checkAchievements({...state, staff: newStaff, lessonsViewed: newLessonsViewed}, newStats);
             updatedAchievements = milestoneCheck.achievements;
             newUnseenAchievements = [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])];
 
@@ -184,6 +194,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 unseenAchievements: newUnseenAchievements,
                 staff: newStaff,
                 currentLabel: newLabel,
+                lessonsViewed: newLessonsViewed,
             };
         }
         case 'DISMISS_OUTCOME': {

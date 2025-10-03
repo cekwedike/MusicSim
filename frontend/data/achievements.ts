@@ -34,4 +34,8 @@ export const achievements: Omit<Achievement, 'unlocked'>[] = [
     { id: 'VIRAL_HIT', name: 'Viral Sensation', description: 'Have a song go viral online.' },
     { id: 'CRITICAL_DARLING', name: 'For the Critics', description: 'Receive a glowing review for a daring performance.' },
     { id: 'BURNOUT_RECOVERY', name: 'Bounced Back', description: 'Recover from a serious burnout.' },
+    
+    // Learning Achievements
+    { id: 'EAGER_STUDENT', name: 'Eager Student', description: 'View 10 different lessons from game scenarios.' },
+    { id: 'KNOWLEDGE_SEEKER', name: 'Knowledge Seeker', description: 'View 25 different lessons from game scenarios.' },
 ];

@@ -1025,6 +1025,256 @@ export const scenarioBank: Scenario[] = [
             }
         ]
     },
+    {
+        title: "The Producer's Royalty Demand",
+        description: "The producer who made your biggest hit drops a bombshell: 'I want 50% of all streaming royalties, not just the beat sale price. This song is half my creation.' They threaten to block the release if you don't agree. Your lawyer says they might have a case since their production is so distinctive. But 50% seems excessive. The song could be your breakthrough.",
+        conditions: { minFame: 25, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Give them 50% - I need this song released",
+                outcome: {
+                    text: "You agree to the 50/50 split. The song releases and becomes a massive hit, earning $50,000 in streaming revenue. You each get $25,000, which stings because you wrote the lyrics and melody. The producer now demands similar splits on all future collaborations. You've set an expensive precedent.",
+                    cash: 25000, fame: 45, wellBeing: -15, careerProgress: 12, hype: 50,
+                    lesson: {
+                        title: "Producer Rights and Splits",
+                        explanation: "Producers who create distinctive, recognizable beats often deserve significant royalty shares, especially if their production is the song's defining element. However, 50/50 splits should be reserved for truly equal creative partnerships.",
+                        realWorldExample: "In Afrobeats, producers like Masterkraft and LeriQ often get 20-30% of publishing because their beats are so distinctive. However, 50/50 splits are rare unless the producer also co-writes melodies and lyrics.",
+                        tipForFuture: "Negotiate producer splits before recording. Establish clear agreements about what percentage different contributions earn to avoid expensive disputes later.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Counter with 25% - that's fair for production",
+                outcome: {
+                    text: "You negotiate down to 25% for the producer, 75% for you as the songwriter and performer. After some back-and-forth, they accept. The song releases successfully, and the split feels fair to both parties. You've established a sustainable working relationship without giving away half your income.",
+                    cash: 37500, fame: 40, wellBeing: 5, careerProgress: 10, hype: 45,
+                    lesson: {
+                        title: "Fair Collaboration Splits",
+                        explanation: "Successful long-term collaborations require splits that feel fair to all parties. 25-30% for distinctive production work is often acceptable, while maintaining songwriter and performer rights.",
+                        realWorldExample: "Most successful African producer-artist partnerships use 20-30% producer splits, allowing both parties to profit fairly while maintaining sustainable working relationships.",
+                        tipForFuture: "Aim for splits that both parties can live with long-term. Extreme splits often damage relationships and future collaboration opportunities.",
+                        conceptTaught: "Negotiation Basics"
+                    }
+                }
+            },
+            {
+                text: "Find a new producer - I won't be held hostage",
+                outcome: {
+                    text: "You refuse their demands and find a different producer to recreate the vibe. The new version is good but lacks the magic of the original. You maintain control of your royalties but lose precious time and momentum. The replacement song performs moderately, not the breakthrough you needed.",
+                    cash: 15000, fame: 20, wellBeing: -10, careerProgress: 5, hype: 25,
+                    lesson: {
+                        title: "The Cost of Starting Over",
+                        explanation: "Sometimes walking away from unreasonable demands is necessary, but it comes with costs. Lost time, momentum, and the challenge of recreating magic can hurt your career progress.",
+                        realWorldExample: "Some artists have walked away from great beats due to producer disputes, only to struggle recreating the same energy. The principle may be right, but the career impact can be significant.",
+                        tipForFuture: "Consider the full cost of standing firm. Sometimes accepting less favorable terms is better than losing breakthrough opportunities.",
+                        conceptTaught: "Strategic Decision Making"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Collecting Society Registration",
+        description: "A music lawyer advises you to register with COSON (Nigeria) or COSOMA (Botswana) - the local collecting society that monitors radio play and collects royalties. Registration costs $200, plus annual fees, but they claim you're losing thousands in uncollected radio royalties. 'Every time your song plays on radio, TV, or in public spaces, you should get paid.' But many artists say these societies are inefficient and keep most of the money.",
+        conditions: { minFame: 35, minCash: 300 },
+        once: true,
+        choices: [
+            {
+                text: "Register with the collecting society - protect my rights",
+                outcome: {
+                    text: "You register and start receiving quarterly royalty checks. The amounts are smaller than promised - about $300 per quarter - but it's passive income for music you already made. You also gain legal protection when venues use your music without permission. It's not life-changing money, but it adds up.",
+                    cash: -200, fame: 0, wellBeing: 5, careerProgress: 5, hype: 0,
+                    lesson: {
+                        title: "Collecting Society Reality",
+                        explanation: "Collecting societies in African markets often provide modest but consistent income from public performance rights. While the amounts may be smaller than advertised, they provide passive income and legal protection.",
+                        realWorldExample: "COSON and similar organizations across Africa collect millions in royalties, though individual artist payments are often modest. However, consistent registration helps establish your professional standing in the industry.",
+                        tipForFuture: "View collecting societies as one small piece of your income puzzle, not a major revenue source. The legal protection and legitimacy may be worth more than the money.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Skip it - these societies don't pay artists fairly anyway",
+                outcome: {
+                    text: "You decide not to register, keeping your $200. Over the next year, you notice your songs playing in shops, clubs, and on radio but receive no payment. A venue uses your music in a commercial without permission, and you have no legal recourse. You've saved money upfront but lost ongoing revenue and protection.",
+                    cash: 0, fame: 0, wellBeing: -5, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "The Cost of Not Protecting Rights",
+                        explanation: "While collecting societies have flaws, not registering means forfeiting all public performance income and legal protections. Even modest collections add up over time.",
+                        realWorldExample: "Many African artists who avoid collecting societies miss out on legitimate royalty income. While the systems aren't perfect, registration provides basic protection and income that unregistered artists forfeit entirely.",
+                        tipForFuture: "Don't let perfect be the enemy of good. Imperfect protection is better than no protection when it comes to your intellectual property.",
+                        conceptTaught: "Rights Protection"
+                    }
+                }
+            },
+            {
+                text: "Research alternatives - maybe there's a better way",
+                outcome: {
+                    text: "You spend time researching international alternatives like ASCAP, BMI, or PRS. You discover that as an African artist, you can register with multiple societies for different territories. This complex approach requires more paperwork but potentially higher royalties from international markets.",
+                    cash: -100, fame: 0, wellBeing: -5, careerProgress: 8, hype: 0,
+                    lesson: {
+                        title: "International Rights Strategy",
+                        explanation: "African artists can often register with multiple collecting societies in different territories to maximize royalty collection. This requires more administrative work but can increase income from international airplay.",
+                        realWorldExample: "Successful African artists often register with local societies plus international ones like PRS (UK) or ASCAP (US) to collect royalties when their music plays in those territories.",
+                        tipForFuture: "As your music gains international exposure, consider multi-territory registration strategies. More paperwork can mean significantly more income.",
+                        conceptTaught: "International Rights"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Sample Clearance Nightmare",
+        description: "You want to sample a classic Fela Kuti horn line for your new album's lead single. The sample is perfect - it gives your track instant credibility and connects you to Afrobeat royalty. But clearing the sample will cost $10,000 upfront plus 50% of your publishing. Fela's estate is notoriously difficult about clearances. Your producer suggests: 'Just replay it with different musicians. Who's going to notice?'",
+        conditions: { minFame: 30, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Pay for proper sample clearance - do it legally",
+                outcome: {
+                    text: "You pay the $10,000 and agree to the 50% publishing split. The song releases with official Fela Kuti credited as co-writer. Music critics praise your respect for the legend. The official clearance gives you credibility, but the costs eat heavily into your profits. At least you sleep well at night.",
+                    cash: -10000, fame: 35, wellBeing: 10, careerProgress: 12, hype: 40,
+                    lesson: {
+                        title: "The Value of Legal Sampling",
+                        explanation: "Proper sample clearance is expensive but provides legal protection and artistic credibility. Official clearances show respect for original artists and protect you from lawsuits, even if they reduce profits.",
+                        realWorldExample: "Many international artists who sample African music now pay proper clearances after high-profile legal battles. This has created new revenue streams for African artist estates and families.",
+                        tipForFuture: "Budget for sample clearances early in your creative process. Legal sampling costs are part of professional music production.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Replay the sample with session musicians - avoid the costs",
+                outcome: {
+                    text: "You hire horn players to recreate the Fela melody with slight modifications. The result is legally distinct but captures the vibe you wanted. You save $10,000 and keep full publishing. However, some fans and critics notice the similarity and question your creativity. You've saved money but raised ethical questions.",
+                    cash: -2000, fame: 25, wellBeing: -5, careerProgress: 8, hype: 30,
+                    lesson: {
+                        title: "Interpolation vs Sampling",
+                        explanation: "Recreating melodies or rhythms with new performances can avoid clearance costs while achieving similar artistic goals. However, this approach can still raise ethical questions about attribution and creativity.",
+                        realWorldExample: "Many artists recreate famous melodies to avoid sampling costs. While legally safer, the practice can be controversial if the borrowing is too obvious or unacknowledged.",
+                        tipForFuture: "If you interpolate existing works, consider crediting the original artists even when not legally required. Respect builds better industry relationships.",
+                        conceptTaught: "Creative Ethics"
+                    }
+                }
+            },
+            {
+                text: "Create something completely original inspired by Fela's style",
+                outcome: {
+                    text: "You abandon the sample and create new horn arrangements inspired by Fela's style without copying specific melodies. The result is fresh, original, and undeniably yours. Critics praise your ability to honor influences while creating something new. You keep all publishing and build your reputation as an original artist.",
+                    cash: -1000, fame: 30, wellBeing: 15, careerProgress: 15, hype: 35,
+                    lesson: {
+                        title: "Inspiration vs Imitation",
+                        explanation: "Drawing inspiration from musical legends while creating original content builds artistic credibility and avoids legal complications. Original compositions allow you to honor influences while establishing your unique voice.",
+                        realWorldExample: "Artists like Burna Boy draw heavily from Fela's influence without directly sampling, creating music that feels connected to the tradition while being completely original.",
+                        tipForFuture: "Let influences inspire new creations rather than direct copies. Original music gives you full control and builds your artistic identity.",
+                        conceptTaught: "Creative Development"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Video Budget Decision",
+        description: "Your breakthrough single needs a video, and you have three options. A high-end director wants $25,000 for a cinematic video with locations across Lagos and professional dancers. A mid-tier director offers $8,000 for a solid performance video. Your friend with a good camera says he'll do it for $1,000 plus food. YouTube success stories show both expensive flops and phone-shot viral hits. How much is the right investment?",
+        conditions: { minFame: 20, minHype: 30, requiredAchievementId: 'PROJECT_SINGLE_1' },
+        once: true,
+        choices: [
+            {
+                text: "Go big with the $25,000 cinematic video",
+                outcome: {
+                    text: "The video is stunning! Professional cinematography, beautiful locations, and high production values. It gets featured on MTV Base and major blogs. However, the song's success doesn't match the video's quality. You spent your entire budget on one video and have no money left for promotion or the next project.",
+                    cash: -25000, fame: 40, wellBeing: -10, careerProgress: 10, hype: 45,
+                    lesson: {
+                        title: "Production Value vs Budget Balance",
+                        explanation: "High-budget videos can create impressive content but may not guarantee proportional returns. Spending your entire budget on one video can limit other important investments like promotion and future projects.",
+                        realWorldExample: "Some African artists have spent their entire advance money on expensive videos without leaving funds for tour support or follow-up singles, limiting their ability to capitalize on initial success.",
+                        tipForFuture: "Consider the total cost of your campaign. An expensive video is worthless if you can't afford to promote it or create follow-up content.",
+                        conceptTaught: "Budget Management"
+                    }
+                }
+            },
+            {
+                text: "Choose the $8,000 professional middle ground",
+                outcome: {
+                    text: "The video looks professional and polished without breaking the bank. Good lighting, solid editing, and professional execution help your song get playlist consideration. You have budget left for promotion and your next single. The balanced approach allows sustainable growth rather than one expensive gamble.",
+                    cash: -8000, fame: 30, wellBeing: 5, careerProgress: 12, hype: 35,
+                    lesson: {
+                        title: "Strategic Budget Allocation",
+                        explanation: "Mid-tier professional videos often provide the best return on investment, offering quality production without exhausting your budget. This approach allows for sustainable content creation and proper promotion.",
+                        realWorldExample: "Many successful African artists built their careers with consistently good mid-budget videos rather than one expensive production. Regular, quality content often outperforms sporadic expensive content.",
+                        tipForFuture: "Aim for sustainable quality over one-time extravagance. Consistent professional content builds careers better than occasional expensive pieces.",
+                        conceptTaught: "Content Strategy"
+                    }
+                }
+            },
+            {
+                text: "Go DIY with your friend for $1,000 - creativity over budget",
+                outcome: {
+                    text: "Your friend surprises everyone with creative camera work and innovative editing. The raw, authentic feel resonates with fans who appreciate the genuine approach. The video goes viral on TikTok for its creativity rather than its budget. You prove that ideas matter more than money, and have budget left for everything else.",
+                    cash: -1000, fame: 35, wellBeing: 10, careerProgress: 8, hype: 50,
+                    lesson: {
+                        title: "Creativity Over Budget",
+                        explanation: "Innovative, authentic content can outperform expensive productions if the creative vision is strong. Social media audiences often prefer genuine, creative content over polished but generic videos.",
+                        realWorldExample: "Many viral African music videos were shot on modest budgets with creative concepts. Artists like Rema gained initial recognition with relatively simple but highly creative videos.",
+                        tipForFuture: "Focus on creative concepts that match your resources. A great idea with modest execution often beats a weak concept with high production values.",
+                        conceptTaught: "Creative Innovation"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The International Collaboration Offer",
+        description: "A mid-level American R&B artist wants to collaborate on a song for their upcoming album. They offer to fly you to Atlanta, cover all expenses, and split the song 50/50. But they want to own the master recording and handle all distribution through their US label. Your manager warns: 'You'll get writing credits but no control. If this song blows up, you won't own any of the recording.' The exposure could be massive, but the terms feel one-sided.",
+        conditions: { minFame: 40, maxFame: 80 },
+        once: true,
+        choices: [
+            {
+                text: "Take the deal - international exposure is worth the trade-off",
+                outcome: {
+                    text: "You fly to Atlanta and create an amazing song together. It becomes their biggest hit and gets radio play across America. You gain massive international recognition and new opportunities, but watch them earn millions from the master recording while you only get songwriting royalties. The exposure was valuable, but expensive.",
+                    cash: 15000, fame: 50, wellBeing: -5, careerProgress: 20, hype: 40,
+                    lesson: {
+                        title: "Exposure vs Ownership Trade-offs",
+                        explanation: "International collaborations can provide massive exposure but often require giving up ownership rights. The key is evaluating whether the career boost justifies the financial sacrifice.",
+                        realWorldExample: "Many African artists gained international recognition through collaborations where they gave up master ownership. While financially costly, these partnerships often led to bigger opportunities and eventual leverage for better deals.",
+                        tipForFuture: "Consider international collaborations as marketing investments. If the exposure leads to bigger opportunities, the ownership sacrifice might be worthwhile.",
+                        conceptTaught: "International Strategy"
+                    }
+                }
+            },
+            {
+                text: "Negotiate for master ownership split or walk away",
+                outcome: {
+                    text: "You demand joint master ownership and equal distribution rights. After tense negotiations, they agree to a compromise: joint ownership with their label handling distribution but you keeping international rights outside the US. The collaboration happens on fairer terms, though the process was stressful.",
+                    cash: 25000, fame: 45, wellBeing: 5, careerProgress: 18, hype: 35,
+                    lesson: {
+                        title: "International Negotiation Leverage",
+                        explanation: "Strong negotiation can improve international collaboration terms, especially when you bring unique value. African artists increasingly have leverage to demand fairer deals as Afrobeats gains global popularity.",
+                        realWorldExample: "As Afrobeats has grown globally, African artists have gained more negotiating power in international collaborations. Artists like Burna Boy and Wizkid now command equal terms with international partners.",
+                        tipForFuture: "Don't accept the first international offer. As African music gains global respect, your negotiating position is stronger than you might think.",
+                        conceptTaught: "Negotiation Power"
+                    }
+                }
+            },
+            {
+                text: "Decline and focus on building my home market first",
+                outcome: {
+                    text: "You turn down the collaboration to focus on strengthening your African base. Six months later, you're the biggest artist in your region with multiple hit songs. When international offers come again, you have much more leverage. Patience allowed you to negotiate from a position of strength.",
+                    cash: 5000, fame: 60, wellBeing: 10, careerProgress: 15, hype: 55,
+                    lesson: {
+                        title: "Building Leverage Through Regional Success",
+                        explanation: "Strong regional success provides leverage for better international deals. Sometimes declining early international offers allows you to build the market position needed for fairer partnerships.",
+                        realWorldExample: "Artists like Davido built massive African followings before pursuing international collaborations, giving them negotiating power to demand equal terms and ownership rights.",
+                        tipForFuture: "Don't rush into international deals from a weak position. Build your regional strength first to negotiate better international terms later.",
+                        conceptTaught: "Strategic Timing"
+                    }
+                }
+            }
+        ]
+    },
     // ... (include more diverse scenarios here)
 ];
 

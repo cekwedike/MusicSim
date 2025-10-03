@@ -70,6 +70,22 @@ export interface TutorialState {
   startTime?: number;
 }
 
+export type Difficulty = 'beginner' | 'realistic' | 'hardcore';
+
+export interface DifficultySettings {
+  name: string;
+  description: string;
+  startingCash: number;
+  gracePeriodWeeks: number;
+  mistakeForgiveness: boolean;
+  scenarioHints: boolean;
+  statsDecayRate: number;
+  salaryMultiplier: number;
+  advanceMultiplier: number;
+  debtInterest: boolean;
+  randomEvents: boolean;
+}
+
 export interface RecordLabel {
     id: string;
     name: string;
@@ -233,6 +249,9 @@ export interface GameState {
   currentHistory: HistoricalDataPoint[];
   sessionStartTime: number;
   tutorial: TutorialState;
+  difficulty: Difficulty;
+  mistakesMade: number;
+  lastMistakeWeek: number;
 }
 
 export interface ChoiceOutcome {

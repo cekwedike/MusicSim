@@ -431,7 +431,7 @@ function gameReducer(state: GameState, action: Action): GameState {
             
             let newDebtTurns = newStats.cash < 0 ? state.debtTurns + 1 : 0;
             let newBurnoutTurns = newStats.wellBeing <= 0 ? state.burnoutTurns + 1 : 0;
-            let newStatus: GameState['status'] = 'loading';
+            let newStatus: GameState['status'] = 'playing';
             let newGameOverReason: GameState['gameOverReason'] = null;
 
             if (newDebtTurns > gracePeriod) {

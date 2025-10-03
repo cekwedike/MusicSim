@@ -213,6 +213,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 currentLabelOffer: newLabelOffer,
                 contractsViewed: newContractsViewed,
                 lessonsViewed: newLessonsViewed,
+                modal: outcome.viewContract ? 'contract' : state.modal,
             };
         }
         case 'DISMISS_OUTCOME': {
@@ -540,6 +541,13 @@ const App: React.FC = () => {
                     module={state.currentModule} 
                     onComplete={handleCompleteModule}
                     onClose={handleCloseModule}
+                />
+            )}
+            {modal === 'contract' && state.currentLabelOffer && (
+                <ContractViewer 
+                    label={state.currentLabelOffer}
+                    onSign={handleSignContract}
+                    onDecline={handleDeclineContract}
                 />
             )}
 

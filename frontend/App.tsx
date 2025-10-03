@@ -16,6 +16,7 @@ import ManagementModal from './components/ManagementModal';
 import SaveLoadModal from './components/SaveLoadModal';
 import LearningHub from './components/LearningHub';
 import ModuleViewer from './components/ModuleViewer';
+import { ContractViewer } from './components/ContractViewer';
 
 const GRACE_PERIOD_WEEKS = 8;
 
@@ -52,6 +53,8 @@ const generateInitialState = (artistName = '', artistGenre = ''): GameState => {
         consecutiveFallbackCount: 0,
         staff: [],
         currentLabel: null,
+        currentLabelOffer: null,
+        contractsViewed: [],
         debtTurns: 0,
         burnoutTurns: 0,
         gameOverReason: null,
@@ -162,6 +165,19 @@ function gameReducer(state: GameState, action: Action): GameState {
             
             // Handle Label signing
             let newLabel: RecordLabel | null = state.currentLabel;
+            let newLabelOffer: RecordLabel | null = state.currentLabelOffer;
+            let newContractsViewed = [...state.contractsViewed];
+            
+            if(outcome.viewContract) {
+                const labelTemplate = allLabels.find(l => l.name === outcome.viewContract);
+                if(labelTemplate) {
+                    newLabelOffer = labelTemplate;
+                    if (!newContractsViewed.includes(labelTemplate.name)) {
+                        newContractsViewed.push(labelTemplate.name);
+                    }
+                }
+            }
+            
             if(outcome.signLabel) {
                 const labelTemplate = allLabels.find(l => l.id === outcome.signLabel);
                 if(labelTemplate) {
@@ -194,6 +210,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 unseenAchievements: newUnseenAchievements,
                 staff: newStaff,
                 currentLabel: newLabel,
+                currentLabelOffer: newLabelOffer,
+                contractsViewed: newContractsViewed,
                 lessonsViewed: newLessonsViewed,
             };
         }
@@ -352,6 +370,42 @@ function gameReducer(state: GameState, action: Action): GameState {
             return { ...state, modal: 'learning', currentModule: null };
         case 'CLOSE_MODAL':
             return { ...state, modal: 'none', currentModule: null };
+        case 'VIEW_CONTRACT':
+            return { ...state, modal: 'contract' };
+        case 'SIGN_CONTRACT': {
+            if (!state.currentLabelOffer) return state;
+            
+            const newStats = { ...state.playerStats };
+            newStats.cash += state.currentLabelOffer.terms.advance;
+            newStats.fame += 10;
+            newStats.hype += 15;
+            newStats.careerProgress += 10;
+            
+            let updatedAchievements = [...state.achievements];
+            let newUnseenAchievements = [...state.unseenAchievements];
+            
+            const signAchievement = updatedAchievements.find(a => a.id === `SIGNED_${state.currentLabelOffer.id}`);
+            if (signAchievement && !signAchievement.unlocked) {
+                signAchievement.unlocked = true;
+                newUnseenAchievements = [...newUnseenAchievements, signAchievement.id];
+            }
+            
+            return {
+                ...state,
+                playerStats: newStats,
+                currentLabel: state.currentLabelOffer,
+                currentLabelOffer: null,
+                modal: 'none',
+                achievements: updatedAchievements,
+                unseenAchievements: newUnseenAchievements,
+                careerLog: [...state.careerLog, { 
+                    date: state.date, 
+                    description: `Signed with ${state.currentLabelOffer.name}! Received ${state.currentLabelOffer.terms.advance.toLocaleString()} advance.` 
+                }]
+            };
+        }
+        case 'DECLINE_CONTRACT':
+            return { ...state, currentLabelOffer: null, modal: 'none' };
         case 'LOAD_GAME':
             return { ...action.payload, status: 'playing' };
         default:
@@ -429,6 +483,9 @@ const App: React.FC = () => {
     const handleCloseModule = () => dispatch({ type: 'CLOSE_MODULE' });
     const handleCloseModal = () => dispatch({ type: 'CLOSE_MODAL' });
     const handleLoadGame = (gameState: GameState) => dispatch({ type: 'LOAD_GAME', payload: gameState });
+    const handleViewContract = () => dispatch({ type: 'VIEW_CONTRACT' });
+    const handleSignContract = () => dispatch({ type: 'SIGN_CONTRACT' });
+    const handleDeclineContract = () => dispatch({ type: 'DECLINE_CONTRACT' });
 
     const renderGameContent = () => {
         switch (status) {

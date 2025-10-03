@@ -4,13 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently --kill-others --prefix-colors \"cyan,magenta\" --prefix \"{name}\" \"npm:dev:frontend\" \"npm:dev:backend\"",
+    "dev:frontend": "vite --host",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:all": "npm run dev",
     "build": "vite build",
     "preview": "vite preview",
-    "dev:frontend": "vite",
-    "dev:backend": "cd backend && npm run dev",
-    "install:backend": "cd backend && npm install",
-    "dev:all": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+    "start": "concurrently --kill-others --prefix-colors \"cyan,magenta\" --prefix \"{name}\" \"npm run preview\" \"npm run start:backend\"",
+    "start:backend": "cd backend && npm start",
+    "install:all": "npm install && npm run install:backend",
+    "install:backend": "cd backend && npm install"
   },
   "dependencies": {
     "axios": "^1.12.2",

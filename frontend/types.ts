@@ -311,7 +311,7 @@ export interface Scenario {
 // Reducer Action Types
 export type Action =
   | { type: 'START_SETUP' }
-  | { type: 'SUBMIT_SETUP'; payload: { name: string; genre: string } }
+  | { type: 'SUBMIT_SETUP'; payload: { name: string; genre: string; difficulty: Difficulty } }
   | { type: 'SCENARIO_LOADING' }
   | { type: 'SCENARIO_LOADED'; payload: Scenario }
   | { type: 'SELECT_CHOICE'; payload: Choice }

@@ -1,8 +1,9 @@
 import React, { useReducer, useCallback, useEffect, useState } from 'react';
-import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory } from './types';
+import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { autoSave, loadGame, isStorageAvailable } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
+import { getDifficultySettings } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
 import { projects as allProjects } from './data/projects';
 import { staff as allStaff } from './data/staff';
@@ -21,10 +22,9 @@ import { ContractViewer } from './components/ContractViewer';
 import { StatisticsModal } from './components/StatisticsModal';
 import { TutorialOverlay } from './components/TutorialOverlay';
 
-const GRACE_PERIOD_WEEKS = 8;
-
-const generateInitialState = (artistName = '', artistGenre = ''): GameState => {
-    const startingCash = Math.floor(Math.random() * 16) + 5; // Random number between 5 and 20
+const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
+    const settings = getDifficultySettings(difficulty);
+    const startingCash = settings.startingCash;
     return {
         status: 'start',
         playerStats: {
@@ -71,6 +71,9 @@ const generateInitialState = (artistName = '', artistGenre = ''): GameState => {
             skipped: false,
             stepsCompleted: []
         },
+        difficulty,
+        mistakesMade: 0,
+        lastMistakeWeek: 0,
     };
 };
 
@@ -123,6 +126,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 status: 'loading',
                 artistName: action.payload.name,
                 artistGenre: action.payload.genre,
+                difficulty: action.payload.difficulty,
                 careerLog: [{date: state.date, description: `The artist '${action.payload.name}' (${action.payload.genre}) is born!`}]
             };
         case 'SCENARIO_LOADING':
@@ -352,15 +356,18 @@ function gameReducer(state: GameState, action: Action): GameState {
             }
             
             // 7. Check Game Over Grace Period
+            const settings = getDifficultySettings(state.difficulty);
+            const gracePeriod = settings.gracePeriodWeeks;
+            
             let newDebtTurns = newStats.cash < 0 ? state.debtTurns + 1 : 0;
             let newBurnoutTurns = newStats.wellBeing <= 0 ? state.burnoutTurns + 1 : 0;
             let newStatus: GameState['status'] = 'loading';
             let newGameOverReason: GameState['gameOverReason'] = null;
 
-            if (newDebtTurns > GRACE_PERIOD_WEEKS) {
+            if (newDebtTurns > gracePeriod) {
                 newStatus = 'gameOver';
                 newGameOverReason = 'debt';
-            } else if (newBurnoutTurns > GRACE_PERIOD_WEEKS) {
+            } else if (newBurnoutTurns > gracePeriod) {
                 newStatus = 'gameOver';
                 newGameOverReason = 'burnout';
             }
@@ -716,7 +723,7 @@ const App: React.FC = () => {
     const handleContinue = () => dispatch({ type: 'DISMISS_OUTCOME' });
     const handleStartGame = () => dispatch({ type: 'START_SETUP' });
     const handleRestart = () => dispatch({ type: 'RESTART' });
-    const handleSetupSubmit = (name: string, genre: string) => dispatch({ type: 'SUBMIT_SETUP', payload: { name, genre } });
+    const handleSetupSubmit = (name: string, genre: string, difficulty: Difficulty) => dispatch({ type: 'SUBMIT_SETUP', payload: { name, genre, difficulty } });
     const handleShowManagementHub = () => dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
     const handleShowSaveLoad = () => dispatch({ type: 'VIEW_SAVE_LOAD' });
     const handleShowLearningHub = () => dispatch({ type: 'VIEW_LEARNING_HUB' });
@@ -742,9 +749,10 @@ const App: React.FC = () => {
             case 'setup':
                 return <ArtistSetup onSubmit={handleSetupSubmit} />;
             case 'gameOver':
+                const settings = getDifficultySettings(state.difficulty);
                 const gameOverMessage = gameOverReason === 'debt'
-                    ? `After ${GRACE_PERIOD_WEEKS} weeks in debt, you've gone bankrupt. The show can't go on.`
-                    : `After ${GRACE_PERIOD_WEEKS} weeks of pushing yourself too hard, you've suffered a complete burnout. You need to step away from the industry.`;
+                    ? `After ${settings.gracePeriodWeeks} weeks in debt, you've gone bankrupt. The show can't go on.`
+                    : `After ${settings.gracePeriodWeeks} weeks of pushing yourself too hard, you've suffered a complete burnout. You need to step away from the industry.`;
                 return <GameScreen onStart={handleRestart} title="Game Over" message={gameOverMessage} buttonText="Play Again" />;
             case 'loading':
                 return <div className="flex-grow flex items-center justify-center"><Loader text="Setting the stage..." /></div>;

@@ -57,6 +57,16 @@ export interface RecordLabel {
     creativeControl: number; // 0-100, higher is more freedom
 }
 
+export interface SaveSlot {
+  id: string;
+  artistName: string;
+  genre: string;
+  date: GameDate;
+  stats: PlayerStats;
+  timestamp: number;
+  careerProgress: number;
+}
+
 export interface GameState {
   status: 'start' | 'setup' | 'playing' | 'loading' | 'gameOver' | 'gameWon';
   playerStats: PlayerStats;

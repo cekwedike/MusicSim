@@ -1,4 +1,4 @@
-import type { GameState, GameStatistics, CareerHistory, PlayerStats } from '../types';
+import type { GameStatistics, GameState, CareerHistory } from '../types';
 
 export const loadStatistics = (): GameStatistics => {
   const saved = localStorage.getItem('musicsim_statistics');
@@ -117,18 +117,11 @@ export const saveCareerHistory = (career: CareerHistory): void => {
   }
 };
 
-export const formatDuration = (weeks: number): string => {
-  const years = Math.floor(weeks / 52);
-  const remainingWeeks = weeks % 52;
-  const months = Math.floor(remainingWeeks / 4);
-  const finalWeeks = remainingWeeks % 4;
-  
-  const parts = [];
-  if (years > 0) parts.push(`${years} year${years > 1 ? 's' : ''}`);
-  if (months > 0) parts.push(`${months} month${months > 1 ? 's' : ''}`);
-  if (finalWeeks > 0) parts.push(`${finalWeeks} week${finalWeeks > 1 ? 's' : ''}`);
-  
-  return parts.join(', ') || '0 weeks';
+export const recordDecision = (stats: GameStatistics, choiceText: string): GameStatistics => {
+  const updated = { ...stats };
+  updated.totalDecisionsMade++;
+  updated.choiceDistribution[choiceText] = (updated.choiceDistribution[choiceText] || 0) + 1;
+  return updated;
 };
 
 export const formatTimestamp = (timestamp: number): string => {
@@ -141,5 +134,31 @@ export const formatTimestamp = (timestamp: number): string => {
   if (days < 7) return `${days} days ago`;
   if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
   
-  return new Date(timestamp).toLocaleDateString();
+  const date = new Date(timestamp);
+  return date.toLocaleDateString('en-US', { 
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+};
+
+export const formatDuration = (weeks: number): string => {
+  if (weeks < 4) return `${weeks} weeks`;
+  if (weeks < 48) {
+    const months = Math.floor(weeks / 4);
+    const remainingWeeks = weeks % 4;
+    if (remainingWeeks === 0) return `${months} months`;
+    return `${months} months, ${remainingWeeks} weeks`;
+  }
+  
+  const years = Math.floor(weeks / 48);
+  const remainingWeeks = weeks % 48;
+  const months = Math.floor(remainingWeeks / 4);
+  const finalWeeks = remainingWeeks % 4;
+  
+  let result = `${years} year${years > 1 ? 's' : ''}`;
+  if (months > 0) result += `, ${months} month${months > 1 ? 's' : ''}`;
+  if (finalWeeks > 0) result += `, ${finalWeeks} week${finalWeeks > 1 ? 's' : ''}`;
+  
+  return result;
 };

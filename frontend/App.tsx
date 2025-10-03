@@ -1,8 +1,8 @@
 import React, { useReducer, useCallback, useEffect, useState } from 'react';
-import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule } from './types';
+import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { autoSave, loadGame, isStorageAvailable } from './services/storageService';
-import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory } from './services/statisticsService';
+import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { achievements as allAchievements } from './data/achievements';
 import { projects as allProjects } from './data/projects';
 import { staff as allStaff } from './data/staff';
@@ -320,8 +320,6 @@ function gameReducer(state: GameState, action: Action): GameState {
             } else if (newBurnoutTurns > GRACE_PERIOD_WEEKS) {
                 newStatus = 'gameOver';
                 newGameOverReason = 'burnout';
-            } else if (newStats.careerProgress >= 100) {
-                newStatus = 'gameWon';
             }
 
 
@@ -542,8 +540,6 @@ const App: React.FC = () => {
                     ? `After ${GRACE_PERIOD_WEEKS} weeks in debt, you've gone bankrupt. The show can't go on.`
                     : `After ${GRACE_PERIOD_WEEKS} weeks of pushing yourself too hard, you've suffered a complete burnout. You need to step away from the industry.`;
                 return <GameScreen onStart={handleRestart} title="Game Over" message={gameOverMessage} buttonText="Play Again" />;
-            case 'gameWon':
-                return <GameScreen onStart={handleRestart} title="You're a MusicSim Master!" message="Congratulations! You've become a true legend. Your legacy is secure!" buttonText="Play Again" />;
             case 'loading':
                 return <div className="flex-grow flex items-center justify-center"><Loader text="Setting the stage..." /></div>;
             case 'playing':

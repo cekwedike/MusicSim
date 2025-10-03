@@ -182,6 +182,13 @@ export const scenarioBank: Scenario[] = [
                     text: "You bring on a savvy promoter who immediately starts getting your name out there. Blog posts and radio interviews follow.",
                     cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: 0,
                     hireStaff: 'Promoter',
+                    lesson: {
+                        title: "Professional Promotion vs DIY Marketing",
+                        explanation: "Promoters have relationships with playlist curators, radio DJs, and influencers that take years to develop. Their credibility can get your music heard by the right people.",
+                        realWorldExample: "Many Afrobeats artists gained international recognition through promoters who had connections with global playlist curators and international radio stations.",
+                        tipForFuture: "Good promotion is an investment, not an expense. The right promoter can multiply your reach far beyond what you could achieve alone.",
+                        conceptTaught: "Branding and Image"
+                    }
                 }
             },
             {
@@ -189,6 +196,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You believe that good music will always find an audience. While noble, your hype stagnates as other, better-marketed artists pass you by.",
                     cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: -5,
+                    lesson: {
+                        title: "The Reality of Music Discovery",
+                        explanation: "Great music alone isn't enough in today's oversaturated market. Millions of songs are uploaded daily - even excellent music needs promotion to be discovered.",
+                        realWorldExample: "Many talented artists remain unknown because they rely only on their music's quality. Meanwhile, artists with professional promotion teams gain massive audiences even with average songs.",
+                        tipForFuture: "Talent needs visibility to succeed. The best music in the world won't help your career if no one hears it.",
+                        conceptTaught: "Branding and Image"
+                    }
                 }
             }
         ]
@@ -205,6 +219,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You scramble to make it work. The show is incredible, you play for thousands of new people, and your fame skyrockets.",
                     cash: -1000, fame: 20, wellBeing: -15, careerProgress: 5, hype: 25,
+                    lesson: {
+                        title: "Seizing Career-Defining Moments",
+                        explanation: "Big opportunities often come with short notice and personal costs. The artists who break through are usually those willing to sacrifice comfort for career-changing moments.",
+                        realWorldExample: "Burna Boy took unpaid international gigs early in his career, spending his own money to fly to shows. These investments in exposure paid off when he gained global recognition.",
+                        tipForFuture: "Calculate the long-term value, not just immediate costs. One great show can open doors that take years to open otherwise.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             },
             {
@@ -212,6 +233,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You decline the offer. Your manager is disappointed, arguing that you have to take risks to succeed. A massive opportunity is missed.",
                     cash: 0, fame: 0, wellBeing: 5, careerProgress: -2, hype: -10,
+                    lesson: {
+                        title: "The Cost of Playing It Safe",
+                        explanation: "Music careers are built on momentum and timing. Passing on opportunities because they're inconvenient can stall your progress while other artists take the risks and reap the rewards.",
+                        realWorldExample: "Many artists regret turning down early opportunities that seemed too difficult. Meanwhile, competitors who said yes to similar chances often advance their careers significantly.",
+                        tipForFuture: "Ask yourself: Will I regret not trying this? Often the biggest career risks come from being too cautious.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             }
         ]
@@ -371,6 +399,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You pour your heart out and the crowd loves it! A few people buy you drinks and you make a small amount from the tip jar.",
                     cash: 50, fame: 5, wellBeing: 5, careerProgress: 1, hype: 10,
+                    lesson: {
+                        title: "Building Your Local Fanbase",
+                        explanation: "Small gigs are where careers start. Every industry connection, every new fan, every dollar earned at these shows builds your foundation. Most successful artists played hundreds of small shows before their breakthrough.",
+                        realWorldExample: "Burna Boy performed at small Lagos clubs for years before gaining national recognition. Those early shows built his stage presence and local following that eventually supported his rise.",
+                        tipForFuture: "Never underestimate small opportunities. They compound over time into bigger ones.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             },
             {
@@ -378,6 +413,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "The new song is a bit rough. Some people look confused, but one person, a local music blogger, is intrigued by your creativity.",
                     cash: 20, fame: 3, wellBeing: -5, careerProgress: 1, hype: 8,
+                    lesson: {
+                        title: "Testing New Material in Safe Spaces",
+                        explanation: "Open mics are perfect for experimenting with new songs. The low stakes environment lets you test audience reactions and refine your material before bigger shows.",
+                        realWorldExample: "Many artists use smaller venues to test new songs. Ed Sheeran famously played hundreds of small shows to perfect his craft and test new material before recording albums.",
+                        tipForFuture: "Use small shows to take creative risks. Better to experiment here than at important gigs.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             },
         ]

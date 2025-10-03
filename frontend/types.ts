@@ -80,7 +80,7 @@ export interface GameState {
   achievements: Achievement[];
   currentProject: Project | null;
   unseenAchievements: string[];
-  modal: 'none' | 'management';
+  modal: 'none' | 'management' | 'saveload';
   consecutiveFallbackCount: number;
   staff: Staff[];
   currentLabel: RecordLabel | null;

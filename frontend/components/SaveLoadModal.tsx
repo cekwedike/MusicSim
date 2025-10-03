@@ -22,11 +22,11 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
     }
   }, [isOpen]);
 
-  const loadSaveSlots = () => {
+  const loadSaveSlots = async () => {
     setLoading(true);
     setError('');
     try {
-      const slots = getAllSaveSlots();
+      const slots = await getAllSaveSlots();
       setSaveSlots(slots);
     } catch (err) {
       setError('Failed to load save slots');

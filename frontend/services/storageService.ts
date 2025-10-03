@@ -212,10 +212,20 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 }
 
 /**
- * Deletes a save slot
+ * Deletes a save slot from backend if authenticated, otherwise localStorage
  */
-export function deleteSave(slotId: string): void {
+export async function deleteSave(slotId: string): Promise<void> {
   try {
+    // Try to delete from backend if authenticated
+    if (isAuthenticated()) {
+      try {
+        await gameService.deleteSave(slotId);
+      } catch (error) {
+        console.warn('Backend delete failed, will still delete from localStorage:', error);
+      }
+    }
+    
+    // Always try to delete from localStorage as well
     const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
     localStorage.removeItem(key);
   } catch (error) {
@@ -226,9 +236,9 @@ export function deleteSave(slotId: string): void {
 /**
  * Auto-saves the current game state
  */
-export function autoSave(state: GameState): void {
+export async function autoSave(state: GameState): Promise<void> {
   try {
-    saveGame(state, 'auto');
+    await saveGame(state, 'auto');
   } catch (error) {
     console.warn('Auto-save failed:', error);
     // Don't throw error for auto-save failures to avoid disrupting gameplay

@@ -789,18 +789,25 @@ const GameApp: React.FC = () => {
     // Initial load check
     const [initialLoadChecked, setInitialLoadChecked] = useState(false);
     useEffect(() => {
-        if (!initialLoadChecked && status === 'start' && isStorageAvailable()) {
-            const autoSaveData = loadGame('auto');
-            if (autoSaveData && autoSaveData.artistName) {
-                const shouldLoad = window.confirm(
-                    `Found a saved game for "${autoSaveData.artistName}" (${autoSaveData.artistGenre}). Do you want to continue?`
-                );
-                if (shouldLoad) {
-                    dispatch({ type: 'LOAD_GAME', payload: autoSaveData });
+        const checkInitialLoad = async () => {
+            if (!initialLoadChecked && status === 'start' && isStorageAvailable()) {
+                try {
+                    const autoSaveData = await loadGame('auto');
+                    if (autoSaveData && autoSaveData.artistName) {
+                        const shouldLoad = window.confirm(
+                            `Found a saved game for "${autoSaveData.artistName}" (${autoSaveData.artistGenre}). Do you want to continue?`
+                        );
+                        if (shouldLoad) {
+                            dispatch({ type: 'LOAD_GAME', payload: autoSaveData });
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Failed to load auto-save:', error);
                 }
+                setInitialLoadChecked(true);
             }
-            setInitialLoadChecked(true);
-        }
+        };
+        checkInitialLoad();
     }, [status, initialLoadChecked]);
 
     // Auto-start tutorial for new players

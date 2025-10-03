@@ -10,6 +10,8 @@ const { sequelize } = require('./models');
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const gameStateRoutes = require('./routes/gameState');
+const careerHistoryRoutes = require('./routes/careerHistory');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -40,6 +42,12 @@ app.get('/api/health', (req, res) => {
 
 // Auth routes
 app.use('/api/auth', authRoutes);
+
+// Game state routes
+app.use('/api/game', gameStateRoutes);
+
+// Career history routes
+app.use('/api/career', careerHistoryRoutes);
 
 // 404 handler for unmatched routes
 app.use((req, res) => {
@@ -73,6 +81,8 @@ const startServer = async () => {
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
       console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+      console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game`);
+      console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career`);
     });
   } catch (error) {
     console.error('❌ Unable to connect to the database:', error.message);
@@ -84,6 +94,8 @@ const startServer = async () => {
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
       console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth (limited functionality)`);
+      console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game (limited functionality)`);
+      console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career (limited functionality)`);
       console.log('Database connection failed - some features may not work');
     });
   }

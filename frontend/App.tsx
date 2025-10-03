@@ -288,10 +288,63 @@ function gameReducer(state: GameState, action: Action): GameState {
             });
             newStats.cash = Math.floor(newStats.cash * cashModifier);
 
-            // 2. Pay staff salaries
-            const totalSalary = newStaff.reduce((sum, s) => sum + s.salary, 0);
+            // 2. Apply difficulty modifiers and pay staff salaries
+            const settings = getDifficultySettings(state.difficulty);
+            const totalSalary = Math.floor(newStaff.reduce((sum, s) => sum + s.salary, 0) * settings.salaryMultiplier);
             newStats.cash -= totalSalary;
             if (totalSalary > 0) eventsThisWeek.push(`Paid $${totalSalary.toLocaleString()} in staff salaries.`);
+
+            // Apply debt interest (hardcore only)
+            if (settings.debtInterest && newStats.cash < 0) {
+                const interest = Math.floor(Math.abs(newStats.cash) * 0.05); // 5% weekly interest
+                newStats.cash -= interest;
+                if (interest > 0) {
+                    eventsThisWeek.push(`Debt interest: -$${interest.toLocaleString()}`);
+                }
+            }
+            
+            // Random events (realistic and hardcore)
+            if (settings.randomEvents && Math.random() < 0.1) { // 10% chance each week
+                const randomEvents = [
+                    { 
+                        description: 'Equipment breakdown! Emergency repair needed.', 
+                        cash: -500, 
+                        wellBeing: -5 
+                    },
+                    { 
+                        description: 'Viral social media moment! Unexpected hype boost.', 
+                        hype: 15, 
+                        fame: 5 
+                    },
+                    { 
+                        description: 'Show cancelled last minute due to venue issues.', 
+                        cash: -300, 
+                        wellBeing: -10 
+                    },
+                    { 
+                        description: 'Local radio spontaneously plays your song!', 
+                        fame: 10, 
+                        hype: 10 
+                    },
+                    { 
+                        description: 'Tax audit - unexpected expense.', 
+                        cash: -800 
+                    },
+                    {
+                        description: 'Streaming platform featuring boost!',
+                        cash: 400,
+                        fame: 5,
+                        hype: 10
+                    }
+                ];
+                
+                const randomEvent = randomEvents[Math.floor(Math.random() * randomEvents.length)];
+                eventsThisWeek.push(randomEvent.description);
+                newStats.cash += randomEvent.cash || 0;
+                newStats.fame += randomEvent.fame || 0;
+                newStats.wellBeing += randomEvent.wellBeing || 0;
+                newStats.hype += randomEvent.hype || 0;
+            }
             
             // 3. Project Release Check
             let newProject = state.currentProject;
@@ -314,9 +367,12 @@ function gameReducer(state: GameState, action: Action): GameState {
                 newProject = null;
             }
 
-            // 4. Update Stats
+            // 4. Update Stats with difficulty modifiers
             newStats.fame = Math.min(100, Math.max(0, newStats.fame + bonusFame));
-            newStats.hype = Math.min(100, Math.max(0, newStats.hype + bonusHype - 2)); // Hype decay
+            
+            // Apply hype decay with difficulty modifier
+            const hypeDecay = Math.floor(2 * settings.statsDecayRate);
+            newStats.hype = Math.min(100, Math.max(0, newStats.hype + bonusHype - hypeDecay));
             
             // 5. Update Date
             let newDate = { ...state.date };
@@ -356,7 +412,6 @@ function gameReducer(state: GameState, action: Action): GameState {
             }
             
             // 7. Check Game Over Grace Period
-            const settings = getDifficultySettings(state.difficulty);
             const gracePeriod = settings.gracePeriodWeeks;
             
             let newDebtTurns = newStats.cash < 0 ? state.debtTurns + 1 : 0;
@@ -517,8 +572,11 @@ function gameReducer(state: GameState, action: Action): GameState {
         case 'SIGN_CONTRACT': {
             if (!state.currentLabelOffer) return state;
             
+            const settings = getDifficultySettings(state.difficulty);
+            const adjustedAdvance = Math.floor(state.currentLabelOffer.terms.advance * settings.advanceMultiplier);
+            
             const newStats = { ...state.playerStats };
-            newStats.cash += state.currentLabelOffer.terms.advance;
+            newStats.cash += adjustedAdvance;
             newStats.fame += 10;
             newStats.hype += 15;
             newStats.careerProgress += 10;

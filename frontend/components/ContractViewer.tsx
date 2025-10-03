@@ -49,7 +49,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
   const calculation = calculateRecoupment();
 
   return (
-    <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
+    <div className="contract-viewer fixed inset-0 bg-black/75 flex items-center justify-center z-50">
       <div className="bg-gray-800 rounded-xl border border-gray-700 max-w-4xl w-full mx-4 max-h-[85vh] overflow-y-auto">
         {/* Header */}
         <div className="p-6 border-b border-gray-700">

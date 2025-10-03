@@ -669,6 +669,23 @@ const App: React.FC = () => {
         }
     }, [status, initialLoadChecked]);
 
+    // Auto-start tutorial for new players
+    useEffect(() => {
+        // Check if this is a brand new player (no previous statistics or tutorial completion)
+        const isNewPlayer = state.statistics.totalGamesPlayed === 0 && 
+                           !state.tutorial.completed && 
+                           !state.tutorial.skipped &&
+                           status === 'playing' &&
+                           !state.tutorial.active;
+        
+        if (isNewPlayer) {
+            // Delay tutorial start to let the game render first
+            setTimeout(() => {
+                dispatch({ type: 'START_TUTORIAL' });
+            }, 1000);
+        }
+    }, [status, state.statistics.totalGamesPlayed, state.tutorial.completed, state.tutorial.skipped, state.tutorial.active]);
+
     const handleChoiceSelect = (choice: Choice) => dispatch({ type: 'SELECT_CHOICE', payload: choice });
     const handleContinue = () => dispatch({ type: 'DISMISS_OUTCOME' });
     const handleStartGame = () => dispatch({ type: 'START_SETUP' });

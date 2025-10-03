@@ -21,10 +21,10 @@ const ChoiceButton: React.FC<{ choice: Choice; onClick: () => void; disabled: bo
 
 const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, disabled }) => {
     return (
-        <div className="bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-2xl animate-fade-in">
+        <div className="scenario-card bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-2xl animate-fade-in">
             <h2 className="text-2xl md:text-3xl font-bold text-violet-300 mb-4">{scenario.title}</h2>
             <p className="text-gray-300 mb-6 leading-relaxed">{scenario.description}</p>
-            <div className="space-y-4">
+            <div className="choice-buttons space-y-4">
                 {scenario.choices.map((choice, index) => (
                     <ChoiceButton 
                         key={index} 

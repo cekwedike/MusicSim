@@ -42,7 +42,7 @@ const ManagementModal: React.FC<ManagementModalProps> = ({ achievements, events,
                         </button>
                          <button 
                             onClick={() => setActiveTab('log')}
-                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-2 ${activeTab === 'log' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
+                            className={`career-log-button flex-1 text-center py-2 font-bold flex items-center justify-center gap-2 ${activeTab === 'log' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
                         >
                             <LogIcon /> Log
                         </button>

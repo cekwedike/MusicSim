@@ -22,9 +22,11 @@ const colorClasses = {
 
 const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, maxValue = 100, isDate = false }) => {
     const classes = colorClasses[color];
+    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 flex flex-col justify-between shadow-lg border border-gray-700/50" 
+                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 flex flex-col justify-between shadow-lg border border-gray-700/50";
 
     return (
-        <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 flex flex-col justify-between shadow-lg border border-gray-700/50">
+        <div className={containerClass}>
             <div className="flex items-center space-x-3 mb-2">
                 <div className={classes.text}>{icon}</div>
                 <span className="font-bold text-gray-300 text-sm md:text-base">{label}</span>
@@ -54,7 +56,7 @@ const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
     const progressPercentage = (project.progress / project.requiredProgress) * 100;
 
     return (
-        <div className="mt-4 bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-gray-700/50">
+        <div className="current-project mt-4 bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 shadow-lg border border-gray-700/50">
             <h3 className="text-lg font-bold text-violet-300 mb-2">Current Project: {project.name}</h3>
             <div className="flex items-center gap-4">
                 <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
@@ -75,7 +77,7 @@ const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
 const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate }> = ({ stats, project, date }) => {
     return (
         <div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+            <div className="player-stats grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
                 <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
                 <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
                 <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />

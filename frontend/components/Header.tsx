@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                 <div className="absolute top-1/2 right-4 md:right-6 -translate-y-1/2 flex gap-2">
                     <button 
                         onClick={onShowLearningHub}
-                        className="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
+                        className="learning-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
                         aria-label="Learning Hub"
                     >
                         <BookIcon />
@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     
                     <button 
                         onClick={onShowStatistics}
-                        className="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
+                        className="stats-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
                         aria-label="Career Statistics"
                     >
                         <ChartIcon />
@@ -51,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     
                     <button 
                         onClick={onShowManagementHub}
-                        className="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700 relative"
+                        className="achievements-button management-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700 relative"
                         aria-label="Show Management Hub"
                     >
                         <BriefcaseIcon />

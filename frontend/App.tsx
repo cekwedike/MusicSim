@@ -447,6 +447,8 @@ function gameReducer(state: GameState, action: Action): GameState {
             return { ...state, modal: 'saveload' };
         case 'VIEW_LEARNING_HUB':
             return { ...state, modal: 'learning' };
+        case 'VIEW_STATISTICS':
+            return { ...state, modal: 'statistics' };
         case 'OPEN_MODULE':
             return { ...state, modal: 'moduleViewer', currentModule: action.payload };
         case 'COMPLETE_MODULE': {

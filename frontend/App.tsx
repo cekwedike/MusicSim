@@ -464,6 +464,14 @@ const App: React.FC = () => {
             {lastOutcome && <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />}
             {modal === 'management' && <ManagementModal achievements={achievements} events={careerLog} staff={staff} onClose={handleCloseModal}/>}
             {modal === 'saveload' && <SaveLoadModal isOpen={true} onClose={handleCloseModal} onLoadGame={handleLoadGame} currentGameState={state} />}
+            {modal === 'learning' && <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} />}
+            {modal === 'moduleViewer' && state.currentModule && (
+                <ModuleViewer 
+                    module={state.currentModule} 
+                    onComplete={handleCompleteModule}
+                    onClose={handleCloseModule}
+                />
+            )}
 
             <footer className="text-center p-4 text-gray-500 text-sm">
                 A Music Industry Simulation

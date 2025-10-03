@@ -20,13 +20,18 @@ export const achievements: Omit<Achievement, 'unlocked'>[] = [
     { id: 'PROJECT_ALBUM_2', name: 'Sophomore Success', description: 'Release your second album.' },
 
     // Business Achievements
-    { id: 'SIGNED_INDIE', name: 'Indie Darling', description: 'Sign a deal with an independent record label.' },
-    { id: 'SIGNED_MAJOR_ADVANCE', name: 'Take the Money', description: 'Sign a deal with a major label for a big advance.' },
-    { id: 'SIGNED_MAJOR_ROYALTIES', name: 'The Long Game', description: 'Sign a deal with a major label for better royalties.' },
+    { id: 'SIGNED_VINYL_HEART_RECORDS', name: 'Indie Darling', description: 'Sign with Vinyl Heart Records, maintaining your creative independence.' },
+    { id: 'SIGNED_GLOBAL_RECORDS', name: 'Big Money', description: 'Sign with Global Records for a massive advance.' },
+    { id: 'SIGNED_VISIONARY_MUSIC_GROUP', name: 'The Smart Deal', description: 'Sign with Visionary Music Group for fair terms and creative control.' },
     { id: 'STAFF_MANAGER', name: 'Got a Manager', description: 'Hire your first manager.'},
     { id: 'STAFF_BOOKER', name: 'On the Books', description: 'Hire your first booker.'},
     { id: 'STAFF_PROMOTER', name: 'Hype Machine', description: 'Hire your first promoter.'},
     { id: 'STAFF_FULL_TEAM', name: 'Assemble the A-Team', description: 'Have a Manager, Booker, and Promoter all at once.' },
+    
+    // Contract Achievements
+    { id: 'CONTRACT_REVIEWER', name: 'Due Diligence', description: 'Review your first record label contract carefully.' },
+    { id: 'CONTRACT_EXPERT', name: 'Contract Whisperer', description: 'Review contracts from 3 different record labels.' },
+    { id: 'WALKED_AWAY', name: 'The Power of No', description: 'Walk away from a record label contract offer.' },
     
     // Event Achievements
     { id: 'SELLOUT', name: 'Corporate Shill', description: 'License a song for a major ad campaign.' },

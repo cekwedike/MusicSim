@@ -174,6 +174,24 @@ function gameReducer(state: GameState, action: Action): GameState {
                     newLabelOffer = labelTemplate;
                     if (!newContractsViewed.includes(labelTemplate.name)) {
                         newContractsViewed.push(labelTemplate.name);
+                        
+                        // First contract review achievement
+                        if (newContractsViewed.length === 1) {
+                            const firstContractAchievement = updatedAchievements.find(a => a.id === 'CONTRACT_REVIEWER');
+                            if (firstContractAchievement && !firstContractAchievement.unlocked) {
+                                firstContractAchievement.unlocked = true;
+                                newUnseenAchievements = [...newUnseenAchievements, firstContractAchievement.id];
+                            }
+                        }
+                        
+                        // Expert contract reviewer achievement
+                        if (newContractsViewed.length === 3) {
+                            const expertAchievement = updatedAchievements.find(a => a.id === 'CONTRACT_EXPERT');
+                            if (expertAchievement && !expertAchievement.unlocked) {
+                                expertAchievement.unlocked = true;
+                                newUnseenAchievements = [...newUnseenAchievements, expertAchievement.id];
+                            }
+                        }
                     }
                 }
             }
@@ -182,7 +200,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 const labelTemplate = allLabels.find(l => l.id === outcome.signLabel);
                 if(labelTemplate) {
                     newLabel = labelTemplate;
-                    const signAchievement = updatedAchievements.find(a => a.id === `SIGNED_${labelTemplate.id}`);
+                    const signAchievement = updatedAchievements.find(a => a.id === `SIGNED_${labelTemplate.name.replace(/\s+/g, '_').toUpperCase()}`);
                     if (signAchievement && !signAchievement.unlocked) {
                         signAchievement.unlocked = true;
                         newUnseenAchievements = [...newUnseenAchievements, signAchievement.id];
@@ -385,7 +403,7 @@ function gameReducer(state: GameState, action: Action): GameState {
             let updatedAchievements = [...state.achievements];
             let newUnseenAchievements = [...state.unseenAchievements];
             
-            const signAchievement = updatedAchievements.find(a => a.id === `SIGNED_${state.currentLabelOffer.id}`);
+            const signAchievement = updatedAchievements.find(a => a.id === `SIGNED_${state.currentLabelOffer.name.replace(/\s+/g, '_').toUpperCase()}`);
             if (signAchievement && !signAchievement.unlocked) {
                 signAchievement.unlocked = true;
                 newUnseenAchievements = [...newUnseenAchievements, signAchievement.id];
@@ -401,12 +419,33 @@ function gameReducer(state: GameState, action: Action): GameState {
                 unseenAchievements: newUnseenAchievements,
                 careerLog: [...state.careerLog, { 
                     date: state.date, 
-                    description: `Signed with ${state.currentLabelOffer.name}! Received ${state.currentLabelOffer.terms.advance.toLocaleString()} advance.` 
+                    description: `Signed with ${state.currentLabelOffer.name}! Received $${state.currentLabelOffer.terms.advance.toLocaleString()} advance.` 
                 }]
             };
         }
-        case 'DECLINE_CONTRACT':
-            return { ...state, currentLabelOffer: null, modal: 'none' };
+        case 'DECLINE_CONTRACT': {
+            let updatedAchievements = [...state.achievements];
+            let newUnseenAchievements = [...state.unseenAchievements];
+            
+            // Walk away achievement
+            const walkAwayAchievement = updatedAchievements.find(a => a.id === 'WALKED_AWAY');
+            if (walkAwayAchievement && !walkAwayAchievement.unlocked) {
+                walkAwayAchievement.unlocked = true;
+                newUnseenAchievements = [...newUnseenAchievements, walkAwayAchievement.id];
+            }
+            
+            return { 
+                ...state, 
+                currentLabelOffer: null, 
+                modal: 'none',
+                achievements: updatedAchievements,
+                unseenAchievements: newUnseenAchievements,
+                careerLog: [...state.careerLog, { 
+                    date: state.date, 
+                    description: `Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.` 
+                }]
+            };
+        }
         case 'LOAD_GAME':
             return { ...action.payload, status: 'playing' };
         default:

@@ -49,6 +49,26 @@ export interface GameEvent {
   description: string;
 }
 
+export interface TutorialStep {
+  id: string;
+  title: string;
+  message: string;
+  target?: string;
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'center';
+  action?: 'highlight' | 'pulse' | 'block';
+  nextTrigger?: 'click' | 'auto';
+  delay?: number;
+  musicBusinessLesson?: string;
+}
+
+export interface TutorialState {
+  active: boolean;
+  currentStep: number;
+  completed: boolean;
+  skipped: boolean;
+  stepsCompleted: string[];
+}
+
 export interface RecordLabel {
     id: string;
     name: string;
@@ -211,6 +231,7 @@ export interface GameState {
   statistics: GameStatistics;
   currentHistory: HistoricalDataPoint[];
   sessionStartTime: number;
+  tutorial: TutorialState;
 }
 
 export interface ChoiceOutcome {

@@ -52,9 +52,26 @@ export interface GameEvent {
 export interface RecordLabel {
     id: string;
     name: string;
-    advance: number;
-    royalties: number; // as percentage, e.g., 15 for 15%
-    creativeControl: number; // 0-100, higher is more freedom
+    type: 'indie' | 'major';
+    reputation: number;
+    description: string;
+    terms: {
+        advance: number;
+        royaltyRate: number;
+        albumCommitment: number;
+        contractLength: number;
+        creativeControl: number;
+        recoupmentRate: number;
+        crossCollateralized: boolean;
+        optionClause: boolean;
+        advanceRecoupable: boolean;
+        marketingBudget: number;
+        tourSupport: number;
+        territories: string[];
+    };
+    redFlags: string[];
+    greenFlags: string[];
+    dealBreakers?: string[];
 }
 
 export interface SaveSlot {
@@ -119,10 +136,12 @@ export interface GameState {
   achievements: Achievement[];
   currentProject: Project | null;
   unseenAchievements: string[];
-  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer';
+  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer' | 'contract';
   currentModule: LearningModule | null;
   playerKnowledge: PlayerKnowledge;
   lessonsViewed: string[];
+  currentLabelOffer: RecordLabel | null;
+  contractsViewed: string[];
   consecutiveFallbackCount: number;
   staff: Staff[];
   currentLabel: RecordLabel | null;
@@ -144,6 +163,7 @@ export interface ChoiceOutcome {
   fireStaff?: StaffRole;
   renewStaff?: StaffRole;
   signLabel?: string; // ID of the label to sign with
+  viewContract?: string; // ID of the label contract to view
   lesson?: {
     title: string;
     explanation: string; // WHY this outcome happened
@@ -200,5 +220,8 @@ export type Action =
   | { type: 'COMPLETE_MODULE'; payload: { moduleId: string; score: number; conceptsMastered: string[] } }
   | { type: 'CLOSE_MODULE' }
   | { type: 'CLOSE_MODAL' }
+  | { type: 'VIEW_CONTRACT'; payload: RecordLabel }
+  | { type: 'SIGN_CONTRACT' }
+  | { type: 'DECLINE_CONTRACT' }
   | { type: 'LOAD_GAME'; payload: GameState }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

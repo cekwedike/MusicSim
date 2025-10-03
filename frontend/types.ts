@@ -309,4 +309,8 @@ export type Action =
   | { type: 'DECLINE_CONTRACT' }
   | { type: 'VIEW_STATISTICS' }
   | { type: 'LOAD_GAME'; payload: GameState }
+  | { type: 'START_TUTORIAL' }
+  | { type: 'NEXT_TUTORIAL_STEP' }
+  | { type: 'SKIP_TUTORIAL' }
+  | { type: 'COMPLETE_TUTORIAL' }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

@@ -63,6 +63,13 @@ const generateInitialState = (artistName = '', artistGenre = ''): GameState => {
         statistics: loadStatistics(),
         currentHistory: [],
         sessionStartTime: Date.now(),
+        tutorial: {
+            active: false,
+            currentStep: 0,
+            completed: false,
+            skipped: false,
+            stepsCompleted: []
+        },
     };
 };
 
@@ -552,6 +559,54 @@ function gameReducer(state: GameState, action: Action): GameState {
         }
         case 'LOAD_GAME':
             return { ...action.payload, status: 'playing' };
+        case 'START_TUTORIAL':
+            return {
+                ...state,
+                tutorial: {
+                    active: true,
+                    currentStep: 0,
+                    completed: false,
+                    skipped: false,
+                    stepsCompleted: []
+                }
+            };
+        case 'NEXT_TUTORIAL_STEP':
+            return {
+                ...state,
+                tutorial: {
+                    ...state.tutorial,
+                    currentStep: state.tutorial.currentStep + 1,
+                    stepsCompleted: [...state.tutorial.stepsCompleted, state.tutorial.currentStep.toString()]
+                }
+            };
+        case 'SKIP_TUTORIAL':
+            return {
+                ...state,
+                tutorial: {
+                    ...state.tutorial,
+                    active: false,
+                    skipped: true
+                }
+            };
+        case 'COMPLETE_TUTORIAL': {
+            const updatedStatistics = updateStatistics(state.statistics, state.playerStats, state.careerLog, state.staff, state.date);
+            
+            // Check for tutorial achievements
+            const { achievements: updatedAchievements, unseenAchievements: newUnseenAchievements } = 
+                checkAchievements(state, state.playerStats);
+            
+            return {
+                ...state,
+                tutorial: {
+                    ...state.tutorial,
+                    active: false,
+                    completed: true
+                },
+                statistics: updatedStatistics,
+                achievements: updatedAchievements,
+                unseenAchievements: [...state.unseenAchievements, ...newUnseenAchievements]
+            };
+        }
         default:
             return state;
     }

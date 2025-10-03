@@ -297,7 +297,14 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You agree to the new terms. Your manager is happy and immediately gets to work on your next big move.",
                     cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: 0,
-                    renewStaff: 'Manager'
+                    renewStaff: 'Manager',
+                    lesson: {
+                        title: "Valuing Good Team Members",
+                        explanation: "Good managers are rare and valuable. If they've proven their worth, paying them fairly often costs less than finding and training replacements while losing momentum.",
+                        realWorldExample: "Many successful artists maintain long-term relationships with their managers, even paying higher rates, because the consistency and trust are worth more than saving money.",
+                        tipForFuture: "Calculate the full cost of change: lost time, relationship rebuilding, and potential missed opportunities often exceed higher fees.",
+                        conceptTaught: "Contract Basics"
+                    }
                 }
             },
             {
@@ -305,7 +312,14 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You part ways with your manager. The administrative tasks immediately pile up, causing stress and costing you opportunities.",
                     cash: 0, fame: -5, wellBeing: -15, careerProgress: -5, hype: -10,
-                    fireStaff: 'Manager'
+                    fireStaff: 'Manager',
+                    lesson: {
+                        title: "The Hidden Costs of Cheap Labor",
+                        explanation: "Cutting costs on key team members often backfires. Cheaper replacements may lack experience, relationships, or commitment, leading to missed opportunities that cost more than the savings.",
+                        realWorldExample: "Artists who frequently change managers to save money often struggle with consistency. Each new manager needs time to learn your career goals and rebuild industry relationships.",
+                        tipForFuture: "Invest in people who deliver results. The cheapest option is rarely the most cost-effective long-term.",
+                        conceptTaught: "Contract Basics"
+                    }
                 }
             }
         ]

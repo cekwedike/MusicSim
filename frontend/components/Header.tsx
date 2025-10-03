@@ -15,14 +15,24 @@ interface HeaderProps {
 }
 
 
-const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShowSaveLoad, onShowLearningHub, onShowStatistics, onStartTutorial, hasUnseenAchievements }) => {
+const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShowSaveLoad, onShowLearningHub, onShowStatistics, onStartTutorial, hasUnseenAchievements, difficulty }) => {
     return (
         <header className="py-4 px-6 md:px-8 text-center border-b border-gray-700/50 relative">
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                 MusicSim
             </h1>
             {artistName ? (
-                <p className="text-yellow-400 mt-2 text-lg font-semibold tracking-wider">Artist: {artistName}</p>
+                <div className="flex items-center gap-3">
+                    <p className="text-yellow-400 text-lg font-semibold tracking-wider">Artist: {artistName}</p>
+                    {difficulty && (
+                        <span 
+                            className={`px-2 py-1 rounded-full text-xs font-bold ${getDifficultyColor(difficulty)} bg-gray-800/50 border border-current`}
+                            title={`Playing on ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} difficulty`}
+                        >
+                            {getDifficultyIcon(difficulty)} {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                        </span>
+                    )}
+                </div>
             ) : (
                 <p className="text-gray-400 mt-1">A Business Simulation Game</p>
             )}

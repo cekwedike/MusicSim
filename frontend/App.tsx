@@ -896,6 +896,7 @@ const App: React.FC = () => {
                 onShowStatistics={handleShowStatistics}
                 onStartTutorial={handleStartTutorial}
                 hasUnseenAchievements={unseenAchievements.length > 0}
+                difficulty={status === 'playing' ? state.difficulty : undefined}
             />
             
             <div className="flex-grow w-full max-w-4xl mx-auto p-4 lg:p-6 flex flex-col">

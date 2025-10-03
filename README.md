@@ -31,3 +31,8 @@ MusicSim/
 4. Run both frontend and backend: `npm run dev:all`
 
 The frontend will be available at http://localhost:5173 and the backend at http://localhost:3001
+
+## API Documentation
+
+When running the backend, interactive API documentation is available at:
+**http://localhost:3001/api-docs**

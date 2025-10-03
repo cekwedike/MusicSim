@@ -127,7 +127,8 @@ const startServer = async () => {
       console.log(`🚀 MusicSim Backend running on port ${PORT}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+      console.log(`� API Documentation: http://localhost:${PORT}/api-docs`);
+      console.log(`�🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
       console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game`);
       console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career`);
       console.log(`🎓 Learning analytics endpoints: http://localhost:${PORT}/api/learning`);
@@ -143,7 +144,8 @@ const startServer = async () => {
       console.log(`⚠️  MusicSim Backend running on port ${PORT} (NO DATABASE)`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth (limited functionality)`);
+      console.log(`� API Documentation: http://localhost:${PORT}/api-docs`);
+      console.log(`�🔐 Auth endpoints: http://localhost:${PORT}/api/auth (limited functionality)`);
       console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game (limited functionality)`);
       console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career (limited functionality)`);
       console.log(`🎓 Learning analytics endpoints: http://localhost:${PORT}/api/learning (limited functionality)`);

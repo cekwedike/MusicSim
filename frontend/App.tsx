@@ -1,5 +1,5 @@
 import React, { useReducer, useCallback, useEffect, useState } from 'react';
-import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel } from './types';
+import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { autoSave, loadGame, isStorageAvailable } from './services/storageService';
 import { achievements as allAchievements } from './data/achievements';
@@ -410,6 +410,11 @@ const App: React.FC = () => {
     const handleSetupSubmit = (name: string, genre: string) => dispatch({ type: 'SUBMIT_SETUP', payload: { name, genre } });
     const handleShowManagementHub = () => dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
     const handleShowSaveLoad = () => dispatch({ type: 'VIEW_SAVE_LOAD' });
+    const handleShowLearningHub = () => dispatch({ type: 'VIEW_LEARNING_HUB' });
+    const handleOpenModule = (module: LearningModule) => dispatch({ type: 'OPEN_MODULE', payload: module });
+    const handleCompleteModule = (moduleId: string, score: number, conceptsMastered: string[]) => 
+        dispatch({ type: 'COMPLETE_MODULE', payload: { moduleId, score, conceptsMastered } });
+    const handleCloseModule = () => dispatch({ type: 'CLOSE_MODULE' });
     const handleCloseModal = () => dispatch({ type: 'CLOSE_MODAL' });
     const handleLoadGame = (gameState: GameState) => dispatch({ type: 'LOAD_GAME', payload: gameState });
 

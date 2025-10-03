@@ -523,6 +523,508 @@ export const scenarioBank: Scenario[] = [
             }
         ]
     },
+    
+    // --- AFRICAN MUSIC INDUSTRY SCENARIOS ---
+    {
+        title: "The Boomplay Decision",
+        description: "Boomplay, Africa's biggest streaming platform, offers to feature you on their 'New Fire' playlist reaching 5 million users. The exposure is massive across Nigeria, Ghana, and Kenya. However, they pay $0.003 per stream compared to Spotify's $0.004. Your manager insists you should focus on Spotify to build international credibility, but Boomplay is where your fans actually listen to music.",
+        conditions: { minFame: 15, maxFame: 50 },
+        once: true,
+        choices: [
+            {
+                text: "Take the Boomplay feature - my audience is in Africa",
+                outcome: {
+                    text: "Your song explodes on Boomplay! You gain 80,000 streams in the first week across African markets. Local radio stations pick it up after seeing the numbers. Your fanbase becomes strongly African-centered, and you become a household name in Lagos, Accra, and Nairobi. International playlists remain out of reach for now.",
+                    cash: 1200, fame: 25, wellBeing: 5, careerProgress: 8, hype: 30,
+                    lesson: {
+                        title: "Regional Platform Strategy",
+                        explanation: "African streaming platforms often provide better discovery, higher engagement, and more relevant audiences for local artists. Building a strong regional base first gives you leverage for international expansion later.",
+                        realWorldExample: "Rema built his entire early career on African platforms and African radio before Spotify featured him. His regional dominance made him attractive to international labels.",
+                        tipForFuture: "Start where your fans actually are. International success usually comes after regional dominance, not before.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Hold out for Spotify - I want international reach",
+                outcome: {
+                    text: "You decline Boomplay and pitch to Spotify curators. After weeks of emails, you get added to a small playlist with 10,000 followers. You gain 2,000 streams, mostly from the US and Europe. Meanwhile, another artist takes the Boomplay slot and blows up across Africa. Your African fans complain they can't find your music easily.",
+                    cash: 300, fame: 3, wellBeing: -10, careerProgress: 1, hype: -15,
+                    lesson: {
+                        title: "The International Chase Trap",
+                        explanation: "Many African artists chase international platforms while ignoring their home audience. This often leads to being unknown everywhere instead of famous somewhere.",
+                        realWorldExample: "Multiple Nigerian artists have failed internationally while neglecting their local fanbase, then returned home to find they'd been forgotten.",
+                        tipForFuture: "Build strong local success before chasing international dreams. You need leverage.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Negotiate to do both platforms simultaneously",
+                outcome: {
+                    text: "You push for non-exclusive promotion. Boomplay agrees! You get featured on both platforms. The African streams dominate, but you're also building international numbers. It costs you more time managing both platforms, but you're not leaving money on the table.",
+                    cash: 1500, fame: 20, wellBeing: -5, careerProgress: 10, hype: 25,
+                    lesson: {
+                        title: "Non-Exclusive Thinking",
+                        explanation: "In the digital age, you rarely have to choose one platform. Smart artists maximize all available channels rather than picking sides.",
+                        realWorldExample: "Burna Boy, Wizkid, and Davido are on every platform simultaneously, maximizing their reach globally.",
+                        tipForFuture: "Always ask: Can I do both? Exclusivity should cost them more money.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Language Choice",
+        description: "You're in the studio recording your breakthrough single. The producer stops you mid-session. 'This Igbo verse is fire, but if you want radio play and playlist adds, you need to do it in English. The international market won't understand Igbo.' But you know your community connects most when you rap in your native language. This decision will define your identity.",
+        conditions: { minFame: 10, maxFame: 40, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Keep it in Igbo/Yoruba/Kinyarwanda - stay authentic",
+                outcome: {
+                    text: "You record the entire song in your native language with just an English chorus. Your community goes wild! Local fans feel represented and proud. You become the voice of your people. African radio plays it constantly. International curators ignore it completely, calling it 'too regional.' But you're building something real.",
+                    cash: 800, fame: 30, wellBeing: 15, careerProgress: 5, hype: 35,
+                    lesson: {
+                        title: "The Authenticity Premium",
+                        explanation: "Artists who authentically represent their culture often build deeper, more loyal fanbases than those who chase international trends. Authenticity is a competitive advantage, not a limitation.",
+                        realWorldExample: "Burna Boy sang in Pidgin English and Yoruba throughout his early career. It made him authentic and differentiated. When he went international, his Nigerian identity was his selling point, not something to hide.",
+                        tipForFuture: "Your culture is your unique value. Don't erase it trying to appeal to everyone.",
+                        conceptTaught: "brand-authenticity"
+                    }
+                }
+            },
+            {
+                text: "Switch to English for broader commercial appeal",
+                outcome: {
+                    text: "You re-record in English. The song sounds more 'international' but less distinctive. Some African fans feel you've sold out. You get a few international blog mentions but no major traction. You're now competing in a very crowded English-language market without your cultural differentiation.",
+                    cash: 500, fame: 8, wellBeing: -15, careerProgress: 2, hype: -10,
+                    lesson: {
+                        title: "The Cost of Assimilation",
+                        explanation: "When African artists erase their cultural markers to sound 'international,' they often lose their unique voice without gaining international success. You become generic.",
+                        realWorldExample: "Many Nigerian artists who abandoned their cultural identity in the 2000s and early 2010s failed to break through internationally while losing their local base.",
+                        tipForFuture: "The international market often wants African artists who sound African, not African artists trying to sound American.",
+                        conceptTaught: "cultural-identity"
+                    }
+                }
+            },
+            {
+                text: "Mix both languages - give them the best of both worlds",
+                outcome: {
+                    text: "You record verses in Igbo/Yoruba/Kinyarwanda with English choruses and ad-libs. It's accessible but authentic. African fans love it, and international listeners find it exotic and interesting. You've created something that travels across cultures while staying rooted. The approach becomes your signature style.",
+                    cash: 1000, fame: 35, wellBeing: 10, careerProgress: 8, hype: 40,
+                    lesson: {
+                        title: "Cultural Fusion Strategy",
+                        explanation: "The most successful African artists often blend languages strategically. Native language for authenticity and emotional depth, English for accessibility. This fusion travels internationally while maintaining cultural roots.",
+                        realWorldExample: "Wizkid's 'Ojuelegba' mixed Yoruba and English. It became a global hit while remaining deeply Nigerian. Drake heard it and wanted to collaborate specifically because of its authenticity.",
+                        tipForFuture: "You can honor your roots AND reach new markets. Fusion, not erasure.",
+                        conceptTaught: "cross-cultural-appeal"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Piracy Problem",
+        description: "It's 3 AM. Your phone explodes with messages. Your unreleased album just leaked on Naijaloaded and Tooxclusive. Thousands are downloading it for free. Your release strategy is ruined. Your manager is furious. The label is threatening to drop you, claiming you leaked it for publicity. You need to act fast.",
+        conditions: { minFame: 30, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Officially release it immediately on all platforms",
+                outcome: {
+                    text: "You scramble to get it on streaming platforms within 12 hours. You announce: 'Since y'all wanted it so bad, here it is!' You turn the leak into a publicity moment. The rushed release gets media coverage. You lose some planned promotional momentum, but you're controlling the narrative. The album still performs decently.",
+                    cash: 2000, fame: 15, wellBeing: -20, careerProgress: 5, hype: 20,
+                    lesson: {
+                        title: "Crisis Response and Adaptation",
+                        explanation: "In African music markets, leaks are extremely common due to weak digital security infrastructure. The best response is often to embrace the chaos and officially release immediately rather than fighting the inevitable.",
+                        realWorldExample: "When Wizkid's 'Made in Lagos' tracks leaked early, he accelerated the official release and turned it into a marketing moment, maintaining control of his narrative.",
+                        tipForFuture: "Have a leak response plan ready. Speed matters more than perfection when content is already out there.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Send legal threats and takedown notices",
+                outcome: {
+                    text: "You spend $3,000 on lawyers sending cease and desist letters. Some sites take it down. Ten more pop up. The Streisand Effect kicks in - more people download it specifically because you're trying to stop them. You look like you're fighting your own fans. The official release, two weeks later, underperforms. People already have it.",
+                    cash: -3000, fame: -10, wellBeing: -25, careerProgress: -5, hype: -30,
+                    lesson: {
+                        title: "The Futility of Fighting Digital Piracy",
+                        explanation: "In markets with weak intellectual property enforcement, aggressive legal action against piracy often backfires. You spend money achieving nothing while alienating fans who see you as attacking them.",
+                        realWorldExample: "Several Nigerian artists have spent fortunes fighting blog piracy with minimal success. The blogs simply change domains and continue operating.",
+                        tipForFuture: "Accept that some piracy is inevitable in African markets. Focus energy on monetizing the attention, not fighting the leak.",
+                        conceptTaught: "piracy-reality"
+                    }
+                }
+            },
+            {
+                text: "Ignore it and stick to the planned release date",
+                outcome: {
+                    text: "You pretend the leak doesn't exist and proceed with your planned rollout two weeks later. By release day, the hype has died. Everyone who cared already downloaded it. Your official first-week numbers are disappointing. The label is upset. Radio programmers moved on to newer music. You missed your moment.",
+                    cash: 800, fame: 5, wellBeing: -15, careerProgress: -3, hype: -20,
+                    lesson: {
+                        title: "The Cost of Ignoring Reality",
+                        explanation: "When a crisis happens, pretending it doesn't exist rarely works. The music industry moves fast. If your music is already out there, your planned release strategy is already dead.",
+                        realWorldExample: "Multiple artists have lost momentum by ignoring leaks and sticking to outdated release plans while their music circulated freely.",
+                        tipForFuture: "When the situation changes dramatically, change your plan. Flexibility beats rigidity.",
+                        conceptTaught: "adaptability"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The WhatsApp Producer",
+        description: "A producer slides into your WhatsApp claiming he made beats for Davido and Burna Boy. He sends you a fire beat and wants $500 upfront, no contract, just trust. He promises exclusive rights and says he'll have the stems ready in 24 hours. But your friend warns you: 'Bro, I've seen this guy sell the same beat to five different artists.' The beat is perfect for your next single, but the red flags are everywhere.",
+        conditions: { minFame: 8, maxCash: 2000, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Pay him - this beat is too good to pass up",
+                outcome: {
+                    text: "You send the $500 via mobile money. The producer goes silent for three days, then sends low-quality stems with missing elements. Two weeks later, you hear 'your' beat on another artist's hit single. You've been scammed, and now you need to start over with a new beat. The lesson is expensive.",
+                    cash: -500, fame: 0, wellBeing: -25, careerProgress: -3, hype: -10,
+                    lesson: {
+                        title: "The Social Media Producer Trap",
+                        explanation: "WhatsApp and Instagram producers often sell the same beats to multiple artists or disappear after payment. Without contracts, you have no legal protection and no guarantee of exclusivity or quality.",
+                        realWorldExample: "Many Nigerian artists have been scammed by fake producers claiming connections to major artists. These scammers use social media to seem legitimate while running basic fraud schemes.",
+                        tipForFuture: "Never pay producers without contracts. Verify their credits and ask for references. If they can't provide professional agreements, they're not professional producers.",
+                        conceptTaught: "contract-basics"
+                    }
+                }
+            },
+            {
+                text: "Demand a proper contract before any money changes hands",
+                outcome: {
+                    text: "You insist on a written agreement specifying exclusive rights, delivery timeline, and what you get. The producer gets defensive and accuses you of not trusting him. He disappears when you mention contracts. You saved $500, but you still need a beat. At least you avoided a scam.",
+                    cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Professional Standards Save Money",
+                        explanation: "Legitimate producers understand the need for contracts and proper business practices. Anyone who refuses to work professionally is either inexperienced or running a scam.",
+                        realWorldExample: "Established producers like LeriQ, Pheelz, and Masterkraft always work with proper agreements. They built their reputations on professionalism and protecting artists' interests.",
+                        tipForFuture: "Professional behavior is a filter for quality partners. If someone can't handle basic business practices, they probably can't handle your music either.",
+                        conceptTaught: "professional-standards"
+                    }
+                }
+            },
+            {
+                text: "Negotiate a split deal - no money upfront, revenue share instead",
+                outcome: {
+                    text: "You propose splitting future streaming revenue 70/30 in your favor. Surprisingly, he agrees! You get the beat with professional stems, and it becomes your biggest hit. The producer makes more money from the revenue split than he would have from a one-time fee. You both win, and he starts sending you more exclusive beats.",
+                    cash: 0, fame: 20, wellBeing: 10, careerProgress: 8, hype: 25,
+                    lesson: {
+                        title: "Creative Deal Structures",
+                        explanation: "Revenue sharing can align interests better than upfront payments. Both parties are invested in the song's success, and good producers often make more money from hits than from beat sales.",
+                        realWorldExample: "Many successful Afrobeats collaborations use revenue splits rather than buyouts. This approach has created long-term partnerships between artists and producers.",
+                        tipForFuture: "Consider revenue sharing when you're low on cash but high on potential. It can create stronger partnerships and better results.",
+                        conceptTaught: "creative-partnerships"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Diaspora Tour Opportunity",
+        description: "African diaspora communities in London, Atlanta, and Toronto want to book you for a three-city tour. The shows could pay $15,000 total, and the exposure to international African communities could be huge. But visa applications cost $2,000, flights another $3,000, and there's no guarantee the visas will be approved in time. Your local promoter says: 'Why risk it? We can make that money with five local shows.'",
+        conditions: { minFame: 35, minHype: 25 },
+        once: true,
+        choices: [
+            {
+                text: "Take the risk - international exposure is worth it",
+                outcome: {
+                    text: "You get the visas! The diaspora shows are incredible. African communities in each city embrace you like family. You gain international connections, and a US-based African label executive offers you a distribution deal. The financial risk paid off with long-term opportunities.",
+                    cash: 8000, fame: 30, wellBeing: 10, careerProgress: 15, hype: 35,
+                    lesson: {
+                        title: "Diaspora Markets as International Bridges",
+                        explanation: "African diaspora communities often serve as bridges to international markets. They maintain cultural connections while having economic power in their new countries. Success in diaspora markets can lead to broader international opportunities.",
+                        realWorldExample: "Burna Boy and Wizkid built strong followings in African diaspora communities in the US and UK before breaking into mainstream international markets. These communities championed their music to local industry players.",
+                        tipForFuture: "Diaspora markets are often more receptive to authentic African music than general international markets. They can be your entry point to global success.",
+                        conceptTaught: "international-strategy"
+                    }
+                }
+            },
+            {
+                text: "Play it safe with local shows instead",
+                outcome: {
+                    text: "You book five local shows and make $12,000 safely. No visa stress, no travel costs, no uncertainty. But six months later, you see the artist who replaced you on the diaspora tour getting major international press and signing with Atlantic Records. You wonder what could have been.",
+                    cash: 12000, fame: 10, wellBeing: 5, careerProgress: 3, hype: 15,
+                    lesson: {
+                        title: "The Opportunity Cost of Playing Safe",
+                        explanation: "While safe choices provide guaranteed returns, they often limit growth potential. In the music industry, calculated risks on international opportunities can yield disproportionate long-term benefits compared to safe local choices.",
+                        realWorldExample: "Many African artists who focused only on safe local opportunities missed the Afrobeats global explosion. Those who took international risks early became the faces of the movement.",
+                        tipForFuture: "Evaluate the long-term potential, not just immediate financial returns. Sometimes the riskier path leads to breakthrough moments.",
+                        conceptTaught: "risk-assessment"
+                    }
+                }
+            },
+            {
+                text: "Crowdfund the tour through your fanbase",
+                outcome: {
+                    text: "You launch a crowdfunding campaign: 'Help me bring our music to the diaspora!' Your fans contribute enthusiastically. You raise $4,000, covering most costs. The tour is successful, and fans feel personally invested in your international journey. You've built a stronger community while reducing financial risk.",
+                    cash: 10000, fame: 25, wellBeing: 15, careerProgress: 12, hype: 40,
+                    lesson: {
+                        title: "Community-Funded Growth",
+                        explanation: "Engaged fanbases will often support artists' growth if asked directly. Crowdfunding reduces financial risk while increasing fan investment and loyalty. It turns supporters into stakeholders.",
+                        realWorldExample: "Several African artists have successfully crowdfunded international tours and recording projects. Fans appreciate transparency and the opportunity to directly support their favorite artists' growth.",
+                        tipForFuture: "Don't be afraid to ask your fans for support on meaningful projects. Transparency about costs and goals builds trust and stronger relationships.",
+                        conceptTaught: "fan-engagement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Radio Payola Request",
+        description: "A popular radio DJ pulls you aside after your interview. 'Your song is hot, but playlist rotation is competitive. If you can show some love to help with my studio rent... let's say $300... I can guarantee heavy rotation during prime time.' You know this happens everywhere, but it feels wrong. Other artists warn you that refusing means your song never gets played.",
+        conditions: { minFame: 20, maxFame: 60 },
+        once: true,
+        choices: [
+            {
+                text: "Pay the $300 - radio play is essential",
+                outcome: {
+                    text: "You discreetly slip the DJ the money. Your song gets heavy rotation and becomes a local hit. Your fame explodes, but you feel dirty about how you got there. Other DJs now expect similar payments. You've entered a pay-to-play system that will cost more each time.",
+                    cash: -300, fame: 35, wellBeing: -15, careerProgress: 8, hype: 40,
+                    lesson: {
+                        title: "The Payola Cycle",
+                        explanation: "Radio payola creates a cycle where DJs expect payment and artists feel forced to pay. While it may provide immediate results, it corrupts the system and makes radio play about money rather than music quality.",
+                        realWorldExample: "Payola is common across African radio markets, from Lagos to Johannesburg. Artists who participate often find themselves trapped in escalating payment demands as their careers grow.",
+                        tipForFuture: "Consider the long-term cost. If every song requires payment, your radio strategy becomes unsustainable. Look for DJs who support music based on quality.",
+                        conceptTaught: "industry-ethics"
+                    }
+                }
+            },
+            {
+                text: "Refuse to pay - my music should speak for itself",
+                outcome: {
+                    text: "You politely decline and leave with your dignity intact. Your song gets minimal radio play, and you watch inferior tracks with bigger budgets dominate the airwaves. Your growth is slower, but you sleep well at night. Some underground DJs respect your stance and support you.",
+                    cash: 0, fame: 8, wellBeing: 10, careerProgress: 3, hype: 5,
+                    lesson: {
+                        title: "The Integrity Tax",
+                        explanation: "Refusing to participate in corrupt practices often costs short-term opportunities but builds long-term credibility. Some industry players respect artists who won't compromise their values.",
+                        realWorldExample: "Several successful African artists built careers without paying radio DJs, relying instead on digital platforms and live performances to grow their audiences.",
+                        tipForFuture: "Integrity may slow your growth initially, but it creates sustainable success. Players who respect ethics often become your strongest supporters.",
+                        conceptTaught: "ethical-business"
+                    }
+                }
+            },
+            {
+                text: "Propose an interview trade instead of cash payment",
+                outcome: {
+                    text: "You offer to do a longer interview, bring your band for a live session, or help promote the DJ's events in exchange for playlist consideration. The DJ appreciates the creative thinking. You get moderate rotation without compromising your ethics, and you've built a legitimate relationship.",
+                    cash: 0, fame: 20, wellBeing: 5, careerProgress: 5, hype: 25,
+                    lesson: {
+                        title: "Creative Value Exchange",
+                        explanation: "Instead of cash payments, artists can offer value through content, promotion, or performances. This builds genuine relationships while avoiding outright corruption.",
+                        realWorldExample: "Many established African artists maintain relationships with radio through content partnerships, exclusive interviews, and promotional support rather than direct payments.",
+                        tipForFuture: "Think beyond money when building industry relationships. Your time, talent, and platform have value that can create win-win situations.",
+                        conceptTaught: "relationship-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Feature Request",
+        description: "A well-known artist with 500K followers wants you on their next single. They offer 60/40 split in their favor and second billing: 'It's my song, but your verse could make it special.' Your manager insists you should demand 50/50 and co-headline billing. But this collaboration could expose you to their massive fanbase. How do you handle this negotiation?",
+        conditions: { minFame: 25, maxFame: 70 },
+        once: true,
+        choices: [
+            {
+                text: "Accept their terms - exposure is worth more than money",
+                outcome: {
+                    text: "You take the 40% and second billing. The song becomes a massive hit! You gain 100,000 new followers and your streaming numbers double. While you made less money, the exposure launches your career to the next level. Other major artists now see you as collaboration-worthy.",
+                    cash: 2000, fame: 40, wellBeing: -5, careerProgress: 15, hype: 50,
+                    lesson: {
+                        title: "Strategic Collaboration Investment",
+                        explanation: "Sometimes accepting less favorable financial terms in exchange for exposure can be a smart career investment. The key is recognizing when the long-term value exceeds short-term costs.",
+                        realWorldExample: "Many breakthrough African artists took smaller splits on collaborations with established names like Davido or Burna Boy. The exposure often led to bigger solo opportunities and label interest.",
+                        tipForFuture: "Evaluate collaborations based on total value, not just money. Ask: Will this partnership open doors that justify the financial compromise?",
+                        conceptTaught: "strategic-partnerships"
+                    }
+                }
+            },
+            {
+                text: "Hold firm on 50/50 and equal billing",
+                outcome: {
+                    text: "You demand equal terms and billing. The established artist gets offended: 'You haven't earned 50/50 yet.' They walk away and collaborate with someone more accommodating. You maintain your self-respect but miss a major opportunity. Your growth continues slowly.",
+                    cash: 0, fame: 0, wellBeing: 5, careerProgress: -2, hype: -10,
+                    lesson: {
+                        title: "When Principle Costs Opportunity",
+                        explanation: "While self-worth is important, inflexibility in negotiations can cost valuable opportunities. Sometimes building leverage requires accepting temporary disadvantages.",
+                        realWorldExample: "Some artists have lost major collaboration opportunities by demanding equal treatment before earning it. Meanwhile, more flexible artists used these opportunities to build the credibility needed for better future deals.",
+                        tipForFuture: "Consider your current market position. If you need the boost more than they need you, be strategic about which battles to fight.",
+                        conceptTaught: "negotiation-leverage"
+                    }
+                }
+            },
+            {
+                text: "Negotiate a compromise with escalation clauses",
+                outcome: {
+                    text: "You propose 60/40 now, but if the song hits certain stream thresholds, you get additional points. Plus you get equal billing. They appreciate your business thinking and agree. The song performs well, triggering the bonuses. You've established yourself as a smart negotiator.",
+                    cash: 3000, fame: 30, wellBeing: 10, careerProgress: 12, hype: 35,
+                    lesson: {
+                        title: "Performance-Based Deal Structures",
+                        explanation: "Escalation clauses align interests and reward success. They allow both parties to benefit more when the project succeeds, creating win-win scenarios and demonstrating business sophistication.",
+                        realWorldExample: "Many successful music collaborations include performance bonuses and escalation clauses. This approach shows you understand business while being reasonable about current market position.",
+                        tipForFuture: "Get creative with deal structures. Performance bonuses, escalation clauses, and future collaboration options can make deals work for everyone.",
+                        conceptTaught: "advanced-negotiation"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Festival Circuit Choice",
+        description: "You have two festival offers for the same weekend. Afronation in Ghana offers $8,000, international exposure, and industry networking with global labels. Felabration in Lagos offers $3,000, massive local love, and deeper connection with your home audience. Your international booking agent pushes hard for Afronation: 'This is how you break globally.' But your heart says Felabration.",
+        conditions: { minFame: 40, minHype: 30 },
+        once: true,
+        choices: [
+            {
+                text: "Choose Afronation - go for international breakthrough",
+                outcome: {
+                    text: "You perform at Afronation to 50,000 international fans. A UK label executive approaches you backstage with a distribution deal. International blogs cover your performance. You're building global recognition, but some Lagos fans feel you've abandoned your roots for international success.",
+                    cash: 8000, fame: 35, wellBeing: 5, careerProgress: 20, hype: 25,
+                    lesson: {
+                        title: "International Festival Strategy",
+                        explanation: "International festivals provide access to global industry networks and international audiences but can create distance from your home fanbase. The key is maintaining balance between global reach and local connection.",
+                        realWorldExample: "Artists like Burna Boy used international festivals to build global recognition while still honoring their Nigerian roots. The international exposure helped them bring African music to global stages.",
+                        tipForFuture: "International festivals are career investments. Use them to build global networks and credibility, but don't forget to maintain your home base.",
+                        conceptTaught: "international-strategy"
+                    }
+                }
+            },
+            {
+                text: "Choose Felabration - stay connected to your roots",
+                outcome: {
+                    text: "You perform at Felabration to a crowd that knows every word of your songs. The energy is incredible! Nigerian music industry veterans notice your loyalty to local culture. You trend on Nigerian Twitter for days. Your home fanbase grows stronger, but you wonder about missed international opportunities.",
+                    cash: 3000, fame: 45, wellBeing: 15, careerProgress: 8, hype: 50,
+                    lesson: {
+                        title: "The Power of Local Loyalty",
+                        explanation: "Strong home market support provides sustainable career foundation. Local audiences offer authentic connection and cultural credibility that international markets often can't replicate.",
+                        realWorldExample: "Many successful African artists built massive local followings before going international. This strong home base provides financial stability and creative authenticity that supports international expansion.",
+                        tipForFuture: "Your home market is your foundation. International success without strong local support is often unstable and short-lived.",
+                        conceptTaught: "market-foundation"
+                    }
+                }
+            },
+            {
+                text: "Negotiate to perform at both events on different days",
+                outcome: {
+                    text: "You contact both festivals explaining your dilemma. Afronation moves your slot to Friday, Felabration keeps you for Sunday. The travel is exhausting and costs you $2,000 extra, but you honor both audiences. Both performances are excellent, and you're seen as an artist who respects all fans.",
+                    cash: 9000, fame: 40, wellBeing: -10, careerProgress: 15, hype: 40,
+                    lesson: {
+                        title: "Multi-Market Strategy",
+                        explanation: "With careful planning, artists can often serve multiple markets simultaneously. This requires extra effort and investment but builds broader, more sustainable fan bases.",
+                        realWorldExample: "Top African artists often perform at multiple festivals during peak season, building both local and international presence. The investment in travel and logistics pays off through broader market reach.",
+                        tipForFuture: "Don't always think in either/or terms. Creative scheduling and extra investment can often allow you to serve multiple important markets.",
+                        conceptTaught: "market-expansion"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Influencer Deal",
+        description: "A TikTok influencer with 2 million followers wants to use your unreleased song for a dance challenge. They say: 'I'll make your song viral! Just give me the track for free - the exposure is payment enough.' Your manager calculates that 2 million views could be worth $10,000 in promotion value. But you believe your art has monetary value. How do you price exposure?",
+        conditions: { minFame: 15, maxFame: 50, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Give them the song for free - viral exposure is priceless",
+                outcome: {
+                    text: "The influencer creates a dance that explodes on TikTok! Your song gets 500,000 uses in two weeks. You gain 200,000 new followers and major label attention. But now every influencer expects free music from you. You've set a precedent that devalues your work.",
+                    cash: 0, fame: 50, wellBeing: -10, careerProgress: 12, hype: 60,
+                    lesson: {
+                        title: "The Free Content Trap",
+                        explanation: "While free content can generate massive exposure, it often establishes the expectation that your music has no monetary value. This makes it harder to monetize future opportunities.",
+                        realWorldExample: "Many artists gave away music for 'exposure' during TikTok's early days. While some gained followers, they struggled to monetize those audiences because fans expected free content.",
+                        tipForFuture: "Exposure has value, but so does your art. Consider whether free exposure actually converts to paying fans and sustainable income.",
+                        conceptTaught: "value-assessment"
+                    }
+                }
+            },
+            {
+                text: "Demand payment - influencers make money, so should I",
+                outcome: {
+                    text: "You quote $2,000 for the song usage. The influencer laughs and finds another artist who works for free. Their dance goes viral with someone else's song. You maintain your principles but miss a major viral opportunity. Your growth remains steady but slow.",
+                    cash: 0, fame: 5, wellBeing: 10, careerProgress: 2, hype: 0,
+                    lesson: {
+                        title: "When Principle Meets Opportunity",
+                        explanation: "Insisting on fair payment for your work is important, but rigid pricing can cost opportunities in the fast-moving influencer economy. The key is finding the balance between value and accessibility.",
+                        realWorldExample: "Some artists have missed viral moments by overpricing music for influencer use, while others built careers by being accessible to content creators early in their careers.",
+                        tipForFuture: "Consider your current stage. Early career exposure might be worth more than immediate payment, but establish clear boundaries.",
+                        conceptTaught: "pricing-strategy"
+                    }
+                }
+            },
+            {
+                text: "Propose a revenue-sharing partnership instead",
+                outcome: {
+                    text: "You offer to let them use the song for free, but they must credit you and share 30% of any sponsorship money they make from the viral content. They agree! The dance goes viral, they get brand deals, and you earn $3,000 from the arrangement while building a working relationship.",
+                    cash: 3000, fame: 45, wellBeing: 5, careerProgress: 10, hype: 55,
+                    lesson: {
+                        title: "Creative Partnership Structures",
+                        explanation: "Revenue sharing aligns interests and creates mutual investment in success. Both parties benefit more when the content performs well, leading to stronger partnerships and better outcomes.",
+                        realWorldExample: "Smart artists and influencers often create revenue-sharing deals around viral content. This approach has led to long-term partnerships and sustainable income streams for both parties.",
+                        tipForFuture: "Think beyond simple transactions. Partnership structures can create ongoing value and stronger relationships than one-time payments.",
+                        conceptTaught: "partnership-development"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Street Vendor Distribution",
+        description: "An old-school street vendor network across Lagos and Abuja wants to sell your physical CDs. They guarantee 10,000 units sold at $2 profit per CD, but they want exclusive physical rights for six months. Your digital team says CDs are dead: 'Focus on streaming!' But the vendor leader insists: 'Young people still buy CDs for their cars and taxi drivers play them all day. This is money in your pocket today.'",
+        conditions: { minFame: 30, requiredAchievementId: 'PROJECT_ALBUM_1' },
+        once: true,
+        choices: [
+            {
+                text: "Sign with street vendors - physical sales still matter",
+                outcome: {
+                    text: "You press 10,000 CDs and give the vendors exclusive rights. They move every unit in four months! Taxi drivers and bus conductors play your album constantly. You make $20,000 and gain massive street credibility. Your music becomes the soundtrack of public transport across Lagos.",
+                    cash: 20000, fame: 35, wellBeing: 10, careerProgress: 8, hype: 40,
+                    lesson: {
+                        title: "Traditional Distribution Networks",
+                        explanation: "Street vendor networks in African markets often reach audiences that streaming doesn't touch. Physical sales can provide immediate income and deep community penetration, especially among working-class audiences.",
+                        realWorldExample: "Many successful Nigerian artists still use street vendor networks for physical distribution. These vendors have established customer bases and can move significant units quickly.",
+                        tipForFuture: "Don't ignore traditional distribution methods. Physical sales can complement digital strategies and reach audiences that streaming platforms miss.",
+                        conceptTaught: "distribution-diversity"
+                    }
+                }
+            },
+            {
+                text: "Focus only on digital streaming - the future is online",
+                outcome: {
+                    text: "You decline the CD deal and push everything to streaming platforms. Your streams grow steadily, but you miss the immediate cash flow and street-level saturation. Six months later, another artist dominates the physical market you ignored. You wonder if you chose progress over profit.",
+                    cash: 5000, fame: 20, wellBeing: 5, careerProgress: 12, hype: 25,
+                    lesson: {
+                        title: "Digital-Only Strategy Limitations",
+                        explanation: "While digital streaming represents the future, ignoring existing physical markets can cost immediate revenue and market penetration. In developing markets, physical sales often outperform streaming economically.",
+                        realWorldExample: "Some African artists who went digital-only missed significant revenue opportunities while their competitors dominated physical markets that still generate substantial income.",
+                        tipForFuture: "Consider the economic realities of your market. Digital may be the future, but physical sales might be today's rent money.",
+                        conceptTaught: "market-reality"
+                    }
+                }
+            },
+            {
+                text: "Do both - physical for immediate income, digital for long-term growth",
+                outcome: {
+                    text: "You negotiate shorter exclusivity (3 months) and do both physical and digital simultaneously. The CDs provide immediate cash flow while streaming builds your digital presence. Your total reach is maximized, and you're not dependent on any single distribution method.",
+                    cash: 15000, fame: 30, wellBeing: 5, careerProgress: 15, hype: 35,
+                    lesson: {
+                        title: "Hybrid Distribution Strategy",
+                        explanation: "Combining traditional and modern distribution methods maximizes reach and revenue streams. Different distribution channels serve different audiences and provide different types of value.",
+                        realWorldExample: "Successful African artists often use hybrid distribution, combining streaming platforms, physical sales, and traditional networks to maximize market penetration and revenue.",
+                        tipForFuture: "Don't put all your distribution eggs in one basket. Multiple channels provide security and reach different market segments.",
+                        conceptTaught: "comprehensive-distribution"
+                    }
+                }
+            }
+        ]
+    },
     // ... (include more diverse scenarios here)
 ];
 

@@ -12,6 +12,9 @@ const { sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 const gameStateRoutes = require('./routes/gameState');
 const careerHistoryRoutes = require('./routes/careerHistory');
+const learningRoutes = require('./routes/learning');
+const lessonsRoutes = require('./routes/lessons');
+const analyticsRoutes = require('./routes/analytics');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -49,6 +52,15 @@ app.use('/api/game', gameStateRoutes);
 // Career history routes
 app.use('/api/career', careerHistoryRoutes);
 
+// Learning analytics routes
+app.use('/api/learning', learningRoutes);
+
+// Lesson tracking routes
+app.use('/api/lessons', lessonsRoutes);
+
+// Analytics routes
+app.use('/api/analytics', analyticsRoutes);
+
 // 404 handler for unmatched routes
 app.use((req, res) => {
   res.status(404).json({
@@ -83,6 +95,9 @@ const startServer = async () => {
       console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
       console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game`);
       console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career`);
+      console.log(`🎓 Learning analytics endpoints: http://localhost:${PORT}/api/learning`);
+      console.log(`📚 Lesson tracking endpoints: http://localhost:${PORT}/api/lessons`);
+      console.log(`📊 Analytics dashboard endpoints: http://localhost:${PORT}/api/analytics`);
     });
   } catch (error) {
     console.error('❌ Unable to connect to the database:', error.message);
@@ -96,6 +111,9 @@ const startServer = async () => {
       console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth (limited functionality)`);
       console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game (limited functionality)`);
       console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career (limited functionality)`);
+      console.log(`🎓 Learning analytics endpoints: http://localhost:${PORT}/api/learning (limited functionality)`);
+      console.log(`📚 Lesson tracking endpoints: http://localhost:${PORT}/api/lessons (limited functionality)`);
+      console.log(`📊 Analytics dashboard endpoints: http://localhost:${PORT}/api/analytics (limited functionality)`);
       console.log('Database connection failed - some features may not work');
     });
   }

@@ -39,6 +39,13 @@ const generateInitialState = (artistName = '', artistGenre = ''): GameState => {
         currentProject: null,
         unseenAchievements: [],
         modal: 'none',
+        currentModule: null,
+        playerKnowledge: {
+            completedModules: [],
+            moduleScores: {},
+            quizAttempts: {},
+            conceptsMastered: []
+        },
         consecutiveFallbackCount: 0,
         staff: [],
         currentLabel: null,
@@ -293,8 +300,44 @@ function gameReducer(state: GameState, action: Action): GameState {
             return { ...state, modal: 'management', unseenAchievements: [] };
         case 'VIEW_SAVE_LOAD':
             return { ...state, modal: 'saveload' };
+        case 'VIEW_LEARNING_HUB':
+            return { ...state, modal: 'learning' };
+        case 'OPEN_MODULE':
+            return { ...state, modal: 'moduleViewer', currentModule: action.payload };
+        case 'COMPLETE_MODULE': {
+            const { moduleId, score, conceptsMastered } = action.payload;
+            const newKnowledge = { ...state.playerKnowledge };
+            
+            // Add to completed modules if not already there
+            if (!newKnowledge.completedModules.includes(moduleId)) {
+                newKnowledge.completedModules.push(moduleId);
+            }
+            
+            // Update score (keep the highest score)
+            const currentScore = newKnowledge.moduleScores[moduleId] || 0;
+            newKnowledge.moduleScores[moduleId] = Math.max(currentScore, score);
+            
+            // Update quiz attempts
+            newKnowledge.quizAttempts[moduleId] = (newKnowledge.quizAttempts[moduleId] || 0) + 1;
+            
+            // Add new concepts mastered
+            conceptsMastered.forEach(concept => {
+                if (!newKnowledge.conceptsMastered.includes(concept)) {
+                    newKnowledge.conceptsMastered.push(concept);
+                }
+            });
+            
+            return { 
+                ...state, 
+                playerKnowledge: newKnowledge,
+                modal: 'learning',
+                currentModule: null
+            };
+        }
+        case 'CLOSE_MODULE':
+            return { ...state, modal: 'learning', currentModule: null };
         case 'CLOSE_MODAL':
-            return { ...state, modal: 'none' };
+            return { ...state, modal: 'none', currentModule: null };
         case 'LOAD_GAME':
             return { ...action.payload, status: 'playing' };
         default:

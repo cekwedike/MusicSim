@@ -1,9 +1,10 @@
 import React from 'react';
-import { BriefcaseIcon } from './icons/Icons';
+import { BriefcaseIcon, SaveIcon } from './icons/Icons';
 
 interface HeaderProps {
     artistName?: string;
     onShowManagementHub: () => void;
+    onShowSaveLoad: () => void;
     hasUnseenAchievements: boolean;
 }
 

@@ -8,6 +8,51 @@ const { Op } = require('sequelize');
 router.use(authMiddleware);
 
 /**
+ * @swagger
+ * /api/game/save:
+ *   post:
+ *     summary: Save game state
+ *     description: Save current game state to a slot
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - slotName
+ *               - gameState
+ *             properties:
+ *               slotName:
+ *                 type: string
+ *                 description: Name of the save slot
+ *               gameState:
+ *                 $ref: '#/components/schemas/GameState'
+ *     responses:
+ *       200:
+ *         description: Game saved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ *       400:
+ *         description: Invalid game state data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
  * @route   POST /api/game/save
  * @desc    Save game state to database
  * @access  Private

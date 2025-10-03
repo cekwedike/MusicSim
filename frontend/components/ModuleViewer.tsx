@@ -73,17 +73,17 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden border border-gray-700">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-gray-800 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden border border-gray-700">
         {/* Header */}
-        <div className="bg-gradient-to-r from-violet-600 to-purple-600 p-6">
+        <div className="bg-gradient-to-r from-violet-600 to-purple-600 p-4 md:p-6">
           <div className="flex justify-between items-start">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-3xl">{module.icon}</span>
+                <span className="text-2xl md:text-3xl">{module.icon}</span>
                 <div>
-                  <h2 className="text-2xl font-bold text-white">{module.title}</h2>
-                  <div className="flex items-center gap-2 text-violet-200">
+                  <h2 className="text-xl md:text-2xl font-bold text-white">{module.title}</h2>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-violet-200">
                     <span className="text-sm">⏱️ {module.estimatedMinutes} minutes</span>
                     <span className="text-sm">📊 {module.difficulty}</span>
                   </div>
@@ -92,7 +92,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
             </div>
             <button
               onClick={onClose}
-              className="text-violet-200 hover:text-white text-2xl"
+              className="text-violet-200 hover:text-white text-2xl min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               ×
             </button>
@@ -116,7 +116,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
         </div>
 
         {/* Content Area */}
-        <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 200px)' }}>
+        <div className="p-4 md:p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 200px)' }}>
           {!showQuiz && !showQuizResults && (
             <>
               {/* Introduction (only show on first section) */}

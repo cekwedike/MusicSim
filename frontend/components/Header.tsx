@@ -17,13 +17,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShowSaveLoad, onShowLearningHub, onShowStatistics, onStartTutorial, hasUnseenAchievements, difficulty }) => {
     return (
-        <header className="py-4 px-6 md:px-8 text-center border-b border-gray-700/50 relative">
-                        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <header className="py-4 px-4 md:px-6 lg:px-8 text-center border-b border-gray-700/50 relative">
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                 MusicSim
             </h1>
             {artistName ? (
-                <div className="flex items-center gap-3">
-                    <p className="text-yellow-400 text-lg font-semibold tracking-wider">Artist: {artistName}</p>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mt-1">
+                    <p className="text-yellow-400 text-base md:text-lg font-semibold tracking-wider">Artist: {artistName}</p>
                     {difficulty && (
                         <span 
                             className={`px-2 py-1 rounded-full text-xs font-bold ${getDifficultyColor(difficulty)} bg-gray-800/50 border border-current`}
@@ -34,14 +34,14 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     )}
                 </div>
             ) : (
-                <p className="text-gray-400 mt-1">A Business Simulation Game</p>
+                <p className="text-gray-400 mt-1 text-sm md:text-base">A Business Simulation Game</p>
             )}
 
             {artistName && (
-                <div className="absolute top-1/2 right-4 md:right-6 -translate-y-1/2 flex gap-2">
+                <div className="absolute top-1/2 right-2 md:right-4 lg:right-6 -translate-y-1/2 flex gap-1 md:gap-2">
                     <button 
                         onClick={onShowLearningHub}
-                        className="learning-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
+                        className="learning-button text-gray-400 hover:text-white transition-colors duration-200 p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         aria-label="Learning Hub"
                     >
                         <BookIcon />
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     
                     <button 
                         onClick={onStartTutorial}
-                        className="tutorial-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
+                        className="tutorial-button text-gray-400 hover:text-white transition-colors duration-200 p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         aria-label="Tutorial"
                     >
                         <QuestionMarkIcon />
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     
                     <button 
                         onClick={onShowStatistics}
-                        className="stats-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
+                        className="stats-button text-gray-400 hover:text-white transition-colors duration-200 p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         aria-label="Career Statistics"
                     >
                         <ChartIcon />
@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     
                     <button 
                         onClick={onShowSaveLoad}
-                        className="text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
+                        className="text-gray-400 hover:text-white transition-colors duration-200 p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         aria-label="Save/Load Game"
                     >
                         <SaveIcon />
@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     
                     <button 
                         onClick={onShowManagementHub}
-                        className="achievements-button management-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700 relative"
+                        className="achievements-button management-button text-gray-400 hover:text-white transition-colors duration-200 p-1.5 md:p-2 rounded-full hover:bg-gray-700 relative min-w-[44px] min-h-[44px] flex items-center justify-center"
                         aria-label="Show Management Hub"
                     >
                         <BriefcaseIcon />

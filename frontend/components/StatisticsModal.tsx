@@ -64,7 +64,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
       </div>
 
       {/* Current Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
           <div className="text-2xl mb-2">💰</div>
           <p className="text-lg font-bold text-white">${state.playerStats.cash.toLocaleString()}</p>
@@ -238,7 +238,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                 <div>
                   <p className="text-xs text-gray-400">Duration</p>
                   <p className="text-sm font-medium text-white">{formatDuration(career.weeksPlayed)}</p>

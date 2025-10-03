@@ -1,12 +1,21 @@
 import type { GameState, SaveSlot } from '../types';
+import { gameService } from './gameService';
+import { authService } from './authService';
 
 const STORAGE_PREFIX = 'musicsim_save_';
 const AUTO_SAVE_KEY = 'musicsim_save_auto';
 
 /**
- * Saves a game state to localStorage
+ * Checks if user is authenticated
  */
-export function saveGame(state: GameState, slotId: string): void {
+function isAuthenticated(): boolean {
+  return authService.isAuthenticated();
+}
+
+/**
+ * Saves a game state to backend if authenticated, otherwise localStorage
+ */
+export async function saveGame(state: GameState, slotId: string): Promise<void> {
   try {
     const saveData = {
       version: '1.0.0',
@@ -14,6 +23,23 @@ export function saveGame(state: GameState, slotId: string): void {
       state
     };
     
+    // Try to save to backend if authenticated
+    if (isAuthenticated()) {
+      try {
+        const response = await gameService.saveGame(slotId, state);
+
+        if (response.success) {
+          // Also save to localStorage as backup
+          const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
+          localStorage.setItem(key, JSON.stringify(saveData));
+          return;
+        }
+      } catch (error) {
+        console.warn('Backend save failed, falling back to localStorage:', error);
+      }
+    }
+    
+    // Fallback to localStorage
     const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
     localStorage.setItem(key, JSON.stringify(saveData));
   } catch (error) {
@@ -25,10 +51,23 @@ export function saveGame(state: GameState, slotId: string): void {
 }
 
 /**
- * Loads a game state from localStorage
+ * Loads a game state from backend if authenticated, otherwise localStorage
  */
-export function loadGame(slotId: string): GameState | null {
+export async function loadGame(slotId: string): Promise<GameState | null> {
   try {
+    // Try to load from backend if authenticated
+    if (isAuthenticated()) {
+      try {
+        const response = await gameService.loadGame(slotId);
+        if (response.success && response.data) {
+          return response.data.gameState;
+        }
+      } catch (error) {
+        console.warn('Backend load failed, falling back to localStorage:', error);
+      }
+    }
+    
+    // Fallback to localStorage
     const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
     const saveData = localStorage.getItem(key);
     

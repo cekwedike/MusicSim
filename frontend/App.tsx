@@ -1,4 +1,6 @@
 import React, { useReducer, useCallback, useEffect, useState } from 'react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { LoginModal } from './components/LoginModal';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { autoSave, loadGame, isStorageAvailable } from './services/storageService';
@@ -757,7 +759,7 @@ const GameScreen: React.FC<{ onStart: () => void, title: string, message: string
     </div>
 );
 
-const App: React.FC = () => {
+const GameApp: React.FC = () => {
     const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
@@ -950,6 +952,107 @@ const App: React.FC = () => {
                 A Music Industry Simulation
             </footer>
         </div>
+    );
+};
+
+// User profile component
+const UserProfile: React.FC<{ onOpenLoginModal: () => void }> = ({ onOpenLoginModal }) => {
+    const { user, logout, isAuthenticated } = useAuth();
+
+    if (!isAuthenticated || !user) {
+        return (
+            <div className="flex items-center space-x-4">
+                <span className="text-gray-400 text-sm">Guest Mode</span>
+                <button
+                    onClick={onOpenLoginModal}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
+                >
+                    Login
+                </button>
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex items-center space-x-4">
+            <span className="text-gray-300 text-sm">Welcome, {user.username}!</span>
+            <button
+                onClick={logout}
+                className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm transition-colors"
+            >
+                Logout
+            </button>
+        </div>
+    );
+};
+
+// Main authenticated app wrapper
+const AuthenticatedApp: React.FC = () => {
+    const { isAuthenticated, isLoading } = useAuth();
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(false);
+
+    // Show login modal on first load if not authenticated
+    useEffect(() => {
+        if (!isLoading && !isInitialized) {
+            setIsInitialized(true);
+            if (!isAuthenticated) {
+                // Don't automatically show login modal, let user choose
+                // setShowLoginModal(true);
+            }
+        }
+    }, [isLoading, isAuthenticated, isInitialized]);
+
+    const handleOpenLoginModal = () => setShowLoginModal(true);
+    const handleCloseLoginModal = () => setShowLoginModal(false);
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-900">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+                    <p className="text-gray-300">Loading MusicSim...</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-gray-900">
+            {/* Header with user info */}
+            <div className="bg-gray-800 border-b border-gray-700 px-4 py-2">
+                <div className="max-w-6xl mx-auto flex justify-between items-center">
+                    <div className="flex items-center space-x-4">
+                        <h1 className="text-xl font-bold text-yellow-400">MusicSim</h1>
+                        {!isAuthenticated && (
+                            <span className="text-sm text-yellow-300 bg-yellow-900/30 px-2 py-1 rounded">
+                                Playing as Guest
+                            </span>
+                        )}
+                    </div>
+                    <UserProfile onOpenLoginModal={handleOpenLoginModal} />
+                </div>
+            </div>
+
+            {/* Game content */}
+            <GameApp />
+
+            {/* Login Modal */}
+            <LoginModal
+                isOpen={showLoginModal}
+                onClose={handleCloseLoginModal}
+                initialMode="login"
+            />
+        </div>
+    );
+};
+
+// Main App component with authentication provider
+const App: React.FC = () => {
+    return (
+        <AuthProvider>
+            <AuthenticatedApp />
+        </AuthProvider>
     );
 };
 

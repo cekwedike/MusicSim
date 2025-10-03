@@ -202,12 +202,21 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           position: absolute;
           background: #fff;
           border-radius: 12px;
-          padding: 20px;
-          max-width: 400px;
-          min-width: 300px;
+          padding: 16px;
+          max-width: min(400px, calc(100vw - 2rem));
+          min-width: min(250px, calc(100vw - 2rem));
+          width: calc(100vw - 2rem);
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
           z-index: 10002;
           font-family: 'Inter', sans-serif;
+        }
+
+        @media (min-width: 480px) {
+          .tutorial-tooltip {
+            width: auto;
+            min-width: 300px;
+            padding: 20px;
+          }
         }
 
         .tutorial-header {

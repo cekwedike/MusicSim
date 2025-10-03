@@ -25,26 +25,26 @@ const ManagementModal: React.FC<ManagementModalProps> = ({ achievements, events,
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 animate-fade-in" onClick={onClose}>
-            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
                 <div className="p-4 border-b border-gray-700">
                     <div className="flex justify-around">
                          <button 
                             onClick={() => setActiveTab('achievements')}
-                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-2 ${activeTab === 'achievements' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
+                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'achievements' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
                          >
-                            <TrophyIcon /> Achievements
+                            <TrophyIcon /> <span className="hidden sm:inline">Achievements</span><span className="sm:hidden">Achieve</span>
                         </button>
                          <button 
                             onClick={() => setActiveTab('staff')}
-                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-2 ${activeTab === 'staff' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
+                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'staff' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
                          >
-                            <BriefcaseIcon /> Staff
+                            <BriefcaseIcon /> <span className="hidden sm:inline">Staff</span>
                         </button>
                          <button 
                             onClick={() => setActiveTab('log')}
-                            className={`career-log-button flex-1 text-center py-2 font-bold flex items-center justify-center gap-2 ${activeTab === 'log' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
+                            className={`career-log-button flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'log' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
                         >
-                            <LogIcon /> Log
+                            <LogIcon /> <span className="hidden sm:inline">Log</span>
                         </button>
                     </div>
                 </div>

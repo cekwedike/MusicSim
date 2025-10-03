@@ -19,6 +19,7 @@ import LearningHub from './components/LearningHub';
 import ModuleViewer from './components/ModuleViewer';
 import { ContractViewer } from './components/ContractViewer';
 import { StatisticsModal } from './components/StatisticsModal';
+import { TutorialOverlay } from './components/TutorialOverlay';
 
 const GRACE_PERIOD_WEEKS = 8;
 
@@ -589,7 +590,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 }
             };
         case 'COMPLETE_TUTORIAL': {
-            const updatedStatistics = updateStatistics(state.statistics, state.playerStats, state.careerLog, state.staff, state.date);
+            const updatedStatistics = updateStatistics(state, state.statistics);
             
             // Check for tutorial achievements
             const { achievements: updatedAchievements, unseenAchievements: newUnseenAchievements } = 
@@ -686,6 +687,10 @@ const App: React.FC = () => {
     const handleViewContract = () => dispatch({ type: 'VIEW_CONTRACT' });
     const handleSignContract = () => dispatch({ type: 'SIGN_CONTRACT' });
     const handleDeclineContract = () => dispatch({ type: 'DECLINE_CONTRACT' });
+    const handleStartTutorial = () => dispatch({ type: 'START_TUTORIAL' });
+    const handleNextTutorialStep = () => dispatch({ type: 'NEXT_TUTORIAL_STEP' });
+    const handleSkipTutorial = () => dispatch({ type: 'SKIP_TUTORIAL' });
+    const handleCompleteTutorial = () => dispatch({ type: 'COMPLETE_TUTORIAL' });
 
     const renderGameContent = () => {
         switch (status) {
@@ -749,6 +754,14 @@ const App: React.FC = () => {
                 />
             )}
             {modal === 'statistics' && <StatisticsModal state={state} onClose={handleCloseModal} />}
+
+            <TutorialOverlay 
+                currentStep={state.tutorial.currentStep}
+                onNext={handleNextTutorialStep}
+                onSkip={handleSkipTutorial}
+                onComplete={handleCompleteTutorial}
+                isActive={state.tutorial.active}
+            />
 
             <footer className="text-center p-4 text-gray-500 text-sm">
                 A Music Industry Simulation

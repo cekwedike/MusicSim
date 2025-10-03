@@ -292,6 +292,8 @@ function gameReducer(state: GameState, action: Action): GameState {
             return { ...state, modal: 'management', unseenAchievements: [] };
         case 'CLOSE_MODAL':
             return { ...state, modal: 'none' };
+        case 'LOAD_GAME':
+            return { ...action.payload, status: 'playing' };
         default:
             return state;
     }
@@ -328,6 +330,30 @@ const App: React.FC = () => {
             fetchNextScenario(state);
         }
     }, [status, artistName, fetchNextScenario, state]);
+
+    // Auto-save effect
+    useEffect(() => {
+        if (status === 'playing' && isStorageAvailable()) {
+            autoSave(state);
+        }
+    }, [state.date, state.playerStats, status]); // Auto-save when date or stats change
+
+    // Initial load check
+    const [initialLoadChecked, setInitialLoadChecked] = useState(false);
+    useEffect(() => {
+        if (!initialLoadChecked && status === 'start' && isStorageAvailable()) {
+            const autoSaveData = loadGame('auto');
+            if (autoSaveData && autoSaveData.artistName) {
+                const shouldLoad = window.confirm(
+                    `Found a saved game for "${autoSaveData.artistName}" (${autoSaveData.artistGenre}). Do you want to continue?`
+                );
+                if (shouldLoad) {
+                    dispatch({ type: 'LOAD_GAME', payload: autoSaveData });
+                }
+            }
+            setInitialLoadChecked(true);
+        }
+    }, [status, initialLoadChecked]);
 
     const handleChoiceSelect = (choice: Choice) => dispatch({ type: 'SELECT_CHOICE', payload: choice });
     const handleContinue = () => dispatch({ type: 'DISMISS_OUTCOME' });

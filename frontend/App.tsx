@@ -48,6 +48,7 @@ const generateInitialState = (artistName = '', artistGenre = ''): GameState => {
             quizAttempts: {},
             conceptsMastered: []
         },
+        lessonsViewed: [],
         consecutiveFallbackCount: 0,
         staff: [],
         currentLabel: null,

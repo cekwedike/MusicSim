@@ -122,6 +122,7 @@ export interface GameState {
   modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer';
   currentModule: LearningModule | null;
   playerKnowledge: PlayerKnowledge;
+  lessonsViewed: string[];
   consecutiveFallbackCount: number;
   staff: Staff[];
   currentLabel: RecordLabel | null;

@@ -282,6 +282,13 @@ export const scenarioBank: Scenario[] = [
                     text: "You sign with Vinyl Heart! The advance helps, and their network gets your music on several popular playlists.",
                     cash: 5000, fame: 10, wellBeing: 5, careerProgress: 10, hype: 15,
                     signLabel: 'INDIE',
+                    lesson: {
+                        title: "Indie Labels vs Major Labels",
+                        explanation: "Indie labels typically offer smaller advances but better royalty rates and creative control. They're more nimble and can give new artists more personal attention.",
+                        realWorldExample: "Chocolate City is a prominent indie label in Nigeria that maintained artists' creative freedom while providing industry connections. Artists like M.I Abaga thrived under their more flexible approach.",
+                        tipForFuture: "Indie deals often have better terms for digital revenue and shorter contract periods. Consider if creative control and higher royalty percentages outweigh smaller advances.",
+                        conceptTaught: "Contract Basics"
+                    }
                 }
             },
             {
@@ -289,6 +296,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You pass, believing you're destined for bigger things. The indie label signs another artist who then blows up. You wonder if you made a mistake.",
                     cash: 0, fame: 0, wellBeing: -5, careerProgress: -2, hype: 0,
+                    lesson: {
+                        title: "The Risk of Waiting for 'Better' Deals",
+                        explanation: "Holding out for major label deals can backfire. Momentum in music is crucial, and sometimes a smaller opportunity now is better than a bigger one that never comes.",
+                        realWorldExample: "Some artists turn down indie deals waiting for majors, only to lose momentum. Meanwhile, artists who took indie deals used them as stepping stones to bigger opportunities.",
+                        tipForFuture: "Evaluate opportunities based on current career stage. Early in your career, any legitimate label support can be valuable for building credibility and connections.",
+                        conceptTaught: "Revenue Streams"
+                    }
                 }
             }
         ]
@@ -305,6 +319,13 @@ export const scenarioBank: Scenario[] = [
                     text: "You sign with Global Records! The massive advance changes your life, but they immediately pressure you to work with pop producers.",
                     cash: 250000, fame: 10, wellBeing: -10, careerProgress: 5, hype: 20,
                     signLabel: 'MAJOR_ADVANCE',
+                    lesson: {
+                        title: "High Advance vs Creative Control",
+                        explanation: "Large advances come with higher expectations and recoupment requirements. Labels need to make their money back, which often means commercial pressure and less creative freedom.",
+                        realWorldExample: "Major labels often sign artists for huge advances but then demand radio-friendly changes to recoup their investment. Artists like Frank Ocean had conflicts with Def Jam over creative direction due to the pressure to recoup advances.",
+                        tipForFuture: "Remember: advances are loans, not gifts. The more you take upfront, the more pressure there is to make commercially successful music. Consider if the money is worth the creative constraints.",
+                        conceptTaught: "Predatory Deals"
+                    }
                 }
             },
             {
@@ -313,6 +334,13 @@ export const scenarioBank: Scenario[] = [
                     text: "You sign with Visionary Music! The advance is smaller, but your higher royalty rate will pay off if you're successful. You have full control, but also more pressure.",
                     cash: 50000, fame: 5, wellBeing: 10, careerProgress: 10, hype: 15,
                     signLabel: 'MAJOR_ROYALTIES',
+                    lesson: {
+                        title: "Long-term Value vs Short-term Money",
+                        explanation: "Higher royalty rates mean you earn more from each sale/stream over time. If your music has staying power, this can be far more valuable than a large advance.",
+                        realWorldExample: "Taylor Swift's conflicts with her label over master ownership show the importance of long-term rights. Artists with better royalty deals often earn more over their careers than those who took bigger advances.",
+                        tipForFuture: "Consider your confidence in your music's longevity. If you believe your music will sell/stream well long-term, higher royalties often outperform large advances.",
+                        conceptTaught: "Rights and Royalties"
+                    }
                 }
             }
         ]
@@ -350,6 +378,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "Your funny, humble response wins people over. Your follower count skyrockets and you're praised for being authentic. Your hype explodes.",
                     cash: 0, fame: 5, wellBeing: -10, careerProgress: 1, hype: 30,
+                    lesson: {
+                        title: "Crisis Management Through Authenticity",
+                        explanation: "How you handle controversies can define your brand. Authentic, humorous responses often work better than corporate damage control because they humanize you.",
+                        realWorldExample: "When old photos of celebrities surface, those who respond with humor and honesty (like Ryan Reynolds or Chrissy Teigen) often come out stronger than those who try to hide or over-apologize.",
+                        tipForFuture: "Authenticity resonates more than perfection. Fans appreciate artists who can laugh at themselves and show vulnerability. It builds stronger connections than a polished corporate image.",
+                        conceptTaught: "Branding and Image"
+                    }
                 }
             },
             {
@@ -357,6 +392,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "The apology is seen as stiff and disingenuous by some, but sponsors and corporate partners appreciate the professional handling of the situation.",
                     cash: 0, fame: 0, wellBeing: -15, careerProgress: 2, hype: -10,
+                    lesson: {
+                        title: "Corporate Crisis Management",
+                        explanation: "Formal apologies protect business relationships but can seem inauthentic to fans. This approach prioritizes corporate partnerships over fan connection.",
+                        realWorldExample: "Many artists issue formal PR statements during controversies, which satisfy legal and business concerns but often feel disconnected from their artistic persona.",
+                        tipForFuture: "Consider your priorities: corporate partnerships or fan loyalty. Formal responses protect business interests but may weaken your authentic brand connection with audiences.",
+                        conceptTaught: "Branding and Image"
+                    }
                 }
             },
             {
@@ -364,6 +406,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "Your silence is interpreted as arrogance, and you lose fans and a potential sponsorship deal.",
                     cash: -500, fame: -10, wellBeing: -20, careerProgress: -5, hype: -20,
+                    lesson: {
+                        title: "The Dangers of Silence in Crisis",
+                        explanation: "In the digital age, silence during controversies is often interpreted negatively. Fans and business partners expect some form of response to show you care about their concerns.",
+                        realWorldExample: "Artists who stay silent during controversies often face worse backlash than those who respond poorly. Social media demands engagement, and silence can be seen as arrogance or guilt.",
+                        tipForFuture: "Even a brief acknowledgment is better than silence. You don't have to over-explain, but showing you're aware and care about your audience's concerns maintains trust.",
+                        conceptTaught: "Branding and Image"
+                    }
                 }
             }
         ]
@@ -379,6 +428,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "The commercial is everywhere. You make a fortune and gain mainstream recognition, but your 'cool' factor and hype from your core fans plummets.",
                     cash: 150000, fame: 20, wellBeing: 0, careerProgress: 2, hype: -20,
+                    lesson: {
+                        title: "Brand Partnerships and Artist Credibility",
+                        explanation: "Brand partnerships can provide significant income but may alienate core fans who value artistic integrity. The impact depends on your brand alignment and fan expectations.",
+                        realWorldExample: "When Iggy Azalea did multiple commercial endorsements, some fans felt it compromised her credibility. Conversely, brands aligned with artists' values (like Patagonia with environmentally conscious musicians) can enhance rather than damage reputation.",
+                        tipForFuture: "Consider if the brand aligns with your values and image. High-paying deals can fund artistic freedom later, but ensure they don't fundamentally contradict your brand.",
+                        conceptTaught: "Branding and Image"
+                    }
                 }
             },
             {
@@ -386,6 +442,13 @@ export const scenarioBank: Scenario[] = [
                 outcome: {
                     text: "You reject the offer. The story gets leaked and your core fanbase rallies around you, praising your integrity. Your credibility and hype soar.",
                     cash: 0, fame: -5, wellBeing: 15, careerProgress: 5, hype: 25,
+                    lesson: {
+                        title: "The Value of Artistic Integrity",
+                        explanation: "Turning down lucrative deals can actually increase your value by building trust and credibility. Fans often support artists who prioritize art over money.",
+                        realWorldExample: "Artists like Radiohead have turned down major brand deals to maintain credibility, which actually increased their cultural value and allowed them to command higher prices for tours and albums.",
+                        tipForFuture: "Sometimes saying no to money creates more long-term value. Authentic artists often have more loyal fanbases and sustainable careers than those seen as purely commercial.",
+                        conceptTaught: "Branding and Image"
+                    }
                 }
             }
         ]

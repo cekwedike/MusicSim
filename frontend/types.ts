@@ -67,6 +67,7 @@ export interface TutorialState {
   completed: boolean;
   skipped: boolean;
   stepsCompleted: string[];
+  startTime?: number;
 }
 
 export interface RecordLabel {

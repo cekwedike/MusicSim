@@ -99,6 +99,10 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     checkAndUnlock('EAGER_STUDENT', state.lessonsViewed.length >= 10);
     checkAndUnlock('KNOWLEDGE_SEEKER', state.lessonsViewed.length >= 25);
     
+    // Tutorial Achievements
+    checkAndUnlock('FIRST_STEPS', state.tutorial.completed);
+    checkAndUnlock('WISE_STUDENT', state.tutorial.completed && state.lessonsViewed.length >= 25);
+    
     // Statistics Achievements
     const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
     checkAndUnlock('SURVIVOR', totalWeeks >= 52);
@@ -568,7 +572,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                     currentStep: 0,
                     completed: false,
                     skipped: false,
-                    stepsCompleted: []
+                    stepsCompleted: [],
+                    startTime: Date.now()
                 }
             };
         case 'NEXT_TUTORIAL_STEP':
@@ -593,8 +598,29 @@ function gameReducer(state: GameState, action: Action): GameState {
             const updatedStatistics = updateStatistics(state, state.statistics);
             
             // Check for tutorial achievements
+            const completionTime = state.tutorial.startTime ? Date.now() - state.tutorial.startTime : 0;
             const { achievements: updatedAchievements, unseenAchievements: newUnseenAchievements } = 
-                checkAchievements(state, state.playerStats);
+                checkAchievements({
+                    ...state,
+                    tutorial: {
+                        ...state.tutorial,
+                        completed: true
+                    }
+                }, state.playerStats);
+            
+            // Additional check for EAGER_LEARNER (complete in under 5 minutes)
+            let finalAchievements = updatedAchievements;
+            let finalUnseen = newUnseenAchievements;
+            
+            if (completionTime < 5 * 60 * 1000) { // 5 minutes in milliseconds
+                const eagerLearnerAchievement = finalAchievements.find(a => a.id === 'EAGER_LEARNER');
+                if (eagerLearnerAchievement && !eagerLearnerAchievement.unlocked) {
+                    eagerLearnerAchievement.unlocked = true;
+                    if (!finalUnseen.includes('EAGER_LEARNER')) {
+                        finalUnseen = [...finalUnseen, 'EAGER_LEARNER'];
+                    }
+                }
+            }
             
             return {
                 ...state,
@@ -604,8 +630,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                     completed: true
                 },
                 statistics: updatedStatistics,
-                achievements: updatedAchievements,
-                unseenAchievements: [...state.unseenAchievements, ...newUnseenAchievements]
+                achievements: finalAchievements,
+                unseenAchievements: [...state.unseenAchievements, ...finalUnseen]
             };
         }
         default:

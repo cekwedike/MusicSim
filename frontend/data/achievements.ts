@@ -44,6 +44,11 @@ export const achievements: Omit<Achievement, 'unlocked'>[] = [
     { id: 'EAGER_STUDENT', name: 'Eager Student', description: 'View 10 different lessons from game scenarios.' },
     { id: 'KNOWLEDGE_SEEKER', name: 'Knowledge Seeker', description: 'View 25 different lessons from game scenarios.' },
     
+    // Tutorial Achievements
+    { id: 'FIRST_STEPS', name: 'First Steps', description: 'Complete the tutorial to learn the music industry basics.' },
+    { id: 'EAGER_LEARNER', name: 'Eager Learner', description: 'Complete the tutorial in under 5 minutes.' },
+    { id: 'WISE_STUDENT', name: 'Wise Student', description: 'Complete the tutorial and view all learning hub lessons.' },
+    
     // Statistics Achievements
     { id: 'SURVIVOR', name: 'Survivor', description: 'Survive 52 weeks (1 year) in a single career.' },
     { id: 'VETERAN', name: 'Veteran', description: 'Complete 10 careers.' },

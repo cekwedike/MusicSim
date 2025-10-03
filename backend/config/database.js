@@ -1,7 +1,10 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+// Default to a mock URL if DATABASE_URL is not provided
+const databaseUrl = process.env.DATABASE_URL || 'postgresql://localhost:5432/musicsim';
+
+const sequelize = new Sequelize(databaseUrl, {
   dialect: 'postgres',
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
   pool: {

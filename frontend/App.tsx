@@ -450,6 +450,7 @@ const App: React.FC = () => {
                 artistName={artistName || undefined} 
                 onShowManagementHub={handleShowManagementHub}
                 onShowSaveLoad={handleShowSaveLoad}
+                onShowLearningHub={handleShowLearningHub}
                 hasUnseenAchievements={unseenAchievements.length > 0}
             />
             

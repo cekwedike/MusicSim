@@ -328,16 +328,16 @@ export const scenarioBank: Scenario[] = [
     // --- LABEL SIGNING ---
     {
         title: "The Indie Label Offer",
-        description: "A small but respected indie record label, 'Vinyl Heart Records', wants to sign you. They offer a small advance but promise full creative control.",
+        description: "A small but respected indie record label, 'Vinyl Heart Records', wants to sign you. They've sent over a contract for you to review. Should you examine their terms or hold out for something bigger?",
         conditions: { minFame: 20, maxFame: 60, requiredAchievementId: 'PROJECT_EP_1' },
         once: true,
         choices: [
             {
-                text: "Sign the deal. Creative freedom is everything.",
+                text: "Review their contract carefully.",
                 outcome: {
-                    text: "You sign with Vinyl Heart! The advance helps, and their network gets your music on several popular playlists.",
-                    cash: 5000, fame: 10, wellBeing: 5, careerProgress: 10, hype: 15,
-                    signLabel: 'INDIE',
+                    text: "You sit down to review Vinyl Heart Records' contract offer. Time to see what they're really offering.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Vinyl Heart Records',
                     lesson: {
                         title: "Indie Labels vs Major Labels",
                         explanation: "Indie labels typically offer smaller advances but better royalty rates and creative control. They're more nimble and can give new artists more personal attention.",
@@ -365,16 +365,16 @@ export const scenarioBank: Scenario[] = [
     },
     {
         title: "The Major Label Bidding War",
-        description: "Your success has attracted the big sharks. Two major labels are courting you. 'Global Records' offers a massive advance, while 'Visionary Music' offers better long-term royalties.",
+        description: "Your success has attracted the big sharks. Two major labels have sent contracts for you to review. 'Global Records' and 'Visionary Music Group' are both interested. Which contract should you examine first?",
         conditions: { minFame: 60, minCareerProgress: 50, requiredAchievementId: 'PROJECT_ALBUM_1' },
         once: true,
         choices: [
             {
-                text: "Take the big advance from 'Global Records'.",
+                text: "Review Global Records' contract offer.",
                 outcome: {
-                    text: "You sign with Global Records! The massive advance changes your life, but they immediately pressure you to work with pop producers.",
-                    cash: 250000, fame: 10, wellBeing: -10, careerProgress: 5, hype: 20,
-                    signLabel: 'MAJOR_ADVANCE',
+                    text: "You examine Global Records' contract carefully. The numbers look big, but what's the fine print?",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Global Records',
                     lesson: {
                         title: "High Advance vs Creative Control",
                         explanation: "Large advances come with higher expectations and recoupment requirements. Labels need to make their money back, which often means commercial pressure and less creative freedom.",
@@ -385,11 +385,11 @@ export const scenarioBank: Scenario[] = [
                 }
             },
             {
-                text: "Sign with 'Visionary Music' for the better deal.",
+                text: "Review Visionary Music Group's contract offer.",
                 outcome: {
-                    text: "You sign with Visionary Music! The advance is smaller, but your higher royalty rate will pay off if you're successful. You have full control, but also more pressure.",
-                    cash: 50000, fame: 5, wellBeing: 10, careerProgress: 10, hype: 15,
-                    signLabel: 'MAJOR_ROYALTIES',
+                    text: "You carefully examine Visionary Music Group's contract. The royalty rates look promising, but let's see the full terms.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Visionary Music Group',
                     lesson: {
                         title: "Long-term Value vs Short-term Money",
                         explanation: "Higher royalty rates mean you earn more from each sale/stream over time. If your music has staying power, this can be far more valuable than a large advance.",

@@ -146,4 +146,5 @@ export type Action =
   | { type: 'RESTART' }
   | { type: 'VIEW_MANAGEMENT_HUB' }
   | { type: 'CLOSE_MODAL' }
+  | { type: 'LOAD_GAME'; payload: GameState }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

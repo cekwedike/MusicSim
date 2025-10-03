@@ -291,6 +291,8 @@ function gameReducer(state: GameState, action: Action): GameState {
         }
         case 'VIEW_MANAGEMENT_HUB':
             return { ...state, modal: 'management', unseenAchievements: [] };
+        case 'VIEW_SAVE_LOAD':
+            return { ...state, modal: 'saveload' };
         case 'CLOSE_MODAL':
             return { ...state, modal: 'none' };
         case 'LOAD_GAME':

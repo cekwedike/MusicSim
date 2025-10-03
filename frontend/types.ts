@@ -145,6 +145,7 @@ export type Action =
   | { type: 'DISMISS_OUTCOME' }
   | { type: 'RESTART' }
   | { type: 'VIEW_MANAGEMENT_HUB' }
+  | { type: 'VIEW_SAVE_LOAD' }
   | { type: 'CLOSE_MODAL' }
   | { type: 'LOAD_GAME'; payload: GameState }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

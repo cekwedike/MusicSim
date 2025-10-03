@@ -188,6 +188,16 @@ export interface GameStatistics {
   lastGameDate: number;
   favoriteGenre: string;
   totalPlayTimeMinutes: number;
+  careersByDifficulty: {
+    beginner: number;
+    realistic: number;
+    hardcore: number;
+  };
+  longestCareerByDifficulty: {
+    beginner: number;
+    realistic: number;
+    hardcore: number;
+  };
 }
 
 export interface HistoricalDataPoint {

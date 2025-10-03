@@ -1,5 +1,7 @@
 import React from 'react';
 import { BriefcaseIcon, SaveIcon, BookIcon, ChartIcon, QuestionMarkIcon } from './icons/Icons';
+import type { Difficulty } from '../types';
+import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 
 interface HeaderProps {
     artistName?: string;
@@ -9,6 +11,7 @@ interface HeaderProps {
     onShowStatistics: () => void;
     onStartTutorial: () => void;
     hasUnseenAchievements: boolean;
+    difficulty?: Difficulty;
 }
 
 

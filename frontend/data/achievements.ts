@@ -54,4 +54,10 @@ export const achievements: Omit<Achievement, 'unlocked'>[] = [
     { id: 'VETERAN', name: 'Veteran', description: 'Complete 10 careers.' },
     { id: 'PERSISTENT', name: 'Persistent', description: 'Survive 104 weeks (2 years) in a single career.' },
     { id: 'LEGENDARY_CAREER', name: 'Legendary Career', description: 'Survive 208 weeks (4 years) in a single career.' },
+    
+    // Difficulty Achievements
+    { id: 'REALISTIC_SURVIVOR', name: 'Realistic Survivor', description: 'Survive 52 weeks in Realistic Mode.' },
+    { id: 'HARDCORE_SURVIVOR', name: 'Hardcore Survivor', description: 'Survive 26 weeks in Hardcore Mode.' },
+    { id: 'HARDCORE_LEGEND', name: 'Hardcore Legend', description: 'Survive 52 weeks in Hardcore Mode.' },
+    { id: 'DIFFICULTY_MASTER', name: 'Difficulty Master', description: 'Complete careers in all three difficulty modes.' },
 ];

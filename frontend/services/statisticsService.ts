@@ -41,7 +41,17 @@ const getDefaultStatistics = (): GameStatistics => {
     firstGameDate: Date.now(),
     lastGameDate: Date.now(),
     favoriteGenre: '',
-    totalPlayTimeMinutes: 0
+    totalPlayTimeMinutes: 0,
+    careersByDifficulty: {
+      beginner: 0,
+      realistic: 0,
+      hardcore: 0
+    },
+    longestCareerByDifficulty: {
+      beginner: 0,
+      realistic: 0,
+      hardcore: 0
+    }
   };
 };
 
@@ -81,6 +91,13 @@ export const recordGameEnd = (state: GameState, stats: GameStatistics, outcome: 
   updated.longestCareerWeeks = Math.max(updated.longestCareerWeeks, weeksPlayed);
   updated.averageCareerLength = Math.floor(
     (updated.averageCareerLength * (updated.totalGamesPlayed - 1) + weeksPlayed) / updated.totalGamesPlayed
+  );
+  
+  // Track difficulty-specific stats
+  updated.careersByDifficulty[state.difficulty]++;
+  updated.longestCareerByDifficulty[state.difficulty] = Math.max(
+    updated.longestCareerByDifficulty[state.difficulty], 
+    weeksPlayed
   );
   
   if (outcome === 'debt') {

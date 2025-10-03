@@ -114,6 +114,20 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     checkAndUnlock('LEGENDARY_CAREER', totalWeeks >= 208);
     checkAndUnlock('VETERAN', state.statistics.totalGamesPlayed >= 10);
     
+    // Difficulty-specific achievements
+    if (state.difficulty === 'realistic') {
+        checkAndUnlock('REALISTIC_SURVIVOR', totalWeeks >= 52);
+    } else if (state.difficulty === 'hardcore') {
+        checkAndUnlock('HARDCORE_SURVIVOR', totalWeeks >= 26);
+        checkAndUnlock('HARDCORE_LEGEND', totalWeeks >= 52);
+    }
+    
+    // Check for Difficulty Master achievement
+    const beginnerCareers = state.statistics.careersByDifficulty.beginner;
+    const realisticCareers = state.statistics.careersByDifficulty.realistic;
+    const hardcoreCareers = state.statistics.careersByDifficulty.hardcore;
+    checkAndUnlock('DIFFICULTY_MASTER', beginnerCareers > 0 && realisticCareers > 0 && hardcoreCareers > 0);
+    
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
 
@@ -863,7 +877,7 @@ const App: React.FC = () => {
                 return <div className="flex-grow flex items-center justify-center"><Loader text="Setting the stage..." /></div>;
             case 'playing':
                 if (!currentScenario) return <div className="flex-grow flex items-center justify-center"><Loader text="Loading..." /></div>;
-                return <ScenarioCard scenario={currentScenario} onChoiceSelect={handleChoiceSelect} disabled={!!lastOutcome} />;
+                return <ScenarioCard scenario={currentScenario} onChoiceSelect={handleChoiceSelect} disabled={!!lastOutcome} difficulty={state.difficulty} />;
             default:
                 return null;
         }

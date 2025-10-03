@@ -20,6 +20,93 @@ const generateToken = (userId) => {
 };
 
 /**
+ * @swagger
+ * components:
+ *   schemas:
+ *     RegisterRequest:
+ *       type: object
+ *       required:
+ *         - email
+ *         - username
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: User's email address
+ *         username:
+ *           type: string
+ *           minLength: 3
+ *           maxLength: 30
+ *           description: Unique username
+ *         password:
+ *           type: string
+ *           minLength: 6
+ *           description: User's password
+ *     LoginRequest:
+ *       type: object
+ *       required:
+ *         - emailOrUsername
+ *         - password
+ *       properties:
+ *         emailOrUsername:
+ *           type: string
+ *           description: User's email or username
+ *         password:
+ *           type: string
+ *           description: User's password
+ *     AuthResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         message:
+ *           type: string
+ *         data:
+ *           type: object
+ *           properties:
+ *             token:
+ *               type: string
+ *               description: JWT authentication token
+ *             user:
+ *               $ref: '#/components/schemas/User'
+ */
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     description: Create a new user account with email, username, and password
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterRequest'
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       409:
+ *         description: User already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
  * @route   POST /api/auth/register
  * @desc    Register a new user
  * @access  Public

@@ -771,10 +771,10 @@ const App: React.FC = () => {
     }, []);
     
     useEffect(() => {
-        if (status === 'loading' && artistName) {
+        if ((status === 'loading' || (status === 'playing' && !currentScenario)) && artistName) {
             fetchNextScenario(state);
         }
-    }, [status, artistName, fetchNextScenario, state]);
+    }, [status, artistName, fetchNextScenario, state, currentScenario]);
 
     // Auto-save effect
     useEffect(() => {

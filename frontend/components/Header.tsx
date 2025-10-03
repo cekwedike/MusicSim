@@ -1,5 +1,5 @@
 import React from 'react';
-import { BriefcaseIcon, SaveIcon, BookIcon, ChartIcon } from './icons/Icons';
+import { BriefcaseIcon, SaveIcon, BookIcon, ChartIcon, QuestionMarkIcon } from './icons/Icons';
 
 interface HeaderProps {
     artistName?: string;
@@ -7,11 +7,12 @@ interface HeaderProps {
     onShowSaveLoad: () => void;
     onShowLearningHub: () => void;
     onShowStatistics: () => void;
+    onStartTutorial: () => void;
     hasUnseenAchievements: boolean;
 }
 
 
-const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShowSaveLoad, onShowLearningHub, onShowStatistics, hasUnseenAchievements }) => {
+const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShowSaveLoad, onShowLearningHub, onShowStatistics, onStartTutorial, hasUnseenAchievements }) => {
     return (
         <header className="py-4 px-6 md:px-8 text-center border-b border-gray-700/50 relative">
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -31,6 +32,14 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                         aria-label="Learning Hub"
                     >
                         <BookIcon />
+                    </button>
+                    
+                    <button 
+                        onClick={onStartTutorial}
+                        className="tutorial-button text-gray-400 hover:text-white transition-colors duration-200 p-2 rounded-full hover:bg-gray-700"
+                        aria-label="Tutorial"
+                    >
+                        <QuestionMarkIcon />
                     </button>
                     
                     <button 

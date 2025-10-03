@@ -767,6 +767,7 @@ const App: React.FC = () => {
                 onShowSaveLoad={handleShowSaveLoad}
                 onShowLearningHub={handleShowLearningHub}
                 onShowStatistics={handleShowStatistics}
+                onStartTutorial={handleStartTutorial}
                 hasUnseenAchievements={unseenAchievements.length > 0}
             />
             

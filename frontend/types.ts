@@ -67,6 +67,45 @@ export interface SaveSlot {
   careerProgress: number;
 }
 
+export interface LearningModule {
+  id: string;
+  title: string;
+  category: 'contracts' | 'revenue' | 'rights' | 'marketing' | 'legal';
+  icon: string; // Icon name or emoji
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  estimatedMinutes: number;
+  prerequisites?: string[]; // Other module IDs
+  content: {
+    introduction: string;
+    sections: ModuleSection[];
+    keyTakeaways: string[];
+    culturalContext?: string; // African music industry specific info
+    commonPitfalls: string[];
+  };
+  quiz: QuizQuestion[];
+}
+
+export interface ModuleSection {
+  heading: string;
+  content: string;
+  examples?: string[];
+  tip?: string;
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+}
+
+export interface PlayerKnowledge {
+  completedModules: string[];
+  moduleScores: Record<string, number>; // 0-100
+  quizAttempts: Record<string, number>;
+  conceptsMastered: string[];
+}
+
 export interface GameState {
   status: 'start' | 'setup' | 'playing' | 'loading' | 'gameOver' | 'gameWon';
   playerStats: PlayerStats;
@@ -80,7 +119,9 @@ export interface GameState {
   achievements: Achievement[];
   currentProject: Project | null;
   unseenAchievements: string[];
-  modal: 'none' | 'management' | 'saveload';
+  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer';
+  currentModule: LearningModule | null;
+  playerKnowledge: PlayerKnowledge;
   consecutiveFallbackCount: number;
   staff: Staff[];
   currentLabel: RecordLabel | null;
@@ -146,6 +187,10 @@ export type Action =
   | { type: 'RESTART' }
   | { type: 'VIEW_MANAGEMENT_HUB' }
   | { type: 'VIEW_SAVE_LOAD' }
+  | { type: 'VIEW_LEARNING_HUB' }
+  | { type: 'OPEN_MODULE'; payload: LearningModule }
+  | { type: 'COMPLETE_MODULE'; payload: { moduleId: string; score: number; conceptsMastered: string[] } }
+  | { type: 'CLOSE_MODULE' }
   | { type: 'CLOSE_MODAL' }
   | { type: 'LOAD_GAME'; payload: GameState }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

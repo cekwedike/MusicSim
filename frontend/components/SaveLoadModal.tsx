@@ -46,10 +46,10 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
     try {
       const timestamp = Date.now().toString();
       const slotId = `${timestamp}_${newSaveName.trim().replace(/\s+/g, '_')}`;
-      saveGame(currentGameState, slotId);
+      await saveGame(currentGameState, slotId);
       setNewSaveName('');
       setShowSaveInput(false);
-      loadSaveSlots();
+      await loadSaveSlots();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save game');
     } finally {
@@ -61,7 +61,7 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
     setLoading(true);
     setError('');
     try {
-      const gameState = loadGame(slotId);
+      const gameState = await loadGame(slotId);
       if (gameState) {
         onLoadGame(gameState);
         onClose();
@@ -83,8 +83,8 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
     setLoading(true);
     setError('');
     try {
-      deleteSave(slotId);
-      loadSaveSlots();
+      await deleteSave(slotId);
+      await loadSaveSlots();
     } catch (err) {
       setError('Failed to delete save');
     } finally {

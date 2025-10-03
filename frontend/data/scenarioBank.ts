@@ -398,6 +398,20 @@ export const scenarioBank: Scenario[] = [
                         conceptTaught: "Rights and Royalties"
                     }
                 }
+            },
+            {
+                text: "Walk away from both offers.",
+                outcome: {
+                    text: "You decide neither offer feels right and walk away. It's a gutsy move that maintains your independence but means giving up major label resources.",
+                    cash: 0, fame: 0, wellBeing: 5, careerProgress: -5, hype: -5,
+                    lesson: {
+                        title: "The Power of Walking Away",
+                        explanation: "Sometimes the best deal is no deal. Walking away from unfavorable contracts maintains your leverage and independence, even if it means short-term sacrifice.",
+                        realWorldExample: "Frank Ocean famously walked away from his Def Jam contract to maintain creative control, eventually releasing 'Blonde' independently to critical and commercial success.",
+                        tipForFuture: "Don't let FOMO (fear of missing out) pressure you into bad deals. There will always be other opportunities if you keep building your career.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
             }
         ]
     },

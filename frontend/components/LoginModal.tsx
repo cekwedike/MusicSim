@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import './LoginModal.css';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -13,263 +12,206 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   onClose, 
   initialMode = 'login' 
 }) => {
-  const { login, register, error, clearError, isLoading } = useAuth();
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
-  const [formData, setFormData] = useState({
-    email: '',
-    username: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const { login, register } = useAuth();
 
   // Reset form when modal opens/closes or mode changes
   React.useEffect(() => {
     if (isOpen) {
-      setFormData({
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: ''
-      });
-      setValidationErrors({});
-      clearError();
+      setEmail('');
+      setUsername('');
+      setPassword('');
+      setError('');
       setMode(initialMode);
     }
-  }, [isOpen, initialMode, clearError]);
-
-  const validateForm = (): boolean => {
-    const errors: Record<string, string> = {};
-
-    if (!formData.email.trim()) {
-      errors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'Please enter a valid email address';
-    }
-
-    if (mode === 'register') {
-      if (!formData.username.trim()) {
-        errors.username = 'Username is required';
-      } else if (formData.username.length < 3) {
-        errors.username = 'Username must be at least 3 characters';
-      } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-        errors.username = 'Username can only contain letters, numbers, and underscores';
-      }
-    }
-
-    if (!formData.password) {
-      errors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
-    }
-
-    if (mode === 'register') {
-      if (!formData.confirmPassword) {
-        errors.confirmPassword = 'Please confirm your password';
-      } else if (formData.password !== formData.confirmPassword) {
-        errors.confirmPassword = 'Passwords do not match';
-      }
-    }
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+  }, [isOpen, initialMode]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
+    setError('');
+    setLoading(true);
 
     try {
-      let success = false;
-
       if (mode === 'login') {
-        success = await login(formData.email, formData.password);
+        await login(email, password);
+        onClose(); // Close modal on successful login
       } else {
-        success = await register(formData.username, formData.email, formData.password);
+        // Validation for registration
+        if (username.length < 3) {
+          setError('Username must be at least 3 characters long');
+          setLoading(false);
+          return;
+        }
+        
+        if (password.length < 8) {
+          setError('Password must be at least 8 characters long');
+          setLoading(false);
+          return;
+        }
+
+        await register(email, username, password);
+        onClose(); // Close modal on successful registration
       }
-
-      if (success) {
-        onClose();
+    } catch (err: any) {
+      setLoading(false);
+      
+      // Parse error message
+      let errorMessage = 'An error occurred. Please try again.';
+      
+      if (err.message) {
+        errorMessage = err.message;
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
       }
-    } catch (error) {
-      // Error is handled by the auth context
-      console.error('Auth error:', error);
+      
+      // User-friendly error messages
+      if (errorMessage.includes('Invalid credentials')) {
+        errorMessage = mode === 'login' 
+          ? '❌ Wrong email/username or password. Please try again.'
+          : errorMessage;
+      } else if (errorMessage.includes('already exists') || errorMessage.includes('already registered')) {
+        errorMessage = '❌ This email or username is already taken. Try logging in instead.';
+      } else if (errorMessage.includes('not found')) {
+        errorMessage = '❌ No account found with these credentials. Please register first.';
+      } else if (errorMessage.includes('network') || errorMessage.includes('Network')) {
+        errorMessage = '🌐 Network error. Please check your internet connection.';
+      }
+      
+      setError(errorMessage);
     }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Clear validation error for this field
-    if (validationErrors[name]) {
-      setValidationErrors(prev => ({ ...prev, [name]: '' }));
-    }
-    
-    // Clear auth error when user starts typing
-    if (error) {
-      clearError();
-    }
-  };
-
-  const switchMode = () => {
-    setMode(mode === 'login' ? 'register' : 'login');
-    setValidationErrors({});
-    clearError();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="login-modal-overlay" onClick={onClose}>
-      <div className="login-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="login-modal-header">
-          <h2>{mode === 'login' ? 'Login to MusicSim' : 'Join MusicSim'}</h2>
-          <button 
-            className="close-button" 
-            onClick={onClose}
-            aria-label="Close"
-          >
-            ×
-          </button>
-        </div>
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+      <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl w-full max-w-md p-8 relative">
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold min-w-[44px] min-h-[44px] flex items-center justify-center"
+        >
+          ✕
+        </button>
 
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">
-              Email {mode === 'login' && '(or Username)'}
+        <h2 className="text-3xl font-bold text-violet-300 mb-2 text-center">
+          {mode === 'login' ? 'Welcome Back!' : 'Join MusicSim'}
+        </h2>
+        
+        <p className="text-gray-400 text-center mb-6">
+          {mode === 'login' 
+            ? 'Login to continue your music career' 
+            : 'Create an account to start your journey'}
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {mode === 'register' && (
+            <div>
+              <label className="block text-gray-300 mb-2 font-medium">Username</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                placeholder="Choose a username"
+                required
+                minLength={3}
+                maxLength={30}
+              />
+              <p className="text-gray-400 text-xs mt-1">3-30 characters, letters, numbers, and underscores only</p>
+            </div>
+          )}
+
+          <div>
+            <label className="block text-gray-300 mb-2 font-medium">
+              {mode === 'login' ? 'Email or Username' : 'Email'}
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder={mode === 'login' ? 'Enter email or username' : 'Enter your email'}
-              className={validationErrors.email ? 'error' : ''}
-              disabled={isLoading}
+              type={mode === 'login' ? 'text' : 'email'}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              placeholder={mode === 'login' ? 'Enter email or username' : 'your@email.com'}
+              required
             />
-            {validationErrors.email && (
-              <span className="error-message">{validationErrors.email}</span>
-            )}
           </div>
 
-          {mode === 'register' && (
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={formData.username}
-                onChange={handleInputChange}
-                placeholder="Choose a username"
-                className={validationErrors.username ? 'error' : ''}
-                disabled={isLoading}
-              />
-              {validationErrors.username && (
-                <span className="error-message">{validationErrors.username}</span>
-              )}
-            </div>
-          )}
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          <div>
+            <label className="block text-gray-300 mb-2 font-medium">Password</label>
             <input
-              id="password"
-              name="password"
               type="password"
-              value={formData.password}
-              onChange={handleInputChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
               placeholder="Enter your password"
-              className={validationErrors.password ? 'error' : ''}
-              disabled={isLoading}
+              required
+              minLength={8}
             />
-            {validationErrors.password && (
-              <span className="error-message">{validationErrors.password}</span>
+            {mode === 'register' && (
+              <p className="text-gray-400 text-xs mt-1">At least 8 characters</p>
             )}
           </div>
-
-          {mode === 'register' && (
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                placeholder="Confirm your password"
-                className={validationErrors.confirmPassword ? 'error' : ''}
-                disabled={isLoading}
-              />
-              {validationErrors.confirmPassword && (
-                <span className="error-message">{validationErrors.confirmPassword}</span>
-              )}
-            </div>
-          )}
 
           {error && (
-            <div className="auth-error">
+            <div className="bg-red-500/10 border-2 border-red-500 rounded-lg p-4 text-red-300 text-sm font-medium animate-shake">
               {error}
             </div>
           )}
 
-          <button 
-            type="submit" 
-            className="submit-button"
-            disabled={isLoading}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-3 px-4 rounded-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
           >
-            {isLoading ? 'Please wait...' : (mode === 'login' ? 'Login' : 'Create Account')}
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Please wait...
+              </span>
+            ) : (
+              mode === 'login' ? 'Login' : 'Create Account'
+            )}
           </button>
         </form>
 
-        <div className="auth-switch">
-          {mode === 'login' ? (
-            <p>
-              Don't have an account?{' '}
-              <button 
-                type="button" 
-                className="link-button" 
-                onClick={switchMode}
-                disabled={isLoading}
-              >
-                Sign up here
-              </button>
-            </p>
-          ) : (
-            <p>
-              Already have an account?{' '}
-              <button 
-                type="button" 
-                className="link-button" 
-                onClick={switchMode}
-                disabled={isLoading}
-              >
-                Log in here
-              </button>
-            </p>
-          )}
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => {
+              setMode(mode === 'login' ? 'register' : 'login');
+              setError('');
+              setEmail('');
+              setPassword('');
+              setUsername('');
+            }}
+            className="text-violet-400 hover:text-violet-300 text-sm font-medium underline"
+          >
+            {mode === 'login' 
+              ? "Don't have an account? Register here" 
+              : 'Already have an account? Login here'}
+          </button>
         </div>
 
-        <div className="guest-mode">
-          <p>
-            Want to try without an account?{' '}
-            <button 
-              type="button" 
-              className="link-button" 
-              onClick={onClose}
-              disabled={isLoading}
-            >
-              Continue as Guest
-            </button>
-          </p>
-          <small>
+        <div className="mt-4 text-center">
+          <button 
+            type="button" 
+            className="text-gray-400 hover:text-gray-300 text-sm underline" 
+            onClick={onClose}
+            disabled={loading}
+          >
+            Continue as Guest
+          </button>
+          <p className="text-gray-500 text-xs mt-1">
             Note: Guest progress won't be saved and some features may be limited.
-          </small>
+          </p>
         </div>
       </div>
     </div>

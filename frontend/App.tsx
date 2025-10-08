@@ -746,6 +746,64 @@ const getPredictedOutcome = (outcome: any): string => {
     return `This choice will likely make you ${negativeEffects.join(", ")}.`;
 };
 
+const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState) => void }> = ({ onStart, onContinue }) => {
+    const [autosaveExists, setAutosaveExists] = useState(false);
+    const [autosaveAge, setAutosaveAge] = useState<number | null>(null);
+
+    useEffect(() => {
+        const checkAutosave = () => {
+            setAutosaveExists(hasValidAutosave());
+            setAutosaveAge(getAutosaveAge());
+        };
+        
+        checkAutosave();
+        
+        // Update every 10 seconds
+        const interval = setInterval(checkAutosave, 10000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleContinue = async () => {
+        const save = await loadGame('auto');
+        if (save) {
+            onContinue(save);
+        } else {
+            alert('Autosave has expired or does not exist');
+        }
+    };
+
+    return (
+        <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">Welcome to MusicSim</h2>
+            <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
+            
+            <div className="space-y-4 w-full max-w-sm">
+                {autosaveExists && (
+                    <button
+                        onClick={handleContinue}
+                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-lg hover:scale-105 transition-transform text-lg shadow-lg"
+                    >
+                        Continue Game
+                        {autosaveAge !== null && (
+                            <span className="block text-sm mt-1 opacity-75">
+                                Last saved {autosaveAge} {autosaveAge === 1 ? 'minute' : 'minutes'} ago
+                                {autosaveAge >= 8 && ' (expires soon!)'}
+                            </span>
+                        )}
+                    </button>
+                )}
+                
+                <button
+                    onClick={onStart}
+                    className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300"
+                >
+                    Start New Career
+                </button>
+            </div>
+        </div>
+    );
+};
+
 const GameScreen: React.FC<{ onStart: () => void, title: string, message: string, buttonText: string }> = ({ onStart, title, message, buttonText }) => (
     <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
         <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">{title}</h2>
@@ -880,6 +938,7 @@ const GameApp: React.FC = () => {
     };
     const handleContinue = () => dispatch({ type: 'DISMISS_OUTCOME' });
     const handleStartGame = () => dispatch({ type: 'START_SETUP' });
+    const handleContinueFromAutosave = (gameState: GameState) => dispatch({ type: 'LOAD_GAME', payload: gameState });
     const handleRestart = () => dispatch({ type: 'RESTART' });
     const handleSetupSubmit = (name: string, genre: string, difficulty: Difficulty) => dispatch({ type: 'SUBMIT_SETUP', payload: { name, genre, difficulty } });
     const handleShowManagementHub = () => dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
@@ -903,7 +962,7 @@ const GameApp: React.FC = () => {
     const renderGameContent = () => {
         switch (status) {
             case 'start':
-                return <GameScreen onStart={handleStartGame} title="Welcome to MusicSim" message="Your journey in the music industry starts now. Make wise decisions to build a legendary career." buttonText="Start Your Career" />;
+                return <StartScreen onStart={handleStartGame} onContinue={handleContinueFromAutosave} />;
             case 'setup':
                 return <ArtistSetup onSubmit={handleSetupSubmit} />;
             case 'gameOver':

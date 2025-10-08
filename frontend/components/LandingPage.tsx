@@ -1,0 +1,125 @@
+import React, { useState } from 'react';
+import { LoginModal } from './LoginModal';
+
+interface LandingPageProps {
+  onPlayAsGuest: () => void;
+}
+
+const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginMode, setLoginMode] = useState<'login' | 'register'>('login');
+
+  const handleShowLogin = () => {
+    setLoginMode('login');
+    setShowLoginModal(true);
+  };
+
+  const handleShowRegister = () => {
+    setLoginMode('register');
+    setShowLoginModal(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center">
+        {/* Logo/Title */}
+        <div className="mb-8">
+          <h1 className="text-6xl md:text-8xl font-black mb-4 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+            MusicSim
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 font-medium">
+            A Business Simulation Game
+          </p>
+        </div>
+
+        {/* Tagline */}
+        <div className="mb-12 space-y-3">
+          <p className="text-lg md:text-xl text-gray-400">
+            Build your music career from the ground up
+          </p>
+          <p className="text-base md:text-lg text-gray-500">
+            Learn the business. Make smart decisions. Become a legend.
+          </p>
+        </div>
+
+        {/* Call-to-action buttons */}
+        <div className="space-y-4 max-w-md mx-auto">
+          {/* Sign Up Button */}
+          <button
+            onClick={handleShowRegister}
+            className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-4 px-8 rounded-lg hover:scale-105 transition-transform shadow-2xl text-lg"
+          >
+            Create Account
+          </button>
+
+          {/* Login Button */}
+          <button
+            onClick={handleShowLogin}
+            className="w-full bg-gray-800 border-2 border-violet-500 text-violet-300 font-bold py-4 px-8 rounded-lg hover:scale-105 transition-transform shadow-xl text-lg"
+          >
+            Login
+          </button>
+
+          {/* Play as Guest Button */}
+          <button
+            onClick={onPlayAsGuest}
+            className="w-full bg-transparent border border-gray-600 text-gray-400 font-medium py-3 px-8 rounded-lg hover:bg-gray-800 hover:text-gray-300 hover:border-gray-500 transition-all text-base"
+          >
+            Play as Guest
+          </button>
+        </div>
+
+        {/* Features */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6">
+            <div className="text-3xl mb-3">🎵</div>
+            <h3 className="text-lg font-bold text-violet-300 mb-2">Realistic Simulation</h3>
+            <p className="text-gray-400 text-sm">
+              Experience the real challenges of the music industry in Africa and beyond
+            </p>
+          </div>
+
+          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6">
+            <div className="text-3xl mb-3">📚</div>
+            <h3 className="text-lg font-bold text-violet-300 mb-2">Learn the Business</h3>
+            <p className="text-gray-400 text-sm">
+              Master contracts, revenue streams, marketing, and industry dynamics
+            </p>
+          </div>
+
+          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6">
+            <div className="text-3xl mb-3">🏆</div>
+            <h3 className="text-lg font-bold text-violet-300 mb-2">Build Your Legacy</h3>
+            <p className="text-gray-400 text-sm">
+              Make decisions that shape your career. How long can you survive?
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-12 text-gray-500 text-sm">
+          <p>An educational game about the music business</p>
+        </div>
+      </div>
+
+      {/* Login/Register Modal */}
+      {showLoginModal && (
+        <LoginModal 
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          initialMode={loginMode}
+        />
+      )}
+    </div>
+  );
+};
+
+export default LandingPage;

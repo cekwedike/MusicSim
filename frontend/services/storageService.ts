@@ -30,13 +30,15 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
   };
 
   try {
-    // If authenticated, save to backend
+    // Only save to backend if authenticated (not guest mode)
     if (authService.isAuthenticated()) {
       await gameService.saveGame(slotId, state);
       console.log(`Saved to backend: ${slotId}`);
+    } else {
+      console.log('Guest mode - saving to localStorage only');
     }
     
-    // Always save to localStorage as backup
+    // Always save to localStorage
     const saves = loadLocalSaves();
     saves[slotId] = saveData;
     localStorage.setItem('musicsim_saves', JSON.stringify(saves));

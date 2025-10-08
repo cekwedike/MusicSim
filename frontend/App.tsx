@@ -1,6 +1,7 @@
 import React, { useReducer, useCallback, useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginModal } from './components/LoginModal';
+import LandingPage from './components/LandingPage';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave } from './services/storageService';
@@ -817,7 +818,7 @@ const GameScreen: React.FC<{ onStart: () => void, title: string, message: string
     </div>
 );
 
-const GameApp: React.FC = () => {
+const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> = ({ isGuestMode, onResetToLanding }) => {
     const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
@@ -879,11 +880,11 @@ const GameApp: React.FC = () => {
         return () => clearInterval(cleanupInterval);
     }, [status]); // Add status dependency
 
-    // Auto-load user's autosave when authenticated
+    // Auto-load user's autosave when authenticated (not guest mode)
     useEffect(() => {
         const autoLoadGame = async () => {
-            // Only run if user just logged in and game hasn't started
-            if (isAuthenticated && !authLoading && status === 'start') {
+            // Only run if user just logged in and game hasn't started, and not in guest mode
+            if (isAuthenticated && !authLoading && status === 'start' && !isGuestMode) {
                 try {
                     console.log('Checking for autosave...');
                     const savedState = await loadGame('auto');
@@ -906,7 +907,19 @@ const GameApp: React.FC = () => {
         };
 
         autoLoadGame();
-    }, [isAuthenticated, authLoading, status]);
+    }, [isAuthenticated, authLoading, status, isGuestMode]);
+
+    // Reset game state when returning to landing (logout/exit guest mode)
+    useEffect(() => {
+        const handleReset = () => {
+            if (!isAuthenticated && !isGuestMode && status !== 'start') {
+                console.log('Resetting game state...');
+                dispatch({ type: 'RESTART' });
+            }
+        };
+
+        handleReset();
+    }, [isAuthenticated, isGuestMode, status]);
 
     // Auto-start tutorial for new players
     useEffect(() => {
@@ -1114,23 +1127,30 @@ const UserProfile: React.FC<{ onOpenLoginModal: () => void }> = ({ onOpenLoginMo
 
 // Main authenticated app wrapper
 const AuthenticatedApp: React.FC = () => {
-    const { isAuthenticated, isLoading } = useAuth();
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const [isInitialized, setIsInitialized] = useState(false);
+    const { user, isAuthenticated, isLoading, logout } = useAuth();
+    const [guestMode, setGuestMode] = useState(false);
+    const [showLanding, setShowLanding] = useState(true);
 
-    // Show login modal on first load if not authenticated
+    // Hide landing page once user is authenticated or playing as guest
     useEffect(() => {
-        if (!isLoading && !isInitialized) {
-            setIsInitialized(true);
-            if (!isAuthenticated) {
-                // Don't automatically show login modal, let user choose
-                // setShowLoginModal(true);
-            }
+        if (isAuthenticated || guestMode) {
+            setShowLanding(false);
         }
-    }, [isLoading, isAuthenticated, isInitialized]);
+    }, [isAuthenticated, guestMode]);
 
-    const handleOpenLoginModal = () => setShowLoginModal(true);
-    const handleCloseLoginModal = () => setShowLoginModal(false);
+    // Handle guest mode
+    const handlePlayAsGuest = () => {
+        setGuestMode(true);
+        setShowLanding(false);
+    };
+
+    // Handle logout
+    const handleLogout = async () => {
+        await logout();
+        setGuestMode(false);
+        setShowLanding(true);
+        // Game state will be reset by GameApp component
+    };
 
     if (isLoading) {
         return (
@@ -1143,32 +1163,45 @@ const AuthenticatedApp: React.FC = () => {
         );
     }
 
+    // Show landing page if not authenticated and not guest
+    if (showLanding && !isAuthenticated && !guestMode) {
+        return <LandingPage onPlayAsGuest={handlePlayAsGuest} />;
+    }
+
     return (
         <div className="min-h-screen bg-gray-900">
-            {/* Header with user info */}
-            <div className="bg-gray-800 border-b border-gray-700 px-4 py-2">
-                <div className="max-w-6xl mx-auto flex justify-between items-center">
-                    <div className="flex items-center space-x-4">
-                        <h1 className="text-xl font-bold text-yellow-400">MusicSim</h1>
-                        {!isAuthenticated && (
-                            <span className="text-sm text-yellow-300 bg-yellow-900/30 px-2 py-1 rounded">
-                                Playing as Guest
-                            </span>
-                        )}
+            {/* Header with user info - only show when not on landing page */}
+            {!showLanding && (isAuthenticated || guestMode) && (
+                <div className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
+                    <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <h1 className="text-xl font-bold text-violet-300">MusicSim</h1>
+                            {guestMode && (
+                                <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded border border-yellow-500/30">
+                                    Guest Mode
+                                </span>
+                            )}
+                            {isAuthenticated && user && (
+                                <span className="text-sm text-gray-400">
+                                    {user.username}
+                                </span>
+                            )}
+                        </div>
+                        
+                        <button
+                            onClick={handleLogout}
+                            className="text-sm text-red-400 hover:text-red-300 font-medium"
+                        >
+                            {guestMode ? 'Exit Guest Mode' : 'Logout'}
+                        </button>
                     </div>
-                    <UserProfile onOpenLoginModal={handleOpenLoginModal} />
                 </div>
+            )}
+
+            {/* Game content with proper padding when header is visible */}
+            <div className={`${!showLanding ? 'pt-16' : ''}`}>
+                <GameApp isGuestMode={guestMode} onResetToLanding={handleLogout} />
             </div>
-
-            {/* Game content */}
-            <GameApp />
-
-            {/* Login Modal */}
-            <LoginModal
-                isOpen={showLoginModal}
-                onClose={handleCloseLoginModal}
-                initialMode="login"
-            />
         </div>
     );
 };

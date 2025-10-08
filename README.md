@@ -1,6 +1,6 @@
-# 🎵 MusicSim: Music Industry Business Simulation
+# 🎵 MusicSim: Music Business Simulation
 
-A comprehensive strategic business simulation game where players navigate the complex world of the music industry, making critical decisions that shape their artist's career, reputation, and success.
+A comprehensive strategic music business simulation where players navigate the complex world of the music industry, making critical decisions that shape their artist's career, reputation, and success.
 
 ## 🎬 Demo Video
 

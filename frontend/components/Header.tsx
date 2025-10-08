@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
                     )}
                 </div>
             ) : (
-                <p className="text-gray-400 mt-1 text-sm md:text-base">A Business Simulation Game</p>
+                <p className="text-gray-400 mt-1 text-sm md:text-base">A Music Business Simulation</p>
             )}
 
             {/* Autosave Indicator */}

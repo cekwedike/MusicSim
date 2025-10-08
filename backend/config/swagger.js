@@ -5,7 +5,7 @@ const swaggerDefinition = {
   info: {
     title: 'MusicSim API',
     version: '1.0.0',
-    description: 'Backend API for MusicSim - A Music Industry Business Simulation Game',
+    description: 'Backend API for MusicSim - A Music Business Simulation',
     contact: {
       name: 'MusicSim Development Team',
       email: 'support@musicsim.dev'

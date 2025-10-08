@@ -35,17 +35,17 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           <h1 className="text-6xl md:text-8xl font-black mb-4 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
             MusicSim
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 font-medium">
-            A Business Simulation Game
+          <p className="text-2xl md:text-3xl text-white font-semibold tracking-wide">
+            A Music Business Simulation
           </p>
         </div>
 
         {/* Tagline */}
-        <div className="mb-12 space-y-3">
-          <p className="text-lg md:text-xl text-gray-400">
+        <div className="mb-12 space-y-4">
+          <p className="text-xl md:text-2xl text-gray-100 font-medium">
             Build your music career from the ground up
           </p>
-          <p className="text-base md:text-lg text-gray-500">
+          <p className="text-lg md:text-xl text-gray-300">
             Learn the business. Make smart decisions. Become a legend.
           </p>
         </div>
@@ -63,7 +63,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           {/* Login Button */}
           <button
             onClick={handleShowLogin}
-            className="w-full bg-gray-800 border-2 border-violet-500 text-violet-300 font-bold py-4 px-8 rounded-lg hover:scale-105 transition-transform shadow-xl text-lg"
+            className="w-full bg-gray-800 border-2 border-violet-400 text-violet-200 font-bold py-4 px-8 rounded-lg hover:scale-105 hover:bg-gray-700 transition-all shadow-xl text-lg"
           >
             Login
           </button>
@@ -71,7 +71,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           {/* Play as Guest Button */}
           <button
             onClick={onPlayAsGuest}
-            className="w-full bg-transparent border border-gray-600 text-gray-400 font-medium py-3 px-8 rounded-lg hover:bg-gray-800 hover:text-gray-300 hover:border-gray-500 transition-all text-base"
+            className="w-full bg-transparent border-2 border-gray-500 text-gray-200 font-semibold py-3 px-8 rounded-lg hover:bg-gray-800 hover:text-white hover:border-gray-400 transition-all text-base"
           >
             Play as Guest
           </button>
@@ -79,33 +79,33 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
         {/* Features */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6">
-            <div className="text-3xl mb-3">🎵</div>
-            <h3 className="text-lg font-bold text-violet-300 mb-2">Realistic Simulation</h3>
-            <p className="text-gray-400 text-sm">
+          <div className="bg-gray-800/70 backdrop-blur-sm border-2 border-gray-600 rounded-lg p-6 hover:border-violet-500 transition-colors">
+            <div className="text-4xl mb-3">🎵</div>
+            <h3 className="text-xl font-bold text-violet-300 mb-3">Realistic Simulation</h3>
+            <p className="text-gray-200 text-base leading-relaxed">
               Experience the real challenges of the music industry in Africa and beyond
             </p>
           </div>
 
-          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6">
-            <div className="text-3xl mb-3">📚</div>
-            <h3 className="text-lg font-bold text-violet-300 mb-2">Learn the Business</h3>
-            <p className="text-gray-400 text-sm">
+          <div className="bg-gray-800/70 backdrop-blur-sm border-2 border-gray-600 rounded-lg p-6 hover:border-violet-500 transition-colors">
+            <div className="text-4xl mb-3">📚</div>
+            <h3 className="text-xl font-bold text-violet-300 mb-3">Learn the Business</h3>
+            <p className="text-gray-200 text-base leading-relaxed">
               Master contracts, revenue streams, marketing, and industry dynamics
             </p>
           </div>
 
-          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6">
-            <div className="text-3xl mb-3">🏆</div>
-            <h3 className="text-lg font-bold text-violet-300 mb-2">Build Your Legacy</h3>
-            <p className="text-gray-400 text-sm">
+          <div className="bg-gray-800/70 backdrop-blur-sm border-2 border-gray-600 rounded-lg p-6 hover:border-violet-500 transition-colors">
+            <div className="text-4xl mb-3">🏆</div>
+            <h3 className="text-xl font-bold text-violet-300 mb-3">Build Your Legacy</h3>
+            <p className="text-gray-200 text-base leading-relaxed">
               Make decisions that shape your career. How long can you survive?
             </p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="mt-12 text-gray-500 text-sm">
+        <div className="mt-12 text-gray-300 text-base">
           <p>An educational game about the music business</p>
         </div>
       </div>

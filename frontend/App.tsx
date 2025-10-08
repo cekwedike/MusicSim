@@ -3,7 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginModal } from './components/LoginModal';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty } from './types';
 import { getNewScenario } from './services/scenarioService';
-import { autoSave, loadGame, isStorageAvailable } from './services/storageService';
+import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { getDifficultySettings } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
@@ -785,6 +785,35 @@ const GameApp: React.FC = () => {
             autoSave(state);
         }
     }, [state.date, state.playerStats, status]); // Auto-save when date or stats change
+
+    // Clean up expired autosaves on mount
+    useEffect(() => {
+        const cleanup = async () => {
+            await cleanupExpiredAutosaves();
+        };
+        cleanup();
+    }, []);
+
+    // Auto-save every 2 minutes during gameplay
+    useEffect(() => {
+        if (status !== 'playing') return;
+
+        const autoSaveInterval = setInterval(async () => {
+            console.log('Auto-saving game...');
+            await saveGame(state, 'auto');
+        }, 2 * 60 * 1000); // 2 minutes
+
+        return () => clearInterval(autoSaveInterval);
+    }, [status, state]);
+
+    // Clean up old autosaves every minute
+    useEffect(() => {
+        const cleanupInterval = setInterval(async () => {
+            await cleanupExpiredAutosaves();
+        }, 60 * 1000); // 1 minute
+
+        return () => clearInterval(cleanupInterval);
+    }, []);
 
     // Initial load check
     const [initialLoadChecked, setInitialLoadChecked] = useState(false);

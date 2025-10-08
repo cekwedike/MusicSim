@@ -50,64 +50,150 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     localStorage.setItem('musicsim_saves', JSON.stringify(saves));
   }
 };
-}
 
 /**
- * Loads a game state from backend if authenticated, otherwise localStorage
+ * Load game and check expiration for autosave
  */
-export async function loadGame(slotId: string): Promise<GameState | null> {
+export const loadGame = async (slotId: string): Promise<GameState | null> => {
   try {
-    // Try to load from backend if authenticated
-    if (isAuthenticated()) {
+    // If authenticated, try loading from backend first
+    if (authService.isAuthenticated()) {
       try {
         const response = await gameService.loadGame(slotId);
-        if (response.success && response.data) {
+        if (response.success) {
+          console.log(`Loaded from backend: ${slotId}`);
           return response.data.gameState;
         }
       } catch (error) {
-        console.warn('Backend load failed, falling back to localStorage:', error);
+        console.error('Load from backend failed, trying localStorage:', error);
       }
     }
-    
-    // Fallback to localStorage
-    const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
-    const saveData = localStorage.getItem(key);
-    
-    if (!saveData) {
-      return null;
-    }
-    
-    const parsed = JSON.parse(saveData);
-    
-    // Validate save data structure
-    if (!parsed.state || !parsed.timestamp) {
-      console.warn('Invalid save data format');
-      return null;
-    }
-    
-    return parsed.state;
   } catch (error) {
-    console.error('Failed to load game:', error);
+    console.error('Backend load error:', error);
+  }
+  
+  // Fallback to localStorage
+  const saves = loadLocalSaves();
+  const saveData = saves[slotId];
+  
+  if (!saveData) {
+    console.log(`No save found: ${slotId}`);
     return null;
   }
-}
+
+  // Check if this is an autosave and if it's expired
+  if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
+    console.log(`Autosave expired (${Math.round((Date.now() - saveData.timestamp) / 60000)} minutes old). Deleting...`);
+    await deleteSave(slotId);
+    return null;
+  }
+
+  const age = Math.round((Date.now() - saveData.timestamp) / 60000);
+  console.log(`Loaded from localStorage: ${slotId} (${age} minutes old)`);
+  return saveData.state;
+};
 
 /**
- * Gets all saved game slots from backend if authenticated, otherwise localStorage
+ * Delete game from both backend and localStorage
+ */
+export const deleteSave = async (slotId: string): Promise<void> => {
+  try {
+    // Delete from backend if authenticated
+    if (authService.isAuthenticated()) {
+      const saves = await gameService.getAllSaves();
+      if (saves.success) {
+        const save = saves.data.saves.find((s: any) => s.slotName === slotId);
+        if (save) {
+          await gameService.deleteSave(save.id);
+          console.log(`Deleted from backend: ${slotId}`);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error deleting from backend:', error);
+  }
+
+  // Delete from localStorage
+  const saves = loadLocalSaves();
+  delete saves[slotId];
+  localStorage.setItem('musicsim_saves', JSON.stringify(saves));
+  console.log(`Deleted from localStorage: ${slotId}`);
+};
+
+/**
+ * Get all saves
+ */
+export const getAllSaves = (): { [key: string]: SaveData } => {
+  return loadLocalSaves();
+};
+
+/**
+ * Clean up expired autosaves
+ */
+export const cleanupExpiredAutosaves = async (): Promise<void> => {
+  const saves = loadLocalSaves();
+  const autoSave = saves['auto'];
+  
+  if (autoSave && isAutosaveExpired(autoSave.timestamp)) {
+    console.log('Cleaning up expired autosave...');
+    await deleteSave('auto');
+  }
+};
+
+/**
+ * Check if autosave exists and is valid
+ */
+export const hasValidAutosave = (): boolean => {
+  const saves = loadLocalSaves();
+  const autoSave = saves['auto'];
+  
+  if (!autoSave) return false;
+  
+  return !isAutosaveExpired(autoSave.timestamp);
+};
+
+/**
+ * Get autosave age in minutes
+ */
+export const getAutosaveAge = (): number | null => {
+  const saves = loadLocalSaves();
+  const autoSave = saves['auto'];
+  
+  if (!autoSave) return null;
+  
+  return Math.round((Date.now() - autoSave.timestamp) / 60000);
+};
+
+/**
+ * Helper: Load saves from localStorage
+ */
+const loadLocalSaves = (): { [key: string]: SaveData } => {
+  const saved = localStorage.getItem('musicsim_saves');
+  if (!saved) return {};
+  
+  try {
+    return JSON.parse(saved);
+  } catch (error) {
+    console.error('Error parsing saves:', error);
+    return {};
+  }
+};
+
+/**
+ * Gets all saved game slots (for SaveLoadModal compatibility)
  */
 export async function getAllSaveSlots(): Promise<SaveSlot[]> {
   const saveSlots: SaveSlot[] = [];
   
   try {
     // Try to get saves from backend if authenticated
-    if (isAuthenticated()) {
+    if (authService.isAuthenticated()) {
       try {
         const response = await gameService.getAllSaves();
         if (response.success && response.data) {
           // Convert backend saves to SaveSlot format
-          // Note: We need to load each save individually to get the full game state
           const backendSlots = await Promise.all(
-            response.data.saves.map(async (save) => {
+            response.data.saves.map(async (save: any) => {
               try {
                 const fullSaveResponse = await gameService.loadGame(save.slotName);
                 if (fullSaveResponse.success && fullSaveResponse.data) {
@@ -122,23 +208,13 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                     careerProgress: calculateCareerProgress(gameState)
                   };
                 }
-                // If we can't load the full save, create a minimal slot
-                return {
-                  id: save.slotName,
-                  artistName: save.artistName,
-                  genre: save.genre,
-                  date: { week: 1, month: 1, year: 1 }, // Default date
-                  stats: { cash: 0, fame: 0, wellBeing: 50, careerProgress: 0, hype: 0 }, // Default stats
-                  timestamp: new Date(save.lastPlayedAt).getTime(),
-                  careerProgress: 0
-                };
+                return null;
               } catch (error) {
                 console.warn(`Failed to load save ${save.slotName}:`, error);
                 return null;
               }
             })
           );
-          // Filter out failed loads
           saveSlots.push(...backendSlots.filter(slot => slot !== null) as SaveSlot[]);
         }
       } catch (error) {
@@ -146,63 +222,30 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
       }
     }
     
-    // Always check localStorage as well for backup/guest saves
-    try {
-      // Check auto-save
-      const autoSave = localStorage.getItem(AUTO_SAVE_KEY);
-      if (autoSave) {
-        const parsed = JSON.parse(autoSave);
-        if (parsed.state && parsed.timestamp) {
-          const state = parsed.state as GameState;
-          // Only add if not already from backend
-          const existingAutoSave = saveSlots.find(slot => slot.id === 'auto');
-          if (!existingAutoSave) {
-            saveSlots.push({
-              id: 'auto',
-              artistName: state.artistName,
-              genre: state.artistGenre,
-              date: state.date,
-              stats: state.playerStats,
-              timestamp: parsed.timestamp,
-              careerProgress: calculateCareerProgress(state)
-            });
-          }
-        }
+    // Always check localStorage as well
+    const localSaves = loadLocalSaves();
+    
+    for (const [slotId, saveData] of Object.entries(localSaves)) {
+      // Skip if already added from backend
+      if (saveSlots.find(slot => slot.id === slotId)) continue;
+      
+      // Check if autosave is expired
+      if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
+        // Clean up expired autosave
+        await deleteSave(slotId);
+        continue;
       }
       
-      // Check manual saves
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith(STORAGE_PREFIX)) {
-          try {
-            const saveData = localStorage.getItem(key);
-            if (saveData) {
-              const parsed = JSON.parse(saveData);
-              if (parsed.state && parsed.timestamp) {
-                const state = parsed.state as GameState;
-                const slotId = key.replace(STORAGE_PREFIX, '');
-                // Only add if not already from backend
-                const existingSave = saveSlots.find(slot => slot.id === slotId);
-                if (!existingSave) {
-                  saveSlots.push({
-                    id: slotId,
-                    artistName: state.artistName,
-                    genre: state.artistGenre,
-                    date: state.date,
-                    stats: state.playerStats,
-                    timestamp: parsed.timestamp,
-                    careerProgress: calculateCareerProgress(state)
-                  });
-                }
-              }
-            }
-          } catch (error) {
-            console.warn(`Corrupted save data in slot ${key}:`, error);
-          }
-        }
-      }
-    } catch (error) {
-      console.warn('Failed to get localStorage saves:', error);
+      const state = saveData.state;
+      saveSlots.push({
+        id: slotId,
+        artistName: state.artistName,
+        genre: state.artistGenre,
+        date: state.date,
+        stats: state.playerStats,
+        timestamp: saveData.timestamp,
+        careerProgress: calculateCareerProgress(state)
+      });
     }
     
     // Sort by timestamp (newest first)
@@ -214,38 +257,15 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 }
 
 /**
- * Deletes a save slot from backend if authenticated, otherwise localStorage
- */
-export async function deleteSave(slotId: string): Promise<void> {
-  try {
-    // Try to delete from backend if authenticated
-    if (isAuthenticated()) {
-      try {
-        await gameService.deleteSave(slotId);
-      } catch (error) {
-        console.warn('Backend delete failed, will still delete from localStorage:', error);
-      }
-    }
-    
-    // Always try to delete from localStorage as well
-    const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
-    localStorage.removeItem(key);
-  } catch (error) {
-    throw new Error('Failed to delete save. Please try again.');
-  }
-}
-
-/**
  * Auto-saves the current game state
  */
-export async function autoSave(state: GameState): Promise<void> {
+export const autoSave = async (state: GameState): Promise<void> => {
   try {
     await saveGame(state, 'auto');
   } catch (error) {
     console.warn('Auto-save failed:', error);
-    // Don't throw error for auto-save failures to avoid disrupting gameplay
   }
-}
+};
 
 /**
  * Checks if localStorage is available
@@ -275,5 +295,19 @@ function calculateCareerProgress(state: GameState): number {
  */
 export function formatSaveDate(timestamp: number): string {
   const date = new Date(timestamp);
-  return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
 }
+
+export default {
+  saveGame,
+  loadGame,
+  deleteSave,
+  getAllSaves,
+  cleanupExpiredAutosaves,
+  hasValidAutosave,
+  getAutosaveAge,
+  getAllSaveSlots,
+  autoSave,
+  isStorageAvailable,
+  formatSaveDate
+};

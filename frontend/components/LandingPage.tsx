@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Music, BookOpen, Trophy } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 
 interface LandingPageProps {
@@ -32,7 +33,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         {/* Logo/Title */}
         <div className="mb-8">
-          <h1 className="text-6xl md:text-8xl font-black mb-4 bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent animate-pulse">
+          <h1 className="text-6xl md:text-8xl font-black mb-4 text-white drop-shadow-lg">
             MusicSim
           </h1>
           <p className="text-2xl md:text-3xl text-white font-semibold tracking-wide">
@@ -80,7 +81,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
         {/* Features */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
           <div className="bg-gray-800/70 backdrop-blur-sm border-2 border-gray-600 rounded-lg p-6 hover:border-violet-500 transition-colors">
-            <div className="text-4xl mb-3">🎵</div>
+            <div className="mb-4 flex items-center justify-center w-12 h-12 bg-violet-500/20 rounded-lg">
+              <Music className="w-7 h-7 text-violet-400" strokeWidth={2} />
+            </div>
             <h3 className="text-xl font-bold text-violet-300 mb-3">Realistic Simulation</h3>
             <p className="text-gray-200 text-base leading-relaxed">
               Experience the real challenges of the music industry in Africa and beyond
@@ -88,7 +91,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           </div>
 
           <div className="bg-gray-800/70 backdrop-blur-sm border-2 border-gray-600 rounded-lg p-6 hover:border-violet-500 transition-colors">
-            <div className="text-4xl mb-3">📚</div>
+            <div className="mb-4 flex items-center justify-center w-12 h-12 bg-violet-500/20 rounded-lg">
+              <BookOpen className="w-7 h-7 text-violet-400" strokeWidth={2} />
+            </div>
             <h3 className="text-xl font-bold text-violet-300 mb-3">Learn the Business</h3>
             <p className="text-gray-200 text-base leading-relaxed">
               Master contracts, revenue streams, marketing, and industry dynamics
@@ -96,7 +101,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           </div>
 
           <div className="bg-gray-800/70 backdrop-blur-sm border-2 border-gray-600 rounded-lg p-6 hover:border-violet-500 transition-colors">
-            <div className="text-4xl mb-3">🏆</div>
+            <div className="mb-4 flex items-center justify-center w-12 h-12 bg-violet-500/20 rounded-lg">
+              <Trophy className="w-7 h-7 text-violet-400" strokeWidth={2} />
+            </div>
             <h3 className="text-xl font-bold text-violet-300 mb-3">Build Your Legacy</h3>
             <p className="text-gray-200 text-base leading-relaxed">
               Make decisions that shape your career. How long can you survive?

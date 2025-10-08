@@ -25,6 +25,7 @@ import { ContractViewer } from './components/ContractViewer';
 import { StatisticsModal } from './components/StatisticsModal';
 import { TutorialOverlay } from './components/TutorialOverlay';
 import { MistakeWarning } from './components/MistakeWarning';
+import WelcomeBackDialog from './components/WelcomeBackDialog';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -822,6 +823,12 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
+    
+    // Welcome dialog state
+    const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
+    const [welcomeArtistName, setWelcomeArtistName] = useState('');
+    const [hasAutoLoaded, setHasAutoLoaded] = useState(false); // Prevent double-loading
+    
     const { status, playerStats, currentScenario, lastOutcome, artistName, careerLog, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason } = state;
 
     // Auth context
@@ -883,6 +890,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     // Auto-load user's autosave when authenticated (not guest mode)
     useEffect(() => {
         const autoLoadGame = async () => {
+            // Prevent multiple calls
+            if (hasAutoLoaded) return;
+            
             // Only run if user just logged in and game hasn't started, and not in guest mode
             if (isAuthenticated && !authLoading && status === 'start' && !isGuestMode) {
                 try {
@@ -891,12 +901,16 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     
                     if (savedState) {
                         console.log(`Auto-resuming game for ${savedState.artistName}`);
+                        
+                        // Mark as loaded to prevent duplicate
+                        setHasAutoLoaded(true);
+                        
+                        // Load the game
                         dispatch({ type: 'LOAD_GAME', payload: savedState });
                         
-                        // Show brief notification
-                        setTimeout(() => {
-                            alert(`Welcome back, ${savedState.artistName}! Resuming your career...`);
-                        }, 500);
+                        // Show welcome dialog
+                        setWelcomeArtistName(savedState.artistName);
+                        setShowWelcomeDialog(true);
                     } else {
                         console.log('No autosave found. User can start new game.');
                     }
@@ -907,7 +921,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         };
 
         autoLoadGame();
-    }, [isAuthenticated, authLoading, status, isGuestMode]);
+    }, [isAuthenticated, authLoading, status, isGuestMode, hasAutoLoaded]);
+
+    // Reset hasAutoLoaded when user logs out
+    useEffect(() => {
+        if (!isAuthenticated) {
+            setHasAutoLoaded(false);
+        }
+    }, [isAuthenticated]);
 
     // Reset game state when returning to landing (logout/exit guest mode)
     useEffect(() => {

@@ -1108,6 +1108,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 isActive={state.tutorial.active}
             />
 
+            {/* Welcome Back Dialog */}
+            {showWelcomeDialog && (
+                <WelcomeBackDialog
+                    artistName={welcomeArtistName}
+                    onClose={() => setShowWelcomeDialog(false)}
+                />
+            )}
+
             <footer className="text-center p-4 text-gray-500 text-sm">
                 A Music Industry Simulation
             </footer>

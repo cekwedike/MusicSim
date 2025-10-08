@@ -3,7 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginModal } from './components/LoginModal';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty } from './types';
 import { getNewScenario } from './services/scenarioService';
-import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge } from './services/storageService';
+import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { getDifficultySettings } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
@@ -823,6 +823,9 @@ const GameApp: React.FC = () => {
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
     const { status, playerStats, currentScenario, lastOutcome, artistName, careerLog, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason } = state;
 
+    // Auth context
+    const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+
     const fetchNextScenario = useCallback(async (currentState: GameState) => {
         const scenario = getNewScenario(currentState);
         setTimeout(() => {
@@ -864,38 +867,46 @@ const GameApp: React.FC = () => {
         return () => clearInterval(autoSaveInterval);
     }, [status, state]);
 
-    // Clean up old autosaves every minute
+    // Clean up old autosaves only during active gameplay
     useEffect(() => {
+        if (status !== 'playing') return; // Only cleanup during gameplay
+
         const cleanupInterval = setInterval(async () => {
+            console.log('Checking for expired autosaves...');
             await cleanupExpiredAutosaves();
         }, 60 * 1000); // 1 minute
 
         return () => clearInterval(cleanupInterval);
-    }, []);
+    }, [status]); // Add status dependency
 
-    // Initial load check
-    const [initialLoadChecked, setInitialLoadChecked] = useState(false);
+    // Auto-load user's autosave when authenticated
     useEffect(() => {
-        const checkInitialLoad = async () => {
-            if (!initialLoadChecked && status === 'start' && isStorageAvailable()) {
+        const autoLoadGame = async () => {
+            // Only run if user just logged in and game hasn't started
+            if (isAuthenticated && !authLoading && status === 'start') {
                 try {
-                    const autoSaveData = await loadGame('auto');
-                    if (autoSaveData && autoSaveData.artistName) {
-                        const shouldLoad = window.confirm(
-                            `Found a saved game for "${autoSaveData.artistName}" (${autoSaveData.artistGenre}). Do you want to continue?`
-                        );
-                        if (shouldLoad) {
-                            dispatch({ type: 'LOAD_GAME', payload: autoSaveData });
-                        }
+                    console.log('Checking for autosave...');
+                    const savedState = await loadGame('auto');
+                    
+                    if (savedState) {
+                        console.log(`Auto-resuming game for ${savedState.artistName}`);
+                        dispatch({ type: 'LOAD_GAME', payload: savedState });
+                        
+                        // Show brief notification
+                        setTimeout(() => {
+                            alert(`Welcome back, ${savedState.artistName}! Resuming your career...`);
+                        }, 500);
+                    } else {
+                        console.log('No autosave found. User can start new game.');
                     }
                 } catch (error) {
-                    console.warn('Failed to load auto-save:', error);
+                    console.error('Error loading autosave:', error);
                 }
-                setInitialLoadChecked(true);
             }
         };
-        checkInitialLoad();
-    }, [status, initialLoadChecked]);
+
+        autoLoadGame();
+    }, [isAuthenticated, authLoading, status]);
 
     // Auto-start tutorial for new players
     useEffect(() => {
@@ -958,6 +969,26 @@ const GameApp: React.FC = () => {
     const handleNextTutorialStep = () => dispatch({ type: 'NEXT_TUTORIAL_STEP' });
     const handleSkipTutorial = () => dispatch({ type: 'SKIP_TUTORIAL' });
     const handleCompleteTutorial = () => dispatch({ type: 'COMPLETE_TUTORIAL' });
+
+    // Manual save logic - Delete autosave when manual save happens
+    const handleManualSave = async (slotName: string) => {
+        try {
+            // First, delete the autosave
+            console.log('Manual save triggered. Deleting autosave...');
+            await deleteSave('auto');
+            
+            // Then save to the new slot
+            await saveGame(state, slotName);
+            
+            // Also create a new autosave that's a copy of this manual save
+            await saveGame(state, 'auto');
+            
+            alert(`Game saved successfully to "${slotName}"!`);
+        } catch (error) {
+            console.error('Error saving game:', error);
+            alert('Failed to save game. Please try again.');
+        }
+    };
 
     const renderGameContent = () => {
         switch (status) {

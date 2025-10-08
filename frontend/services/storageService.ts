@@ -2,52 +2,54 @@ import type { GameState, SaveSlot } from '../types';
 import { gameService } from './gameService';
 import { authService } from './authService';
 
-const STORAGE_PREFIX = 'musicsim_save_';
-const AUTO_SAVE_KEY = 'musicsim_save_auto';
+const AUTOSAVE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
 
-/**
- * Checks if user is authenticated
- */
-function isAuthenticated(): boolean {
-  return authService.isAuthenticated();
+interface SaveData {
+  state: GameState;
+  timestamp: number;
+  version?: string;
 }
 
 /**
- * Saves a game state to backend if authenticated, otherwise localStorage
+ * Check if autosave is expired
  */
-export async function saveGame(state: GameState, slotId: string): Promise<void> {
-  try {
-    const saveData = {
-      version: '1.0.0',
-      timestamp: Date.now(),
-      state
-    };
-    
-    // Try to save to backend if authenticated
-    if (isAuthenticated()) {
-      try {
-        const response = await gameService.saveGame(slotId, state);
+const isAutosaveExpired = (timestamp: number): boolean => {
+  const now = Date.now();
+  const age = now - timestamp;
+  return age > AUTOSAVE_EXPIRATION_MS;
+};
 
-        if (response.success) {
-          // Also save to localStorage as backup
-          const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
-          localStorage.setItem(key, JSON.stringify(saveData));
-          return;
-        }
-      } catch (error) {
-        console.warn('Backend save failed, falling back to localStorage:', error);
-      }
+/**
+ * Save game with timestamp
+ */
+export const saveGame = async (state: GameState, slotId: string): Promise<void> => {
+  const saveData: SaveData = {
+    state,
+    timestamp: Date.now(),
+    version: '1.0.0'
+  };
+
+  try {
+    // If authenticated, save to backend
+    if (authService.isAuthenticated()) {
+      await gameService.saveGame(slotId, state);
+      console.log(`Saved to backend: ${slotId}`);
     }
     
-    // Fallback to localStorage
-    const key = slotId === 'auto' ? AUTO_SAVE_KEY : `${STORAGE_PREFIX}${slotId}`;
-    localStorage.setItem(key, JSON.stringify(saveData));
+    // Always save to localStorage as backup
+    const saves = loadLocalSaves();
+    saves[slotId] = saveData;
+    localStorage.setItem('musicsim_saves', JSON.stringify(saves));
+    console.log(`Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
   } catch (error) {
-    if (error instanceof Error && error.name === 'QuotaExceededError') {
-      throw new Error('Storage quota exceeded. Please delete some save files.');
-    }
-    throw new Error('Failed to save game. Please try again.');
+    console.error('Save error:', error);
+    
+    // Fallback to localStorage only
+    const saves = loadLocalSaves();
+    saves[slotId] = saveData;
+    localStorage.setItem('musicsim_saves', JSON.stringify(saves));
   }
+};
 }
 
 /**

@@ -520,7 +520,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     weeksPlayed: totalWeeks,
                     outcome: outcome,
                     historicalData: newHistory,
-                    majorEvents: state.careerLog.map(e => e.description).slice(0, 10),
+                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : state.careerLog.map(e => e.description).slice(0, 10),
                     achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
                     lessonsLearned: state.lessonsViewed,
                     contractsSigned: state.currentLabel ? [state.currentLabel.name] : [],
@@ -539,7 +539,9 @@ function gameReducer(state: GameState, action: Action): GameState {
             const milestoneCheck = checkAchievements({...state, achievements: updatedAchievements}, newStats);
             const newCareerLog = eventsThisWeek.length > 0 ? [...state.careerLog, { date: newDate, description: eventsThisWeek.join(' ') }] : state.careerLog;
 
-                return {
+            const newLogs = eventsThisWeek.length > 0 ? addLog(state, eventsThisWeek.join(' '), 'info') : state.logs;
+
+            return {
                 ...state,
                 status: newStatus,
                 lastOutcome: null,
@@ -549,6 +551,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 currentDate: newCurrentDate,
                 currentProject: newProject,
                 careerLog: newCareerLog,
+                logs: newLogs,
                 achievements: milestoneCheck.achievements,
                 unseenAchievements: [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])],
                 staff: newStaff,
@@ -575,7 +578,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                     weeksPlayed: totalWeeks,
                     outcome: 'abandoned',
                     historicalData: state.currentHistory,
-                    majorEvents: state.careerLog.map(e => e.description).slice(0, 10),
+                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : state.careerLog.map(e => e.description).slice(0, 10),
+                    
                     achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
                     lessonsLearned: state.lessonsViewed,
                     contractsSigned: state.currentLabel ? [state.currentLabel.name] : [],

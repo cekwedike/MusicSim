@@ -74,7 +74,17 @@ const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
 };
 
 
-const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate }> = ({ stats, project, date }) => {
+const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date }> = ({ stats, project, date, currentDate }) => {
+    const formatDate = (date: Date): string => {
+        return date.toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
+    const displayDate = currentDate ? formatDate(currentDate) : `Y${date.year} M${date.month} W${date.week}`;
+
     return (
         <div>
             <div className="player-stats grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
@@ -82,7 +92,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                 <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
                 <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
                 <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
-                <StatDisplay icon={<CalendarIcon />} label="Date" value={`Y${date.year} M${date.month} W${date.week}`} color="violet" isDate={true} />
+                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
             </div>
             <ProjectTracker project={project} />
         </div>

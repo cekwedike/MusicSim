@@ -44,6 +44,13 @@ export interface GameDate {
   year: number;
 }
 
+export interface LogEntry {
+  message: string;
+  type: 'info' | 'success' | 'warning' | 'danger';
+  timestamp: Date;
+  icon?: string;
+}
+
 export interface GameEvent {
   date: GameDate;
   description: string;
@@ -238,7 +245,10 @@ export interface GameState {
   currentScenario: Scenario | null;
   lastOutcome: ChoiceOutcome | null;
   careerLog: GameEvent[];
+  logs: LogEntry[];
   date: GameDate;
+  currentDate: Date;
+  startDate: Date;
   usedScenarioTitles: string[];
   achievements: Achievement[];
   currentProject: Project | null;

@@ -4,6 +4,7 @@ import { LoginModal } from './components/LoginModal';
 import LandingPage from './components/LandingPage';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
 import { getNewScenario } from './services/scenarioService';
+import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { getDifficultySettings } from './data/difficultySettings';
@@ -47,13 +48,8 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         artistGenre,
         currentScenario: null,
         lastOutcome: null,
-        careerLog: [],
-        logs: [{
-            message: 'Your music career begins today!',
-            type: 'success',
-            timestamp: new Date(2025, 9, 14), // October 14, 2025
-            icon: '🎵'
-        }],
+    // legacy careerLog removed; use `logs` (Date-based) instead
+        logs: [createLog('Your music career begins today!', 'success', new Date(2025, 9, 14), '🎵')],
         date: { week: 1, month: 1, year: 1 },
         currentDate: new Date(2025, 9, 14), // October 14, 2025
         startDate: new Date(2025, 9, 14),
@@ -96,32 +92,7 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
 
 const INITIAL_STATE = generateInitialState();
 
-// Helper function for adding logs with automatic timestamp
-const addLog = (
-    state: GameState,
-    message: string,
-    type: 'info' | 'success' | 'warning' | 'danger' = 'info',
-    icon?: string
-): LogEntry[] => {
-    const getIconForType = (logType: string): string => {
-        switch (logType) {
-            case 'success': return '✅';
-            case 'warning': return '⚠️';
-            case 'danger': return '❌';
-            default: return 'ℹ️';
-        }
-    };
-
-    return [
-        ...(state.logs || []),
-        {
-            message,
-            type,
-            timestamp: new Date(state.currentDate || new Date()),
-            icon: icon || getIconForType(type)
-        }
-    ];
-};
+// Log helpers moved to src/utils/logUtils.ts (createLog, appendLogToArray)
 
 function checkAchievements(state: GameState, newStats: PlayerStats): { achievements: GameState['achievements'], unseenAchievements: string[] } {
     const unlockedAchievements = [...state.achievements];
@@ -185,13 +156,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 artistName: action.payload.name,
                 artistGenre: action.payload.genre,
                 difficulty: action.payload.difficulty,
-                careerLog: [{date: state.date, description: `The artist '${action.payload.name}' (${action.payload.genre}) is born!`}],
-                logs: [...(state.logs || []), {
-                    message: `The artist '${action.payload.name}' (${action.payload.genre}) is born!`,
-                    type: 'success',
-                    timestamp: new Date(state.currentDate || new Date()),
-                    icon: '🎵'
-                }]
+                // legacy careerLog entry removed; add Date-based log in logs
+                logs: appendLogToArray(state.logs, createLog(`The artist '${action.payload.name}' (${action.payload.genre}) is born!`, 'success', new Date(state.currentDate || new Date()), '🎵'))
             };
         case 'SCENARIO_LOADING':
             return { ...state, status: 'loading' };
@@ -319,8 +285,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 playerStats: newStats,
                 lastOutcome: outcome,
                 currentProject: newProject,
-                careerLog: [...state.careerLog, { date: state.date, description: outcome.text }],
-                logs: addLog(state, outcome.text, 'info'),
+                // legacy careerLog append removed; message added to Date-based logs instead
+                logs: appendLogToArray(state.logs, createLog(outcome.text, 'info', new Date(state.currentDate || new Date()))),
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
                 staff: newStaff,
@@ -520,7 +486,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     weeksPlayed: totalWeeks,
                     outcome: outcome,
                     historicalData: newHistory,
-                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : state.careerLog.map(e => e.description).slice(0, 10),
+                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : [],
                     achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
                     lessonsLearned: state.lessonsViewed,
                     contractsSigned: state.currentLabel ? [state.currentLabel.name] : [],
@@ -537,9 +503,7 @@ function gameReducer(state: GameState, action: Action): GameState {
 
 
             const milestoneCheck = checkAchievements({...state, achievements: updatedAchievements}, newStats);
-            const newCareerLog = eventsThisWeek.length > 0 ? [...state.careerLog, { date: newDate, description: eventsThisWeek.join(' ') }] : state.careerLog;
-
-            const newLogs = eventsThisWeek.length > 0 ? addLog(state, eventsThisWeek.join(' '), 'info') : state.logs;
+            const newLogs = eventsThisWeek.length > 0 ? appendLogToArray(state.logs, createLog(eventsThisWeek.join(' '), 'info', new Date(newCurrentDate))) : state.logs;
 
             return {
                 ...state,
@@ -550,7 +514,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 date: newDate,
                 currentDate: newCurrentDate,
                 currentProject: newProject,
-                careerLog: newCareerLog,
+                // careerLog removed; preserve only Date-based logs
                 logs: newLogs,
                 achievements: milestoneCheck.achievements,
                 unseenAchievements: [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])],
@@ -578,7 +542,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     weeksPlayed: totalWeeks,
                     outcome: 'abandoned',
                     historicalData: state.currentHistory,
-                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : state.careerLog.map(e => e.description).slice(0, 10),
+                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : [],
                     
                     achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
                     lessonsLearned: state.lessonsViewed,
@@ -674,11 +638,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 modal: 'none',
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
-                careerLog: [...state.careerLog, { 
-                    date: state.date, 
-                    description: `Signed with ${state.currentLabelOffer.name}! Received $${state.currentLabelOffer.terms.advance.toLocaleString()} advance.` 
-                }],
-                logs: addLog(state, `Signed with ${state.currentLabelOffer.name}! Received $${state.currentLabelOffer.terms.advance.toLocaleString()} advance.`, 'success')
+                // legacy careerLog append removed; Date-based log added instead
+                logs: appendLogToArray(state.logs, createLog(`Signed with ${state.currentLabelOffer.name}! Received $${state.currentLabelOffer.terms.advance.toLocaleString()} advance.`, 'success', new Date(state.currentDate || new Date())))
             };
         }
         case 'DECLINE_CONTRACT': {
@@ -698,11 +659,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 modal: 'none',
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
-                careerLog: [...state.careerLog, { 
-                    date: state.date, 
-                    description: `Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.` 
-                }],
-                logs: addLog(state, `Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.`, 'info')
+                // legacy careerLog append removed; Date-based log added instead
+                logs: appendLogToArray(state.logs, createLog(`Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.`, 'info', new Date(state.currentDate || new Date())))
             };
         }
         case 'LOAD_GAME':
@@ -887,7 +845,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [welcomeArtistName, setWelcomeArtistName] = useState('');
     const [hasAutoLoaded, setHasAutoLoaded] = useState(false); // Prevent double-loading
     
-    const { status, playerStats, currentScenario, lastOutcome, artistName, careerLog, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason } = state;
+    const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
 
     // Auth context
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -1138,7 +1096,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             </div>
 
             {lastOutcome && <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />}
-            {modal === 'management' && <ManagementModal achievements={achievements} events={careerLog} staff={staff} onClose={handleCloseModal}/>}
+            {modal === 'management' && <ManagementModal achievements={achievements} logs={logs} staff={staff} onClose={handleCloseModal}/>}
             {modal === 'saveload' && <SaveLoadModal isOpen={true} onClose={handleCloseModal} onLoadGame={handleLoadGame} currentGameState={state} />}
             {modal === 'learning' && <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} />}
             {modal === 'moduleViewer' && state.currentModule && (

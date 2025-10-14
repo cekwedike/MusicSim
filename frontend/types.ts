@@ -38,12 +38,6 @@ export interface Achievement {
     unlocked: boolean;
 }
 
-export interface GameDate {
-  week: number;
-  month: number;
-  year: number;
-}
-
 export interface LogEntry {
   message: string;
   type: 'info' | 'success' | 'warning' | 'danger';
@@ -51,9 +45,11 @@ export interface LogEntry {
   icon?: string;
 }
 
-export interface GameEvent {
-  date: GameDate;
-  description: string;
+// Deprecated legacy week/month/year representation — retained for compatibility with a few modules.
+export interface GameDate {
+  week: number;
+  month: number;
+  year: number;
 }
 
 export interface TutorialStep {
@@ -244,7 +240,6 @@ export interface GameState {
   artistGenre: string;
   currentScenario: Scenario | null;
   lastOutcome: ChoiceOutcome | null;
-  careerLog: GameEvent[];
   logs: LogEntry[];
   date: GameDate;
   currentDate: Date;

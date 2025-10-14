@@ -120,12 +120,9 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
               <p className="text-gray-400 text-xs">{new Date(log.timestamp).toLocaleDateString('en-GB')}</p>
               <p>{log.message}</p>
             </div>
-          )) : state.careerLog.slice(-5).reverse().map((event, index) => (
-            <div key={index} className="text-sm text-gray-300 border-l-2 border-purple-500 pl-3">
-              <p className="text-gray-400 text-xs">Week {event.date.week}, Month {event.date.month}</p>
-              <p>{event.description}</p>
-            </div>
-          )))}
+          )) : (
+            <div className="text-gray-400 text-sm text-center py-3">No recent events yet.</div>
+          )}
         </div>
       </div>
 

@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import type { Achievement, GameEvent, Staff } from '../types';
+import type { Achievement, LogEntry, Staff } from '../types';
 import { TrophyIcon, LogIcon, BriefcaseIcon } from './icons/Icons';
 
 interface ManagementModalProps {
     achievements: Achievement[];
-    events: GameEvent[];
+    logs?: LogEntry[];
     staff: Staff[];
     onClose: () => void;
 }

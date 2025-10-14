@@ -115,12 +115,14 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
       <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
         <h4 className="font-semibold text-white mb-3">Recent Events</h4>
         <div className="space-y-2 max-h-32 overflow-y-auto">
-          {((state.logs && state.logs.length > 0) ? state.logs.slice(-5).reverse().map((log, index) => (
-            <div key={index} className="text-sm text-gray-300 border-l-2 border-purple-500 pl-3">
-              <p className="text-gray-400 text-xs">{new Date(log.timestamp).toLocaleDateString('en-GB')}</p>
-              <p>{log.message}</p>
-            </div>
-          )) : (
+          {state.logs && state.logs.length > 0 ? (
+            state.logs.slice(-5).reverse().map((log, index) => (
+              <div key={index} className="text-sm text-gray-300 border-l-2 border-purple-500 pl-3">
+                <p className="text-gray-400 text-xs">{new Date(log.timestamp).toLocaleDateString('en-GB')}</p>
+                <p>{log.message}</p>
+              </div>
+            ))
+          ) : (
             <div className="text-gray-400 text-sm text-center py-3">No recent events yet.</div>
           )}
         </div>

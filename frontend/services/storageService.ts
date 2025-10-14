@@ -53,8 +53,9 @@ const isAutosaveExpired = (timestamp: number): boolean => {
  * Save game with timestamp
  */
 export const saveGame = async (state: GameState, slotId: string): Promise<void> => {
+  const serializedState = serializeGameState(state);
   const saveData: SaveData = {
-    state,
+    state: serializedState,
     timestamp: Date.now(),
     version: '1.0.0'
   };
@@ -94,7 +95,7 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
         const response = await gameService.loadGame(slotId);
         if (response.success) {
           console.log(`Loaded from backend: ${slotId}`);
-          return response.data.gameState;
+          return deserializeGameState(response.data.gameState);
         }
       } catch (error) {
         console.error('Load from backend failed, trying localStorage:', error);
@@ -122,7 +123,7 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
 
   const age = Math.round((Date.now() - saveData.timestamp) / 60000);
   console.log(`Loaded from localStorage: ${slotId} (${age} minutes old)`);
-  return saveData.state;
+  return deserializeGameState(saveData.state);
 };
 
 /**

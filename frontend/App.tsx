@@ -2,7 +2,7 @@ import React, { useReducer, useCallback, useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginModal } from './components/LoginModal';
 import LandingPage from './components/LandingPage';
-import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty } from './types';
+import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
@@ -95,6 +95,33 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
 };
 
 const INITIAL_STATE = generateInitialState();
+
+// Helper function for adding logs with automatic timestamp
+const addLog = (
+    state: GameState,
+    message: string,
+    type: 'info' | 'success' | 'warning' | 'danger' = 'info',
+    icon?: string
+): LogEntry[] => {
+    const getIconForType = (logType: string): string => {
+        switch (logType) {
+            case 'success': return '✅';
+            case 'warning': return '⚠️';
+            case 'danger': return '❌';
+            default: return 'ℹ️';
+        }
+    };
+
+    return [
+        ...(state.logs || []),
+        {
+            message,
+            type,
+            timestamp: new Date(state.currentDate || new Date()),
+            icon: icon || getIconForType(type)
+        }
+    ];
+};
 
 function checkAchievements(state: GameState, newStats: PlayerStats): { achievements: GameState['achievements'], unseenAchievements: string[] } {
     const unlockedAchievements = [...state.achievements];

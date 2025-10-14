@@ -1,4 +1,5 @@
 import type { GameState, SaveSlot, LogEntry } from '../types';
+import { toGameDate } from '../src/utils/dateUtils';
 import { gameService } from './gameService';
 import { authService } from './authService';
 
@@ -231,11 +232,12 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                 const fullSaveResponse = await gameService.loadGame(save.slotName);
                 if (fullSaveResponse.success && fullSaveResponse.data) {
                   const gameState = fullSaveResponse.data.gameState;
+                  const gd = toGameDate(new Date(gameState.currentDate), new Date(gameState.startDate));
                   return {
                     id: save.slotName,
                     artistName: save.artistName,
                     genre: save.genre,
-                    date: gameState.date,
+                    date: gd,
                     stats: gameState.playerStats,
                     timestamp: new Date(save.lastPlayedAt).getTime(),
                     careerProgress: calculateCareerProgress(gameState)
@@ -270,11 +272,12 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
       }
       
       const state = saveData.state;
+      const gdLocal = toGameDate(new Date(state.currentDate), new Date(state.startDate));
       saveSlots.push({
         id: slotId,
         artistName: state.artistName,
         genre: state.artistGenre,
-        date: state.date,
+        date: gdLocal,
         stats: state.playerStats,
         timestamp: saveData.timestamp,
         careerProgress: calculateCareerProgress(state)
@@ -319,7 +322,8 @@ export function isStorageAvailable(): boolean {
  */
 function calculateCareerProgress(state: GameState): number {
   const maxWeeks = 260; // 5 years * 52 weeks
-  const currentWeeks = (state.date.year - 1) * 52 + state.date.week;
+  const gd = toGameDate(state.currentDate, state.startDate);
+  const currentWeeks = (gd.year - 1) * 52 + gd.week;
   return Math.min(Math.round((currentWeeks / maxWeeks) * 100), 100);
 }
 

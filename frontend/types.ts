@@ -213,6 +213,11 @@ export interface HistoricalDataPoint {
   eventDescription?: string;
 }
 
+export interface CareerEvent {
+  message: string;
+  timestamp: number;
+}
+
 export interface CareerHistory {
   gameId: string;
   artistName: string;
@@ -223,7 +228,7 @@ export interface CareerHistory {
   weeksPlayed: number;
   outcome: 'debt' | 'burnout' | 'abandoned';
   historicalData: HistoricalDataPoint[];
-  majorEvents: string[];
+  majorEvents: CareerEvent[];
   achievementsEarned: string[];
   lessonsLearned: string[];
   contractsSigned: string[];

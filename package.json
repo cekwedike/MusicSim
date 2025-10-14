@@ -10,6 +10,7 @@
     "dev:all": "npm run dev",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest",
     "start": "concurrently --kill-others --prefix-colors \"cyan,magenta\" --prefix \"{name}\" \"npm run preview\" \"npm run start:backend\"",
     "start:backend": "cd backend && npm start",
     "install:all": "npm install && npm run install:backend",
@@ -31,5 +32,7 @@
     "concurrently": "^9.2.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.8"
+    ,
+    "vitest": "^1.0.0"
   }
 }

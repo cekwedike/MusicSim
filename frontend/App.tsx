@@ -5,6 +5,7 @@ import LandingPage from './components/LandingPage';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
+import { toGameDate } from './src/utils/dateUtils';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { getDifficultySettings } from './data/difficultySettings';
@@ -122,7 +123,8 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     checkAndUnlock('WISE_STUDENT', state.tutorial.completed && state.lessonsViewed.length >= 25);
     
     // Statistics Achievements
-    const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+    const currentGameDate = toGameDate(state.currentDate, state.startDate);
+    const totalWeeks = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
     checkAndUnlock('SURVIVOR', totalWeeks >= 52);
     checkAndUnlock('PERSISTENT', totalWeeks >= 104);
     checkAndUnlock('LEGENDARY_CAREER', totalWeeks >= 208);
@@ -405,25 +407,15 @@ function gameReducer(state: GameState, action: Action): GameState {
             const hypeDecay = Math.floor(2 * settings.statsDecayRate);
             newStats.hype = Math.min(100, Math.max(0, newStats.hype + bonusHype - hypeDecay));
             
-            // 5. Update Date
-            let newDate = { ...state.date };
-            newDate.week++;
-            if (newDate.week > 4) {
-                newDate.week = 1;
-                newDate.month++;
-            }
-            if (newDate.month > 12) {
-                newDate.month = 1;
-                newDate.year++;
-            }
-
             // Advance current date by random 3-7 days
             const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days
             const newCurrentDate = new Date(state.currentDate);
             newCurrentDate.setDate(newCurrentDate.getDate() + daysToAdvance);
             
-            // Record historical data point every 4 weeks
-            const totalWeeks = (newDate.year - 1) * 48 + (newDate.month - 1) * 4 + newDate.week;
+            // Determine game-week derived from newCurrentDate
+            const newGameDate = toGameDate(newCurrentDate, state.startDate);
+            // Record historical data point every 4 weeks (using totalWeeks derived from newGameDate)
+            const totalWeeks = (newGameDate.year - 1) * 48 + (newGameDate.month - 1) * 4 + newGameDate.week;
             let newHistory = [...state.currentHistory];
             if (totalWeeks % 4 === 0) {
                 newHistory.push({
@@ -437,8 +429,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 });
             }
 
-            // Update statistics
-            let newStatistics = updateStatistics({...state, playerStats: newStats, date: newDate}, state.statistics);
+            // Update statistics (pass through a derived legacy date for calculation where needed)
+            let newStatistics = updateStatistics({...state, playerStats: newStats, date: newGameDate as any}, state.statistics);
 
             // 6. Update Staff Contracts
             newStaff.forEach(s => s.contractLength--);
@@ -486,7 +478,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     weeksPlayed: totalWeeks,
                     outcome: outcome,
                     historicalData: newHistory,
-                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : [],
+                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.slice(-10).reverse().map(l => ({ message: l.message, timestamp: l.timestamp.getTime() })) : [],
                     achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
                     lessonsLearned: state.lessonsViewed,
                     contractsSigned: state.currentLabel ? [state.currentLabel.name] : [],
@@ -511,7 +503,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 lastOutcome: null,
                 currentScenario: null,
                 playerStats: newStats,
-                date: newDate,
+                // legacy `date` removed; `currentDate` represents actual timeline
                 currentDate: newCurrentDate,
                 currentProject: newProject,
                 // careerLog removed; preserve only Date-based logs
@@ -528,8 +520,9 @@ function gameReducer(state: GameState, action: Action): GameState {
         }
         case 'RESTART': {
             // Record abandoned career if there was an active game
-            if (state.artistName && state.date.week > 1) {
-                const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+            if (state.artistName) {
+                const gd = toGameDate(state.currentDate, state.startDate);
+                const totalWeeks = (gd.year - 1) * 48 + (gd.month - 1) * 4 + gd.week;
                 const updatedStats = recordGameEnd(state, state.statistics, 'abandoned');
                 
                 const careerHistory: CareerHistory = {
@@ -542,7 +535,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     weeksPlayed: totalWeeks,
                     outcome: 'abandoned',
                     historicalData: state.currentHistory,
-                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.map(l => l.message).slice(-10).reverse() : [],
+                    majorEvents: (state.logs && state.logs.length > 0) ? state.logs.slice(-10).reverse().map(l => ({ message: l.message, timestamp: l.timestamp.getTime() })) : [],
                     
                     achievementsEarned: state.achievements.filter(a => a.unlocked).map(a => a.name),
                     lessonsLearned: state.lessonsViewed,

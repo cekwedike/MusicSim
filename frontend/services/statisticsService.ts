@@ -1,4 +1,5 @@
 import type { GameStatistics, GameState, CareerHistory } from '../types';
+import { toGameDate } from '../src/utils/dateUtils';
 
 export const loadStatistics = (): GameStatistics => {
   const saved = localStorage.getItem('musicsim_statistics');
@@ -66,7 +67,8 @@ export const saveStatistics = (stats: GameStatistics): void => {
 export const updateStatistics = (state: GameState, stats: GameStatistics): GameStatistics => {
   const updated = { ...stats };
   
-  updated.totalWeeksPlayed = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+  const gd = toGameDate(state.currentDate, state.startDate);
+  updated.totalWeeksPlayed = (gd.year - 1) * 48 + (gd.month - 1) * 4 + gd.week;
   updated.lastGameDate = Date.now();
   updated.highestCash = Math.max(updated.highestCash, state.playerStats.cash);
   updated.highestFameReached = Math.max(updated.highestFameReached, state.playerStats.fame);
@@ -87,7 +89,8 @@ export const recordGameEnd = (state: GameState, stats: GameStatistics, outcome: 
   
   updated.totalGamesPlayed++;
   
-  const weeksPlayed = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+  const gd2 = toGameDate(state.currentDate, state.startDate);
+  const weeksPlayed = (gd2.year - 1) * 48 + (gd2.month - 1) * 4 + gd2.week;
   updated.longestCareerWeeks = Math.max(updated.longestCareerWeeks, weeksPlayed);
   updated.averageCareerLength = Math.floor(
     (updated.averageCareerLength * (updated.totalGamesPlayed - 1) + weeksPlayed) / updated.totalGamesPlayed

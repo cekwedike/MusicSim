@@ -69,7 +69,7 @@ const CareerHistory = sequelize.define('CareerHistory', {
     defaultValue: []
   },
   majorEvents: {
-    type: DataTypes.ARRAY(DataTypes.TEXT),
+    type: DataTypes.JSONB,
     defaultValue: []
   },
   sessionDurationMinutes: {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { GameState } from '../types';
 import { loadCareerHistories, formatTimestamp, formatDuration } from '../services/statisticsService';
 import { MiniChart } from './MiniChart';
+import { toGameDate } from '../src/utils/dateUtils';
 
 interface StatisticsModalProps {
   state: GameState;
@@ -20,7 +21,8 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
     { id: 'patterns' as const, label: 'Patterns', icon: '🔍' },
   ];
 
-  const currentWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+  const gd = toGameDate(state.currentDate, state.startDate);
+  const currentWeeks = (gd.year - 1) * 48 + (gd.month - 1) * 4 + gd.week;
   const currentDuration = formatDuration(currentWeeks);
 
   // Get cash trend for current career (last 10 data points)
@@ -60,7 +62,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
         <p className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
           {currentDuration}
         </p>
-        <p className="text-gray-400 text-sm">Week {state.date.week}, Month {state.date.month}, Year {state.date.year}</p>
+          <p className="text-gray-400 text-sm">Week {gd.week}, Month {gd.month}, Year {gd.year}</p>
       </div>
 
       {/* Current Stats */}

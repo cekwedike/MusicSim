@@ -1,9 +1,4 @@
-/* Tailwind CSS base styles */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
-/* Custom animations */
+/* Custom animations for PWA */
 @keyframes slide-up {
   from {
     transform: translateY(100%);

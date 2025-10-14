@@ -47,7 +47,15 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         currentScenario: null,
         lastOutcome: null,
         careerLog: [],
+        logs: [{
+            message: 'Your music career begins today!',
+            type: 'success',
+            timestamp: new Date(2025, 9, 14), // October 14, 2025
+            icon: '🎵'
+        }],
         date: { week: 1, month: 1, year: 1 },
+        currentDate: new Date(2025, 9, 14), // October 14, 2025
+        startDate: new Date(2025, 9, 14),
         usedScenarioTitles: [],
         achievements: allAchievements.map(a => ({ ...a, unlocked: false })),
         currentProject: null,

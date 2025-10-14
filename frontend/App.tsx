@@ -185,7 +185,13 @@ function gameReducer(state: GameState, action: Action): GameState {
                 artistName: action.payload.name,
                 artistGenre: action.payload.genre,
                 difficulty: action.payload.difficulty,
-                careerLog: [{date: state.date, description: `The artist '${action.payload.name}' (${action.payload.genre}) is born!`}]
+                careerLog: [{date: state.date, description: `The artist '${action.payload.name}' (${action.payload.genre}) is born!`}],
+                logs: [...(state.logs || []), {
+                    message: `The artist '${action.payload.name}' (${action.payload.genre}) is born!`,
+                    type: 'success',
+                    timestamp: new Date(state.currentDate || new Date()),
+                    icon: '🎵'
+                }]
             };
         case 'SCENARIO_LOADING':
             return { ...state, status: 'loading' };
@@ -314,6 +320,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 lastOutcome: outcome,
                 currentProject: newProject,
                 careerLog: [...state.careerLog, { date: state.date, description: outcome.text }],
+                logs: addLog(state, outcome.text, 'info'),
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
                 staff: newStaff,
@@ -532,7 +539,7 @@ function gameReducer(state: GameState, action: Action): GameState {
             const milestoneCheck = checkAchievements({...state, achievements: updatedAchievements}, newStats);
             const newCareerLog = eventsThisWeek.length > 0 ? [...state.careerLog, { date: newDate, description: eventsThisWeek.join(' ') }] : state.careerLog;
 
-            return {
+                return {
                 ...state,
                 status: newStatus,
                 lastOutcome: null,
@@ -666,7 +673,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 careerLog: [...state.careerLog, { 
                     date: state.date, 
                     description: `Signed with ${state.currentLabelOffer.name}! Received $${state.currentLabelOffer.terms.advance.toLocaleString()} advance.` 
-                }]
+                }],
+                logs: addLog(state, `Signed with ${state.currentLabelOffer.name}! Received $${state.currentLabelOffer.terms.advance.toLocaleString()} advance.`, 'success')
             };
         }
         case 'DECLINE_CONTRACT': {
@@ -689,7 +697,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 careerLog: [...state.careerLog, { 
                     date: state.date, 
                     description: `Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.` 
-                }]
+                }],
+                logs: addLog(state, `Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.`, 'info')
             };
         }
         case 'LOAD_GAME':

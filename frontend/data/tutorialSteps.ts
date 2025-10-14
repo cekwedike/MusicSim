@@ -65,7 +65,7 @@ export const tutorialSteps: TutorialStep[] = [
     id: 'career-log',
     title: 'Career History',
     message: 'Your career log tracks all major events and decisions. Review it regularly to understand patterns and learn from your journey.',
-    target: '.career-log-button',
+    target: '.game-history',
     position: 'left',
     action: 'highlight',
     nextTrigger: 'click',

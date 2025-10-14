@@ -1,8 +1,38 @@
-import type { GameState, SaveSlot } from '../types';
+import type { GameState, SaveSlot, LogEntry } from '../types';
 import { gameService } from './gameService';
 import { authService } from './authService';
 
 const AUTOSAVE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
+
+/**
+ * Serialize GameState for storage (convert Dates to ISO strings)
+ */
+const serializeGameState = (state: GameState): any => {
+  return {
+    ...state,
+    currentDate: state.currentDate ? state.currentDate.toISOString() : undefined,
+    startDate: state.startDate ? state.startDate.toISOString() : undefined,
+    logs: state.logs ? state.logs.map(log => ({
+      ...log,
+      timestamp: log.timestamp.toISOString()
+    })) : []
+  };
+};
+
+/**
+ * Deserialize GameState from storage (convert ISO strings back to Dates)
+ */
+const deserializeGameState = (data: any): GameState => {
+  return {
+    ...data,
+    currentDate: data.currentDate ? new Date(data.currentDate) : new Date(2025, 9, 14),
+    startDate: data.startDate ? new Date(data.startDate) : new Date(2025, 9, 14),
+    logs: data.logs ? data.logs.map((log: any) => ({
+      ...log,
+      timestamp: new Date(log.timestamp)
+    })) : []
+  };
+};
 
 interface SaveData {
   state: GameState;

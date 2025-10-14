@@ -26,6 +26,7 @@ import { StatisticsModal } from './components/StatisticsModal';
 import { TutorialOverlay } from './components/TutorialOverlay';
 import { MistakeWarning } from './components/MistakeWarning';
 import WelcomeBackDialog from './components/WelcomeBackDialog';
+import GameHistory from './components/GameHistory';
 import { useOnlineStatus } from './src/hooks/useOnlineStatus';
 import OfflineBanner from './src/components/OfflineBanner';
 import InstallPrompt from './src/components/InstallPrompt';
@@ -415,6 +416,11 @@ function gameReducer(state: GameState, action: Action): GameState {
                 newDate.month = 1;
                 newDate.year++;
             }
+
+            // Advance current date by random 3-7 days
+            const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days
+            const newCurrentDate = new Date(state.currentDate);
+            newCurrentDate.setDate(newCurrentDate.getDate() + daysToAdvance);
             
             // Record historical data point every 4 weeks
             const totalWeeks = (newDate.year - 1) * 48 + (newDate.month - 1) * 4 + newDate.week;
@@ -506,6 +512,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 currentScenario: null,
                 playerStats: newStats,
                 date: newDate,
+                currentDate: newCurrentDate,
                 currentProject: newProject,
                 careerLog: newCareerLog,
                 achievements: milestoneCheck.achievements,
@@ -1080,7 +1087,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             />
             
             <div className="flex-grow w-full max-w-4xl mx-auto p-4 lg:p-6 flex flex-col">
-                {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} />}
+                {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
+                
+                {/* History section right after stats */}
+                {showDashboard && <GameHistory logs={state.logs || []} />}
                 
                 <main className="flex-grow flex items-center justify-center mt-6">
                     {renderGameContent()}

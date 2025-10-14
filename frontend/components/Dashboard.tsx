@@ -94,7 +94,6 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                 <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
                 <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
             </div>
-            <ProjectTracker project={project} />
         </div>
     );
 };

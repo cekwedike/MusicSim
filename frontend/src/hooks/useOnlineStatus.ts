@@ -25,3 +25,13 @@ export function useOnlineStatus() {
 
   return isOnline;
 }
+
+// Helper function to check if app is installed as PWA
+export function isPWAInstalled(): boolean {
+  return window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+}
+
+// Helper function to check if running in PWA context
+export function isPWAContext(): boolean {
+  return isPWAInstalled() || (window.navigator as any).standalone === true;
+}

@@ -109,4 +109,14 @@ export function processOfflineQueue() {
   });
 }
 
+// Auto-sync when coming back online
+let isOnlineEventAdded = false;
+if (!isOnlineEventAdded && typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    console.log('Connection restored - processing offline queue...');
+    processOfflineQueue().catch(console.error);
+  });
+  isOnlineEventAdded = true;
+}
+
 export default api;

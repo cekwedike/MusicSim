@@ -39,8 +39,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
     try {
       if (mode === 'login') {
-        await login(email, password);
-        onClose(); // Close modal on successful login
+        const ok = await login(email, password);
+        if (ok) {
+          onClose(); // Close modal on successful login
+        } else {
+          setLoading(false);
+        }
       } else {
         // Validation for registration
         if (username.length < 3) {
@@ -55,8 +59,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           return;
         }
 
-        await register(email, username, password);
-        onClose(); // Close modal on successful registration
+        // register expects (username, email, password)
+        const ok = await register(username, email, password);
+        if (ok) {
+          onClose(); // Close modal on successful registration
+        } else {
+          setLoading(false);
+        }
       }
     } catch (err: any) {
       setLoading(false);

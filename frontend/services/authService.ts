@@ -1,5 +1,21 @@
 import api from './api';
 
+// Local fallback utilities for when backend is unreachable (development convenience)
+const LOCAL_USERS_KEY = 'musicsim_local_users';
+const makeLocalToken = (username: string) => `local-token-${username}-${Date.now()}`;
+
+function readLocalUsers() {
+  try {
+    return JSON.parse(localStorage.getItem(LOCAL_USERS_KEY) || '[]');
+  } catch (e) {
+    return [];
+  }
+}
+
+function writeLocalUsers(users: any[]) {
+  localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
+}
+
 export interface RegisterData {
   email: string;
   username: string;
@@ -36,22 +52,78 @@ export interface ApiResponse<T = any> {
 export const authService = {
   // Register new user
   register: async (data: RegisterData): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/register', data);
-    if (response.data.success) {
-      localStorage.setItem('musicsim_token', response.data.data.token);
-      localStorage.setItem('musicsim_user', JSON.stringify(response.data.data.user));
+    try {
+      const response = await api.post<AuthResponse>('/auth/register', data);
+      if (response.data.success) {
+        localStorage.setItem('musicsim_token', response.data.data.token);
+        localStorage.setItem('musicsim_user', JSON.stringify(response.data.data.user));
+      }
+      return response.data;
+    } catch (error: any) {
+      // If backend is unreachable, fallback to localStorage-based users for dev
+      if (error?.message && error.message.includes('Network')) {
+        const users = readLocalUsers();
+        const exists = users.find((u: any) => u.email === data.email || u.username === data.username);
+        if (exists) {
+          return {
+            success: false,
+            message: 'Email or username already registered',
+            data: null as any
+          } as any;
+        }
+
+        const newUser = {
+          id: `local-${Date.now()}`,
+          email: data.email,
+          username: data.username,
+          createdAt: new Date().toISOString()
+        };
+        users.push({ ...newUser, password: data.password });
+        writeLocalUsers(users);
+
+        const token = makeLocalToken(data.username);
+        localStorage.setItem('musicsim_token', token);
+        localStorage.setItem('musicsim_user', JSON.stringify(newUser));
+
+        return {
+          success: true,
+          message: 'Registered locally (offline mode)',
+          data: { token, user: newUser } as any
+        } as any;
+      }
+
+      throw error;
     }
-    return response.data;
   },
 
   // Login user
   login: async (data: LoginData): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/login', data);
-    if (response.data.success) {
-      localStorage.setItem('musicsim_token', response.data.data.token);
-      localStorage.setItem('musicsim_user', JSON.stringify(response.data.data.user));
+    try {
+      const response = await api.post<AuthResponse>('/auth/login', data);
+      if (response.data.success) {
+        localStorage.setItem('musicsim_token', response.data.data.token);
+        localStorage.setItem('musicsim_user', JSON.stringify(response.data.data.user));
+      }
+      return response.data;
+    } catch (error: any) {
+      // Network error -> try local fallback
+      if (error?.message && error.message.includes('Network')) {
+        const users = readLocalUsers();
+        const found = users.find((u: any) => (u.email === data.emailOrUsername || u.username === data.emailOrUsername) && u.password === data.password);
+        if (!found) {
+          return { success: false, message: 'Invalid credentials', data: null as any } as any;
+        }
+
+        const user = { id: found.id, email: found.email, username: found.username };
+        const token = makeLocalToken(found.username);
+        localStorage.setItem('musicsim_token', token);
+        localStorage.setItem('musicsim_user', JSON.stringify(user));
+
+        return { success: true, message: 'Logged in locally (offline mode)', data: { token, user } as any } as any;
+      }
+
+      throw error;
     }
-    return response.data;
   },
 
   // Logout user

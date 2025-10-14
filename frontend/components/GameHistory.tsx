@@ -41,7 +41,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
   const sortedLogs = [...displayLogs].reverse(); // Show most recent first
 
   return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 mb-6">
+  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 p-4 mb-6 mt-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <History className="w-5 h-5 text-violet-400" />

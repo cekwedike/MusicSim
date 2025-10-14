@@ -11,16 +11,11 @@ interface ManagementModalProps {
 
 const ManagementModal: React.FC<ManagementModalProps> = ({ achievements, events, staff, onClose }) => {
     const [activeTab, setActiveTab] = useState('achievements');
-    const logEndRef = useRef<HTMLDivElement>(null);
 
     const unlockedCount = achievements.filter(a => a.unlocked).length;
     const totalCount = achievements.length;
 
-    useEffect(() => {
-        if(activeTab === 'log') {
-            logEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }
-    }, [activeTab, events]);
+    // Scroll behavior for events removed - legacy log tab has been removed
 
 
     return (
@@ -40,12 +35,7 @@ const ManagementModal: React.FC<ManagementModalProps> = ({ achievements, events,
                          >
                             <BriefcaseIcon /> <span className="hidden sm:inline">Staff</span>
                         </button>
-                         <button 
-                            onClick={() => setActiveTab('log')}
-                            className={`career-log-button flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'log' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
-                        >
-                            <LogIcon /> <span className="hidden sm:inline">Log</span>
-                        </button>
+                        {/* Legacy Log tab removed - History is now on the main dashboard */}
                     </div>
                 </div>
 
@@ -82,16 +72,7 @@ const ManagementModal: React.FC<ManagementModalProps> = ({ achievements, events,
                             )) : <p className="text-center text-gray-400">You haven't hired any staff yet.</p>}
                         </div>
                     )}
-                    {activeTab === 'log' && (
-                         <ul className="space-y-3 text-sm">
-                            {events.slice().reverse().map((event, index) => (
-                                <li key={`${event.date.year}-${event.date.month}-${event.date.week}-${index}`} className="text-gray-400 border-l-2 border-violet-500 pl-3 leading-relaxed">
-                                    <p><span className="font-semibold text-gray-300">Y{event.date.year} M{event.date.month} W{event.date.week}:</span> {event.description}</p>
-                                </li>
-                            ))}
-                            <div ref={logEndRef} />
-                        </ul>
-                    )}
+                    {/* Legacy log view removed. Use the History panel on the dashboard for chronological entries with real dates. */}
                 </div>
 
                  <div className="p-4 border-t border-gray-700 mt-auto">

@@ -1,0 +1,6 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#8b5cf6"/>
+  <text x="256" y="280" font-family="Arial, sans-serif" font-size="96" font-weight="bold" fill="white" text-anchor="middle">MS</text>
+  <text x="256" y="340" font-family="Arial, sans-serif" font-size="40" font-weight="normal" fill="white" text-anchor="middle">MUSIC</text>
+  <text x="256" y="390" font-family="Arial, sans-serif" font-size="40" font-weight="normal" fill="white" text-anchor="middle">SIM</text>
+</svg>

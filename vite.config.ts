@@ -16,7 +16,19 @@ export default defineConfig(({ mode }) => {
       },
       build: {
         outDir: '../dist',
-        emptyOutDir: true
+        emptyOutDir: true,
+        manifest: true,
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              vendor: ['react', 'react-dom'],
+              utils: ['axios']
+            }
+          }
+        }
+      },
+      server: {
+        port: 5173
       }
     };
 });

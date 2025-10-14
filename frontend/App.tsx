@@ -26,6 +26,9 @@ import { StatisticsModal } from './components/StatisticsModal';
 import { TutorialOverlay } from './components/TutorialOverlay';
 import { MistakeWarning } from './components/MistakeWarning';
 import WelcomeBackDialog from './components/WelcomeBackDialog';
+import { useOnlineStatus } from './src/hooks/useOnlineStatus';
+import OfflineBanner from './src/components/OfflineBanner';
+import InstallPrompt from './src/components/InstallPrompt';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -833,6 +836,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Auth context
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+    
+    // PWA functionality
+    const isOnline = useOnlineStatus();
 
     const fetchNextScenario = useCallback(async (currentState: GameState) => {
         const scenario = getNewScenario(currentState);
@@ -1051,6 +1057,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     return (
         <div className="min-h-screen flex flex-col bg-gray-900 bg-grid-gray-800/[0.2]">
              <style>{`.bg-grid-gray-800\\/\\[0\\.2\\] { background-image: linear-gradient(to right, rgba(55, 65, 81, 0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(55, 65, 81, 0.4) 1px, transparent 1px); background-size: 2.5rem 2.5rem; } .animate-fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+            {/* PWA Components */}
+            <OfflineBanner isOnline={isOnline} />
+            <InstallPrompt />
             <Header 
                 artistName={artistName || undefined} 
                 onShowManagementHub={handleShowManagementHub}

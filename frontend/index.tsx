@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
-import { registerServiceWorker } from './utils/serviceWorkerRegistration';
-import './index.css';
+import { registerServiceWorker } from './src/utils/serviceWorkerRegistration';
+import './src/index.css';
 
 // Register service worker
 registerServiceWorker();

@@ -61,7 +61,8 @@ export const authService = {
       return response.data;
     } catch (error: any) {
       // If backend is unreachable, fallback to localStorage-based users for dev
-      if (error?.message && error.message.includes('Network')) {
+      const isOffline = !!(error && (error.offline === true || (error.message && (error.message.includes('Network') || error.message.includes('offline') || error.message.includes('ECONNREFUSED') || error.message.includes('connect')))));
+      if (isOffline) {
         const users = readLocalUsers();
         const exists = users.find((u: any) => u.email === data.email || u.username === data.username);
         if (exists) {
@@ -107,7 +108,8 @@ export const authService = {
       return response.data;
     } catch (error: any) {
       // Network error -> try local fallback
-      if (error?.message && error.message.includes('Network')) {
+      const isOffline = !!(error && (error.offline === true || (error.message && (error.message.includes('Network') || error.message.includes('offline') || error.message.includes('ECONNREFUSED') || error.message.includes('connect')))));
+      if (isOffline) {
         const users = readLocalUsers();
         const found = users.find((u: any) => (u.email === data.emailOrUsername || u.username === data.emailOrUsername) && u.password === data.password);
         if (!found) {

@@ -42,6 +42,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         const ok = await login(email, password);
         if (ok) {
           onClose(); // Close modal on successful login
+          // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
+          window.location.reload();
         } else {
           setLoading(false);
         }
@@ -63,6 +65,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         const ok = await register(username, email, password);
         if (ok) {
           onClose(); // Close modal on successful registration
+          // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
+          window.location.reload();
         } else {
           setLoading(false);
         }

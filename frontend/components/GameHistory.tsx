@@ -14,7 +14,7 @@ interface GameHistoryProps {
 
 const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const showCount = 5;
+  const showCount = 3;
 
   const formatDate = (date: Date): string => {
     return date.toLocaleDateString('en-GB', {
@@ -67,7 +67,10 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
         )}
       </div>
 
-      <div className="space-y-2 max-h-96 overflow-y-auto">
+      {/* Collapsed: fixed height for 3 items so layout doesn't shift; Expanded: allow larger max height */}
+      <div className={
+        `space-y-2 overflow-y-auto ${isExpanded ? 'max-h-96' : 'h-48'}`
+      }>
         {sortedLogs.length === 0 ? (
           <div className="text-gray-500 text-center py-8">
             No history yet. Start making decisions to see your story unfold!

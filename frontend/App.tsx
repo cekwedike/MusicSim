@@ -32,7 +32,6 @@ import WelcomeBackDialog from './components/WelcomeBackDialog';
 import GameHistory from './components/GameHistory';
 import { useOnlineStatus } from './src/hooks/useOnlineStatus';
 import OfflineBanner from './src/components/OfflineBanner';
-import InstallBanner from './src/components/InstallBanner';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -1066,7 +1065,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
              <style>{`.bg-grid-gray-800\\/\\[0\\.2\\] { background-image: linear-gradient(to right, rgba(55, 65, 81, 0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(55, 65, 81, 0.4) 1px, transparent 1px); background-size: 2.5rem 2.5rem; } .animate-fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`}</style>
             {/* PWA Components */}
             <OfflineBanner isOnline={isOnline} />
-            <InstallBanner />
             <Header 
                 artistName={artistName || undefined} 
                 onShowManagementHub={handleShowManagementHub}

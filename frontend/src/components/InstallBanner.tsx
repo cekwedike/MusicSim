@@ -147,6 +147,8 @@ const InstallBanner: React.FC = () => {
     }
   };
 
+  console.log('[InstallBanner] Render check - visible:', visible);
+
   if (!visible) return null;
 
   return (

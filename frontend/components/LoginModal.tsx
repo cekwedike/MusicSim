@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { Eye, EyeOff, Check } from 'lucide-react';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -18,8 +19,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login, register } = useAuth();
+
+  // Password validation helper (used for real-time hints and pre-submit validation)
+  const getPasswordChecks = (pw: string) => {
+    const minLength = pw.length >= 8;
+    const hasUpper = /[A-Z]/.test(pw);
+    const hasLower = /[a-z]/.test(pw);
+    const hasNumber = /[0-9]/.test(pw);
+    return { minLength, hasUpper, hasLower, hasNumber, valid: minLength && hasUpper && hasLower && hasNumber };
+  };
 
   // Reset form when modal opens/closes or mode changes
   React.useEffect(() => {
@@ -38,6 +49,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     setLoading(true);
 
     try {
+      // Pre-submit validation for registration mode
+      if (mode === 'register') {
+        const result = getPasswordChecks(password);
+        if (!result.valid) {
+          setError('Password must be at least 8 characters and include an uppercase letter, lowercase letter, and a number.');
+          setLoading(false);
+          return;
+        }
+      }
+
       if (mode === 'login') {
         const ok = await login(email, password);
         if (ok) {
@@ -55,11 +76,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           return;
         }
         
-        if (password.length < 8) {
-          setError('Password must be at least 8 characters long');
-          setLoading(false);
-          return;
-        }
+        
 
         // register expects (username, email, password)
         const ok = await register(username, email, password);
@@ -157,17 +174,61 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
           <div>
             <label className="block text-gray-300 mb-2 font-medium">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-              placeholder="Enter your password"
-              required
-              minLength={8}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 pr-12 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                placeholder="Enter your password"
+                required
+                minLength={8}
+                aria-describedby={mode === 'register' ? 'password-hint' : undefined}
+              />
+
+              {/* Show/Hide toggle - touch target at least 44x44 (w-11 h-11) */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center text-gray-300 hover:text-white z-20 focus:outline-none focus:ring-2 focus:ring-violet-500 rounded"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+
+            {/* Short summary hint (registration only) */}
             {mode === 'register' && (
-              <p className="text-gray-400 text-xs mt-1">At least 8 characters</p>
+              <p className="text-gray-400 text-xs mt-1">Minimum 8 characters, include an uppercase letter, a lowercase letter and a number</p>
+            )}
+
+            {/* Real-time validation hints (registration only) */}
+            {mode === 'register' && (
+              <div id="password-hint" className="mt-2">
+                {(() => {
+                  const checks = getPasswordChecks(password);
+                  return (
+                    <ul className="space-y-1 text-sm">
+                      <li className={checks.minLength ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
+                        {checks.minLength ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
+                        <span>Minimum 8 characters</span>
+                      </li>
+                      <li className={checks.hasUpper ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
+                        {checks.hasUpper ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
+                        <span>At least one uppercase letter (A-Z)</span>
+                      </li>
+                      <li className={checks.hasLower ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
+                        {checks.hasLower ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
+                        <span>At least one lowercase letter (a-z)</span>
+                      </li>
+                      <li className={checks.hasNumber ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
+                        {checks.hasNumber ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
+                        <span>At least one number (0-9)</span>
+                      </li>
+                    </ul>
+                  );
+                })()}
+              </div>
             )}
           </div>
 

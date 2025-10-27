@@ -8,9 +8,29 @@ const { Op } = require('sequelize');
 router.use(authMiddleware);
 
 /**
- * @route   POST /api/learning/module/start
- * @desc    Mark module as started
- * @access  Private
+ * @swagger
+ * /api/learning/module/start:
+ *   post:
+ *     summary: Mark module as started
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               moduleId:
+ *                 type: string
+ *               moduleName:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Module started successfully
+ *       400:
+ *         description: Validation failed
  */
 router.post('/module/start', async (req, res, next) => {
   try {
@@ -70,9 +90,29 @@ router.post('/module/start', async (req, res, next) => {
 });
 
 /**
- * @route   POST /api/learning/module/complete
- * @desc    Mark module as completed with quiz score
- * @access  Private
+ * @swagger
+ * /api/learning/module/complete:
+ *   post:
+ *     summary: Mark module as completed with quiz score
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               moduleId:
+ *                 type: string
+ *               quizScore:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Module completed successfully
+ *       404:
+ *         description: Module not found
  */
 router.post('/module/complete', async (req, res, next) => {
   try {
@@ -134,9 +174,29 @@ router.post('/module/complete', async (req, res, next) => {
 });
 
 /**
- * @route   POST /api/learning/quiz/attempt
- * @desc    Record quiz attempt (without completing module)
- * @access  Private
+ * @swagger
+ * /api/learning/quiz/attempt:
+ *   post:
+ *     summary: Record quiz attempt (without completing module)
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               moduleId:
+ *                 type: string
+ *               score:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Quiz attempt recorded
+ *       404:
+ *         description: Module not found
  */
 router.post('/quiz/attempt', async (req, res, next) => {
   try {
@@ -194,9 +254,21 @@ router.post('/quiz/attempt', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/learning/progress
- * @desc    Get all learning progress for user
- * @access  Private
+ * @swagger
+ * /api/learning/progress:
+ *   get:
+ *     summary: Get all learning progress for user
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: completed
+ *         schema:
+ *           type: boolean
+ *     responses:
+ *       200:
+ *         description: User learning progress
  */
 router.get('/progress', async (req, res, next) => {
   try {
@@ -239,9 +311,22 @@ router.get('/progress', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/learning/progress/:moduleId
- * @desc    Get progress for specific module
- * @access  Private
+ * @swagger
+ * /api/learning/progress/{moduleId}:
+ *   get:
+ *     summary: Get progress for specific module
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: moduleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Module progress
  */
 router.get('/progress/:moduleId', async (req, res, next) => {
   try {
@@ -282,9 +367,16 @@ router.get('/progress/:moduleId', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/learning/stats
- * @desc    Get comprehensive learning statistics
- * @access  Private
+ * @swagger
+ * /api/learning/stats:
+ *   get:
+ *     summary: Get comprehensive learning statistics
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Learning stats
  */
 router.get('/stats', async (req, res, next) => {
   try {
@@ -355,9 +447,16 @@ router.get('/stats', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/learning/recommendations
- * @desc    Get recommended modules based on progress
- * @access  Private
+ * @swagger
+ * /api/learning/recommendations:
+ *   get:
+ *     summary: Get recommended modules based on progress
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Recommendations
  */
 router.get('/recommendations', async (req, res, next) => {
   try {
@@ -434,9 +533,24 @@ router.get('/recommendations', async (req, res, next) => {
 });
 
 /**
- * @route   DELETE /api/learning/progress/:moduleId
- * @desc    Reset module progress
- * @access  Private
+ * @swagger
+ * /api/learning/progress/{moduleId}:
+ *   delete:
+ *     summary: Reset module progress
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: moduleId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Module reset
+ *       404:
+ *         description: Module not found
  */
 router.delete('/progress/:moduleId', async (req, res, next) => {
   try {
@@ -469,9 +583,25 @@ router.delete('/progress/:moduleId', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/learning/leaderboard
- * @desc    Get learning leaderboard (anonymous)
- * @access  Private
+ * @swagger
+ * /api/learning/leaderboard:
+ *   get:
+ *     summary: Get learning leaderboard (anonymous)
+ *     tags: [Learning]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: metric
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Leaderboard data
  */
 router.get('/leaderboard', async (req, res, next) => {
   try {

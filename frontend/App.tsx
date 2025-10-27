@@ -866,6 +866,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
 
+    // Sidebar state
+    const [activeSidebarView, setActiveSidebarView] = useState<SidebarView>(null);
+
     // Welcome dialog state
     const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
     const [welcomeArtistName, setWelcomeArtistName] = useState('');
@@ -1207,6 +1210,27 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         dispatch({ type: 'COMPLETE_TUTORIAL' });
     };
 
+    // Sidebar view change handler
+    const handleSidebarViewChange = (view: SidebarView) => {
+        setActiveSidebarView(view);
+
+        // Map sidebar views to modal states
+        if (view === 'achievements') {
+            dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
+        } else if (view === 'learning') {
+            dispatch({ type: 'VIEW_LEARNING_HUB' });
+        } else if (view === 'statistics') {
+            dispatch({ type: 'VIEW_STATISTICS' });
+        } else if (view === 'tutorial') {
+            dispatch({ type: 'START_TUTORIAL' });
+        } else if (view === 'saveload') {
+            dispatch({ type: 'VIEW_SAVE_LOAD' });
+        } else if (view === null) {
+            // Close all modals when sidebar is closed
+            dispatch({ type: 'CLOSE_MODAL' });
+        }
+    };
+
     // Manual save logic - Delete autosave when manual save happens
     const handleManualSave = async (slotName: string) => {
         try {
@@ -1257,16 +1281,49 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             {/* PWA Components */}
             <OfflineBanner isOnline={isOnline} />
             <InstallBanner />
-            <Header 
-                artistName={artistName || undefined} 
-                onShowManagementHub={handleShowManagementHub}
-                onShowSaveLoad={handleShowSaveLoad}
-                onShowLearningHub={handleShowLearningHub}
-                onShowStatistics={handleShowStatistics}
-                onStartTutorial={handleStartTutorial}
-                hasUnseenAchievements={unseenAchievements.length > 0}
+            <Header
+                artistName={artistName || undefined}
                 difficulty={status === 'playing' ? state.difficulty : undefined}
             />
+
+            {/* Sidebar - only show when game has started */}
+            {artistName && (
+                <Sidebar
+                    activeView={activeSidebarView}
+                    onViewChange={handleSidebarViewChange}
+                    hasUnseenAchievements={unseenAchievements.length > 0}
+                >
+                    {/* Render content based on active view */}
+                    {activeSidebarView === 'saveload' && (
+                        <SaveLoadPanel
+                            onLoadGame={handleLoadGame}
+                            currentGameState={state}
+                            onClose={() => setActiveSidebarView(null)}
+                        />
+                    )}
+                    {/* Other views will continue using modals for now */}
+                    {activeSidebarView === 'achievements' && (
+                        <div className="text-gray-300 text-sm">
+                            Management Hub content (using modal)
+                        </div>
+                    )}
+                    {activeSidebarView === 'learning' && (
+                        <div className="text-gray-300 text-sm">
+                            Learning Hub content (using modal)
+                        </div>
+                    )}
+                    {activeSidebarView === 'statistics' && (
+                        <div className="text-gray-300 text-sm">
+                            Career Analytics content (using modal)
+                        </div>
+                    )}
+                    {activeSidebarView === 'tutorial' && (
+                        <div className="text-gray-300 text-sm">
+                            Tutorial will launch as overlay
+                        </div>
+                    )}
+                </Sidebar>
+            )}
             
             <div className="flex-grow w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6 py-2 sm:py-4 flex flex-col">
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}

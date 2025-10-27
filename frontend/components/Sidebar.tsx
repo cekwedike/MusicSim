@@ -7,6 +7,7 @@ interface SidebarProps {
   activeView: SidebarView;
   onViewChange: (view: SidebarView) => void;
   hasUnseenAchievements?: boolean;
+  children?: React.ReactNode;
 }
 
 interface SidebarButton {
@@ -17,7 +18,7 @@ interface SidebarButton {
   badge?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const buttons: SidebarButton[] = [
@@ -142,10 +143,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
             </div>
 
             <div className="flex-1 overflow-y-auto">
-              {/* Content will be rendered by parent based on activeView */}
-              <div className="text-gray-300">
-                {/* Placeholder - parent component renders actual content */}
-              </div>
+              {children}
             </div>
           </div>
         )}

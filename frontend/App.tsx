@@ -35,6 +35,8 @@ import { useOnlineStatus } from './src/hooks/useOnlineStatus';
 import OfflineBanner from './src/components/OfflineBanner';
 import InstallBanner from './src/components/InstallBanner';
 import { useAudio } from './contexts/AudioContext';
+import Sidebar, { SidebarView } from './components/Sidebar';
+import SaveLoadPanel from './components/SaveLoadPanel';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);

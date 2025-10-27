@@ -37,50 +37,66 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
   useEffect(() => {
     if (!isActive || !currentTutorialStep) return;
 
-    const updatePositions = () => {
+    const updatePositions = (retryCount = 0) => {
       if (currentTutorialStep.target) {
         const targetElement = document.querySelector(currentTutorialStep.target) as HTMLElement;
+
+        // Check if element exists and has valid dimensions
         if (targetElement) {
           const rect = targetElement.getBoundingClientRect();
-          const position: ElementPosition = {
-            top: rect.top + window.scrollY,
-            left: rect.left + window.scrollX,
-            width: rect.width,
-            height: rect.height
-          };
-          setTargetPosition(position);
-          calculateTooltipPosition(position, currentTutorialStep.position || 'bottom');
-        } else {
-          setTargetPosition(null);
-          // Center tooltip when no target element found (mobile-friendly)
-          const isMobile = window.innerWidth <= 480;
-          if (isMobile) {
-            setTooltipPosition({ 
-              top: window.innerHeight / 2 - 100, 
-              left: 8 
-            });
-          } else {
-            setTooltipPosition({ 
-              top: window.innerHeight / 2 - 100, 
-              left: window.innerWidth / 2 - 200 
-            });
+
+          // Retry logic: if element has no dimensions and we haven't exceeded retry limit
+          // This fixes the timing bug when navigating forward to step 8
+          if ((rect.width === 0 || rect.height === 0) && retryCount < 5) {
+            console.log(`[Tutorial] Element not ready, retrying... (attempt ${retryCount + 1}/5)`);
+            setTimeout(() => updatePositions(retryCount + 1), 100);
+            return;
           }
+
+          if (rect.width > 0 && rect.height > 0) {
+            const position: ElementPosition = {
+              top: rect.top + window.scrollY,
+              left: rect.left + window.scrollX,
+              width: rect.width,
+              height: rect.height
+            };
+            console.log(`[Tutorial] Element positioned:`, position);
+            setTargetPosition(position);
+            calculateTooltipPosition(position, currentTutorialStep.position || 'bottom');
+          } else {
+            console.warn(`[Tutorial] Element has invalid dimensions after ${retryCount} retries`);
+            centerTooltip();
+          }
+        } else {
+          // Element not found in DOM
+          if (retryCount < 5) {
+            console.log(`[Tutorial] Element not found, retrying... (attempt ${retryCount + 1}/5)`);
+            setTimeout(() => updatePositions(retryCount + 1), 100);
+            return;
+          }
+
+          console.warn(`[Tutorial] Target element not found: ${currentTutorialStep.target}`);
+          setTargetPosition(null);
+          centerTooltip();
         }
       } else {
         setTargetPosition(null);
-        // Center tooltip when no target (mobile-friendly)
-        const isMobile = window.innerWidth <= 480;
-        if (isMobile) {
-          setTooltipPosition({ 
-            top: window.innerHeight / 2 - 100, 
-            left: 8 
-          });
-        } else {
-          setTooltipPosition({ 
-            top: window.innerHeight / 2 - 100, 
-            left: window.innerWidth / 2 - 200 
-          });
-        }
+        centerTooltip();
+      }
+    };
+
+    const centerTooltip = () => {
+      const isMobile = window.innerWidth <= 480;
+      if (isMobile) {
+        setTooltipPosition({
+          top: window.innerHeight / 2 - 100,
+          left: 8
+        });
+      } else {
+        setTooltipPosition({
+          top: window.innerHeight / 2 - 100,
+          left: window.innerWidth / 2 - 200
+        });
       }
     };
 
@@ -93,7 +109,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
       const margin = isMobile ? 8 : 20;
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      
+
       let top = 0;
       let left = 0;
 
@@ -144,16 +160,21 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
       setTooltipPosition({ top, left });
     };
 
-    // Initial position calculation
-    setTimeout(updatePositions, 100);
+    // Initial position calculation with delay to allow DOM to settle
+    // Increased delay for step 8 specifically (choice buttons)
+    const initialDelay = currentTutorialStep.id === 'choice-selection' ? 200 : 100;
+    setTimeout(() => updatePositions(0), initialDelay);
+
+    // Wrapper function for event listeners (they don't pass parameters)
+    const handleReposition = () => updatePositions(0);
 
     // Recalculate on window resize
-    window.addEventListener('resize', updatePositions);
-    window.addEventListener('scroll', updatePositions);
+    window.addEventListener('resize', handleReposition);
+    window.addEventListener('scroll', handleReposition);
 
     return () => {
-      window.removeEventListener('resize', updatePositions);
-      window.removeEventListener('scroll', updatePositions);
+      window.removeEventListener('resize', handleReposition);
+      window.removeEventListener('scroll', handleReposition);
     };
   }, [currentStep, isActive, currentTutorialStep]);
 

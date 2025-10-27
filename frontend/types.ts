@@ -351,6 +351,7 @@ export type Action =
   | { type: 'LOAD_GAME'; payload: GameState }
   | { type: 'START_TUTORIAL' }
   | { type: 'NEXT_TUTORIAL_STEP' }
+  | { type: 'PREVIOUS_TUTORIAL_STEP' }
   | { type: 'SKIP_TUTORIAL' }
   | { type: 'COMPLETE_TUTORIAL' }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

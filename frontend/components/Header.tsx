@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { BriefcaseIcon, SaveIcon, BookIcon, ChartIcon, QuestionMarkIcon } from './icons/Icons';
 import type { Difficulty } from '../types';
 import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 import { getAutosaveAge } from '../services/storageService';
@@ -7,17 +6,11 @@ import AudioControls from './AudioControls';
 
 interface HeaderProps {
     artistName?: string;
-    onShowManagementHub: () => void;
-    onShowSaveLoad: () => void;
-    onShowLearningHub: () => void;
-    onShowStatistics: () => void;
-    onStartTutorial: () => void;
-    hasUnseenAchievements: boolean;
     difficulty?: Difficulty;
 }
 
 
-const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShowSaveLoad, onShowLearningHub, onShowStatistics, onStartTutorial, hasUnseenAchievements, difficulty }) => {
+const Header: React.FC<HeaderProps> = ({ artistName, difficulty }) => {
     const [autosaveAge, setAutosaveAge] = useState<number | null>(null);
     const [justSaved, setJustSaved] = useState(false);
 
@@ -80,54 +73,8 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
             )}
 
             {artistName && (
-                <div className="absolute top-1/2 right-1 sm:right-2 md:right-4 lg:right-6 -translate-y-1/2 flex gap-0.5 sm:gap-1 md:gap-2">
+                <div className="absolute top-1/2 right-20 -translate-y-1/2">
                     <AudioControls />
-
-                    <button
-                        onClick={onShowLearningHub}
-                        className="learning-button text-gray-400 hover:text-white transition-colors duration-200 p-1 sm:p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
-                        aria-label="Learning Hub"
-                    >
-                        <BookIcon />
-                    </button>
-
-                    <button
-                        onClick={onStartTutorial}
-                        className="tutorial-button text-gray-400 hover:text-white transition-colors duration-200 p-1 sm:p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
-                        aria-label="Tutorial"
-                    >
-                        <QuestionMarkIcon />
-                    </button>
-
-                    <button
-                        onClick={onShowStatistics}
-                        className="stats-button text-gray-400 hover:text-white transition-colors duration-200 p-1 sm:p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
-                        aria-label="Career Statistics"
-                    >
-                        <ChartIcon />
-                    </button>
-
-                    <button
-                        onClick={onShowSaveLoad}
-                        className="text-gray-400 hover:text-white transition-colors duration-200 p-1 sm:p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
-                        aria-label="Save/Load Game"
-                    >
-                        <SaveIcon />
-                    </button>
-
-                    <button
-                        onClick={onShowManagementHub}
-                        className="achievements-button management-button text-gray-400 hover:text-white transition-colors duration-200 p-1 sm:p-1.5 md:p-2 rounded-full hover:bg-gray-700 relative min-w-[36px] min-h-[36px] sm:min-w-[44px] sm:min-h-[44px] flex items-center justify-center"
-                        aria-label="Show Management Hub"
-                    >
-                        <BriefcaseIcon />
-                        {hasUnseenAchievements && (
-                            <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                            </span>
-                        )}
-                    </button>
                 </div>
             )}
         </header>

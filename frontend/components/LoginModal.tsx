@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import { Eye, EyeOff, Check } from 'lucide-react';
 
 interface LoginModalProps {
@@ -20,7 +21,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const toast = useToast();
 
   const { login, register } = useAuth();
 
@@ -63,8 +64,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       if (mode === 'login') {
         // login() will throw on failure; let the catch block handle errors
         await login(email, password);
-        // show success briefly before reloading
-        setSuccessMessage('Logged in successfully! Redirecting...');
+        // show global success toast and reload shortly after
+        toast.show('Logged in successfully! Redirecting...', 'success');
         setLoading(false);
         setTimeout(() => {
           onClose();
@@ -83,8 +84,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         // register expects (username, email, password)
         // register() will throw on failure; let the catch block handle errors
         await register(username, email, password);
-        // show success briefly before reloading
-        setSuccessMessage('Account created! Signing you in...');
+        // show global success toast and reload shortly after
+        toast.show('Account created! Signing you in...', 'success');
         setLoading(false);
         setTimeout(() => {
           onClose();
@@ -124,7 +125,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         errorMessage = '🌐 Network error. Please check your internet connection.';
       }
 
+      // Show inline error and a global toast for visibility
       setError(errorMessage);
+      try {
+        toast.show(errorMessage, 'error');
+      } catch (_) {
+        // If toast isn't available for some reason, ignore
+      }
     }
   };
 
@@ -249,11 +256,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             </div>
           )}
 
-          {successMessage && (
-            <div className="bg-green-500/10 border-2 border-green-500 rounded-lg p-4 text-green-200 text-sm font-medium">
-              {successMessage}
-            </div>
-          )}
+          {/* success handled via global toast */}
 
           <button
             type="submit"

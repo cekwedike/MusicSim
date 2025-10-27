@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       id: 'profile',
       icon: <UserIcon />,
       label: 'Profile',
-      ariaLabel: 'Profile & Settings'
+      ariaLabel: 'User Profile'
     },
     {
       id: 'achievements',

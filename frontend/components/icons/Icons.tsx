@@ -89,6 +89,7 @@ export const MusicNoteIcon = () => (
 
 export const UserIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M16 14a4 4 0 10-8 0M12 10a4 4 0 100-8 4 4 0 000 8zM4 20a8 8 0 0116 0" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16 14a4 4 0 10-8 0v1a4 4 0 004 4h0a4 4 0 004-4v-1z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 7a4 4 0 110-8 4 4 0 010 8z" transform="translate(0 8)"/>
     </svg>
 );

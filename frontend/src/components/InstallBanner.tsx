@@ -1,0 +1,148 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { Download, X } from 'lucide-react';
+
+type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+};
+
+const DISMISS_KEY = 'musicsim_install_banner_dismissed';
+
+const isDismissedRecently = (): boolean => {
+  try {
+    const raw = localStorage.getItem(DISMISS_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.t) return false;
+    const ts = parsed.t as number;
+    const now = Date.now();
+    // hide for 7 days
+    return now - ts < 7 * 24 * 60 * 60 * 1000;
+  } catch (e) {
+    return false;
+  }
+};
+
+const markDismissed = (permanent = false) => {
+  try {
+    const value = { t: Date.now(), p: !!permanent };
+    localStorage.setItem(DISMISS_KEY, JSON.stringify(value));
+  } catch (e) {
+    // ignore
+  }
+};
+
+const InstallBanner: React.FC = () => {
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [visible, setVisible] = useState(false);
+  const bannerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (isDismissedRecently()) return; // do not show if dismissed
+
+    const onBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setVisible(true);
+    };
+
+    const onAppInstalled = () => {
+      // permanently remove banner after install
+      markDismissed(true);
+      setVisible(false);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
+    window.addEventListener('appinstalled', onAppInstalled as EventListener);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
+      window.removeEventListener('appinstalled', onAppInstalled as EventListener);
+    };
+  }, []);
+
+  useEffect(() => {
+    // If previously dismissed permanently (installed) or within 7 days, keep hidden
+    if (isDismissedRecently()) setVisible(false);
+  }, []);
+
+  const handleClose = () => {
+    markDismissed(false);
+    setVisible(false);
+  };
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    try {
+      // user clicks Install -> show native prompt
+      await deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      // Hide the banner regardless of choice
+      setVisible(false);
+      setDeferredPrompt(null);
+
+      if (choice.outcome === 'accepted') {
+        // mark as permanently dismissed (installed)
+        markDismissed(true);
+      }
+    } catch (e) {
+      // hide banner anyway
+      setVisible(false);
+      setDeferredPrompt(null);
+    }
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div
+      ref={bannerRef}
+      className="fixed left-4 right-4 md:left-8 md:right-8 bottom-4 z-50"
+      style={{ pointerEvents: 'auto' }}
+    >
+      <style>{`
+        .musicsim-install-slide { animation: slideUp 360ms cubic-bezier(.2,.8,.2,1); }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+      `}</style>
+
+      <div className="musicsim-install-slide flex items-center justify-between bg-[#1f2937] border border-gray-700 shadow-lg rounded-xl p-3 md:p-4">
+        <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-violet-600 rounded-lg flex items-center justify-center">
+            <Download className="w-6 h-6 text-white" />
+          </div>
+
+          <div className="hidden sm:block">
+            <div className="text-white font-semibold text-sm md:text-base">Install MusicSim</div>
+            <div className="text-gray-300 text-xs md:text-sm">Take Your Music Journey With You. Play Anytime, Anywhere.</div>
+          </div>
+
+          <div className="block sm:hidden">
+            <div className="text-white font-semibold text-sm">Install MusicSim</div>
+          </div>
+        </div>
+
+        <div className="ml-4 flex items-center gap-3">
+          <button
+            onClick={handleInstall}
+            className="flex items-center gap-3 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform"
+            aria-label="Install MusicSim"
+          >
+            <span className="hidden sm:inline">Install</span>
+            <span className="sm:hidden text-sm">Install</span>
+          </button>
+
+          <button
+            onClick={handleClose}
+            className="ml-2 p-2 rounded-full text-gray-300 hover:text-white hover:bg-gray-700"
+            aria-label="Close install banner"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default InstallBanner;

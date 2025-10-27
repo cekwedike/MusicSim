@@ -1,10 +1,10 @@
 {
-  "name": "MusicSim - A Music Business Simulation",
+  "name": "MusicSim",
   "short_name": "MusicSim",
   "description": "Learn the music business through an interactive simulation game",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a0b2e",
+  "background_color": "#1f2937",
   "theme_color": "#8b5cf6",
   "orientation": "portrait-primary",
   "icons": [

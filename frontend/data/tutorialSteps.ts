@@ -105,8 +105,8 @@ export const tutorialSteps: TutorialStep[] = [
     id: 'achievements-system',
     title: 'Achievements & Milestones',
     message: 'Achievements celebrate your progress and teach you about industry milestones. They represent real career accomplishments that matter in the music business.',
-    target: '.achievements-button',
-    position: 'left',
+    target: 'button[aria-label="Show Management Hub"]',
+    position: 'right',
     action: 'highlight',
     nextTrigger: 'click',
     musicBusinessLesson: 'The music industry measures success through various milestones: chart positions, sales figures, tour attendance, industry recognition, and career longevity.'
@@ -114,9 +114,9 @@ export const tutorialSteps: TutorialStep[] = [
   {
     id: 'learning-hub',
     title: 'Learning Hub',
-    message: 'Access detailed lessons about music business concepts here. Each lesson explains industry fundamentals with real examples and practical advice.',
-    target: '.learning-button',
-    position: 'left',
+    message: 'Access detailed lessons about music business concepts from the right-side Sidebar. Open the Learning Hub to read bite-sized lessons and practical advice.',
+    target: 'button[aria-label="Learning Hub"]',
+    position: 'right',
     action: 'highlight',
     nextTrigger: 'click',
     musicBusinessLesson: 'Continuous learning is essential in the evolving music industry. Understanding concepts like royalties, publishing, marketing, and contracts gives you competitive advantages.'
@@ -135,9 +135,9 @@ export const tutorialSteps: TutorialStep[] = [
   {
     id: 'record-labels',
     title: 'Record Label Contracts',
-    message: 'You\'ll encounter record label offers throughout your career. Each contract has different terms, benefits, and trade-offs. Learn to evaluate them carefully.',
-    target: '.management-button',
-    position: 'left',
+    message: 'You\'ll encounter record label offers throughout your career. Open the Management Hub from the Sidebar to view contract offers and label interactions.',
+    target: 'button[aria-label="Show Management Hub"]',
+    position: 'right',
     action: 'highlight',
     nextTrigger: 'click',
     musicBusinessLesson: 'Record deals can accelerate careers but involve giving up control and revenue. Understanding contract terms, advances, royalties, and recoupment is crucial for fair negotiations.'
@@ -156,12 +156,45 @@ export const tutorialSteps: TutorialStep[] = [
   {
     id: 'statistics-tracking',
     title: 'Career Analytics',
-    message: 'Track your progress across multiple careers with detailed statistics. Analyze patterns in your decision-making and identify areas for improvement.',
-    target: '.stats-button',
-    position: 'left',
+    message: 'Track your progress across multiple careers from the Sidebar Analytics panel. Use the statistics view to inspect trends and learn from past decisions.',
+    target: 'button[aria-label="Career Statistics"]',
+    position: 'right',
     action: 'highlight',
     nextTrigger: 'click',
     musicBusinessLesson: 'Data-driven decision making is increasingly important in music. Understanding metrics like streaming numbers, audience demographics, and revenue sources helps optimize strategies.'
+  },
+
+  {
+    id: 'saveload-hub',
+    title: 'Save & Load',
+    message: 'Use the Save & Load panel in the Sidebar to create manual saves, load previous games, or manage autosaves. Saving regularly preserves your progress.',
+    target: 'button[aria-label="Save/Load Game"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Regular saves let you experiment with risky choices without permanent consequences. Use manual saves before big decisions.'
+  },
+
+  {
+    id: 'audio-panel',
+    title: 'Audio Settings',
+    message: 'Audio settings (music & SFX) are now available in the Sidebar under Audio. Tweak volumes and toggles to match your preference.',
+    target: 'button[aria-label="Audio Settings"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Audio preferences help tailor the learning experience—turn down music while studying lessons or lower SFX for quieter play.'
+  },
+
+  {
+    id: 'profile-panel',
+    title: 'Your Profile',
+    message: 'The new Profile panel lives in the Sidebar. Open it to logout, exit guest mode, or manage account preferences.',
+    target: 'button[aria-label="User Profile"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Keeping account details and session controls in one place helps you manage your play sessions and account safely.'
   },
   {
     id: 'survival-focus',

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon } from './icons/Icons';
+import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon, MusicNoteIcon } from './icons/Icons';
 
-export type SidebarView = 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | null;
+export type SidebarView = 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
 
 interface SidebarProps {
   activeView: SidebarView;
@@ -20,6 +20,7 @@ interface SidebarButton {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   const buttons: SidebarButton[] = [
     {
@@ -53,6 +54,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       label: 'Save & Load',
       ariaLabel: 'Save/Load Game'
     }
+    ,
+    {
+      id: 'audio',
+      icon: <MusicNoteIcon />, 
+      label: 'Audio',
+      ariaLabel: 'Audio Settings'
+    }
   ];
 
   const handleButtonClick = (id: SidebarView) => {
@@ -68,9 +76,20 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
   };
 
   return (
-    <div className="fixed right-0 top-0 h-full z-40 flex">
+    <div className={`fixed right-0 top-0 h-full z-40 flex transition-transform ${isVisible ? 'translate-x-0' : 'translate-x-full'}`}>
       {/* Icon Bar */}
-      <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-20 gap-4 shadow-xl">
+      <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-4 shadow-xl">
+        {/* Sidebar visibility toggle */}
+        <button
+          onClick={() => setIsVisible(v => !v)}
+          className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
+          aria-label={isVisible ? 'Collapse sidebar' : 'Open sidebar'}
+          title={isVisible ? 'Collapse' : 'Open'}
+        >
+          <svg className={`w-5 h-5 transition-transform ${isVisible ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
         {buttons.map((button) => (
           <button
             key={button.id}
@@ -111,6 +130,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
             </div>
           </button>
         ))}
+        {/* Spacer to push any future controls toward center */}
+        <div className="flex-1" />
       </div>
 
       {/* Expanded Panel */}
@@ -118,12 +139,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         className={`
           bg-gray-800/98 backdrop-blur-md border-l border-gray-700
           transition-all duration-300 ease-in-out
-          ${isExpanded && activeView ? 'w-80' : 'w-0'}
+          ${isExpanded && activeView ? 'w-96' : 'w-0'}
           overflow-hidden shadow-2xl
         `}
       >
         {activeView && isExpanded && (
-          <div className="w-80 h-full flex flex-col p-4 animate-fade-in">
+          <div className="w-96 h-full flex flex-col p-4 animate-fade-in">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-violet-300">
                 {buttons.find(b => b.id === activeView)?.label}

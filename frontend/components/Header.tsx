@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import type { Difficulty } from '../types';
 import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 import { getAutosaveAge } from '../services/storageService';
-import AudioControls from './AudioControls';
 
 interface HeaderProps {
     artistName?: string;
@@ -72,11 +71,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty }) => {
                 </div>
             )}
 
-            {artistName && (
-                <div className="absolute top-1/2 right-20 -translate-y-1/2">
-                    <AudioControls />
-                </div>
-            )}
+            {/* Audio controls moved into the Sidebar (Audio Panel) */}
         </header>
     );
 };

@@ -21,12 +21,13 @@ import ScenarioCard from './components/ScenarioCard';
 import OutcomeModal from './components/OutcomeModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
-import ManagementModal from './components/ManagementModal';
-import SaveLoadModal from './components/SaveLoadModal';
 import LearningHub from './components/LearningHub';
 import ModuleViewer from './components/ModuleViewer';
 import { ContractViewer } from './components/ContractViewer';
-import { StatisticsModal } from './components/StatisticsModal';
+import ManagementPanel from './components/ManagementPanel';
+import StatisticsPanel from './components/StatisticsPanel';
+import SidebarAudioSettings from './components/SidebarAudioSettings';
+// SaveLoadPanel already used inside the sidebar
 import { TutorialOverlay } from './components/TutorialOverlay';
 import { MistakeWarning } from './components/MistakeWarning';
 import WelcomeBackDialog from './components/WelcomeBackDialog';
@@ -1301,26 +1302,25 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                             onClose={() => setActiveSidebarView(null)}
                         />
                     )}
-                    {/* Other views will continue using modals for now */}
+
                     {activeSidebarView === 'achievements' && (
-                        <div className="text-gray-300 text-sm">
-                            Management Hub content (using modal)
-                        </div>
+                        <ManagementPanel achievements={achievements} logs={logs} staff={staff} />
                     )}
+
                     {activeSidebarView === 'learning' && (
-                        <div className="text-gray-300 text-sm">
-                            Learning Hub content (using modal)
-                        </div>
+                        <div className="text-gray-300 text-sm">Learning Hub content</div>
                     )}
+
                     {activeSidebarView === 'statistics' && (
-                        <div className="text-gray-300 text-sm">
-                            Career Analytics content (using modal)
-                        </div>
+                        <StatisticsPanel state={state} />
                     )}
+
                     {activeSidebarView === 'tutorial' && (
-                        <div className="text-gray-300 text-sm">
-                            Tutorial will launch as overlay
-                        </div>
+                        <div className="text-gray-300 text-sm">Tutorial will launch as overlay</div>
+                    )}
+
+                    {activeSidebarView === 'audio' && (
+                        <SidebarAudioSettings />
                     )}
                 </Sidebar>
             )}
@@ -1337,8 +1337,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             </div>
 
             {lastOutcome && <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />}
-            {modal === 'management' && <ManagementModal achievements={achievements} logs={logs} staff={staff} onClose={handleCloseModal}/>}
-            {modal === 'saveload' && <SaveLoadModal isOpen={true} onClose={handleCloseModal} onLoadGame={handleLoadGame} currentGameState={state} />}
             {modal === 'learning' && <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} />}
             {modal === 'moduleViewer' && state.currentModule && (
                 <ModuleViewer 
@@ -1354,7 +1352,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     onDecline={handleDeclineContract}
                 />
             )}
-            {modal === 'statistics' && <StatisticsModal state={state} onClose={handleCloseModal} />}
+            {/* Management, Save/Load and Statistics are now available in the Sidebar panels. */}
 
             {showMistakeWarning && pendingChoice && currentScenario && (
                 <MistakeWarning

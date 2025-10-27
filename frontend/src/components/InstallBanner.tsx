@@ -56,14 +56,10 @@ const InstallBanner: React.FC = () => {
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
     window.addEventListener('appinstalled', onAppInstalled as EventListener);
 
-    // Dev override: show banner when ?showInstall=1 or localStorage 'musicsim_force_install_banner' === 'true'
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const forced = params.get('showInstall') === '1' || localStorage.getItem('musicsim_force_install_banner') === 'true';
-      if (forced) setVisible(true);
-    } catch (e) {
-      // ignore errors reading search/localStorage
-    }
+    // Show banner on app start (unless dismissed). This makes the banner visible immediately
+    // so the user can decide to close it. We still listen for beforeinstallprompt to trigger
+    // the native flow when available.
+    setVisible(true);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);

@@ -5,6 +5,7 @@ import { getTutorialStepByIndex, getTutorialLength } from '../data/tutorialSteps
 interface TutorialOverlayProps {
   currentStep: number;
   onNext: () => void;
+  onBack: () => void;
   onSkip: () => void;
   onComplete: () => void;
   isActive: boolean;
@@ -20,6 +21,7 @@ interface ElementPosition {
 export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
   currentStep,
   onNext,
+  onBack,
   onSkip,
   onComplete,
   isActive
@@ -411,10 +413,10 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           <div
             className="tutorial-highlight-box"
             style={{
-              top: targetPosition.top - 5,
-              left: targetPosition.left - 5,
-              width: targetPosition.width + 10,
-              height: targetPosition.height + 10,
+              top: targetPosition.top - 8,
+              left: targetPosition.left - 8,
+              width: targetPosition.width + 16,
+              height: targetPosition.height + 16,
             }}
           />
         )}
@@ -446,17 +448,26 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           )}
 
           <div className="tutorial-controls">
-            <button 
+            {currentStep > 0 && (
+              <button
+                className="tutorial-button secondary"
+                onClick={onBack}
+              >
+                ← Back
+              </button>
+            )}
+            <button
               className="tutorial-button secondary"
               onClick={onSkip}
+              style={{ flex: currentStep > 0 ? '0.8' : '1' }}
             >
-              Skip Tutorial
+              Skip
             </button>
-            <button 
+            <button
               className="tutorial-button primary"
               onClick={handleNext}
             >
-              {currentStep >= totalSteps - 1 ? 'Complete!' : 'Next'}
+              {currentStep >= totalSteps - 1 ? 'Complete!' : 'Next →'}
             </button>
           </div>
         </div>

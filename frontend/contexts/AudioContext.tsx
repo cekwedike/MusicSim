@@ -17,9 +17,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Play menu music when the provider mounts (will wait for user interaction)
   useEffect(() => {
+    console.log('[AudioProvider] Mounting, playing menu music');
     audioManager.playMusic('menu');
 
     return () => {
+      console.log('[AudioProvider] Unmounting, stopping music');
       audioManager.stopMusic();
     };
   }, []); // Only run once on mount

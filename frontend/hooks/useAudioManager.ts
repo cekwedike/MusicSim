@@ -205,8 +205,10 @@ export const useAudioManager = (): AudioManager => {
 
   // Play background music with fade-in
   const playMusic = useCallback(async (track: BackgroundMusic) => {
+    console.log(`[Audio Manager] playMusic called with track: "${track}", isUserInteracted: ${isUserInteracted}`);
+
     if (!musicAudioRef.current || !isUserInteracted) {
-      console.log(`Music "${track}" queued for later (user interaction required)`);
+      console.log(`[Audio Manager] Music "${track}" queued for later (user interaction required)`);
       nextTrackRef.current = track;
       return;
     }
@@ -215,17 +217,22 @@ export const useAudioManager = (): AudioManager => {
 
     // If same track is already playing, do nothing
     if (audioState.currentTrack === track && !audio.paused) {
+      console.log(`[Audio Manager] Track "${track}" already playing, skipping`);
       return;
     }
 
     try {
+      console.log(`[Audio Manager] Starting playback of "${track}"`);
+
       // Fade out current track if playing
       if (!audio.paused && audioState.currentTrack) {
+        console.log(`[Audio Manager] Fading out current track: "${audioState.currentTrack}"`);
         await fadeMusic(0, 500);
         audio.pause();
       }
 
       // Load new track
+      console.log(`[Audio Manager] Loading track from URL: ${MUSIC_URLS[track]}`);
       audio.src = MUSIC_URLS[track];
       audio.load();
 
@@ -233,13 +240,16 @@ export const useAudioManager = (): AudioManager => {
 
       // Start at 0 volume and fade in
       audio.volume = 0;
+      console.log(`[Audio Manager] Attempting to play "${track}"...`);
       await audio.play();
+      console.log(`[Audio Manager] Playback started for "${track}"`);
 
       if (!audioState.isMusicMuted) {
+        console.log(`[Audio Manager] Fading in to volume ${audioState.musicVolume}`);
         await fadeMusic(audioState.musicVolume, 1000);
       }
     } catch (error) {
-      console.error(`Failed to play music "${track}":`, error);
+      console.error(`[Audio Manager] Failed to play music "${track}":`, error);
     }
   }, [audioState.currentTrack, audioState.musicVolume, audioState.isMusicMuted, isUserInteracted, fadeMusic]);
 

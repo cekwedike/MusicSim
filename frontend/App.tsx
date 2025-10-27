@@ -689,6 +689,14 @@ function gameReducer(state: GameState, action: Action): GameState {
                     stepsCompleted: [...state.tutorial.stepsCompleted, state.tutorial.currentStep.toString()]
                 }
             };
+        case 'PREVIOUS_TUTORIAL_STEP':
+            return {
+                ...state,
+                tutorial: {
+                    ...state.tutorial,
+                    currentStep: Math.max(0, state.tutorial.currentStep - 1)
+                }
+            };
         case 'SKIP_TUTORIAL':
             // Mark tutorial as seen in localStorage (persistent)
             try {
@@ -880,15 +888,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     }, []);
 
-    // Background music management based on game status
+    // Background music management - use menu music throughout (simpler, more consistent)
     useEffect(() => {
         console.log('[Audio] Game status changed to:', status);
-        if (status === 'start' || status === 'setup') {
-            console.log('[Audio] Playing menu music');
+        // Play the same background music throughout the game
+        if (status === 'start' || status === 'setup' || status === 'playing') {
+            console.log('[Audio] Playing background music');
             audioManager.playMusic('menu');
-        } else if (status === 'playing') {
-            console.log('[Audio] Playing gameplay music');
-            audioManager.playMusic('gameplay');
         } else if (status === 'gameOver') {
             console.log('[Audio] Playing game over music');
             audioManager.playMusic('gameOver');
@@ -1184,6 +1190,11 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         dispatch({ type: 'NEXT_TUTORIAL_STEP' });
     };
 
+    const handlePreviousTutorialStep = () => {
+        // No sound - tutorial navigation is frequent
+        dispatch({ type: 'PREVIOUS_TUTORIAL_STEP' });
+    };
+
     const handleSkipTutorial = () => {
         // No sound
         dispatch({ type: 'SKIP_TUTORIAL' });
@@ -1296,9 +1307,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 />
             )}
 
-            <TutorialOverlay 
+            <TutorialOverlay
                 currentStep={state.tutorial.currentStep}
                 onNext={handleNextTutorialStep}
+                onBack={handlePreviousTutorialStep}
                 onSkip={handleSkipTutorial}
                 onComplete={handleCompleteTutorial}
                 isActive={state.tutorial.active}

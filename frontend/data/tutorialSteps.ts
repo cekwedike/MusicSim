@@ -11,19 +11,49 @@ export const tutorialSteps: TutorialStep[] = [
     musicBusinessLesson: 'The music industry is complex and requires both creative talent and business knowledge to succeed. This simulation will teach you both!'
   },
   {
-    id: 'artist-stats',
-    title: 'Your Artist Stats',
-    message: 'These are your key metrics: Cash (your money), Fame (public recognition), Well-being (mental health), Career Progress (industry advancement), and Hype (current buzz). All are crucial for success.',
-    target: '.player-stats',
+    id: 'cash-stat',
+    title: 'Cash - Your Financial Health',
+    message: 'Cash represents your available money. You need it for everything - recording, marketing, living expenses. Running out of cash for too long leads to bankruptcy and game over.',
+    target: '.player-stats > div:nth-child(1)',
     position: 'bottom',
     action: 'highlight',
     nextTrigger: 'click',
-    musicBusinessLesson: 'Successful artists balance financial stability, public recognition, personal health, career growth, and current momentum. Neglecting any area can derail your career.'
+    musicBusinessLesson: 'Financial stability is the foundation of any music career. Even talented artists fail without proper money management. Track your income and expenses carefully.'
+  },
+  {
+    id: 'fame-stat',
+    title: 'Fame - Your Public Recognition',
+    message: 'Fame measures how well-known you are. Higher fame opens bigger opportunities, attracts better deals, and increases your earning potential.',
+    target: '.player-stats > div:nth-child(2)',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Fame is built through consistent quality work, smart marketing, and public engagement. It takes time to build but can be lost quickly through scandals or poor decisions.'
+  },
+  {
+    id: 'wellbeing-stat',
+    title: 'Well-Being - Your Mental Health',
+    message: 'Well-being represents your mental and physical health. Overworking, stress, and poor lifestyle choices damage it. Let it drop too low for too long, and you\'ll burn out.',
+    target: '.player-stats > div:nth-child(3)',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'The music industry is notorious for burnout. Many successful careers ended because artists didn\'t prioritize their health. Balance work with rest and self-care.'
+  },
+  {
+    id: 'hype-stat',
+    title: 'Hype - Your Current Buzz',
+    message: 'Hype is your current momentum and buzz in the industry. It fluctuates based on your recent activities, releases, and media presence. Strike while the iron is hot!',
+    target: '.player-stats > div:nth-child(4)',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Hype is temporary but powerful. Smart artists capitalize on high hype moments with strategic releases and appearances, then use that momentum to build lasting fame.'
   },
   {
     id: 'date-display',
     title: 'Career Timeline',
-    message: 'This shows your current career week and year. Your career progresses week by week, and decisions have both immediate and long-term consequences.',
+    message: 'This shows your current career date. Your career progresses week by week, and decisions have both immediate and long-term consequences.',
     target: '.date-display',
     position: 'bottom',
     action: 'highlight',
@@ -43,10 +73,10 @@ export const tutorialSteps: TutorialStep[] = [
   {
     id: 'choice-selection',
     title: 'Making Choices',
-    message: 'Each choice has different outcomes affecting your stats. Some provide immediate benefits but long-term costs, others are investments in your future. Think strategically!',
-    target: '.choice-buttons',
+    message: 'These are your decision options. Each choice has different outcomes affecting your stats. Some provide immediate benefits but long-term costs, others are investments in your future. Think strategically!',
+    target: '.scenario-card .choice-buttons',
     position: 'top',
-    action: 'pulse',
+    action: 'highlight',
     nextTrigger: 'click',
     musicBusinessLesson: 'In the music business, short-term gains often come with long-term consequences. Successful artists learn to balance immediate needs with future goals.'
   },
@@ -91,16 +121,17 @@ export const tutorialSteps: TutorialStep[] = [
     nextTrigger: 'click',
     musicBusinessLesson: 'Continuous learning is essential in the evolving music industry. Understanding concepts like royalties, publishing, marketing, and contracts gives you competitive advantages.'
   },
-  {
-    id: 'projects-system',
-    title: 'Projects & Releases',
-    message: 'Projects represent your creative work - albums, singles, tours. Managing projects well balances artistic vision with commercial viability and timing.',
-    target: '.current-project',
-    position: 'bottom',
-    action: 'highlight',
-    nextTrigger: 'click',
-    musicBusinessLesson: 'Successful artists treat each release as a business project with budgets, timelines, marketing strategies, and measurable goals, not just creative expression.'
-  },
+  // Projects feature is not currently visible in the UI - skip this step
+  // {
+  //   id: 'projects-system',
+  //   title: 'Projects & Releases',
+  //   message: 'Projects represent your creative work - albums, singles, tours. Managing projects well balances artistic vision with commercial viability and timing.',
+  //   target: '.current-project',
+  //   position: 'bottom',
+  //   action: 'highlight',
+  //   nextTrigger: 'click',
+  //   musicBusinessLesson: 'Successful artists treat each release as a business project with budgets, timelines, marketing strategies, and measurable goals, not just creative expression.'
+  // },
   {
     id: 'record-labels',
     title: 'Record Label Contracts',

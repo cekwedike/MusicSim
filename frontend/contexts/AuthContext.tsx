@@ -94,66 +94,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initializeAuth();
   }, []);
 
-  // Login function
+  // Login function - throws on failure so calling components can handle/display errors
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    setError(null);
-    
+
     try {
-      const response = await authService.login({ 
-        emailOrUsername: email, 
-        password 
+      const response = await authService.login({
+        emailOrUsername: email,
+        password
       });
-      
+
       if (response.success && response.data) {
         const { user: userData, token: authToken } = response.data;
-        
+
         // Store in state
         setUser(userData);
         setToken(authToken);
-        
+
         return true;
       } else {
-        setError(response.message || 'Login failed');
-        return false;
+        throw new Error(response.message || 'Login failed');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Login failed';
-      setError(errorMessage);
-      return false;
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Register function
+  // Register function - throws on failure so calling components can handle/display errors
   const register = useCallback(async (username: string, email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    setError(null);
-    
+
     try {
       const response = await authService.register({
         username,
         email,
         password
       });
-      
+
       if (response.success && response.data) {
         const { user: userData, token: authToken } = response.data;
-        
+
         // Store in state
         setUser(userData);
         setToken(authToken);
-        
+
         return true;
       } else {
-        setError(response.message || 'Registration failed');
-        return false;
+        throw new Error(response.message || 'Registration failed');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
-      setError(errorMessage);
-      return false;
     } finally {
       setIsLoading(false);
     }
@@ -195,12 +183,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         return true;
       } else {
-        // Refresh failed, logout user
+        // Refresh failed, set context error and logout user
+        setError((response && response.message) || 'Token refresh failed');
         logout();
         return false;
       }
     } catch (error) {
+      const msg = (error as any)?.message || 'Token refresh failed';
       console.error('Token refresh failed:', error);
+      setError(msg);
       logout();
       return false;
     }

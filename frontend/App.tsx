@@ -862,11 +862,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Background music management based on game status
     useEffect(() => {
+        console.log('[Audio] Game status changed to:', status);
         if (status === 'start' || status === 'setup') {
+            console.log('[Audio] Playing menu music');
             audioManager.playMusic('menu');
         } else if (status === 'playing') {
+            console.log('[Audio] Playing gameplay music');
             audioManager.playMusic('gameplay');
         } else if (status === 'gameOver') {
+            console.log('[Audio] Playing game over music');
             audioManager.playMusic('gameOver');
             audioManager.playSound('gameOver');
         }
@@ -881,27 +885,38 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Track previous stats to detect changes and play appropriate sounds
     const prevStatsRef = useRef(playerStats);
+    const isInitialRenderRef = useRef(true);
     useEffect(() => {
+        // Skip sound on first render
+        if (isInitialRenderRef.current) {
+            isInitialRenderRef.current = false;
+            prevStatsRef.current = playerStats;
+            return;
+        }
+
         const prevStats = prevStatsRef.current;
         const currentStats = playerStats;
 
-        // Only play sounds during gameplay
-        if (status === 'playing') {
-            // Cash changes
-            if (currentStats.cash > prevStats.cash) {
+        // Only play sounds during gameplay and for significant changes
+        if (status === 'playing' && lastOutcome) {
+            // Cash changes (only for significant amounts)
+            const cashDiff = currentStats.cash - prevStats.cash;
+            if (cashDiff >= 100) {
                 audioManager.playSound('cashGain');
-            } else if (currentStats.cash < prevStats.cash) {
+            } else if (cashDiff <= -100) {
                 audioManager.playSound('cashLoss');
             }
 
-            // Fame/Hype increases (only play for positive changes)
-            if (currentStats.fame > prevStats.fame || currentStats.hype > prevStats.hype) {
+            // Fame/Hype increases (only for increases of 5+)
+            const fameDiff = currentStats.fame - prevStats.fame;
+            const hypeDiff = currentStats.hype - prevStats.hype;
+            if (fameDiff >= 5 || hypeDiff >= 5) {
                 audioManager.playSound('fameIncrease');
             }
         }
 
         prevStatsRef.current = currentStats;
-    }, [playerStats, status, audioManager]);
+    }, [playerStats, status, lastOutcome, audioManager]);
     
     useEffect(() => {
         if ((status === 'loading' || (status === 'playing' && !currentScenario)) && artistName) {
@@ -1033,7 +1048,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleMistakeProceed = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - choice selection already has sound
         if (pendingChoice) {
             dispatch({ type: 'SELECT_CHOICE', payload: pendingChoice });
             setPendingChoice(null);
@@ -1042,7 +1057,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleMistakeReconsider = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just canceling
         setPendingChoice(null);
         setShowMistakeWarning(false);
     };
@@ -1073,27 +1088,27 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleShowManagementHub = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just opening a menu
         dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
     };
 
     const handleShowSaveLoad = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just opening a menu
         dispatch({ type: 'VIEW_SAVE_LOAD' });
     };
 
     const handleShowLearningHub = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just opening a menu
         dispatch({ type: 'VIEW_LEARNING_HUB' });
     };
 
     const handleShowStatistics = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just opening a menu
         dispatch({ type: 'VIEW_STATISTICS' });
     };
 
     const handleOpenModule = (module: LearningModule) => {
-        audioManager.playSound('buttonClick');
+        // No sound - just opening content
         dispatch({ type: 'OPEN_MODULE', payload: module });
     };
 
@@ -1103,12 +1118,12 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleCloseModule = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just closing
         dispatch({ type: 'CLOSE_MODULE' });
     };
 
     const handleCloseModal = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just closing
         dispatch({ type: 'CLOSE_MODAL' });
     };
 
@@ -1118,7 +1133,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleViewContract = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just viewing
         dispatch({ type: 'VIEW_CONTRACT' });
     };
 
@@ -1128,22 +1143,22 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleDeclineContract = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just declining
         dispatch({ type: 'DECLINE_CONTRACT' });
     };
 
     const handleStartTutorial = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - just starting tutorial
         dispatch({ type: 'START_TUTORIAL' });
     };
 
     const handleNextTutorialStep = () => {
-        audioManager.playSound('buttonClick');
+        // No sound - tutorial navigation is frequent
         dispatch({ type: 'NEXT_TUTORIAL_STEP' });
     };
 
     const handleSkipTutorial = () => {
-        audioManager.playSound('buttonClick');
+        // No sound
         dispatch({ type: 'SKIP_TUTORIAL' });
     };
 

@@ -22,13 +22,9 @@ router.use(authMiddleware);
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - slotName
- *               - gameState
  *             properties:
  *               slotName:
  *                 type: string
- *                 description: Name of the save slot
  *               gameState:
  *                 $ref: '#/components/schemas/GameState'
  *     responses:
@@ -38,18 +34,6 @@ router.use(authMiddleware);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ApiResponse'
- *       400:
- *         description: Invalid game state data
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 
 /**
@@ -151,9 +135,28 @@ router.post('/save', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/game/load/:slotName
- * @desc    Load specific save slot
- * @access  Private
+ * @swagger
+ * /api/game/load/{slotName}:
+ *   get:
+ *     summary: Load specific save slot
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: slotName
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Save loaded
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ *       404:
+ *         description: Save not found
  */
 router.get('/load/:slotName', async (req, res, next) => {
   try {
@@ -196,9 +199,28 @@ router.get('/load/:slotName', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/game/load/id/:saveId
- * @desc    Load by save ID
- * @access  Private
+ * @swagger
+ * /api/game/load/id/{saveId}:
+ *   get:
+ *     summary: Load save by ID
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: saveId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Save loaded by id
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ *       404:
+ *         description: Save not found
  */
 router.get('/load/id/:saveId', async (req, res, next) => {
   try {
@@ -240,9 +262,29 @@ router.get('/load/id/:saveId', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/game/saves
- * @desc    List all saves for current user
- * @access  Private
+ * @swagger
+ * /api/game/saves:
+ *   get:
+ *     summary: List all saves for current user
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: List of saves
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
  */
 router.get('/saves', async (req, res, next) => {
   try {
@@ -294,9 +336,24 @@ router.get('/saves', async (req, res, next) => {
 });
 
 /**
- * @route   DELETE /api/game/save/:saveId
- * @desc    Delete a save (soft delete)
- * @access  Private
+ * @swagger
+ * /api/game/save/{saveId}:
+ *   delete:
+ *     summary: Delete a save (soft delete)
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: saveId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Save deleted
+ *       404:
+ *         description: Save not found
  */
 router.delete('/save/:saveId', async (req, res, next) => {
   try {
@@ -334,9 +391,16 @@ router.delete('/save/:saveId', async (req, res, next) => {
 });
 
 /**
- * @route   DELETE /api/game/saves/all
- * @desc    Delete all saves for user (soft delete)
- * @access  Private
+ * @swagger
+ * /api/game/saves/all:
+ *   delete:
+ *     summary: Delete all saves for user (soft delete)
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All saves deleted
  */
 router.delete('/saves/all', async (req, res, next) => {
   try {
@@ -363,9 +427,16 @@ router.delete('/saves/all', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/game/autosave
- * @desc    Check if autosave exists
- * @access  Private
+ * @swagger
+ * /api/game/autosave:
+ *   get:
+ *     summary: Check if autosave exists
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Autosave state
  */
 router.get('/autosave', async (req, res, next) => {
   try {
@@ -416,9 +487,29 @@ router.get('/autosave', async (req, res, next) => {
 });
 
 /**
- * @route   POST /api/game/save/rename
- * @desc    Rename a save slot
- * @access  Private
+ * @swagger
+ * /api/game/save/rename:
+ *   post:
+ *     summary: Rename a save slot
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               saveId:
+ *                 type: string
+ *               newSlotName:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Save renamed
+ *       400:
+ *         description: Invalid input
  */
 router.post('/save/rename', async (req, res, next) => {
   try {
@@ -498,9 +589,16 @@ router.post('/save/rename', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/game/saves/count
- * @desc    Get count of saves by difficulty
- * @access  Private
+ * @swagger
+ * /api/game/saves/count:
+ *   get:
+ *     summary: Get count of saves by difficulty
+ *     tags: [Game State]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Counts by difficulty
  */
 router.get('/saves/count', async (req, res, next) => {
   try {

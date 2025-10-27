@@ -1,6 +1,7 @@
 import React, { useReducer, useCallback, useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { AudioProvider } from './contexts/AudioContext';
 import { LoginModal } from './components/LoginModal';
 import LandingPage from './components/LandingPage';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
@@ -33,6 +34,7 @@ import GameHistory from './components/GameHistory';
 import { useOnlineStatus } from './src/hooks/useOnlineStatus';
 import OfflineBanner from './src/components/OfflineBanner';
 import InstallBanner from './src/components/InstallBanner';
+import { useAudio } from './contexts/AudioContext';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -1276,7 +1278,9 @@ const App: React.FC = () => {
     return (
         <ToastProvider>
             <AuthProvider>
-                <AuthenticatedApp />
+                <AudioProvider>
+                    <AuthenticatedApp />
+                </AudioProvider>
             </AuthProvider>
         </ToastProvider>
     );

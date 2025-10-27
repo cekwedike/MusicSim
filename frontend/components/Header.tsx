@@ -3,6 +3,7 @@ import { BriefcaseIcon, SaveIcon, BookIcon, ChartIcon, QuestionMarkIcon } from '
 import type { Difficulty } from '../types';
 import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 import { getAutosaveAge } from '../services/storageService';
+import AudioControls from './AudioControls';
 
 interface HeaderProps {
     artistName?: string;
@@ -80,7 +81,9 @@ const Header: React.FC<HeaderProps> = ({ artistName, onShowManagementHub, onShow
 
             {artistName && (
                 <div className="absolute top-1/2 right-2 md:right-4 lg:right-6 -translate-y-1/2 flex gap-1 md:gap-2">
-                    <button 
+                    <AudioControls />
+
+                    <button
                         onClick={onShowLearningHub}
                         className="learning-button text-gray-400 hover:text-white transition-colors duration-200 p-1.5 md:p-2 rounded-full hover:bg-gray-700 min-w-[44px] min-h-[44px] flex items-center justify-center"
                         aria-label="Learning Hub"

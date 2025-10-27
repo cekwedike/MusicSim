@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { Eye, EyeOff, Check } from 'lucide-react';
@@ -9,10 +9,10 @@ interface LoginModalProps {
   initialMode?: 'login' | 'register';
 }
 
-export const LoginModal: React.FC<LoginModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  initialMode = 'login' 
+export const LoginModal: React.FC<LoginModalProps> = ({
+  isOpen,
+  onClose,
+  initialMode = 'login'
 }) => {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [email, setEmail] = useState('');
@@ -21,11 +21,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const toast = useToast();
 
   const { login, register } = useAuth();
+  const toast = useToast();
 
-  // Password validation helper (used for real-time hints and pre-submit validation)
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  // Password validation helper
   const getPasswordChecks = (pw: string) => {
     const minLength = pw.length >= 8;
     const hasUpper = /[A-Z]/.test(pw);
@@ -34,14 +37,16 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     return { minLength, hasUpper, hasLower, hasNumber, valid: minLength && hasUpper && hasLower && hasNumber };
   };
 
-  // Reset form when modal opens/closes or mode changes
-  React.useEffect(() => {
+  // Reset form when modal opens or initial mode changes
+  useEffect(() => {
     if (isOpen) {
       setEmail('');
       setUsername('');
       setPassword('');
       setError('');
       setMode(initialMode);
+      // focus email field when modal opens
+      setTimeout(() => emailRef.current?.focus(), 50);
     }
   }, [isOpen, initialMode]);
 
@@ -51,46 +56,21 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     setLoading(true);
 
     try {
-      // Pre-submit validation for registration mode
       if (mode === 'register') {
-        const result = getPasswordChecks(password);
-        if (!result.valid) {
-          setError('Password must be at least 8 characters and include an uppercase letter, lowercase letter, and a number.');
+        const checks = getPasswordChecks(password);
+        if (!checks.valid) {
+          const msg = 'Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number.';
+          setError(msg);
+          toast.show(msg, 'error');
           setLoading(false);
           return;
         }
-      }
-
-      if (mode === 'login') {
-        // login() will throw on failure; let the catch block handle errors
-        await login(email, password);
-        // show global success toast and reload shortly after
-        toast.show('Logged in successfully! Redirecting...', 'success');
-        setLoading(false);
-        setTimeout(() => {
-          onClose();
-          window.location.reload();
-        }, 700);
-      } else {
-        // Validation for registration
         if (username.length < 3) {
-          setError('Username must be at least 3 characters long');
+          const msg = 'Username must be at least 3 characters long.';
+          setError(msg);
+          toast.show(msg, 'error');
           setLoading(false);
           return;
-        }
-        
-        
-
-        // register expects (username, email, password)
-        // register() will throw on failure; let the catch block handle errors
-        await register(username, email, password);
-        // show global success toast and reload shortly after
-        toast.show('Account created! Signing you in...', 'success');
-        setLoading(false);
-        setTimeout(() => {
-          onClose();
-          window.location.reload();
-        }, 700);
       }
     } catch (err: any) {
       setLoading(false);
@@ -181,6 +161,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               {mode === 'login' ? 'Email or Username' : 'Email'}
             </label>
             <input
+              ref={emailRef}
               type={mode === 'login' ? 'text' : 'email'}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -194,14 +175,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             <label className="block text-gray-300 mb-2 font-medium">Password</label>
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 pr-12 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                placeholder="Enter your password"
-                required
-                minLength={8}
-                aria-describedby={mode === 'register' ? 'password-hint' : undefined}
+        ref={passwordRef}
+        type={showPassword ? 'text' : 'password'}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="w-full p-3 pr-12 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+        placeholder="Enter your password"
+        required
+        minLength={8}
+        aria-describedby={mode === 'register' ? 'password-hint' : undefined}
               />
 
               {/* Show/Hide toggle - touch target at least 44x44 (w-11 h-11) */}
@@ -225,28 +207,47 @@ export const LoginModal: React.FC<LoginModalProps> = ({
               <div id="password-hint" className="mt-2">
                 {(() => {
                   const checks = getPasswordChecks(password);
+                        setLoading(false);
                   return (
-                    <ul className="space-y-1 text-sm">
-                      <li className={checks.minLength ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
-                        {checks.minLength ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
-                        <span>Minimum 8 characters</span>
-                      </li>
-                      <li className={checks.hasUpper ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
-                        {checks.hasUpper ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
-                        <span>At least one uppercase letter (A-Z)</span>
-                      </li>
-                      <li className={checks.hasLower ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
-                        {checks.hasLower ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
-                        <span>At least one lowercase letter (a-z)</span>
-                      </li>
-                      <li className={checks.hasNumber ? 'text-green-300 flex items-center gap-2' : 'text-gray-400 flex items-center gap-2'}>
-                        {checks.hasNumber ? <Check className="w-4 h-4 text-green-300" /> : <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />}
-                        <span>At least one number (0-9)</span>
-                      </li>
-                    </ul>
-                  );
-                })()}
-              </div>
+                        // Backend may return 'Email already registered' or 'Username already taken'
+                        const lower = errorMessage.toLowerCase();
+
+                        if (lower.includes('email') && lower.includes('already')) {
+                          // Friendly message and switch to login mode so user can sign in
+                          const friendly = 'Email already in use. Please log in.';
+                          setMode('login');
+                          setEmail(email);
+                          setPassword('');
+                          setError(friendly);
+                          try {
+                            toast.show(friendly, 'info');
+                          } catch (_) {}
+
+                          // Focus password input so the user can enter their password immediately
+                          setTimeout(() => {
+                            passwordRef.current?.focus();
+                          }, 120);
+                          return;
+                        }
+
+                        if (lower.includes('username') && lower.includes('already')) {
+                          const friendly = 'That username is already taken. Please choose another.';
+                          setError(friendly);
+                          try { toast.show(friendly, 'error'); } catch (_) {}
+                          return;
+                        }
+
+                        if (lower.includes('network') || lower.includes('ecconnrefused') || lower.includes('connect')) {
+                          const friendly = 'Network error. Please check your internet connection and try again.';
+                          setError(friendly);
+                          try { toast.show(friendly, 'error'); } catch (_) {}
+                          return;
+                        }
+
+                        // Default: show a simple, user-friendly message
+                        const friendly = errorMessage || 'Something went wrong. Please try again.';
+                        setError(friendly);
+                        try { toast.show(friendly, 'error'); } catch (_) {}
             )}
           </div>
 

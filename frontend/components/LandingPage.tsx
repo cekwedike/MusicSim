@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Music, BookOpen, Trophy } from 'lucide-react';
 import { LoginModal } from './LoginModal';
-import InstallBanner from '../src/components/InstallBanner';
 
 interface LandingPageProps {
   onPlayAsGuest: () => void;
@@ -126,9 +125,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           initialMode={loginMode}
         />
       )}
-
-      {/* PWA Install Banner */}
-      <InstallBanner />
     </div>
   );
 };

@@ -22,25 +22,25 @@ const colorClasses = {
 
 const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, maxValue = 100, isDate = false }) => {
     const classes = colorClasses[color];
-    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 flex flex-col justify-between shadow-lg border border-gray-700/50" 
-                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-4 flex flex-col justify-between shadow-lg border border-gray-700/50";
+    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50"
+                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50";
 
     return (
         <div className={containerClass}>
-            <div className="flex items-center space-x-3 mb-2">
-                <div className={classes.text}>{icon}</div>
-                <span className="font-bold text-gray-300 text-sm md:text-base">{label}</span>
+            <div className="flex items-center space-x-2 mb-1 sm:mb-2">
+                <div className={`${classes.text} w-4 h-4 sm:w-5 sm:h-5`}>{icon}</div>
+                <span className="font-bold text-gray-300 text-xs sm:text-sm md:text-base">{label}</span>
             </div>
             {label === 'Cash' ? (
-                 <p className={`text-xl md:text-2xl font-bold text-right ${classes.text}`}>${Number(value).toLocaleString()}</p>
+                 <p className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-right ${classes.text} break-all`}>${Number(value).toLocaleString()}</p>
             ) : isDate ? (
-                 <p className={`text-lg md:text-xl font-bold text-right ${classes.text}`}>{value}</p>
+                 <p className={`text-sm sm:text-base md:text-lg lg:text-xl font-bold text-right ${classes.text} break-words`}>{value}</p>
             ) : (
                 <div>
-                    <p className={`text-xl md:text-2xl font-bold text-right ${classes.text}`}>{value}/{maxValue}</p>
-                    <div className="w-full bg-gray-700 rounded-full h-2.5 mt-1 overflow-hidden">
-                        <div 
-                            className={`bg-gradient-to-r ${classes.from} ${classes.to} h-2.5 rounded-full transition-all duration-500 ease-out`} 
+                    <p className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-right ${classes.text}`}>{value}/{maxValue}</p>
+                    <div className="w-full bg-gray-700 rounded-full h-2 sm:h-2.5 mt-1 overflow-hidden">
+                        <div
+                            className={`bg-gradient-to-r ${classes.from} ${classes.to} h-2 sm:h-2.5 rounded-full transition-all duration-500 ease-out`}
                             style={{ width: `${Math.max(0, Math.min(100, (Number(value) / maxValue) * 100))}%` }}
                         ></div>
                     </div>
@@ -87,7 +87,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
 
     return (
         <div>
-            <div className="player-stats grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+            <div className="player-stats grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
                 <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
                 <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
                 <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />

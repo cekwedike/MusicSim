@@ -662,6 +662,13 @@ function gameReducer(state: GameState, action: Action): GameState {
         case 'LOAD_GAME':
             return { ...action.payload, status: 'playing' };
         case 'START_TUTORIAL':
+            // Mark tutorial as seen in localStorage (persistent)
+            // This ensures even if user closes browser mid-tutorial, it won't show again
+            try {
+                localStorage.setItem('musicsim_tutorial_seen', 'true');
+            } catch (e) {
+                console.error('Failed to save tutorial seen flag:', e);
+            }
             return {
                 ...state,
                 tutorial: {
@@ -683,6 +690,12 @@ function gameReducer(state: GameState, action: Action): GameState {
                 }
             };
         case 'SKIP_TUTORIAL':
+            // Mark tutorial as seen in localStorage (persistent)
+            try {
+                localStorage.setItem('musicsim_tutorial_seen', 'true');
+            } catch (e) {
+                console.error('Failed to save tutorial seen flag:', e);
+            }
             return {
                 ...state,
                 tutorial: {
@@ -692,11 +705,18 @@ function gameReducer(state: GameState, action: Action): GameState {
                 }
             };
         case 'COMPLETE_TUTORIAL': {
+            // Mark tutorial as seen in localStorage (persistent)
+            try {
+                localStorage.setItem('musicsim_tutorial_seen', 'true');
+            } catch (e) {
+                console.error('Failed to save tutorial seen flag:', e);
+            }
+
             const updatedStatistics = updateStatistics(state, state.statistics);
-            
+
             // Check for tutorial achievements
             const completionTime = state.tutorial.startTime ? Date.now() - state.tutorial.startTime : 0;
-            const { achievements: updatedAchievements, unseenAchievements: newUnseenAchievements } = 
+            const { achievements: updatedAchievements, unseenAchievements: newUnseenAchievements } =
                 checkAchievements({
                     ...state,
                     tutorial: {
@@ -704,11 +724,11 @@ function gameReducer(state: GameState, action: Action): GameState {
                         completed: true
                     }
                 }, state.playerStats);
-            
+
             // Additional check for EAGER_LEARNER (complete in under 5 minutes)
             let finalAchievements = updatedAchievements;
             let finalUnseen = newUnseenAchievements;
-            
+
             if (completionTime < 5 * 60 * 1000) { // 5 minutes in milliseconds
                 const eagerLearnerAchievement = finalAchievements.find(a => a.id === 'EAGER_LEARNER');
                 if (eagerLearnerAchievement && !eagerLearnerAchievement.unlocked) {
@@ -718,7 +738,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     }
                 }
             }
-            
+
             return {
                 ...state,
                 tutorial: {
@@ -1018,22 +1038,29 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         handleReset();
     }, [isAuthenticated, isGuestMode, status]);
 
-    // Auto-start tutorial for new players
+    // Auto-start tutorial for new players (only once ever)
     useEffect(() => {
-        // Check if this is a brand new player (no previous statistics or tutorial completion)
-        const isNewPlayer = state.statistics.totalGamesPlayed === 0 && 
-                           !state.tutorial.completed && 
-                           !state.tutorial.skipped &&
+        // Check localStorage to see if tutorial was ever seen
+        const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
+        const tutorialEverSeen = localStorage.getItem(TUTORIAL_SEEN_KEY) === 'true';
+
+        // Only show tutorial if:
+        // 1. Never seen before (not in localStorage)
+        // 2. No games played yet (brand new user)
+        // 3. Currently playing
+        // 4. Tutorial not already active
+        const isNewPlayer = !tutorialEverSeen &&
+                           state.statistics.totalGamesPlayed === 0 &&
                            status === 'playing' &&
                            !state.tutorial.active;
-        
+
         if (isNewPlayer) {
             // Delay tutorial start to let the game render first
             setTimeout(() => {
                 dispatch({ type: 'START_TUTORIAL' });
             }, 1000);
         }
-    }, [status, state.statistics.totalGamesPlayed, state.tutorial.completed, state.tutorial.skipped, state.tutorial.active]);
+    }, [status, state.statistics.totalGamesPlayed, state.tutorial.active]);
 
     const handleChoiceSelect = (choice: Choice) => {
         audioManager.playSound('buttonClick');
@@ -1228,13 +1255,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 difficulty={status === 'playing' ? state.difficulty : undefined}
             />
             
-            <div className="flex-grow w-full max-w-4xl mx-auto p-4 lg:p-6 flex flex-col">
+            <div className="flex-grow w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6 py-2 sm:py-4 flex flex-col">
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
 
-                <main className="flex justify-center mt-2 mb-6">
+                <main className="flex justify-center mt-1 sm:mt-2 mb-4 sm:mb-6">
                     {renderGameContent()}
                 </main>
             </div>

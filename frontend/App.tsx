@@ -859,6 +859,49 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         }, 500);
 
     }, []);
+
+    // Background music management based on game status
+    useEffect(() => {
+        if (status === 'start' || status === 'setup') {
+            audioManager.playMusic('menu');
+        } else if (status === 'playing') {
+            audioManager.playMusic('gameplay');
+        } else if (status === 'gameOver') {
+            audioManager.playMusic('gameOver');
+            audioManager.playSound('gameOver');
+        }
+    }, [status, audioManager]);
+
+    // Play achievement unlock sound when new achievements are unlocked
+    useEffect(() => {
+        if (unseenAchievements.length > 0) {
+            audioManager.playSound('achievementUnlock');
+        }
+    }, [unseenAchievements.length, audioManager]);
+
+    // Track previous stats to detect changes and play appropriate sounds
+    const prevStatsRef = useRef(playerStats);
+    useEffect(() => {
+        const prevStats = prevStatsRef.current;
+        const currentStats = playerStats;
+
+        // Only play sounds during gameplay
+        if (status === 'playing') {
+            // Cash changes
+            if (currentStats.cash > prevStats.cash) {
+                audioManager.playSound('cashGain');
+            } else if (currentStats.cash < prevStats.cash) {
+                audioManager.playSound('cashLoss');
+            }
+
+            // Fame/Hype increases (only play for positive changes)
+            if (currentStats.fame > prevStats.fame || currentStats.hype > prevStats.hype) {
+                audioManager.playSound('fameIncrease');
+            }
+        }
+
+        prevStatsRef.current = currentStats;
+    }, [playerStats, status, audioManager]);
     
     useEffect(() => {
         if ((status === 'loading' || (status === 'playing' && !currentScenario)) && artistName) {
@@ -978,6 +1021,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     }, [status, state.statistics.totalGamesPlayed, state.tutorial.completed, state.tutorial.skipped, state.tutorial.active]);
 
     const handleChoiceSelect = (choice: Choice) => {
+        audioManager.playSound('buttonClick');
+
         // Check for bad choices in beginner mode
         if (state.difficulty === 'beginner' && isBadChoice(choice.outcome, state.difficulty)) {
             setPendingChoice(choice);
@@ -988,6 +1033,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleMistakeProceed = () => {
+        audioManager.playSound('buttonClick');
         if (pendingChoice) {
             dispatch({ type: 'SELECT_CHOICE', payload: pendingChoice });
             setPendingChoice(null);
@@ -996,31 +1042,115 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleMistakeReconsider = () => {
+        audioManager.playSound('buttonClick');
         setPendingChoice(null);
         setShowMistakeWarning(false);
     };
-    const handleContinue = () => dispatch({ type: 'DISMISS_OUTCOME' });
-    const handleStartGame = () => dispatch({ type: 'START_SETUP' });
-    const handleContinueFromAutosave = (gameState: GameState) => dispatch({ type: 'LOAD_GAME', payload: gameState });
-    const handleRestart = () => dispatch({ type: 'RESTART' });
-    const handleSetupSubmit = (name: string, genre: string, difficulty: Difficulty) => dispatch({ type: 'SUBMIT_SETUP', payload: { name, genre, difficulty } });
-    const handleShowManagementHub = () => dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
-    const handleShowSaveLoad = () => dispatch({ type: 'VIEW_SAVE_LOAD' });
-    const handleShowLearningHub = () => dispatch({ type: 'VIEW_LEARNING_HUB' });
-    const handleShowStatistics = () => dispatch({ type: 'VIEW_STATISTICS' });
-    const handleOpenModule = (module: LearningModule) => dispatch({ type: 'OPEN_MODULE', payload: module });
-    const handleCompleteModule = (moduleId: string, score: number, conceptsMastered: string[]) => 
+
+    const handleContinue = () => {
+        audioManager.playSound('weekAdvance');
+        dispatch({ type: 'DISMISS_OUTCOME' });
+    };
+
+    const handleStartGame = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'START_SETUP' });
+    };
+
+    const handleContinueFromAutosave = (gameState: GameState) => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'LOAD_GAME', payload: gameState });
+    };
+
+    const handleRestart = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'RESTART' });
+    };
+
+    const handleSetupSubmit = (name: string, genre: string, difficulty: Difficulty) => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'SUBMIT_SETUP', payload: { name, genre, difficulty } });
+    };
+
+    const handleShowManagementHub = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
+    };
+
+    const handleShowSaveLoad = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'VIEW_SAVE_LOAD' });
+    };
+
+    const handleShowLearningHub = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'VIEW_LEARNING_HUB' });
+    };
+
+    const handleShowStatistics = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'VIEW_STATISTICS' });
+    };
+
+    const handleOpenModule = (module: LearningModule) => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'OPEN_MODULE', payload: module });
+    };
+
+    const handleCompleteModule = (moduleId: string, score: number, conceptsMastered: string[]) => {
+        audioManager.playSound('lessonComplete');
         dispatch({ type: 'COMPLETE_MODULE', payload: { moduleId, score, conceptsMastered } });
-    const handleCloseModule = () => dispatch({ type: 'CLOSE_MODULE' });
-    const handleCloseModal = () => dispatch({ type: 'CLOSE_MODAL' });
-    const handleLoadGame = (gameState: GameState) => dispatch({ type: 'LOAD_GAME', payload: gameState });
-    const handleViewContract = () => dispatch({ type: 'VIEW_CONTRACT' });
-    const handleSignContract = () => dispatch({ type: 'SIGN_CONTRACT' });
-    const handleDeclineContract = () => dispatch({ type: 'DECLINE_CONTRACT' });
-    const handleStartTutorial = () => dispatch({ type: 'START_TUTORIAL' });
-    const handleNextTutorialStep = () => dispatch({ type: 'NEXT_TUTORIAL_STEP' });
-    const handleSkipTutorial = () => dispatch({ type: 'SKIP_TUTORIAL' });
-    const handleCompleteTutorial = () => dispatch({ type: 'COMPLETE_TUTORIAL' });
+    };
+
+    const handleCloseModule = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'CLOSE_MODULE' });
+    };
+
+    const handleCloseModal = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'CLOSE_MODAL' });
+    };
+
+    const handleLoadGame = (gameState: GameState) => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'LOAD_GAME', payload: gameState });
+    };
+
+    const handleViewContract = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'VIEW_CONTRACT' });
+    };
+
+    const handleSignContract = () => {
+        audioManager.playSound('contractSign');
+        dispatch({ type: 'SIGN_CONTRACT' });
+    };
+
+    const handleDeclineContract = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'DECLINE_CONTRACT' });
+    };
+
+    const handleStartTutorial = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'START_TUTORIAL' });
+    };
+
+    const handleNextTutorialStep = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'NEXT_TUTORIAL_STEP' });
+    };
+
+    const handleSkipTutorial = () => {
+        audioManager.playSound('buttonClick');
+        dispatch({ type: 'SKIP_TUTORIAL' });
+    };
+
+    const handleCompleteTutorial = () => {
+        audioManager.playSound('lessonComplete');
+        dispatch({ type: 'COMPLETE_TUTORIAL' });
+    };
 
     // Manual save logic - Delete autosave when manual save happens
     const handleManualSave = async (slotName: string) => {

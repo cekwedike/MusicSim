@@ -61,7 +61,7 @@ export const SOUND_URLS: Record<SoundEffect, string> = {
 
 export const MUSIC_URLS: Record<BackgroundMusic, string> = {
   menu: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3', // Chill ambient
-  gameplay: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_3b7c1a5c9c.mp3', // Upbeat motivational
+  gameplay: 'https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe5c20c.mp3', // Different upbeat track
   gameOver: 'https://cdn.pixabay.com/download/audio/2022/03/20/audio_8d32d1f0e5.mp3', // Melancholic
 };
 

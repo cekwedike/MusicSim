@@ -1230,11 +1230,11 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             
             <div className="flex-grow w-full max-w-4xl mx-auto p-4 lg:p-6 flex flex-col">
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
-                
+
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
-                
-                <main className="flex-grow flex items-center justify-center mt-6">
+
+                <main className="flex justify-center mt-2 mb-6">
                     {renderGameContent()}
                 </main>
             </div>

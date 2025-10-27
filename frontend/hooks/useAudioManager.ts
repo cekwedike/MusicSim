@@ -5,8 +5,8 @@ import { SOUND_URLS, MUSIC_URLS, AUDIO_STORAGE_KEY } from '../types/audio';
 const DEFAULT_AUDIO_STATE: AudioState = {
   isMusicMuted: false,
   isSfxMuted: false,
-  musicVolume: 0.2, // Reduced from 0.5
-  sfxVolume: 0.4, // Reduced from 0.7
+  musicVolume: 0.1, // Reduced from 0.2 (very quiet)
+  sfxVolume: 0.25, // Reduced from 0.4 (quiet)
   currentTrack: null,
 };
 

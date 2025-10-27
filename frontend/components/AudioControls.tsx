@@ -110,7 +110,7 @@ const AudioControls: React.FC = () => {
 
       {/* Audio Controls Popup */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-72 bg-gray-800 border border-violet-500/30 rounded-lg shadow-xl z-50 p-4 animate-fade-in">
+        <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-gray-800 border border-violet-500/30 rounded-lg shadow-xl z-[60] p-4 animate-fade-in max-w-[calc(100vw-2rem)]">
           <h3 className="text-violet-300 font-bold text-lg mb-4 flex items-center gap-2">
             <MusicNoteIcon />
             Audio Settings

@@ -41,12 +41,14 @@ const InstallBanner: React.FC = () => {
     if (isDismissedRecently()) return; // do not show if dismissed
 
     const onBeforeInstallPrompt = (e: Event) => {
+      console.log('[InstallBanner] beforeinstallprompt event fired');
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setVisible(true);
     };
 
     const onAppInstalled = () => {
+      console.log('[InstallBanner] appinstalled event fired');
       // permanently remove banner after install
       markDismissed(true);
       setVisible(false);
@@ -56,20 +58,49 @@ const InstallBanner: React.FC = () => {
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
     window.addEventListener('appinstalled', onAppInstalled as EventListener);
 
-    // Show banner on app start (unless dismissed). This makes the banner visible immediately
-    // so the user can decide to close it. We still listen for beforeinstallprompt to trigger
-    // the native flow when available.
-    setVisible(true);
+    console.log('[InstallBanner] Event listeners registered, waiting for beforeinstallprompt...');
+
+    // Development mode: Check for forced display via localStorage or URL parameter
+    const checkForceDisplay = () => {
+      const localStorage_forced = localStorage.getItem('musicsim_force_install_banner') === 'true';
+      const url_forced = new URLSearchParams(window.location.search).get('showInstall') === '1';
+      const dismissed = isDismissedRecently();
+
+      console.log('[InstallBanner] Debug status:', {
+        localStorage_forced,
+        url_forced,
+        dismissed,
+        visible,
+        deferredPrompt: !!deferredPrompt
+      });
+
+      const forced = localStorage_forced || url_forced;
+      if (forced) {
+        console.log('[InstallBanner] Forced display enabled for testing');
+        setVisible(true);
+      }
+    };
+
+    // Check immediately and then periodically (for localStorage changes)
+    checkForceDisplay();
+    const forceCheckInterval = setInterval(checkForceDisplay, 1000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
       window.removeEventListener('appinstalled', onAppInstalled as EventListener);
+      clearInterval(forceCheckInterval);
     };
   }, []);
 
   useEffect(() => {
     // If previously dismissed permanently (installed) or within 7 days, keep hidden
-    if (isDismissedRecently()) setVisible(false);
+    // But allow forced display for development testing
+    const forced = localStorage.getItem('musicsim_force_install_banner') === 'true' ||
+                  new URLSearchParams(window.location.search).get('showInstall') === '1';
+
+    if (isDismissedRecently() && !forced) {
+      setVisible(false);
+    }
   }, []);
 
   const handleClose = () => {

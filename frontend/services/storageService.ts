@@ -73,15 +73,30 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     // Always save to localStorage
     const saves = loadLocalSaves();
     saves[slotId] = saveData;
-    localStorage.setItem('musicsim_saves', JSON.stringify(saves));
-    console.log(`Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+    try {
+      // Ensure we can stringify before writing — helps surface circular/reference errors
+      const payload = JSON.stringify(saves);
+      localStorage.setItem('musicsim_saves', payload);
+      console.log(`Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+    } catch (err) {
+      console.error('Failed to write saves to localStorage (stringify error):', err);
+      throw err;
+    }
   } catch (error) {
     console.error('Save error:', error);
     
     // Fallback to localStorage only
     const saves = loadLocalSaves();
     saves[slotId] = saveData;
-    localStorage.setItem('musicsim_saves', JSON.stringify(saves));
+    try {
+      const payload = JSON.stringify(saves);
+      localStorage.setItem('musicsim_saves', payload);
+      console.log(`Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+    } catch (err) {
+      console.error('Fallback: failed to write saves to localStorage (stringify error):', err);
+      // Re-throw so callers can surface the error if needed
+      throw err;
+    }
   }
 };
 

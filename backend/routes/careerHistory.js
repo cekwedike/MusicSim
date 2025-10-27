@@ -8,9 +8,41 @@ const { Op } = require('sequelize');
 router.use(authMiddleware);
 
 /**
- * @route   POST /api/career/complete
- * @desc    Record a completed career (game over)
- * @access  Private
+ * @swagger
+ * /api/career/complete:
+ *   post:
+ *     summary: Record a completed career (game over)
+ *     tags: [Career]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               artistName:
+ *                 type: string
+ *               genre:
+ *                 type: string
+ *               difficulty:
+ *                 type: string
+ *               finalStats:
+ *                 type: object
+ *               gameEndReason:
+ *                 type: string
+ *               weeksPlayed:
+ *                 type: integer
+ *               achievements:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Career recorded
+ *       400:
+ *         description: Missing required fields
  */
 router.post('/complete', async (req, res, next) => {
   try {
@@ -87,9 +119,29 @@ router.post('/complete', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/career/history
- * @desc    Get user's career history with pagination
- * @access  Private
+ * @swagger
+ * /api/career/history:
+ *   get:
+ *     summary: Get user's career history with pagination
+ *     tags: [Career]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: difficulty
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Career history
  */
 router.get('/history', async (req, res, next) => {
   try {
@@ -162,9 +214,16 @@ router.get('/history', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/career/stats
- * @desc    Get career statistics and analytics
- * @access  Private
+ * @swagger
+ * /api/career/stats:
+ *   get:
+ *     summary: Get career statistics and analytics
+ *     tags: [Career]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Career statistics
  */
 router.get('/stats', async (req, res, next) => {
   try {
@@ -294,9 +353,29 @@ router.get('/stats', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/career/leaderboard
- * @desc    Get leaderboard data (anonymous)
- * @access  Private
+ * @swagger
+ * /api/career/leaderboard:
+ *   get:
+ *     summary: Get leaderboard data (anonymous)
+ *     tags: [Career]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: difficulty
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: metric
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Leaderboard
  */
 router.get('/leaderboard', async (req, res, next) => {
   try {
@@ -359,9 +438,24 @@ router.get('/leaderboard', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/career/:careerHistoryId
- * @desc    Get detailed career information
- * @access  Private
+ * @swagger
+ * /api/career/{careerHistoryId}:
+ *   get:
+ *     summary: Get detailed career information
+ *     tags: [Career]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: careerHistoryId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Career details
+ *       404:
+ *         description: Career not found
  */
 router.get('/:careerHistoryId', async (req, res, next) => {
   try {
@@ -391,9 +485,24 @@ router.get('/:careerHistoryId', async (req, res, next) => {
 });
 
 /**
- * @route   DELETE /api/career/:careerHistoryId
- * @desc    Delete a career record
- * @access  Private
+ * @swagger
+ * /api/career/{careerHistoryId}:
+ *   delete:
+ *     summary: Delete a career record
+ *     tags: [Career]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: careerHistoryId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Career deleted
+ *       404:
+ *         description: Career not found
  */
 router.delete('/:careerHistoryId', async (req, res, next) => {
   try {
@@ -429,9 +538,16 @@ router.delete('/:careerHistoryId', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/career/achievements/summary
- * @desc    Get achievement summary across all careers
- * @access  Private
+ * @swagger
+ * /api/career/achievements/summary:
+ *   get:
+ *     summary: Get achievement summary across all careers
+ *     tags: [Career]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Achievement summary
  */
 router.get('/achievements/summary', async (req, res, next) => {
   try {

@@ -305,9 +305,18 @@ router.post('/login', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/auth/me
- * @desc    Get current user information
- * @access  Private
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get current user information
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user
+ *       401:
+ *         description: Unauthorized
  */
 router.get('/me', authMiddleware, async (req, res, next) => {
   try {
@@ -343,9 +352,16 @@ router.get('/me', authMiddleware, async (req, res, next) => {
 });
 
 /**
- * @route   POST /api/auth/verify
- * @desc    Verify if JWT token is valid
- * @access  Private
+ * @swagger
+ * /api/auth/verify:
+ *   post:
+ *     summary: Verify if JWT token is valid
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token is valid
  */
 router.post('/verify', authMiddleware, (req, res) => {
   res.json({
@@ -359,16 +375,20 @@ router.post('/verify', authMiddleware, (req, res) => {
 });
 
 /**
- * @route   POST /api/auth/logout
- * @desc    Logout user (mainly client-side in stateless JWT)
- * @access  Private
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout user (stateless JWT)
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
  */
 router.post('/logout', authMiddleware, (req, res) => {
   // In a stateless JWT system, logout is mainly client-side
-  // Server can optionally track revoked tokens in Redis/database for enhanced security
-  
   console.log(`User logged out: ${req.user.username}`);
-  
   res.json({
     success: true,
     message: 'Logout successful'
@@ -376,15 +396,20 @@ router.post('/logout', authMiddleware, (req, res) => {
 });
 
 /**
- * @route   POST /api/auth/refresh
- * @desc    Refresh JWT token (extend expiration)
- * @access  Private
+ * @swagger
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Refresh JWT token (extend expiration)
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token refreshed
  */
 router.post('/refresh', authMiddleware, (req, res) => {
   try {
-    // Generate new token
     const newToken = generateToken(req.userId);
-    
     res.json({
       success: true,
       message: 'Token refreshed successfully',

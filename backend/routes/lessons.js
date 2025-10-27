@@ -7,9 +7,35 @@ const authMiddleware = require('../middleware/auth');
 router.use(authMiddleware);
 
 /**
- * @route   POST /api/lessons/view
- * @desc    Track lesson view from scenario
- * @access  Private
+ * @swagger
+ * /api/lessons/view:
+ *   post:
+ *     summary: Track lesson view from scenario
+ *     tags: [Lessons]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               lessonTitle:
+ *                 type: string
+ *               scenarioTitle:
+ *                 type: string
+ *               conceptTaught:
+ *                 type: string
+ *               timeSpent:
+ *                 type: integer
+ *               difficulty:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Lesson view recorded
+ *       400:
+ *         description: Missing required fields
  */
 router.post('/view', async (req, res, next) => {
   try {
@@ -72,9 +98,31 @@ router.post('/view', async (req, res, next) => {
 });
 
 /**
- * @route   POST /api/lessons/concept/master
- * @desc    Mark concept as mastered through gameplay
- * @access  Private
+ * @swagger
+ * /api/lessons/concept/master:
+ *   post:
+ *     summary: Mark concept as mastered through gameplay
+ *     tags: [Lessons]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               conceptId:
+ *                 type: string
+ *               conceptName:
+ *                 type: string
+ *               masteryLevel:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Concept mastery recorded
+ *       400:
+ *         description: Invalid input
  */
 router.post('/concept/master', async (req, res, next) => {
   try {
@@ -147,9 +195,35 @@ router.post('/concept/master', async (req, res, next) => {
 });
 
 /**
- * @route   POST /api/lessons/engagement
- * @desc    Track detailed lesson engagement metrics
- * @access  Private
+ * @swagger
+ * /api/lessons/engagement:
+ *   post:
+ *     summary: Track detailed lesson engagement metrics
+ *     tags: [Lessons]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               lessonId:
+ *                 type: string
+ *               scenarioId:
+ *                 type: string
+ *               engagementType:
+ *                 type: string
+ *               timeSpent:
+ *                 type: integer
+ *               userRating:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Engagement recorded
+ *       400:
+ *         description: Invalid input
  */
 router.post('/engagement', async (req, res, next) => {
   try {
@@ -235,9 +309,16 @@ router.post('/engagement', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/lessons/stats
- * @desc    Get comprehensive lesson viewing and learning statistics
- * @access  Private
+ * @swagger
+ * /api/lessons/stats:
+ *   get:
+ *     summary: Get comprehensive lesson viewing and learning statistics
+ *     tags: [Lessons]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lesson statistics
  */
 router.get('/stats', async (req, res, next) => {
   try {
@@ -306,9 +387,21 @@ router.get('/stats', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/lessons/concepts
- * @desc    Get detailed concept mastery information
- * @access  Private
+ * @swagger
+ * /api/lessons/concepts:
+ *   get:
+ *     summary: Get detailed concept mastery information
+ *     tags: [Lessons]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: masteryLevel
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Concept mastery details
  */
 router.get('/concepts', async (req, res, next) => {
   try {
@@ -379,9 +472,22 @@ router.get('/concepts', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/lessons/engagement/:lessonId
- * @desc    Get detailed engagement metrics for specific lesson
- * @access  Private
+ * @swagger
+ * /api/lessons/engagement/{lessonId}:
+ *   get:
+ *     summary: Get detailed engagement metrics for specific lesson
+ *     tags: [Lessons]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: lessonId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Engagement metrics
  */
 router.get('/engagement/:lessonId', async (req, res, next) => {
   try {

@@ -14,9 +14,16 @@ const { Op } = require('sequelize');
 router.use(authMiddleware);
 
 /**
- * @route   GET /api/analytics/overview
- * @desc    Personal analytics overview combining learning and gaming data
- * @access  Private
+ * @swagger
+ * /api/analytics/overview:
+ *   get:
+ *     summary: Personal analytics overview combining learning and gaming data
+ *     tags: [Analytics]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Overview analytics
  */
 router.get('/overview', async (req, res, next) => {
   try {
@@ -124,9 +131,16 @@ router.get('/overview', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/analytics/learning-journey
- * @desc    Detailed learning journey with timeline and insights
- * @access  Private
+ * @swagger
+ * /api/analytics/learning-journey:
+ *   get:
+ *     summary: Detailed learning journey with timeline and insights
+ *     tags: [Analytics]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Learning journey
  */
 router.get('/learning-journey', async (req, res, next) => {
   try {
@@ -191,9 +205,16 @@ router.get('/learning-journey', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/analytics/performance-trends
- * @desc    Performance trends over time with learning correlation
- * @access  Private
+ * @swagger
+ * /api/analytics/performance-trends:
+ *   get:
+ *     summary: Performance trends over time with learning correlation
+ *     tags: [Analytics]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Performance trends
  */
 router.get('/performance-trends', async (req, res, next) => {
   try {
@@ -265,9 +286,16 @@ router.get('/performance-trends', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/analytics/educational-effectiveness
- * @desc    Analyze the effectiveness of learning on game performance
- * @access  Private
+ * @swagger
+ * /api/analytics/educational-effectiveness:
+ *   get:
+ *     summary: Analyze the effectiveness of learning on game performance
+ *     tags: [Analytics]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Educational effectiveness analysis
  */
 router.get('/educational-effectiveness', async (req, res, next) => {
   try {
@@ -325,9 +353,21 @@ router.get('/educational-effectiveness', async (req, res, next) => {
 });
 
 /**
- * @route   GET /api/analytics/progress-dashboard
- * @desc    Comprehensive dashboard data for analytics visualization
- * @access  Private
+ * @swagger
+ * /api/analytics/progress-dashboard:
+ *   get:
+ *     summary: Comprehensive dashboard data for analytics visualization
+ *     tags: [Analytics]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: timeframe
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Dashboard data
  */
 router.get('/progress-dashboard', async (req, res, next) => {
   try {
@@ -694,7 +734,6 @@ function calculateAverageScore(completedProgress) {
 }
 
 function generateDailyProgress(learningProgress, startDate, endDate) {
-  // Generate daily progress data for charts
   const days = [];
   const currentDate = new Date(startDate);
   

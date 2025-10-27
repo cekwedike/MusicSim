@@ -38,6 +38,7 @@ import InstallBanner from './src/components/InstallBanner';
 import { useAudio } from './contexts/AudioContext';
 import Sidebar, { SidebarView } from './components/Sidebar';
 import SaveLoadPanel from './components/SaveLoadPanel';
+import ProfilePanel from './components/ProfilePanel';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -1307,6 +1308,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         <ManagementPanel achievements={achievements} logs={logs} staff={staff} />
                     )}
 
+                    {activeSidebarView === 'profile' && (
+                        <ProfilePanel
+                            isGuestMode={isGuestMode}
+                            onExitGuest={onResetToLanding}
+                            onClose={() => setActiveSidebarView(null)}
+                        />
+                    )}
+
                     {activeSidebarView === 'learning' && (
                         <div className="text-gray-300 text-sm">Learning Hub content</div>
                     )}
@@ -1485,26 +1494,21 @@ const AuthenticatedApp: React.FC = () => {
             {!showLanding && (isAuthenticated || guestMode) && (
                 <div className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
                     <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <h1 className="text-xl font-bold text-violet-300">MusicSim</h1>
-                            {guestMode && (
-                                <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded border border-yellow-500/30">
-                                    Guest Mode
-                                </span>
-                            )}
-                            {isAuthenticated && user && (
-                                <span className="text-sm text-gray-400">
-                                    {user.username}
-                                </span>
-                            )}
-                        </div>
-                        
-                        <button
-                            onClick={handleLogout}
-                            className="text-sm text-red-400 hover:text-red-300 font-medium"
-                        >
-                            {guestMode ? 'Exit Guest Mode' : 'Logout'}
-                        </button>
+                                        <div className="flex items-center gap-3">
+                                            <h1 className="text-xl font-bold text-violet-300">MusicSim</h1>
+                                            {guestMode && (
+                                                <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded border border-yellow-500/30">
+                                                    Guest Mode
+                                                </span>
+                                            )}
+                                            {isAuthenticated && user && (
+                                                <span className="text-sm text-gray-400">
+                                                    {user.username}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* NOTE: Logout / Exit Guest Mode moved into the Profile panel in the sidebar */}
                     </div>
                 </div>
             )}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon, MusicNoteIcon } from './icons/Icons';
+import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon, MusicNoteIcon, UserIcon } from './icons/Icons';
 
-export type SidebarView = 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
+export type SidebarView = 'profile' | 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
 
 interface SidebarProps {
   activeView: SidebarView;
@@ -23,6 +23,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
   const [isVisible, setIsVisible] = useState(true);
 
   const buttons: SidebarButton[] = [
+    {
+      id: 'profile',
+      icon: <UserIcon />,
+      label: 'Profile',
+      ariaLabel: 'Profile & Settings'
+    },
     {
       id: 'achievements',
       icon: <BriefcaseIcon />,

@@ -60,14 +60,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       }
 
       if (mode === 'login') {
-        const ok = await login(email, password);
-        if (ok) {
-          onClose(); // Close modal on successful login
-          // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
-          window.location.reload();
-        } else {
-          setLoading(false);
-        }
+        // login() will throw on failure; let the catch block handle errors
+        await login(email, password);
+        onClose(); // Close modal on successful login
+        // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
+        window.location.reload();
       } else {
         // Validation for registration
         if (username.length < 3) {
@@ -79,14 +76,11 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         
 
         // register expects (username, email, password)
-        const ok = await register(username, email, password);
-        if (ok) {
-          onClose(); // Close modal on successful registration
-          // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
-          window.location.reload();
-        } else {
-          setLoading(false);
-        }
+        // register() will throw on failure; let the catch block handle errors
+        await register(username, email, password);
+        onClose(); // Close modal on successful registration
+        // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
+        window.location.reload();
       }
     } catch (err: any) {
       setLoading(false);

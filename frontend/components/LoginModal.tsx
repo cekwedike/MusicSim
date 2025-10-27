@@ -20,6 +20,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const { login, register } = useAuth();
 
@@ -62,9 +63,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       if (mode === 'login') {
         // login() will throw on failure; let the catch block handle errors
         await login(email, password);
-        onClose(); // Close modal on successful login
-        // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
-        window.location.reload();
+        // show success briefly before reloading
+        setSuccessMessage('Logged in successfully! Redirecting...');
+        setLoading(false);
+        setTimeout(() => {
+          onClose();
+          window.location.reload();
+        }, 700);
       } else {
         // Validation for registration
         if (username.length < 3) {
@@ -78,35 +83,47 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         // register expects (username, email, password)
         // register() will throw on failure; let the catch block handle errors
         await register(username, email, password);
-        onClose(); // Close modal on successful registration
-        // Reload to ensure AuthProvider picks up stored auth state and hides the landing page
-        window.location.reload();
+        // show success briefly before reloading
+        setSuccessMessage('Account created! Signing you in...');
+        setLoading(false);
+        setTimeout(() => {
+          onClose();
+          window.location.reload();
+        }, 700);
       }
     } catch (err: any) {
       setLoading(false);
-      
+
       // Parse error message
       let errorMessage = 'An error occurred. Please try again.';
-      
-      if (err.message) {
+
+      if (err?.message) {
         errorMessage = err.message;
-      } else if (err.response?.data?.message) {
+      } else if (err?.response?.data?.message) {
         errorMessage = err.response.data.message;
       }
-      
-      // User-friendly error messages
+
+      // User-friendly error messages and specific flows
       if (errorMessage.includes('Invalid credentials')) {
-        errorMessage = mode === 'login' 
+        errorMessage = mode === 'login'
           ? '❌ Wrong email/username or password. Please try again.'
           : errorMessage;
-      } else if (errorMessage.includes('already exists') || errorMessage.includes('already registered')) {
-        errorMessage = '❌ This email or username is already taken. Try logging in instead.';
-      } else if (errorMessage.includes('not found')) {
-        errorMessage = '❌ No account found with these credentials. Please register first.';
-      } else if (errorMessage.includes('network') || errorMessage.includes('Network')) {
+      }
+
+      // Backend may return 'Email already registered' or 'Username already taken'
+      const lower = errorMessage.toLowerCase();
+      if (lower.includes('email') && lower.includes('already')) {
+        // Switch to login mode and prefill email
+        setMode('login');
+        setEmail(email);
+        errorMessage = '❌ This email is already registered. Please login.';
+      } else if (lower.includes('username') && lower.includes('already')) {
+        // Username taken - inform user to choose another username
+        errorMessage = '❌ This username is already taken. Please choose another.';
+      } else if (lower.includes('network') || lower.includes('ecconnrefused') || lower.includes('connect')) {
         errorMessage = '🌐 Network error. Please check your internet connection.';
       }
-      
+
       setError(errorMessage);
     }
   };
@@ -229,6 +246,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           {error && (
             <div className="bg-red-500/10 border-2 border-red-500 rounded-lg p-4 text-red-300 text-sm font-medium animate-shake">
               {error}
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-500/10 border-2 border-green-500 rounded-lg p-4 text-green-200 text-sm font-medium">
+              {successMessage}
             </div>
           )}
 

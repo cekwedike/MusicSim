@@ -1,5 +1,6 @@
 import React, { useReducer, useCallback, useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
 import { LoginModal } from './components/LoginModal';
 import LandingPage from './components/LandingPage';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
@@ -1178,9 +1179,18 @@ const AuthenticatedApp: React.FC = () => {
     const [guestMode, setGuestMode] = useState(false);
     const [showLanding, setShowLanding] = useState(true);
 
-    // Hide landing page once user is authenticated or playing as guest
+    // Hide landing page once user is authenticated or playing as guest.
+    // Delay hiding the landing page briefly when the user authenticates so
+    // any success banners in the Login/Register modal have time to render
+    // before the landing page (and modal) unmounts.
     useEffect(() => {
-        if (isAuthenticated || guestMode) {
+        if (isAuthenticated) {
+            const t = setTimeout(() => setShowLanding(false), 700);
+            return () => clearTimeout(t);
+        }
+
+        if (guestMode) {
+            // Guest mode can proceed immediately
             setShowLanding(false);
         }
     }, [isAuthenticated, guestMode]);
@@ -1256,9 +1266,11 @@ const AuthenticatedApp: React.FC = () => {
 // Main App component with authentication provider
 const App: React.FC = () => {
     return (
-        <AuthProvider>
-            <AuthenticatedApp />
-        </AuthProvider>
+        <ToastProvider>
+            <AuthProvider>
+                <AuthenticatedApp />
+            </AuthProvider>
+        </ToastProvider>
     );
 };
 

@@ -1222,7 +1222,12 @@ const AuthenticatedApp: React.FC = () => {
 
     // Show landing page if not authenticated and not guest
     if (showLanding && !isAuthenticated && !guestMode) {
-        return <LandingPage onPlayAsGuest={handlePlayAsGuest} />;
+        return (
+            <div>
+                <InstallBanner />
+                <LandingPage onPlayAsGuest={handlePlayAsGuest} />
+            </div>
+        );
     }
 
     return (

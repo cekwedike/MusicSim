@@ -835,17 +835,20 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
-    
+
     // Welcome dialog state
     const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
     const [welcomeArtistName, setWelcomeArtistName] = useState('');
     const [hasAutoLoaded, setHasAutoLoaded] = useState(false); // Prevent double-loading
-    
+
     const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
 
     // Auth context
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
-    
+
+    // Audio context
+    const audioManager = useAudio();
+
     // PWA functionality
     const isOnline = useOnlineStatus();
 

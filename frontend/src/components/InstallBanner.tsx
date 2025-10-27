@@ -33,6 +33,7 @@ const markDismissed = (permanent = false) => {
 };
 
 const InstallBanner: React.FC = () => {
+  console.log('[InstallBanner] Component rendering...');
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const bannerRef = useRef<HTMLDivElement | null>(null);

@@ -78,17 +78,20 @@ const InstallBanner: React.FC = () => {
       // user clicks Install -> show native prompt
       await deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
-      // Hide the banner regardless of choice
-      setVisible(false);
-      setDeferredPrompt(null);
 
       if (choice.outcome === 'accepted') {
-        // mark as permanently dismissed (installed)
+        // mark as permanently dismissed (installed) and hide
         markDismissed(true);
+        setVisible(false);
+        setDeferredPrompt(null);
+      } else {
+        // user dismissed native prompt — keep the banner visible so they can try again or close
+        // don't mark dismissed so it will reappear later (or remain until user closes)
+        setDeferredPrompt(null);
+        // keep visible (user can close with X)
       }
     } catch (e) {
-      // hide banner anyway
-      setVisible(false);
+      // on error, keep the banner visible and clear deferred prompt
       setDeferredPrompt(null);
     }
   };

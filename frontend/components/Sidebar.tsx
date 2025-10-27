@@ -82,8 +82,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
   };
 
   return (
-    // Increased z-index so the sidebar controls sit above the app header
-    <div className={`fixed right-0 top-0 h-full z-60 flex transition-transform ${isVisible ? 'translate-x-0' : 'translate-x-full'}`}>
+    // Sidebar positioned below the app header (top-16) and stretches to the bottom
+    <div className={`fixed right-0 top-16 bottom-0 z-60 flex transition-transform ${isVisible ? 'translate-x-0' : 'translate-x-full'}`}>
       {/* Icon Bar */}
   <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-4 shadow-xl">
         {/* Sidebar visibility toggle */}
@@ -152,7 +152,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         style={{ willChange: 'width' }}
       >
         {activeView && isExpanded && (
-          <div className="w-96 h-full flex flex-col p-4 animate-fade-in">
+          <div className="w-full h-full flex flex-col p-4 animate-fade-in">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-violet-300">
                 {buttons.find(b => b.id === activeView)?.label}

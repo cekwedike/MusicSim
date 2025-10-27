@@ -56,6 +56,15 @@ const InstallBanner: React.FC = () => {
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
     window.addEventListener('appinstalled', onAppInstalled as EventListener);
 
+    // Dev override: show banner when ?showInstall=1 or localStorage 'musicsim_force_install_banner' === 'true'
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const forced = params.get('showInstall') === '1' || localStorage.getItem('musicsim_force_install_banner') === 'true';
+      if (forced) setVisible(true);
+    } catch (e) {
+      // ignore errors reading search/localStorage
+    }
+
     return () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
       window.removeEventListener('appinstalled', onAppInstalled as EventListener);
@@ -73,26 +82,40 @@ const InstallBanner: React.FC = () => {
   };
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    try {
-      // user clicks Install -> show native prompt
-      await deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
+    if (deferredPrompt) {
+      try {
+        // user clicks Install -> show native prompt
+        await deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
 
-      if (choice.outcome === 'accepted') {
-        // mark as permanently dismissed (installed) and hide
-        markDismissed(true);
-        setVisible(false);
+        if (choice.outcome === 'accepted') {
+          // mark as permanently dismissed (installed) and hide
+          markDismissed(true);
+          setVisible(false);
+          setDeferredPrompt(null);
+        } else {
+          // user dismissed native prompt — keep the banner visible so they can try again or close
+          setDeferredPrompt(null);
+        }
+      } catch (e) {
         setDeferredPrompt(null);
-      } else {
-        // user dismissed native prompt — keep the banner visible so they can try again or close
-        // don't mark dismissed so it will reappear later (or remain until user closes)
-        setDeferredPrompt(null);
-        // keep visible (user can close with X)
+      }
+      return;
+    }
+
+    // No native beforeinstallprompt available — in dev we support a forced mode for UI testing
+    try {
+      const forced = localStorage.getItem('musicsim_force_install_banner') === 'true' || new URLSearchParams(window.location.search).get('showInstall') === '1';
+      if (forced) {
+        const accepted = window.confirm('Simulate PWA install: OK = accepted, Cancel = dismissed');
+        if (accepted) {
+          markDismissed(true);
+          setVisible(false);
+        }
+        // if dismissed, keep banner visible so dev can try again or close
       }
     } catch (e) {
-      // on error, keep the banner visible and clear deferred prompt
-      setDeferredPrompt(null);
+      // ignore
     }
   };
 

@@ -1,13 +1,24 @@
 import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import type { GameStatistics, Difficulty } from '../types';
 
 interface ProfilePanelProps {
 	isGuestMode: boolean;
 	onExitGuest: () => void;
 	onClose?: () => void;
+	statistics?: GameStatistics;
+	artistName?: string;
+	difficulty?: Difficulty;
 }
 
-const ProfilePanel: React.FC<ProfilePanelProps> = ({ isGuestMode, onExitGuest, onClose }) => {
+const ProfilePanel: React.FC<ProfilePanelProps> = ({
+	isGuestMode,
+	onExitGuest,
+	onClose,
+	statistics,
+	artistName,
+	difficulty
+}) => {
 	const { user, isAuthenticated, logout } = useAuth();
 
 	const handleLogout = async () => {
@@ -24,44 +35,187 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({ isGuestMode, onExitGuest, o
 		if (onClose) onClose();
 	};
 
-	return (
-		<div className="text-gray-200">
-			<div className="mb-4">
-				<h3 className="text-2xl font-bold text-violet-300">Profile</h3>
-				<p className="text-sm text-gray-400">Account & session settings</p>
-			</div>
+	const formatPlayTime = (minutes: number) => {
+		if (minutes < 60) return `${minutes}m`;
+		const hours = Math.floor(minutes / 60);
+		const mins = minutes % 60;
+		return `${hours}h ${mins}m`;
+	};
 
-			<div className="bg-gray-900/50 p-4 rounded-lg mb-4 border border-gray-700">
+	const formatCurrency = (amount: number) => {
+		if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`;
+		if (amount >= 1000) return `$${(amount / 1000).toFixed(1)}K`;
+		return `$${amount}`;
+	};
+
+	return (
+		<div className="h-full overflow-y-auto -mx-4 px-4">
+			{/* Account Header */}
+			<div className="bg-gradient-to-br from-violet-600/20 to-purple-600/20 border border-violet-600/30 rounded-lg p-4 mb-4">
 				{isAuthenticated && user ? (
 					<div className="flex items-center gap-3">
-						<div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-xl text-violet-300">{user.username.charAt(0).toUpperCase()}</div>
-						<div>
-							<div className="font-semibold">{user.username}</div>
-							<div className="text-xs text-gray-400">{user.email}</div>
+						<div className="w-16 h-16 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg">
+							{user.username.charAt(0).toUpperCase()}
+						</div>
+						<div className="flex-1">
+							<div className="font-bold text-lg text-white">{user.username}</div>
+							<div className="text-sm text-violet-200">{user.email}</div>
+							<div className="flex items-center gap-2 mt-1">
+								<span className="text-xs bg-violet-600/50 text-violet-200 px-2 py-0.5 rounded">
+									Signed In
+								</span>
+							</div>
 						</div>
 					</div>
 				) : (
-					<div className="text-sm text-gray-400">You are currently in Guest Mode.</div>
+					<div className="flex items-center gap-3">
+						<div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-2xl">
+							👤
+						</div>
+						<div className="flex-1">
+							<div className="font-bold text-lg text-white">Guest Player</div>
+							<div className="text-sm text-gray-300">Playing without an account</div>
+							<div className="flex items-center gap-2 mt-1">
+								<span className="text-xs bg-yellow-600/50 text-yellow-200 px-2 py-0.5 rounded">
+									Guest Mode
+								</span>
+							</div>
+						</div>
+					</div>
 				)}
 			</div>
 
-			<div className="space-y-3">
+			{/* Current Session */}
+			{artistName && (
+				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+						<span>🎵</span> Current Session
+					</h3>
+					<div className="space-y-2">
+						<div className="flex justify-between items-center">
+							<span className="text-xs text-gray-400">Artist</span>
+							<span className="text-sm font-medium text-yellow-400">{artistName}</span>
+						</div>
+						{difficulty && (
+							<div className="flex justify-between items-center">
+								<span className="text-xs text-gray-400">Difficulty</span>
+								<span className="text-sm font-medium text-white capitalize">{difficulty}</span>
+							</div>
+						)}
+					</div>
+				</div>
+			)}
+
+			{/* Career Statistics */}
+			{statistics && (
+				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+						<span>📊</span> Career Statistics
+					</h3>
+					<div className="grid grid-cols-2 gap-3">
+						<div className="bg-gray-800/50 rounded-lg p-3">
+							<div className="text-xs text-gray-400 mb-1">Total Careers</div>
+							<div className="text-xl font-bold text-violet-400">{statistics.totalGamesPlayed}</div>
+						</div>
+						<div className="bg-gray-800/50 rounded-lg p-3">
+							<div className="text-xs text-gray-400 mb-1">Total Weeks</div>
+							<div className="text-xl font-bold text-green-400">{statistics.totalWeeksPlayed}</div>
+						</div>
+						<div className="bg-gray-800/50 rounded-lg p-3">
+							<div className="text-xs text-gray-400 mb-1">Play Time</div>
+							<div className="text-xl font-bold text-blue-400">
+								{formatPlayTime(statistics.totalPlayTimeMinutes || 0)}
+							</div>
+						</div>
+						<div className="bg-gray-800/50 rounded-lg p-3">
+							<div className="text-xs text-gray-400 mb-1">Achievements</div>
+							<div className="text-xl font-bold text-yellow-400">{statistics.achievementsUnlocked}</div>
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* Milestones */}
+			{statistics && (statistics.highestCash > 0 || statistics.highestFameReached > 0) && (
+				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+						<span>🏆</span> Personal Records
+					</h3>
+					<div className="space-y-2 text-sm">
+						{statistics.highestCash > 0 && (
+							<div className="flex justify-between items-center">
+								<span className="text-gray-400">💰 Peak Wealth</span>
+								<span className="font-semibold text-green-400">{formatCurrency(statistics.highestCash)}</span>
+							</div>
+						)}
+						{statistics.highestFameReached > 0 && (
+							<div className="flex justify-between items-center">
+								<span className="text-gray-400">⭐ Peak Fame</span>
+								<span className="font-semibold text-yellow-400">{statistics.highestFameReached}</span>
+							</div>
+						)}
+						{statistics.longestCareerWeeks > 0 && (
+							<div className="flex justify-between items-center">
+								<span className="text-gray-400">📅 Longest Career</span>
+								<span className="font-semibold text-violet-400">{statistics.longestCareerWeeks} weeks</span>
+							</div>
+						)}
+						{statistics.totalCashEarned > 0 && (
+							<div className="flex justify-between items-center">
+								<span className="text-gray-400">💵 Total Earned</span>
+								<span className="font-semibold text-green-400">{formatCurrency(statistics.totalCashEarned)}</span>
+							</div>
+						)}
+					</div>
+				</div>
+			)}
+
+			{/* Learning Progress */}
+			{statistics && statistics.modulesCompleted > 0 && (
+				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+						<span>📚</span> Learning Progress
+					</h3>
+					<div className="space-y-2 text-sm">
+						<div className="flex justify-between items-center">
+							<span className="text-gray-400">Modules Completed</span>
+							<span className="font-semibold text-violet-400">{statistics.modulesCompleted}</span>
+						</div>
+						<div className="flex justify-between items-center">
+							<span className="text-gray-400">Average Quiz Score</span>
+							<span className="font-semibold text-green-400">{Math.round(statistics.averageQuizScore)}%</span>
+						</div>
+						<div className="flex justify-between items-center">
+							<span className="text-gray-400">Concepts Mastered</span>
+							<span className="font-semibold text-yellow-400">{statistics.conceptsMastered?.length || 0}</span>
+						</div>
+					</div>
+				</div>
+			)}
+
+			{/* Actions */}
+			<div className="space-y-3 mb-4">
 				<button
 					onClick={isGuestMode ? handleExitGuest : handleLogout}
-					className="w-full text-left bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+					className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
 				>
+					<span>{isGuestMode ? '🚪' : '👋'}</span>
 					{isGuestMode ? 'Exit Guest Mode' : 'Logout'}
 				</button>
 
-				<div className="bg-gray-900/50 p-3 rounded-lg border border-gray-700">
-					<h4 className="text-sm font-semibold text-gray-300 mb-2">Preferences</h4>
-					<p className="text-xs text-gray-400">Theme, notifications and other account settings will go here.</p>
-				</div>
-
-				<div className="bg-gray-900/50 p-3 rounded-lg border border-gray-700">
-					<h4 className="text-sm font-semibold text-gray-300 mb-2">Notifications</h4>
-					<p className="text-xs text-gray-400">Placeholder for notification toggles and recent messages.</p>
-				</div>
+				{isGuestMode && (
+					<div className="bg-blue-600/20 border border-blue-600/30 rounded-lg p-3">
+						<div className="flex items-start gap-2">
+							<span className="text-lg">💡</span>
+							<div>
+								<h4 className="text-sm font-semibold text-blue-300 mb-1">Sign Up to Save Progress</h4>
+								<p className="text-xs text-blue-200 leading-relaxed">
+									Create an account to save your progress, unlock achievements, and access your stats across devices.
+								</p>
+							</div>
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);

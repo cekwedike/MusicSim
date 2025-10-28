@@ -22,6 +22,7 @@ import OutcomeModal from './components/OutcomeModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
 import LearningHub from './components/LearningHub';
+import LearningPanel from './components/LearningPanel';
 import ModuleViewer from './components/ModuleViewer';
 import { ContractViewer } from './components/ContractViewer';
 import ManagementPanel from './components/ManagementPanel';
@@ -1214,19 +1215,19 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Sidebar view change handler
     const handleSidebarViewChange = (view: SidebarView) => {
+        // Special handling for tutorial - launch overlay and close sidebar
+        if (view === 'tutorial') {
+            dispatch({ type: 'START_TUTORIAL' });
+            setActiveSidebarView(null);
+            return;
+        }
+
         setActiveSidebarView(view);
 
-        // Map sidebar views to modal states
-        if (view === 'achievements') {
-            dispatch({ type: 'VIEW_MANAGEMENT_HUB' });
-        } else if (view === 'learning') {
-            dispatch({ type: 'VIEW_LEARNING_HUB' });
-        } else if (view === 'statistics') {
-            dispatch({ type: 'VIEW_STATISTICS' });
-        } else if (view === 'tutorial') {
-            dispatch({ type: 'START_TUTORIAL' });
-        } else if (view === 'saveload') {
-            dispatch({ type: 'VIEW_SAVE_LOAD' });
+        // Map sidebar views to modal states (for modals that still exist)
+        if (view === 'learning') {
+            // Close any existing modal when opening learning panel
+            dispatch({ type: 'CLOSE_MODAL' });
         } else if (view === null) {
             // Close all modals when sidebar is closed
             dispatch({ type: 'CLOSE_MODAL' });
@@ -1309,6 +1310,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                             isGuestMode={isGuestMode}
                             onExitGuest={onResetToLanding}
                             onClose={() => setActiveSidebarView(null)}
+                            statistics={state.statistics}
+                            artistName={state.artistName}
+                            difficulty={state.difficulty}
                         />
                     )}
 
@@ -1317,15 +1321,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     )}
 
                     {activeSidebarView === 'learning' && (
-                        <div className="text-gray-300 text-sm">Learning Hub content</div>
+                        <LearningPanel
+                            onOpenModule={handleOpenModule}
+                            playerKnowledge={state.playerKnowledge}
+                        />
                     )}
 
                     {activeSidebarView === 'statistics' && (
                         <StatisticsPanel state={state} />
-                    )}
-
-                    {activeSidebarView === 'tutorial' && (
-                        <div className="text-gray-300 text-sm">Tutorial will launch as overlay</div>
                     )}
 
                     {activeSidebarView === 'audio' && (

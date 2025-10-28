@@ -20,7 +20,6 @@ interface SidebarButton {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
 
   const buttons: SidebarButton[] = [
     {
@@ -83,20 +82,9 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
 
   return (
     // Sidebar positioned below the app header (top-16) and stretches to the bottom
-    <div className={`fixed right-0 top-16 bottom-0 z-60 flex transition-transform ${isVisible ? 'translate-x-0' : 'translate-x-full'}`}>
+    <div className="fixed right-0 top-16 bottom-0 z-60 flex">
       {/* Icon Bar */}
-  <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-4 shadow-xl">
-        {/* Sidebar visibility toggle */}
-        <button
-          onClick={() => setIsVisible(v => !v)}
-          className="p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
-          aria-label={isVisible ? 'Collapse sidebar' : 'Open sidebar'}
-          title={isVisible ? 'Collapse' : 'Open'}
-        >
-          <svg className={`w-5 h-5 transition-transform ${isVisible ? 'rotate-180' : 'rotate-0'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+      <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-4 shadow-xl">
         {buttons.map((button) => (
           <button
             key={button.id}

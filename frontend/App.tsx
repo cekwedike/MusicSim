@@ -58,10 +58,10 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         currentScenario: null,
         lastOutcome: null,
     // legacy careerLog removed; use `logs` (Date-based) instead
-        logs: [createLog('Your music career begins today!', 'success', new Date(2025, 9, 14), '🎵')],
+        logs: [createLog('Your music career begins today!', 'success', new Date(), '🎵')],
         date: { week: 1, month: 1, year: 1 },
-        currentDate: new Date(2025, 9, 14), // October 14, 2025
-        startDate: new Date(2025, 9, 14),
+        currentDate: new Date(),
+        startDate: new Date(),
         usedScenarioTitles: [],
         achievements: allAchievements.map(a => ({ ...a, unlocked: false })),
         currentProject: null,

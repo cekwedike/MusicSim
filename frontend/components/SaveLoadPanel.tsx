@@ -252,7 +252,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
 
                   <div className="grid grid-cols-2 gap-2 text-xs text-gray-300 mb-3 bg-gray-800/50 p-2 rounded">
                     <div>
-                      <span className="text-gray-500">Date:</span> Y{slot.date.year} W{slot.date.week}
+                      <span className="text-gray-500">In-Game Date:</span> {new Date(slot.currentDate).toLocaleDateString()}
                     </div>
                     <div>
                       <span className="text-gray-500">Progress:</span> {slot.careerProgress}%

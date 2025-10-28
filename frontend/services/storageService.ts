@@ -26,8 +26,8 @@ const serializeGameState = (state: GameState): any => {
 const deserializeGameState = (data: any): GameState => {
   return {
     ...data,
-    currentDate: data.currentDate ? new Date(data.currentDate) : new Date(2025, 9, 14),
-    startDate: data.startDate ? new Date(data.startDate) : new Date(2025, 9, 14),
+    currentDate: data.currentDate ? new Date(data.currentDate) : new Date(),
+    startDate: data.startDate ? new Date(data.startDate) : new Date(),
     logs: data.logs ? data.logs.map((log: any) => ({
       ...log,
       timestamp: new Date(log.timestamp)
@@ -274,6 +274,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                     artistName: save.artistName,
                     genre: save.genre,
                     date: gd,
+                    currentDate: gameState.currentDate,
                     stats: gameState.playerStats,
                     timestamp: new Date(save.lastPlayedAt).getTime(),
                     careerProgress: calculateCareerProgress(gameState)
@@ -324,6 +325,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         artistName: state.artistName,
         genre: state.artistGenre,
         date: gdLocal,
+        currentDate: state.currentDate,
         stats: state.playerStats,
         timestamp: saveData.timestamp,
         careerProgress: calculateCareerProgress(state)

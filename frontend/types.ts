@@ -119,8 +119,9 @@ export interface SaveSlot {
   artistName: string;
   genre: string;
   date: GameDate;
+  currentDate: Date; // Real in-game date
   stats: PlayerStats;
-  timestamp: number;
+  timestamp: number; // When the save was created
   careerProgress: number;
 }
 

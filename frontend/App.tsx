@@ -41,6 +41,7 @@ import { useAudio } from './contexts/AudioContext';
 import Sidebar, { SidebarView } from './components/Sidebar';
 import ProfilePanel from './components/ProfilePanel';
 import SaveLoadPanel from './components/SaveLoadPanel';
+import { AudioPlayer } from './src/components/AudioPlayer';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -831,9 +832,17 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
     return (
         <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
+            {/* Welcome Intro Audio */}
+            <div className="mb-4">
+                <AudioPlayer
+                    audioSrc="/audio/scenarios/welcome-intro.m4a"
+                    autoPlay={true}
+                />
+            </div>
+
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">Welcome to MusicSim</h2>
             <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
-            
+
             <div className="space-y-4 w-full max-w-sm">
                 {autosaveExists && (
                     <button
@@ -861,18 +870,37 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
     );
 };
 
-const GameScreen: React.FC<{ onStart: () => void, title: string, message: string, buttonText: string }> = ({ onStart, title, message, buttonText }) => (
-    <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
-        <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">{title}</h2>
-        <p className="text-gray-300 max-w-md mb-8">{message}</p>
-        <button
-            onClick={onStart}
-            className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300"
-        >
-            {buttonText}
-        </button>
-    </div>
-);
+const GameScreen: React.FC<{ onStart: () => void, title: string, message: string, buttonText: string, gameOverReason?: 'debt' | 'burnout' | null }> = ({ onStart, title, message, buttonText, gameOverReason }) => {
+    // Determine audio file based on game over reason
+    const audioFile = gameOverReason === 'debt'
+        ? '/audio/scenarios/game-over-debt.m4a'
+        : gameOverReason === 'burnout'
+        ? '/audio/scenarios/game-over-burnout.m4a'
+        : null;
+
+    return (
+        <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
+            {/* Audio Player for game over */}
+            {audioFile && (
+                <div className="mb-6">
+                    <AudioPlayer
+                        audioSrc={audioFile}
+                        autoPlay={true}
+                    />
+                </div>
+            )}
+
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">{title}</h2>
+            <p className="text-gray-300 max-w-md mb-8">{message}</p>
+            <button
+                onClick={onStart}
+                className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300"
+            >
+                {buttonText}
+            </button>
+        </div>
+    );
+};
 
 const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> = ({ isGuestMode, onResetToLanding }) => {
     const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
@@ -922,11 +950,55 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     }, [status, audioManager]);
 
     // Play achievement unlock sound when new achievements are unlocked
+    // Play special audio for first achievement
+    const firstAchievementAudioRef = useRef<HTMLAudioElement | null>(null);
     useEffect(() => {
         if (unseenAchievements.length > 0) {
-            audioManager.playSound('achievementUnlock');
+            // Check if this is the player's first achievement ever in this career
+            const totalUnlockedAchievements = achievements.filter(a => a.unlocked).length;
+            const isFirstAchievement = totalUnlockedAchievements === 1;
+
+            if (isFirstAchievement) {
+                // Play first achievement audio
+                if (!firstAchievementAudioRef.current) {
+                    firstAchievementAudioRef.current = new Audio('/audio/scenarios/first-achievement.m4a');
+                }
+                firstAchievementAudioRef.current.volume = audioManager.audioState.sfxVolume;
+                firstAchievementAudioRef.current.muted = audioManager.audioState.isSfxMuted;
+                firstAchievementAudioRef.current.play().catch(err => {
+                    console.warn('[First Achievement Audio] Playback failed:', err);
+                });
+            } else {
+                // Play regular achievement unlock sound
+                audioManager.playSound('achievementUnlock');
+            }
         }
-    }, [unseenAchievements.length, audioManager]);
+    }, [unseenAchievements.length, audioManager, achievements]);
+
+    // Play one year milestone audio at 48 weeks
+    const hasPlayedMilestoneAudioRef = useRef(false);
+    const milestoneAudioRef = useRef<HTMLAudioElement | null>(null);
+    useEffect(() => {
+        if (status === 'playing' && state.currentDate && state.startDate) {
+            const currentGameDate = toGameDate(state.currentDate, state.startDate);
+            const totalWeeks = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
+
+            // Check if player just reached 48 weeks (1 year milestone)
+            if (totalWeeks === 48 && !hasPlayedMilestoneAudioRef.current) {
+                hasPlayedMilestoneAudioRef.current = true;
+
+                // Play one year milestone audio
+                if (!milestoneAudioRef.current) {
+                    milestoneAudioRef.current = new Audio('/audio/scenarios/one-year-milestone.m4a');
+                }
+                milestoneAudioRef.current.volume = audioManager.audioState.sfxVolume;
+                milestoneAudioRef.current.muted = audioManager.audioState.isSfxMuted;
+                milestoneAudioRef.current.play().catch(err => {
+                    console.warn('[One Year Milestone Audio] Playback failed:', err);
+                });
+            }
+        }
+    }, [status, state.currentDate, state.startDate, audioManager]);
 
     // Track previous stats to detect changes and play appropriate sounds
     const prevStatsRef = useRef(playerStats);
@@ -1259,7 +1331,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 const gameOverMessage = gameOverReason === 'debt'
                     ? `After ${settings.gracePeriodWeeks} weeks in debt, you've gone bankrupt. The show can't go on.`
                     : `After ${settings.gracePeriodWeeks} weeks of pushing yourself too hard, you've suffered a complete burnout. You need to step away from the industry.`;
-                return <GameScreen onStart={handleRestart} title="Game Over" message={gameOverMessage} buttonText="Play Again" />;
+                return <GameScreen onStart={handleRestart} title="Game Over" message={gameOverMessage} buttonText="Play Again" gameOverReason={gameOverReason} />;
             case 'loading':
                 return <div className="flex-grow flex items-center justify-center"><Loader text="Setting the stage..." /></div>;
             case 'playing':

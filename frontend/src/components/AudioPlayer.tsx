@@ -19,7 +19,19 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [hasEnded, setHasEnded] = useState(false);
-  const { volume, isMuted } = useAudio();
+  // useAudio throws if the provider is missing; guard to avoid crashing when used outside provider
+  let volume = 1;
+  let isMuted = false;
+  try {
+    const ctx = useAudio();
+    // AudioManager exposes audioState with sfx/music volumes
+    volume = ctx.audioState?.sfxVolume ?? 1;
+    isMuted = ctx.audioState?.isSfxMuted ?? false;
+  } catch (e) {
+    // If context isn't available, fall back to defaults and log a warning
+    // eslint-disable-next-line no-console
+    console.warn('[AudioPlayer] useAudio hook not available, using defaults', e);
+  }
 
   // Update audio volume and mute state
   useEffect(() => {

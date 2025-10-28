@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { Scenario, Choice, Difficulty } from '../types';
 import { getDifficultySettings } from '../data/difficultySettings';
 import { AudioPlayer } from '../src/components/AudioPlayer';
+import AudioErrorBoundary from './AudioErrorBoundary';
 
 interface ScenarioCardProps {
     scenario: Scenario;
@@ -90,7 +91,9 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, d
             {/* Scenario voice-over player (if provided) */}
             {scenario.audioFile && showAudio && (
                 <div className="mb-4">
-                    <AudioPlayer audioSrc={scenario.audioFile} autoPlay={!!scenario.autoPlayAudio} />
+                    <AudioErrorBoundary>
+                        <AudioPlayer audioSrc={scenario.audioFile} autoPlay={!!scenario.autoPlayAudio} />
+                    </AudioErrorBoundary>
                 </div>
             )}
             <p className="text-gray-300 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">{scenario.description}</p>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon, MusicNoteIcon, UserIcon } from './icons/Icons';
+import { useTheme } from '../contexts/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 export type SidebarView = 'profile' | 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
 
@@ -20,6 +22,7 @@ interface SidebarButton {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const buttons: SidebarButton[] = [
     {
@@ -125,6 +128,32 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
             </div>
           </button>
         ))}
+
+        {/* Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          className="p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-gray-700"
+          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          <div className="w-6 h-6 flex items-center justify-center">
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </div>
+
+          {/* Hover tooltip - hidden on mobile */}
+          <div className="
+            hidden lg:block
+            absolute left-[-8px] top-1/2 -translate-y-1/2 -translate-x-full
+            bg-gray-900 text-white text-sm px-3 py-2 rounded-lg
+            whitespace-nowrap opacity-0 group-hover:opacity-100
+            pointer-events-none transition-opacity duration-200
+            shadow-lg
+          ">
+            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-gray-900"></div>
+          </div>
+        </button>
+
         {/* Spacer to push any future controls toward center */}
         <div className="flex-1" />
       </div>

@@ -2,6 +2,7 @@ import React, { useReducer, useCallback, useEffect, useState, useRef } from 'rea
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { AudioProvider } from './contexts/AudioContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { LoginModal } from './components/LoginModal';
 import LandingPage from './components/LandingPage';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
@@ -1523,13 +1524,15 @@ const AuthenticatedApp: React.FC = () => {
 // Main App component with authentication provider
 const App: React.FC = () => {
     return (
-        <ToastProvider>
-            <AuthProvider>
-                <AudioProvider>
-                    <AuthenticatedApp />
-                </AudioProvider>
-            </AuthProvider>
-        </ToastProvider>
+        <ThemeProvider>
+            <ToastProvider>
+                <AuthProvider>
+                    <AudioProvider>
+                        <AuthenticatedApp />
+                    </AudioProvider>
+                </AuthProvider>
+            </ToastProvider>
+        </ThemeProvider>
     );
 };
 

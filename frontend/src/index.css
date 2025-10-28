@@ -13,3 +13,124 @@
 .animate-slide-up {
   animation: slide-up 0.3s ease-out;
 }
+
+/* Light Mode Theme */
+html.light {
+  /* Background colors */
+  --bg-gray-900: #f8f9fa;
+  --bg-gray-800: #ffffff;
+  --bg-gray-700: #f1f3f5;
+  --bg-gray-600: #e9ecef;
+
+  /* Text colors */
+  --text-white: #1a1b1e;
+  --text-gray-100: #212529;
+  --text-gray-200: #343a40;
+  --text-gray-300: #495057;
+  --text-gray-400: #6c757d;
+  --text-gray-500: #868e96;
+
+  /* Border colors */
+  --border-gray-700: #dee2e6;
+  --border-gray-600: #ced4da;
+
+  /* Accent colors remain the same */
+  --violet-300: #9775fa;
+  --violet-400: #845ef7;
+  --violet-500: #7950f2;
+  --violet-600: #7048e8;
+  --violet-700: #6741d9;
+}
+
+/* Apply light theme classes */
+html.light .bg-gray-900 {
+  background-color: var(--bg-gray-900, #f8f9fa) !important;
+}
+
+html.light .bg-gray-800 {
+  background-color: var(--bg-gray-800, #ffffff) !important;
+}
+
+html.light .bg-gray-800\/95,
+html.light .bg-gray-800\/98,
+html.light .bg-gray-800\/80 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+html.light .bg-gray-700 {
+  background-color: var(--bg-gray-700, #f1f3f5) !important;
+}
+
+html.light .bg-gray-700\/50 {
+  background-color: rgba(241, 243, 245, 0.5) !important;
+}
+
+html.light .bg-gray-600 {
+  background-color: var(--bg-gray-600, #e9ecef) !important;
+}
+
+html.light .text-white {
+  color: var(--text-white, #1a1b1e) !important;
+}
+
+html.light .text-gray-100 {
+  color: var(--text-gray-100, #212529) !important;
+}
+
+html.light .text-gray-200 {
+  color: var(--text-gray-200, #343a40) !important;
+}
+
+html.light .text-gray-300 {
+  color: var(--text-gray-300, #495057) !important;
+}
+
+html.light .text-gray-400 {
+  color: var(--text-gray-400, #6c757d) !important;
+}
+
+html.light .text-gray-500 {
+  color: var(--text-gray-500, #868e96) !important;
+}
+
+html.light .border-gray-700 {
+  border-color: var(--border-gray-700, #dee2e6) !important;
+}
+
+html.light .border-gray-600 {
+  border-color: var(--border-gray-600, #ced4da) !important;
+}
+
+/* Hover states for light mode */
+html.light .hover\:bg-gray-700:hover {
+  background-color: var(--bg-gray-700, #f1f3f5) !important;
+}
+
+html.light .hover\:bg-gray-600:hover {
+  background-color: var(--bg-gray-600, #e9ecef) !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: var(--text-white, #1a1b1e) !important;
+}
+
+/* Sidebar specific overrides for light mode */
+html.light .bg-gray-900\/80 {
+  background-color: rgba(248, 249, 250, 0.95) !important;
+}
+
+/* Card and panel backgrounds */
+html.light .bg-gray-800\/50 {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Modal backdrop */
+html.light .bg-black {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Ensure backdrop stays dark even in light mode */
+html.light .bg-black\/75,
+html.light .bg-opacity-75 {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+}

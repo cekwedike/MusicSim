@@ -173,7 +173,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
 
           <div className="text-sm text-gray-400 bg-gray-700/30 p-3 rounded-lg">
             <p className="font-medium text-gray-300 mb-1">💡 Quick Save Tip</p>
-            <p>Your game auto-saves every 2 minutes. Manual saves are great for backing up before risky decisions!</p>
+            <p>Your game auto-saves every 5 minutes. Manual saves are great for backing up before risky decisions!</p>
           </div>
         </div>
       )}

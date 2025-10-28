@@ -122,32 +122,59 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
         return;
       }
 
-      // Desktop positioning logic
-      switch (position) {
-        case 'top':
-          top = targetPos.top - tooltipRect.height - margin;
-          left = targetPos.left + (targetPos.width / 2) - (tooltipRect.width / 2);
-          break;
-        case 'bottom':
-          top = targetPos.top + targetPos.height + margin;
-          left = targetPos.left + (targetPos.width / 2) - (tooltipRect.width / 2);
-          break;
-        case 'left':
-          top = targetPos.top + (targetPos.height / 2) - (tooltipRect.height / 2);
-          left = targetPos.left - tooltipRect.width - margin;
-          break;
-        case 'right':
-          top = targetPos.top + (targetPos.height / 2) - (tooltipRect.height / 2);
-          left = targetPos.left + targetPos.width + margin;
-          break;
-        case 'center':
-        default:
-          top = viewportHeight / 2 - tooltipRect.height / 2;
-          left = viewportWidth / 2 - tooltipRect.width / 2;
-          break;
-      }
+      // Helper function to check if tooltip overlaps with target
+      const checkOverlap = (tooltipTop: number, tooltipLeft: number): boolean => {
+        const tooltipRight = tooltipLeft + tooltipRect.width;
+        const tooltipBottom = tooltipTop + tooltipRect.height;
+        const targetRight = targetPos.left + targetPos.width;
+        const targetBottom = targetPos.top + targetPos.height;
 
-      // Ensure tooltip stays within viewport (desktop only)
+        return !(
+          tooltipRight < targetPos.left ||
+          tooltipLeft > targetRight ||
+          tooltipBottom < targetPos.top ||
+          tooltipTop > targetBottom
+        );
+      };
+
+      // Helper function to calculate position for a given direction
+      const calculatePosition = (dir: string): { top: number; left: number } => {
+        let posTop = 0;
+        let posLeft = 0;
+
+        switch (dir) {
+          case 'top':
+            posTop = targetPos.top - tooltipRect.height - margin;
+            posLeft = targetPos.left + (targetPos.width / 2) - (tooltipRect.width / 2);
+            break;
+          case 'bottom':
+            posTop = targetPos.top + targetPos.height + margin;
+            posLeft = targetPos.left + (targetPos.width / 2) - (tooltipRect.width / 2);
+            break;
+          case 'left':
+            posTop = targetPos.top + (targetPos.height / 2) - (tooltipRect.height / 2);
+            posLeft = targetPos.left - tooltipRect.width - margin;
+            break;
+          case 'right':
+            posTop = targetPos.top + (targetPos.height / 2) - (tooltipRect.height / 2);
+            posLeft = targetPos.left + targetPos.width + margin;
+            break;
+          case 'center':
+          default:
+            posTop = viewportHeight / 2 - tooltipRect.height / 2;
+            posLeft = viewportWidth / 2 - tooltipRect.width / 2;
+            break;
+        }
+
+        return { top: posTop, left: posLeft };
+      };
+
+      // Calculate initial position
+      let result = calculatePosition(position);
+      top = result.top;
+      left = result.left;
+
+      // Constrain to viewport
       if (left < margin) left = margin;
       if (left + tooltipRect.width > viewportWidth - margin) {
         left = viewportWidth - tooltipRect.width - margin;
@@ -155,6 +182,35 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
       if (top < margin) top = margin;
       if (top + tooltipRect.height > viewportHeight - margin) {
         top = viewportHeight - tooltipRect.height - margin;
+      }
+
+      // Check if tooltip overlaps with target after viewport constraints
+      if (position !== 'center' && checkOverlap(top, left)) {
+        // Try alternative positions to find one that doesn't overlap
+        const alternativePositions = ['left', 'top', 'bottom', 'right'].filter(p => p !== position);
+
+        for (const altPos of alternativePositions) {
+          const altResult = calculatePosition(altPos);
+          let altTop = altResult.top;
+          let altLeft = altResult.left;
+
+          // Constrain alternative position to viewport
+          if (altLeft < margin) altLeft = margin;
+          if (altLeft + tooltipRect.width > viewportWidth - margin) {
+            altLeft = viewportWidth - tooltipRect.width - margin;
+          }
+          if (altTop < margin) altTop = margin;
+          if (altTop + tooltipRect.height > viewportHeight - margin) {
+            altTop = viewportHeight - tooltipRect.height - margin;
+          }
+
+          // If this alternative doesn't overlap, use it
+          if (!checkOverlap(altTop, altLeft)) {
+            top = altTop;
+            left = altLeft;
+            break;
+          }
+        }
       }
 
       setTooltipPosition({ top, left });

@@ -871,6 +871,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Sidebar state
     const [activeSidebarView, setActiveSidebarView] = useState<SidebarView>(null);
+    const [saveLoadPanelKey, setSaveLoadPanelKey] = useState(0);
 
     // Welcome dialog state
     const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
@@ -973,14 +974,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         cleanup();
     }, []);
 
-    // Auto-save every 2 minutes during gameplay
+    // Auto-save every 5 minutes during gameplay
     useEffect(() => {
         if (status !== 'playing') return;
 
         const autoSaveInterval = setInterval(async () => {
             console.log('Auto-saving game...');
             await saveGame(state, 'auto');
-        }, 2 * 60 * 1000); // 2 minutes
+        }, 5 * 60 * 1000); // 5 minutes
 
         return () => clearInterval(autoSaveInterval);
     }, [status, state]);
@@ -1222,6 +1223,11 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             return;
         }
 
+        // Increment save/load panel key to force refresh when opened
+        if (view === 'saveload') {
+            setSaveLoadPanelKey((prev: number) => prev + 1);
+        }
+
         setActiveSidebarView(view);
 
         // Map sidebar views to modal states (for modals that still exist)
@@ -1299,6 +1305,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     {/* Render content based on active view */}
                     {activeSidebarView === 'saveload' && (
                         <SaveLoadPanel
+                            key={saveLoadPanelKey}
                             onLoadGame={handleLoadGame}
                             currentGameState={state}
                             onClose={() => setActiveSidebarView(null)}

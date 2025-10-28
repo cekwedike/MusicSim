@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Scenario, Choice, Difficulty } from '../types';
 import { getDifficultySettings } from '../data/difficultySettings';
+import { AudioPlayer } from '../src/components/AudioPlayer';
 
 interface ScenarioCardProps {
     scenario: Scenario;
@@ -74,12 +75,24 @@ const ChoiceButton: React.FC<{
 
 const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, disabled, difficulty }) => {
     const [showHints, setShowHints] = useState(true);
+    const [showAudio, setShowAudio] = useState(true);
     const settings = getDifficultySettings(difficulty);
     const hintsAvailable = settings.scenarioHints;
+
+    useEffect(() => {
+        // Reset audio visibility when scenario changes
+        setShowAudio(true);
+    }, [scenario.title]);
 
     return (
         <div className="scenario-card bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-4 sm:p-6 md:p-8 w-full max-w-2xl animate-fade-in">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-violet-300 mb-3 sm:mb-4">{scenario.title}</h2>
+            {/* Scenario voice-over player (if provided) */}
+            {scenario.audioFile && showAudio && (
+                <div className="mb-4">
+                    <AudioPlayer audioSrc={scenario.audioFile} autoPlay={!!scenario.autoPlayAudio} />
+                </div>
+            )}
             <p className="text-gray-300 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">{scenario.description}</p>
 
             {hintsAvailable && (
@@ -112,7 +125,11 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, d
                     <ChoiceButton
                         key={index}
                         choice={choice}
-                        onClick={() => onChoiceSelect(choice)}
+                        onClick={() => {
+                            // stop scenario audio immediately when user makes a choice
+                            setShowAudio(false);
+                            onChoiceSelect(choice);
+                        }}
                         disabled={disabled}
                         showHints={hintsAvailable && showHints}
                     />

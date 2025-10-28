@@ -100,6 +100,9 @@ export const scenarioBank: Scenario[] = [
         title: "Overwhelmed",
         description: "Emails, booking requests, scheduling... it's all becoming too much to handle on your own. You're an artist, not an administrator. Maybe it's time to get some help.",
         conditions: { minFame: 15, missingStaff: ['Manager'] },
+        // audio: play a short encouraging clip when hiring your first manager
+        audioFile: '/audio/scenarios/first-staff-hire.m4a',
+        autoPlayAudio: true,
         once: true,
         choices: [
             {
@@ -330,6 +333,9 @@ export const scenarioBank: Scenario[] = [
         title: "The Indie Label Offer",
         description: "A small but respected indie record label, 'Vinyl Heart Records', wants to sign you. They've sent over a contract for you to review. Should you examine their terms or hold out for something bigger?",
         conditions: { minFame: 20, maxFame: 60, requiredAchievementId: 'PROJECT_EP_1' },
+        // audio: first record deal voiceover
+        audioFile: '/audio/scenarios/first-record-deal.m4a',
+        autoPlayAudio: true,
         once: true,
         choices: [
             {
@@ -367,6 +373,9 @@ export const scenarioBank: Scenario[] = [
         title: "The Major Label Bidding War",
         description: "Your success has attracted the big sharks. Two major labels have sent contracts for you to review. 'Global Records' and 'Visionary Music Group' are both interested. Which contract should you examine first?",
         conditions: { minFame: 60, minCareerProgress: 50, requiredAchievementId: 'PROJECT_ALBUM_1' },
+        // audio: contract signing / label negotiation (informational, don't autoplay by default)
+        audioFile: '/audio/scenarios/contract-signing.m4a',
+        autoPlayAudio: false,
         once: true,
         choices: [
             {
@@ -544,6 +553,9 @@ export const scenarioBank: Scenario[] = [
         description: "Boomplay, Africa's biggest streaming platform, offers to feature you on their 'New Fire' playlist reaching 5 million users. The exposure is massive across Nigeria, Ghana, and Kenya. However, they pay $0.003 per stream compared to Spotify's $0.004. Your manager insists you should focus on Spotify to build international credibility, but Boomplay is where your fans actually listen to music.",
         conditions: { minFame: 15, maxFame: 50 },
         once: true,
+        // celebratory / chart-success style audio
+        audioFile: '/audio/scenarios/chart-success.m4a',
+        autoPlayAudio: true,
         choices: [
             {
                 text: "Take the Boomplay feature - my audience is in Africa",
@@ -694,6 +706,9 @@ export const scenarioBank: Scenario[] = [
         description: "A producer slides into your WhatsApp claiming he made beats for Davido and Burna Boy. He sends you a fire beat and wants $500 upfront, no contract, just trust. He promises exclusive rights and says he'll have the stems ready in 24 hours. But your friend warns you: 'Bro, I've seen this guy sell the same beat to five different artists.' The beat is perfect for your next single, but the red flags are everywhere.",
         conditions: { minFame: 8, maxCash: 2000, projectRequired: true },
         once: true,
+        // shady producer / warning audio — don't autoplay
+        audioFile: '/audio/scenarios/shady-contract-warning.m4a',
+        autoPlayAudio: false,
         choices: [
             {
                 text: "Pay him - this beat is too good to pass up",

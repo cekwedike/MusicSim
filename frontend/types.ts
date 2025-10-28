@@ -327,6 +327,10 @@ export interface Scenario {
   choices: Choice[];
   conditions?: ScenarioConditions;
   once?: boolean; // If true, this scenario can only appear once
+  // Optional audio to play when this scenario is shown. Path is relative to public/.
+  audioFile?: string;
+  // If true, attempt to auto-play the audio when the scenario appears (honors browser autoplay rules and user audio preferences).
+  autoPlayAudio?: boolean;
 }
 
 // Reducer Action Types

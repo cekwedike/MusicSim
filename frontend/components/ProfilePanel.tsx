@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import type { GameStatistics, Difficulty } from '../types';
+import ConfirmDialog from './ConfirmDialog';
 
 interface ProfilePanelProps {
 	isGuestMode: boolean;
@@ -19,20 +20,62 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	artistName,
 	difficulty
 }) => {
-	const { user, isAuthenticated, logout } = useAuth();
+	const { user, isAuthenticated, logout, deleteAccount } = useAuth();
+	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
 	const handleLogout = async () => {
+		console.log('[ProfilePanel] Logging out...');
 		try {
-			await logout();
+			// Always use onExitGuest to properly return to landing page
+			if (onClose) onClose();
+			onExitGuest(); // This handles both logout and returning to landing
 		} catch (e) {
 			console.error('Logout failed:', e);
 		}
-		if (onClose) onClose();
 	};
 
 	const handleExitGuest = () => {
-		onExitGuest();
+		console.log('[ProfilePanel] Exiting guest mode...');
 		if (onClose) onClose();
+		onExitGuest();
+	};
+
+	const handleDeleteProfile = async () => {
+		console.log('[ProfilePanel] Starting profile deletion...');
+
+		try {
+			if (isAuthenticated) {
+				// Delete account from backend (also clears localStorage)
+				console.log('[ProfilePanel] Deleting account from backend...');
+				const result = await deleteAccount();
+
+				if (!result.success) {
+					throw new Error(result.message || 'Failed to delete account');
+				}
+
+				console.log('[ProfilePanel] Account deleted from backend successfully');
+			} else {
+				// Guest mode - just clear localStorage
+				console.log('[ProfilePanel] Guest mode - clearing localStorage...');
+				localStorage.clear();
+			}
+
+			console.log('[ProfilePanel] Profile deletion completed');
+
+			// Close the dialog
+			setShowDeleteDialog(false);
+
+			// Close the panel
+			if (onClose) onClose();
+
+			// Return to landing page by triggering logout/exit guest flow
+			console.log('[ProfilePanel] Returning to landing page...');
+			onExitGuest();
+		} catch (error) {
+			console.error('[ProfilePanel] Error deleting profile:', error);
+			setShowDeleteDialog(false);
+			alert('Failed to delete account. Please try again.');
+		}
 	};
 
 	const formatPlayTime = (minutes: number) => {
@@ -203,6 +246,15 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					{isGuestMode ? 'Exit Guest Mode' : 'Logout'}
 				</button>
 
+				{/* Delete Profile Button */}
+				<button
+					onClick={() => setShowDeleteDialog(true)}
+					className="w-full bg-gray-700 hover:bg-gray-600 text-red-400 hover:text-red-300 px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 border border-gray-600"
+				>
+					<span>🗑️</span>
+					Delete All Data
+				</button>
+
 				{isGuestMode && (
 					<div className="bg-blue-600/20 border border-blue-600/30 rounded-lg p-3">
 						<div className="flex items-start gap-2">
@@ -217,6 +269,18 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					</div>
 				)}
 			</div>
+
+			{/* Delete Confirmation Dialog */}
+			<ConfirmDialog
+				isOpen={showDeleteDialog}
+				title="Delete All Data?"
+				message="This will permanently delete all your saved games, statistics, and progress. This action cannot be undone."
+				confirmText="Delete Everything"
+				cancelText="Cancel"
+				type="danger"
+				onConfirm={handleDeleteProfile}
+				onCancel={() => setShowDeleteDialog(false)}
+			/>
 		</div>
 	);
 };

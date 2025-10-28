@@ -198,5 +198,56 @@ export const authService = {
   clearAuth: (): void => {
     localStorage.removeItem('musicsim_token');
     localStorage.removeItem('musicsim_user');
+  },
+
+  // Delete user account permanently
+  deleteAccount: async (): Promise<{ success: boolean; message: string }> => {
+    try {
+      const response = await api.delete<{ success: boolean; message: string }>('/auth/account');
+
+      // Clear all localStorage data on successful deletion
+      if (response.data.success) {
+        localStorage.clear(); // Clear everything
+        console.log('[authService] Account deleted successfully, localStorage cleared');
+      }
+
+      return response.data;
+    } catch (error: any) {
+      console.error('[authService] Delete account error:', error);
+
+      // If user is in local/offline mode, delete the local account
+      const token = localStorage.getItem('musicsim_token');
+      if (token && token.startsWith('local-token-')) {
+        const users = readLocalUsers();
+        const currentUser = authService.getStoredUser();
+
+        if (currentUser) {
+          // Remove user from local users
+          const updatedUsers = users.filter((u: any) => u.id !== currentUser.id);
+          writeLocalUsers(updatedUsers);
+
+          // Clear all localStorage
+          localStorage.clear();
+          console.log('[authService] Local account deleted, localStorage cleared');
+
+          return {
+            success: true,
+            message: 'Local account deleted successfully'
+          };
+        }
+      }
+
+      // If backend is unreachable, still allow clearing local data
+      const isOffline = !!(error && (error.offline === true || (error.message && (error.message.includes('Network') || error.message.includes('offline') || error.message.includes('ECONNREFUSED') || error.message.includes('connect')))));
+      if (isOffline) {
+        localStorage.clear();
+        return {
+          success: true,
+          message: 'Local data cleared (backend unavailable)'
+        };
+      }
+
+      throw error;
+    }
   }
 };

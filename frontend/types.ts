@@ -338,6 +338,7 @@ export type Action =
   | { type: 'SELECT_CHOICE'; payload: Choice }
   | { type: 'DISMISS_OUTCOME' }
   | { type: 'RESTART' }
+  | { type: 'RESET_TO_LANDING' }
   | { type: 'VIEW_MANAGEMENT_HUB' }
   | { type: 'VIEW_SAVE_LOAD' }
   | { type: 'VIEW_LEARNING_HUB' }

@@ -9,6 +9,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (username: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  deleteAccount: () => Promise<{ success: boolean; message: string }>;
   refreshToken: () => Promise<boolean>;
   clearError: () => void;
   error: string | null;
@@ -150,7 +151,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Logout function
   const logout = useCallback(async () => {
     setIsLoading(true);
-    
+
     try {
       // Call server logout
       await authService.logout();
@@ -158,13 +159,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Don't prevent logout on server error
       console.warn('Server logout failed:', error);
     }
-    
+
     // Clear local state
     setUser(null);
     setToken(null);
     setError(null);
-    
+
     setIsLoading(false);
+  }, []);
+
+  // Delete account function
+  const deleteAccount = useCallback(async (): Promise<{ success: boolean; message: string }> => {
+    setIsLoading(true);
+
+    try {
+      // Call delete account service (also clears localStorage)
+      const result = await authService.deleteAccount();
+
+      // Clear local state
+      setUser(null);
+      setToken(null);
+      setError(null);
+
+      console.log('[AuthContext] Account deleted, state cleared');
+
+      return result;
+    } catch (error) {
+      console.error('[AuthContext] Delete account failed:', error);
+      const message = (error as any)?.message || 'Failed to delete account';
+      setError(message);
+
+      return {
+        success: false,
+        message
+      };
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   // Refresh token function
@@ -217,6 +248,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     register,
     logout,
+    deleteAccount,
     refreshToken,
     clearError,
     error,

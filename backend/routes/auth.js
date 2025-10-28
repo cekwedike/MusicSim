@@ -425,4 +425,59 @@ router.post('/refresh', authMiddleware, (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/account:
+ *   delete:
+ *     summary: Delete user account and all associated data
+ *     description: Permanently deletes the user account and all related data (saves, statistics, learning progress, career history)
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Account deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+
+/**
+ * @route   DELETE /api/auth/account
+ * @desc    Delete user account and all associated data
+ * @access  Private
+ */
+router.delete('/account', authMiddleware, async (req, res, next) => {
+  try {
+    const userId = req.userId;
+
+    // Find the user
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    const username = user.username;
+    const email = user.email;
+
+    // Delete the user (CASCADE will delete all associated data)
+    await user.destroy();
+
+    console.log(`User account deleted: ${username} (${email})`);
+
+    res.json({
+      success: true,
+      message: 'Account deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    next(error);
+  }
+});
+
 module.exports = router;

@@ -564,6 +564,15 @@ function gameReducer(state: GameState, action: Action): GameState {
                 statistics: state.statistics // Preserve statistics across restarts
             };
         }
+        case 'RESET_TO_LANDING': {
+            // Reset to landing page after logout (don't record as abandoned since we saved before logout)
+            const freshState = generateInitialState();
+            return {
+                ...freshState,
+                status: 'start', // Go to start screen, not setup
+                statistics: state.statistics // Preserve statistics across resets
+            };
+        }
         case 'VIEW_MANAGEMENT_HUB':
             return { ...state, modal: 'management', unseenAchievements: [] };
         case 'VIEW_SAVE_LOAD':
@@ -998,62 +1007,35 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         return () => clearInterval(cleanupInterval);
     }, [status]); // Add status dependency
 
-    // Auto-load user's autosave when authenticated (not guest mode)
-    useEffect(() => {
-        const autoLoadGame = async () => {
-            // Prevent multiple calls
-            if (hasAutoLoaded) return;
-            
-            // Only run if user just logged in and game hasn't started, and not in guest mode
-            if (isAuthenticated && !authLoading && status === 'start' && !isGuestMode) {
-                try {
-                    console.log('Checking for autosave...');
-                    const savedState = await loadGame('auto');
-                    
-                    if (savedState) {
-                        console.log(`Auto-resuming game for ${savedState.artistName}`);
-                        
-                        // Mark as loaded to prevent duplicate
-                        setHasAutoLoaded(true);
-                        
-                        // Load the game
-                        dispatch({ type: 'LOAD_GAME', payload: savedState });
-                        
-                        // Show welcome dialog
-                        setWelcomeArtistName(savedState.artistName);
-                        setShowWelcomeDialog(true);
-                    } else {
-                        console.log('No autosave found. User can start new game.');
-                    }
-                } catch (error) {
-                    console.error('Error loading autosave:', error);
-                }
-            }
-        };
-
-        autoLoadGame();
-    }, [isAuthenticated, authLoading, status, isGuestMode, hasAutoLoaded]);
-
-    // Reset hasAutoLoaded when user logs out
-    useEffect(() => {
-        if (!isAuthenticated) {
-            setHasAutoLoaded(false);
-        }
-    }, [isAuthenticated]);
+    // Don't auto-load game on login - let user choose from Start screen
+    // (removed auto-load logic - user should manually click Continue Game)
 
     // Reset game state when returning to landing (logout/exit guest mode)
     useEffect(() => {
-        const handleReset = () => {
+        const handleReset = async () => {
             if (!isAuthenticated && !isGuestMode && status !== 'start') {
-                console.log('Resetting game state...');
-                dispatch({ type: 'RESTART' });
+                console.log('User logged out - saving game and resetting state...');
+
+                // Save the current game state before resetting
+                if (status === 'playing' && state.artistName && isStorageAvailable()) {
+                    console.log('Saving game before logout...');
+                    try {
+                        await saveGame(state, 'auto');
+                        console.log('Game saved successfully before logout');
+                    } catch (error) {
+                        console.error('Failed to save game before logout:', error);
+                    }
+                }
+
+                console.log('Resetting game state to landing page...');
+                dispatch({ type: 'RESET_TO_LANDING' });
             }
         };
 
         handleReset();
-    }, [isAuthenticated, isGuestMode, status]);
+    }, [isAuthenticated, isGuestMode, status, state]);
 
-    // Auto-start tutorial for new players (only once ever)
+    // Auto-start tutorial for brand new players (only once ever, on their first gameplay)
     useEffect(() => {
         // Check localStorage to see if tutorial was ever seen
         const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
@@ -1062,20 +1044,25 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         // Only show tutorial if:
         // 1. Never seen before (not in localStorage)
         // 2. No games played yet (brand new user)
-        // 3. Currently playing
+        // 3. Currently playing (not just logged in - actually started playing)
         // 4. Tutorial not already active
+        // 5. Has an artist name (started a career)
         const isNewPlayer = !tutorialEverSeen &&
                            state.statistics.totalGamesPlayed === 0 &&
                            status === 'playing' &&
-                           !state.tutorial.active;
+                           !state.tutorial.active &&
+                           state.artistName.trim() !== '';
 
         if (isNewPlayer) {
+            console.log('[GameApp] First-time player detected, starting tutorial...');
+            localStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
+
             // Delay tutorial start to let the game render first
             setTimeout(() => {
                 dispatch({ type: 'START_TUTORIAL' });
             }, 1000);
         }
-    }, [status, state.statistics.totalGamesPlayed, state.tutorial.active]);
+    }, [status, state.statistics.totalGamesPlayed, state.tutorial.active, state.artistName]);
 
     const handleChoiceSelect = (choice: Choice) => {
         audioManager.playSound('buttonClick');

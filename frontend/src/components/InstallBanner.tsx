@@ -7,14 +7,24 @@ type BeforeInstallPromptEvent = Event & {
 };
 
 const DISMISS_KEY = 'musicsim_install_banner_dismissed';
+const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-const isAppInstalled = (): boolean => {
+const isBannerDismissed = (): boolean => {
   try {
     const raw = localStorage.getItem(DISMISS_KEY);
     if (!raw) return false;
     const parsed = JSON.parse(raw);
-    // Only return true if permanently dismissed (app installed)
-    return parsed && parsed.p === true;
+
+    // Permanently dismissed (app installed)
+    if (parsed && parsed.p === true) return true;
+
+    // Temporarily dismissed - check if duration has passed
+    if (parsed && parsed.t) {
+      const elapsed = Date.now() - parsed.t;
+      return elapsed < DISMISS_DURATION_MS;
+    }
+
+    return false;
   } catch (e) {
     return false;
   }
@@ -29,14 +39,23 @@ const markAppInstalled = () => {
   }
 };
 
+const markBannerDismissed = () => {
+  try {
+    const value = { t: Date.now(), p: false };
+    localStorage.setItem(DISMISS_KEY, JSON.stringify(value));
+  } catch (e) {
+    // ignore
+  }
+};
+
 const InstallBanner: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const bannerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Don't show if app is already installed
-    if (isAppInstalled()) return;
+    // Don't show if banner is dismissed
+    if (isBannerDismissed()) return;
 
     const onBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -54,32 +73,31 @@ const InstallBanner: React.FC = () => {
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
     window.addEventListener('appinstalled', onAppInstalled as EventListener);
 
-    // Always show banner on startup (unless app is installed)
+    // Show banner on startup (unless dismissed)
     // or if forced for development testing
     const checkDisplayConditions = () => {
       const localStorage_forced = localStorage.getItem('musicsim_force_install_banner') === 'true';
       const url_forced = new URLSearchParams(window.location.search).get('showInstall') === '1';
       const forced = localStorage_forced || url_forced;
 
-      // Show if forced (for testing) or if app is not installed
-      if (forced || !isAppInstalled()) {
+      // Show if forced (for testing) or if banner is not dismissed
+      if (forced || !isBannerDismissed()) {
         setVisible(true);
       }
     };
 
-    // Check immediately and then periodically (for localStorage changes)
+    // Check on mount only
     checkDisplayConditions();
-    const checkInterval = setInterval(checkDisplayConditions, 1000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
       window.removeEventListener('appinstalled', onAppInstalled as EventListener);
-      clearInterval(checkInterval);
     };
   }, []);
 
   const handleClose = () => {
-    // Only hide for current session - will reappear on next startup
+    // Mark as dismissed for 24 hours
+    markBannerDismissed();
     setVisible(false);
   };
 

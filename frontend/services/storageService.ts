@@ -54,6 +54,8 @@ const isAutosaveExpired = (timestamp: number): boolean => {
  * Save game with timestamp
  */
 export const saveGame = async (state: GameState, slotId: string): Promise<void> => {
+  console.log('[storageService] saveGame called with slotId:', slotId);
+
   const serializedState = serializeGameState(state);
   const saveData: SaveData = {
     state: serializedState,
@@ -65,35 +67,51 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     // Only save to backend if authenticated (not guest mode)
     if (authService.isAuthenticated()) {
       await gameService.saveGame(slotId, state);
-      console.log(`Saved to backend: ${slotId}`);
+      console.log(`[storageService] Saved to backend: ${slotId}`);
     } else {
-      console.log('Guest mode - saving to localStorage only');
+      console.log('[storageService] Guest mode - saving to localStorage only');
     }
-    
+
     // Always save to localStorage
     const saves = loadLocalSaves();
+    console.log('[storageService] Current saves before adding new one:', Object.keys(saves));
+
     saves[slotId] = saveData;
+    console.log('[storageService] Saves after adding new one:', Object.keys(saves));
+
     try {
       // Ensure we can stringify before writing — helps surface circular/reference errors
       const payload = JSON.stringify(saves);
       localStorage.setItem('musicsim_saves', payload);
-      console.log(`Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      console.log(`[storageService] ✅ Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+
+      // Verify the save was written
+      const verification = localStorage.getItem('musicsim_saves');
+      if (verification) {
+        const verified = JSON.parse(verification);
+        console.log('[storageService] Verification - saved slots:', Object.keys(verified));
+        if (verified[slotId]) {
+          console.log('[storageService] ✅ Verification successful - save exists in localStorage');
+        } else {
+          console.error('[storageService] ❌ Verification failed - save not found in localStorage after writing!');
+        }
+      }
     } catch (err) {
-      console.error('Failed to write saves to localStorage (stringify error):', err);
+      console.error('[storageService] Failed to write saves to localStorage (stringify error):', err);
       throw err;
     }
   } catch (error) {
-    console.error('Save error:', error);
-    
+    console.error('[storageService] Save error:', error);
+
     // Fallback to localStorage only
     const saves = loadLocalSaves();
     saves[slotId] = saveData;
     try {
       const payload = JSON.stringify(saves);
       localStorage.setItem('musicsim_saves', payload);
-      console.log(`Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      console.log(`[storageService] Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
     } catch (err) {
-      console.error('Fallback: failed to write saves to localStorage (stringify error):', err);
+      console.error('[storageService] Fallback: failed to write saves to localStorage (stringify error):', err);
       // Re-throw so callers can surface the error if needed
       throw err;
     }
@@ -232,14 +250,17 @@ const loadLocalSaves = (): { [key: string]: SaveData } => {
  * Gets all saved game slots (for SaveLoadModal compatibility)
  */
 export async function getAllSaveSlots(): Promise<SaveSlot[]> {
+  console.log('[storageService] getAllSaveSlots called');
   const saveSlots: SaveSlot[] = [];
-  
+
   try {
     // Try to get saves from backend if authenticated
     if (authService.isAuthenticated()) {
+      console.log('[storageService] User authenticated, loading from backend...');
       try {
         const response = await gameService.getAllSaves();
         if (response.success && response.data) {
+          console.log('[storageService] Backend returned', response.data.saves.length, 'saves');
           // Convert backend saves to SaveSlot format
           const backendSlots = await Promise.all(
             response.data.saves.map(async (save: any) => {
@@ -260,34 +281,44 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                 }
                 return null;
               } catch (error) {
-                console.warn(`Failed to load save ${save.slotName}:`, error);
+                console.warn(`[storageService] Failed to load save ${save.slotName}:`, error);
                 return null;
               }
             })
           );
           saveSlots.push(...backendSlots.filter(slot => slot !== null) as SaveSlot[]);
+          console.log('[storageService] Added', saveSlots.length, 'backend saves');
         }
       } catch (error) {
-        console.warn('Failed to get backend saves, falling back to localStorage:', error);
+        console.warn('[storageService] Failed to get backend saves, falling back to localStorage:', error);
       }
+    } else {
+      console.log('[storageService] Guest mode - loading from localStorage only');
     }
-    
+
     // Always check localStorage as well
     const localSaves = loadLocalSaves();
-    
+    console.log('[storageService] LocalStorage has', Object.keys(localSaves).length, 'saves:', Object.keys(localSaves));
+
     for (const [slotId, saveData] of Object.entries(localSaves)) {
       // Skip if already added from backend
-      if (saveSlots.find(slot => slot.id === slotId)) continue;
-      
+      if (saveSlots.find(slot => slot.id === slotId)) {
+        console.log('[storageService] Skipping', slotId, '- already loaded from backend');
+        continue;
+      }
+
       // Check if autosave is expired
       if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
+        console.log('[storageService] Autosave expired, cleaning up');
         // Clean up expired autosave
         await deleteSave(slotId);
         continue;
       }
-      
-      const state = saveData.state;
-      const gdLocal = toGameDate(new Date(state.currentDate), new Date(state.startDate));
+
+      console.log('[storageService] Processing localStorage save:', slotId);
+      // Deserialize the state to convert ISO strings back to Date objects
+      const state = deserializeGameState(saveData.state);
+      const gdLocal = toGameDate(state.currentDate, state.startDate);
       saveSlots.push({
         id: slotId,
         artistName: state.artistName,
@@ -298,11 +329,14 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         careerProgress: calculateCareerProgress(state)
       });
     }
-    
+
+    console.log('[storageService] Total saves to return:', saveSlots.length);
+    console.log('[storageService] Save IDs:', saveSlots.map(s => s.id));
+
     // Sort by timestamp (newest first)
     return saveSlots.sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {
-    console.error('Failed to get save slots:', error);
+    console.error('[storageService] Failed to get save slots:', error);
     return [];
   }
 }

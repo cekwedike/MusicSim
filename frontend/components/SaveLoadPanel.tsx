@@ -6,9 +6,10 @@ interface SaveLoadPanelProps {
   onLoadGame: (gameState: GameState) => void;
   currentGameState: GameState;
   onClose?: () => void;
+  onSaveComplete?: () => void;
 }
 
-const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameState, onClose }) => {
+const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameState, onClose, onSaveComplete }) => {
   const [saveSlots, setSaveSlots] = useState<SaveSlot[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -21,12 +22,15 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   }, []);
 
   const loadSaveSlots = async () => {
+    console.log('[SaveLoadPanel] Loading save slots...');
     setLoading(true);
     setError('');
     try {
       const slots = await getAllSaveSlots();
+      console.log('[SaveLoadPanel] Loaded', slots.length, 'save slots:', slots);
       setSaveSlots(slots);
     } catch (err) {
+      console.error('[SaveLoadPanel] Failed to load save slots:', err);
       setError('Failed to load save slots');
     } finally {
       setLoading(false);
@@ -44,12 +48,26 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
     try {
       const timestamp = Date.now().toString();
       const slotId = `${timestamp}_${newSaveName.trim().replace(/\s+/g, '_')}`;
+      console.log('[SaveLoadPanel] Saving game with slotId:', slotId);
+
       await saveGame(currentGameState, slotId);
+      console.log('[SaveLoadPanel] Save completed, reloading save slots...');
+
       setNewSaveName('');
       setShowSaveInput(false);
+
       await loadSaveSlots();
+      console.log('[SaveLoadPanel] Save slots reloaded');
+
       setActiveTab('load'); // Switch to load tab to see the new save
+
+      // Notify parent component to refresh the panel
+      if (onSaveComplete) {
+        console.log('[SaveLoadPanel] Calling onSaveComplete callback');
+        onSaveComplete();
+      }
     } catch (err) {
+      console.error('[SaveLoadPanel] Save failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to save game');
     } finally {
       setLoading(false);
@@ -180,7 +198,22 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
 
       {/* Load Tab */}
       {activeTab === 'load' && (
-        <div className="flex-1 overflow-y-auto -mx-4 px-4">
+        <div className="flex-1 flex flex-col">
+          {/* Refresh Button */}
+          <div className="mb-3">
+            <button
+              onClick={() => loadSaveSlots()}
+              disabled={loading}
+              className="w-full bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+            >
+              <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              {loading ? 'Refreshing...' : 'Refresh Saves'}
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto -mx-4 px-4">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500 mb-3"></div>
@@ -259,6 +292,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
               ))}
             </div>
           )}
+          </div>
         </div>
       )}
     </div>

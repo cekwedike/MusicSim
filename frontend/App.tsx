@@ -1309,6 +1309,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                             onLoadGame={handleLoadGame}
                             currentGameState={state}
                             onClose={() => setActiveSidebarView(null)}
+                            onSaveComplete={() => {
+                                console.log('[App] Save complete, refreshing panel...');
+                                setSaveLoadPanelKey((prev: number) => prev + 1);
+                            }}
                         />
                     )}
 

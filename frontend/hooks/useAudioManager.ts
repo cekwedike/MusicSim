@@ -52,7 +52,8 @@ export const useAudioManager = (): AudioManager => {
   useEffect(() => {
     if (!musicAudioRef.current) {
       const audio = new Audio();
-      audio.loop = true;
+      // Don't loop a single track — we manage playlist rotation ourselves.
+      audio.loop = false;
       audio.volume = audioState.musicVolume;
       musicAudioRef.current = audio;
       // when a track naturally ends (we won't loop here since we manage rotation), rotate
@@ -258,7 +259,10 @@ export const useAudioManager = (): AudioManager => {
       audio.src = MUSIC_URLS[track];
       audio.load();
 
-      setAudioState((prev) => ({ ...prev, currentTrack: track }));
+  // Remember where in the playlist we are so rotation continues correctly
+  const idx = Math.max(0, BACKGROUND_TRACK_KEYS.indexOf(track));
+  playlistIndexRef.current = idx;
+  setAudioState((prev) => ({ ...prev, currentTrack: track }));
 
       // Start at 0 volume and fade in
       audio.volume = 0;
@@ -353,29 +357,39 @@ export const useAudioManager = (): AudioManager => {
     const idx = Math.floor(Math.random() * BACKGROUND_TRACK_KEYS.length);
     playlistIndexRef.current = idx;
     const startKey = BACKGROUND_TRACK_KEYS[idx];
-    // If user has already interacted, play immediately; otherwise queue
-    if (isUserInteracted) {
-      playMusic(startKey as BackgroundMusic);
-    } else {
-      nextTrackRef.current = startKey as BackgroundMusic;
-    }
+    // Queue the randomly selected starting track. It will be played after
+    // the first user interaction (autoplay policies) by the effect that
+    // listens for `isUserInteracted`.
+    nextTrackRef.current = startKey as BackgroundMusic;
   }, []);
 
   // Ducking: lower music volume while voiceovers play
-  const duckMusic = useCallback(() => {
+  const duckMusic = useCallback(async () => {
     if (!musicAudioRef.current) return;
-    if (previousMusicVolumeRef.current == null) previousMusicVolumeRef.current = musicAudioRef.current.volume;
-    musicAudioRef.current.volume = Math.max(0, (previousMusicVolumeRef.current ?? audioState.musicVolume) * 0.12);
-    setAudioState((prev) => ({ ...prev, isMusicDucked: true }));
-  }, [audioState.musicVolume]);
+    try {
+      if (previousMusicVolumeRef.current == null) previousMusicVolumeRef.current = musicAudioRef.current.volume;
+      const baseVol = previousMusicVolumeRef.current ?? audioState.musicVolume;
+      const target = Math.max(0, baseVol * 0.12);
+      // Smoothly fade down to the ducked level
+      await fadeMusic(target, 200);
+      setAudioState((prev) => ({ ...prev, isMusicDucked: true }));
+    } catch (e) {
+      console.error('Error while ducking music:', e);
+    }
+  }, [audioState.musicVolume, fadeMusic]);
 
-  const unduckMusic = useCallback(() => {
+  const unduckMusic = useCallback(async () => {
     if (!musicAudioRef.current) return;
-    const prev = previousMusicVolumeRef.current ?? audioState.musicVolume;
-    musicAudioRef.current.volume = prev;
-    previousMusicVolumeRef.current = null;
-    setAudioState((prev) => ({ ...prev, isMusicDucked: false }));
-  }, [audioState.musicVolume]);
+    try {
+      const prev = previousMusicVolumeRef.current ?? audioState.musicVolume;
+      // Smoothly fade back to previous volume
+      await fadeMusic(prev, 300);
+      previousMusicVolumeRef.current = null;
+      setAudioState((prev) => ({ ...prev, isMusicDucked: false }));
+    } catch (e) {
+      console.error('Error while unducking music:', e);
+    }
+  }, [audioState.musicVolume, fadeMusic]);
 
   return {
     playSound,

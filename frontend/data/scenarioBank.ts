@@ -100,14 +100,15 @@ export const scenarioBank: Scenario[] = [
         title: "Overwhelmed",
         description: "Emails, booking requests, scheduling... it's all becoming too much to handle on your own. You're an artist, not an administrator. Maybe it's time to get some help.",
         conditions: { minFame: 15, missingStaff: ['Manager'] },
-        // audio: play a short encouraging clip when hiring your first manager
-        audioFile: '/audio/scenarios/first-staff-hire.m4a',
-        autoPlayAudio: true,
+        // audio: moved to outcome-level so it only plays if the player hires the manager
         once: true,
         choices: [
             {
                 text: "Find a professional manager.",
                 outcome: {
+                    // voiceover: play only when this outcome is selected
+                    audioFile: '/audio/scenarios/first-staff-hire.m4a',
+                    autoPlayAudio: true,
                     text: "You put out feelers and a respected local manager agrees to take you on. Their services aren't cheap, but the relief is immediate.",
                     cash: 0, fame: 0, wellBeing: 10, careerProgress: 0, hype: 0,
                     hireStaff: 'Manager',

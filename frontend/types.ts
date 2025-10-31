@@ -282,6 +282,10 @@ export interface ChoiceOutcome {
   wellBeing: number;
   careerProgress: number;
   hype: number;
+  // Optional audio to play when this outcome occurs (e.g., a voiceover that should play only if this outcome is selected)
+  audioFile?: string;
+  // If true, attempt to auto-play the outcome audio when the choice is selected (honors autoplay rules and preferences)
+  autoPlayAudio?: boolean;
   startProject?: string; // ID of the project to start
   progressProject?: number; // Amount to progress the current project
   hireStaff?: StaffRole; // Role of staff to hire

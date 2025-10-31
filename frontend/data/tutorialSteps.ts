@@ -8,8 +8,7 @@ export const tutorialSteps: TutorialStep[] = [
     position: 'center',
     action: 'block',
     nextTrigger: 'click',
-    musicBusinessLesson: 'The music industry is complex and requires both creative talent and business knowledge to succeed. This simulation will teach you both!',
-    audioSrc: '/audio/scenarios/welcome-intro.m4a' // Welcome audio for first-time users
+    musicBusinessLesson: 'The music industry is complex and requires both creative talent and business knowledge to succeed. This simulation will teach you both!'
   },
   {
     id: 'cash-stat',

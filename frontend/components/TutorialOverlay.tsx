@@ -37,6 +37,9 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
 
   // Track if this is the first time the user sees the tutorial (for welcome audio autoplay)
   const isFirstTimeTutorial = useRef<boolean>(false);
+  // Welcome audio should show throughout the entire tutorial
+  const welcomeAudioSrc = '/audio/scenarios/welcome-intro.m4a';
+
   useEffect(() => {
     // Check if this is the first time user is seeing the tutorial
     const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
@@ -298,6 +301,30 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
 
   return (
     <>
+      {/* Persistent Welcome Audio Player - Shows throughout entire tutorial */}
+      {isActive && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10003,
+            background: 'rgba(0, 0, 0, 0.8)',
+            padding: '12px 20px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <AudioPlayer
+            audioSrc={welcomeAudioSrc}
+            autoPlay={isFirstTimeTutorial.current} // Only autoplay for first-time users
+            className="justify-center"
+          />
+        </div>
+      )}
+
       {/* Tutorial Styles */}
       <style>{`
         .tutorial-overlay {
@@ -527,17 +554,6 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           <div className="tutorial-message">
             {currentTutorialStep.message}
           </div>
-
-          {/* Audio Player for tutorial step (welcome audio) */}
-          {currentTutorialStep.audioSrc && (
-            <div className="mb-3">
-              <AudioPlayer
-                audioSrc={currentTutorialStep.audioSrc}
-                autoPlay={isFirstTimeTutorial.current && currentStep === 0} // Only autoplay on first tutorial step for first-time users
-                className="justify-center"
-              />
-            </div>
-          )}
 
           {currentTutorialStep.musicBusinessLesson && (
             <div className="tutorial-lesson">

@@ -832,14 +832,6 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
     return (
         <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
-            {/* Welcome Intro Audio */}
-            <div className="mb-4">
-                <AudioPlayer
-                    audioSrc="/audio/scenarios/welcome-intro.m4a"
-                    autoPlay={true}
-                />
-            </div>
-
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">Welcome to MusicSim</h2>
             <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
 

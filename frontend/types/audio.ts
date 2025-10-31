@@ -35,6 +35,7 @@ export interface AudioManager {
   stopMusic: () => void;
   pauseMusic: () => void;
   resumeMusic: () => void;
+  nextTrack: () => void; // Skip to next track in playlist
 
   // Volume controls
   setMusicVolume: (volume: number) => void;
@@ -72,9 +73,10 @@ export const MUSIC_URLS: Record<BackgroundMusic, string> = {
   menu: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3', // Chill ambient
   gameplay: 'https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe5c20c.mp3', // Different upbeat track
   gameOver: 'https://cdn.pixabay.com/download/audio/2022/03/20/audio_8d32d1f0e5.mp3', // Melancholic
-  bg1: 'https://cdn.pixabay.com/download/audio/2021/09/22/audio_5d21a1e9f4.mp3',
-  bg2: 'https://cdn.pixabay.com/download/audio/2020/11/07/audio_7e9f7e7c4a.mp3',
-  bg3: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3',
+  // Dynamic background tracks that auto-rotate
+  bg1: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_3a8f6925d5.mp3', // Upbeat Lo-Fi
+  bg2: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3', // Chill ambient
+  bg3: 'https://cdn.pixabay.com/download/audio/2022/08/04/audio_d1718ab41b.mp3', // Smooth Jazz
 };
 
 // Local storage key for audio preferences

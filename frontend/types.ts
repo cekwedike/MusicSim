@@ -62,6 +62,7 @@ export interface TutorialStep {
   nextTrigger?: 'click' | 'auto';
   delay?: number;
   musicBusinessLesson?: string;
+  audioSrc?: string; // Optional audio for this tutorial step
 }
 
 export interface TutorialState {

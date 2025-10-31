@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { TutorialStep } from '../types';
 import { getTutorialStepByIndex, getTutorialLength } from '../data/tutorialSteps';
+import { AudioPlayer } from '../src/components/AudioPlayer';
 
 interface TutorialOverlayProps {
   currentStep: number;
@@ -33,6 +34,15 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
 
   const currentTutorialStep = getTutorialStepByIndex(currentStep);
   const totalSteps = getTutorialLength();
+
+  // Track if this is the first time the user sees the tutorial (for welcome audio autoplay)
+  const isFirstTimeTutorial = useRef<boolean>(false);
+  useEffect(() => {
+    // Check if this is the first time user is seeing the tutorial
+    const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
+    const hasSeenBefore = localStorage.getItem(TUTORIAL_SEEN_KEY) === 'true';
+    isFirstTimeTutorial.current = !hasSeenBefore;
+  }, []);
 
   useEffect(() => {
     if (!isActive || !currentTutorialStep) return;
@@ -517,6 +527,17 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           <div className="tutorial-message">
             {currentTutorialStep.message}
           </div>
+
+          {/* Audio Player for tutorial step (welcome audio) */}
+          {currentTutorialStep.audioSrc && (
+            <div className="mb-3">
+              <AudioPlayer
+                audioSrc={currentTutorialStep.audioSrc}
+                autoPlay={isFirstTimeTutorial.current && currentStep === 0} // Only autoplay on first tutorial step for first-time users
+                className="justify-center"
+              />
+            </div>
+          )}
 
           {currentTutorialStep.musicBusinessLesson && (
             <div className="tutorial-lesson">

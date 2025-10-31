@@ -49,6 +49,9 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     const audio = audioRef.current;
 
     if (audio && autoPlay && !isMuted) {
+      // Duck music IMMEDIATELY before any delay so it's ready when voiceover plays
+      try { audioManagerCtx?.duckMusic?.(); } catch (err) { /* ignore */ }
+
       // Delay autoplay slightly for better UX
       const timer = setTimeout(() => {
         const playPromise = audio.play();
@@ -58,17 +61,21 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             .then(() => {
               console.log('[AudioPlayer] Auto-playing:', audioSrc);
               setIsPlaying(true);
-              // Duck background music when a voiceover starts
-              try { audioManagerCtx?.duckMusic?.(); } catch (err) { /* ignore */ }
             })
             .catch(error => {
               console.warn('[AudioPlayer] Auto-play prevented:', error);
               // Auto-play was prevented (browser policy) - that's okay
+              // Unduck if autoplay failed
+              try { audioManagerCtx?.unduckMusic?.(); } catch (err) { /* ignore */ }
             });
         }
       }, 500);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        // Ensure we unduck music on cleanup
+        try { audioManagerCtx?.unduckMusic?.(); } catch (err) { /* ignore */ }
+      };
     }
 
     return () => {

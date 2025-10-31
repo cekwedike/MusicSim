@@ -3,7 +3,7 @@ import { useAudio } from '../contexts/AudioContext';
 import { MusicNoteIcon } from './icons/Icons';
 
 const SidebarAudioSettings: React.FC = () => {
-  const { audioState, setMusicVolume, setSfxVolume, toggleMusicMute, toggleSfxMute, playSound } = useAudio();
+  const { audioState, setMusicVolume, setSfxVolume, toggleMusicMute, toggleSfxMute, playSound, nextTrack } = useAudio();
 
   return (
     <div className="text-gray-300">
@@ -69,7 +69,7 @@ const SidebarAudioSettings: React.FC = () => {
 
       <div className="flex gap-2">
         <button onClick={() => playSound('buttonClick')} className="flex-1 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg">Test SFX</button>
-        <button onClick={() => playSound('weekAdvance')} className="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Play Music</button>
+        <button onClick={() => nextTrack()} className="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Next Track</button>
       </div>
 
       <style>{`

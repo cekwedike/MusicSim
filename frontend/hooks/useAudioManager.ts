@@ -342,6 +342,39 @@ export const useAudioManager = (): AudioManager => {
     setAudioState((prev) => ({ ...prev, isSfxMuted: muted }));
   }, []);
 
+  // Skip to next track in the playlist
+  const nextTrack = useCallback(async () => {
+    if (!musicAudioRef.current) return;
+
+    const audio = musicAudioRef.current;
+    const nextIdx = (playlistIndexRef.current + 1) % BACKGROUND_TRACK_KEYS.length;
+    playlistIndexRef.current = nextIdx;
+    const nextKey = BACKGROUND_TRACK_KEYS[nextIdx];
+
+    try {
+      // Fade out current track
+      if (!audio.paused) {
+        await fadeMusic(0, 300);
+        audio.pause();
+      }
+
+      // Load and play next track
+      audio.src = MUSIC_URLS[nextKey];
+      audio.load();
+      setAudioState((prev) => ({ ...prev, currentTrack: nextKey }));
+
+      // Start at 0 volume and fade in
+      audio.volume = 0;
+      await audio.play();
+
+      if (!audioState.isMusicMuted) {
+        await fadeMusic(audioState.musicVolume, 1000);
+      }
+    } catch (error) {
+      console.error(`[Audio Manager] Failed to skip to next track "${nextKey}":`, error);
+    }
+  }, [audioState.musicVolume, audioState.isMusicMuted, fadeMusic]);
+
   // Play queued track on first user interaction
   useEffect(() => {
     if (isUserInteracted && nextTrackRef.current) {
@@ -405,6 +438,7 @@ export const useAudioManager = (): AudioManager => {
     setSfxMuted,
     duckMusic,
     unduckMusic,
+    nextTrack,
     audioState,
   };
 };

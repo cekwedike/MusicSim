@@ -15,11 +15,9 @@ export const useAudio = (): AudioManager => {
 export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const audioManager = useAudioManager();
 
-  // Play menu music when the provider mounts (will wait for user interaction)
+  // Random background music is automatically queued in useAudioManager
+  // It will start playing after first user interaction
   useEffect(() => {
-    console.log('[AudioProvider] Mounting, playing menu music');
-    audioManager.playMusic('menu');
-
     return () => {
       console.log('[AudioProvider] Unmounting, stopping music');
       audioManager.stopMusic();

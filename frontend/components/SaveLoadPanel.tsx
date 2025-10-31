@@ -17,6 +17,25 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   const [showSaveInput, setShowSaveInput] = useState(false);
   const [activeTab, setActiveTab] = useState<'save' | 'load'>('load');
 
+  // Helper function to extract save name from slot ID
+  const getSaveName = (slotId: string): string => {
+    if (slotId === 'auto') return 'Autosave';
+    // Format: {timestamp}_{saveName}
+    const parts = slotId.split('_');
+    if (parts.length > 1) {
+      return parts.slice(1).join('_').replace(/_/g, ' ');
+    }
+    return 'Manual Save';
+  };
+
+  // Generate default save name placeholder
+  const getDefaultSaveName = (): string => {
+    const now = new Date();
+    const dateStr = `${now.getMonth() + 1}-${now.getDate()}-${now.getFullYear()}`;
+    const artistName = currentGameState.artistName || 'Artist';
+    return `${artistName}-${dateStr}`;
+  };
+
   useEffect(() => {
     loadSaveSlots();
   }, []);
@@ -38,16 +57,13 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   };
 
   const handleSaveGame = async () => {
-    if (!newSaveName.trim()) {
-      setError('Please enter a save name');
-      return;
-    }
-
     setLoading(true);
     setError('');
     try {
       const timestamp = Date.now().toString();
-      const slotId = `${timestamp}_${newSaveName.trim().replace(/\s+/g, '_')}`;
+      // Use default save name if input is empty
+      const saveName = newSaveName.trim() || getDefaultSaveName();
+      const slotId = `${timestamp}_${saveName.replace(/\s+/g, '_')}`;
       console.log('[SaveLoadPanel] Saving game with slotId:', slotId);
 
       await saveGame(currentGameState, slotId);
@@ -158,20 +174,25 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
             </button>
           ) : (
             <div className="space-y-3 bg-gray-700/50 p-4 rounded-lg">
-              <input
-                type="text"
-                value={newSaveName}
-                onChange={(e) => setNewSaveName(e.target.value)}
-                placeholder="Enter save name..."
-                className="w-full bg-gray-800 border border-gray-600 text-white px-3 py-2 rounded-lg focus:outline-none focus:border-violet-500 text-sm"
-                maxLength={50}
-                onKeyPress={(e) => e.key === 'Enter' && handleSaveGame()}
-                autoFocus
-              />
+              <div className="space-y-2">
+                <input
+                  type="text"
+                  value={newSaveName}
+                  onChange={(e) => setNewSaveName(e.target.value)}
+                  placeholder={getDefaultSaveName()}
+                  className="w-full bg-gray-800 border border-gray-600 text-white px-3 py-2 rounded-lg focus:outline-none focus:border-violet-500 text-sm"
+                  maxLength={50}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSaveGame()}
+                  autoFocus
+                />
+                <p className="text-xs text-gray-400">
+                  💡 Leave blank to use default: <span className="text-gray-300">{getDefaultSaveName()}</span>
+                </p>
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={handleSaveGame}
-                  disabled={loading || !newSaveName.trim()}
+                  disabled={loading}
                   className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
                 >
                   Save
@@ -237,8 +258,8 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold text-white text-sm truncate">
-                          {slot.artistName}
+                        <h4 className="font-semibold text-white text-base truncate">
+                          {getSaveName(slot.id)}
                         </h4>
                         {slot.id === 'auto' && (
                           <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
@@ -246,7 +267,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-400">{slot.genre}</p>
+                      <p className="text-xs text-gray-400">{slot.artistName} • {slot.genre}</p>
                     </div>
                   </div>
 

@@ -927,14 +927,12 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     }, []);
 
-    // Background music management - use menu music throughout (simpler, more consistent)
+    // Background music management - random rotation handled by useAudioManager
     useEffect(() => {
         console.log('[Audio] Game status changed to:', status);
-        // Play the same background music throughout the game
-        if (status === 'start' || status === 'setup' || status === 'playing') {
-            console.log('[Audio] Playing background music');
-            audioManager.playMusic('menu');
-        } else if (status === 'gameOver') {
+        // Random background music (bg1, bg2, bg3) is automatically queued and rotates
+        // Only override for game over state
+        if (status === 'gameOver') {
             console.log('[Audio] Playing game over music');
             audioManager.playMusic('gameOver');
             audioManager.playSound('gameOver');

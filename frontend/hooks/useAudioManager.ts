@@ -28,8 +28,8 @@ export const useAudioManager = (): AudioManager => {
   const [audioState, setAudioState] = useState<AudioState>(loadSavedPreferences);
   const [isUserInteracted, setIsUserInteracted] = useState(false);
 
-  // Playlist management for rotating background music - only use bg1, bg2, bg3 for rotation
-  const BACKGROUND_TRACK_KEYS: BackgroundMusic[] = ['bg1', 'bg2', 'bg3'];
+  // Playlist management for rotating background music - 11 tracks for variety
+  const BACKGROUND_TRACK_KEYS: BackgroundMusic[] = ['bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6', 'bg7', 'bg8', 'bg9', 'bg10', 'bg11'];
   const playlistIndexRef = useRef<number>(0);
   const previousMusicVolumeRef = useRef<number | null>(null);
 

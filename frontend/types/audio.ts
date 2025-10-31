@@ -16,7 +16,15 @@ export type BackgroundMusic =
   | 'gameOver'
   | 'bg1'
   | 'bg2'
-  | 'bg3';
+  | 'bg3'
+  | 'bg4'
+  | 'bg5'
+  | 'bg6'
+  | 'bg7'
+  | 'bg8'
+  | 'bg9'
+  | 'bg10'
+  | 'bg11';
 
 export interface AudioState {
   isMusicMuted: boolean;
@@ -70,13 +78,24 @@ export const SOUND_URLS: Record<SoundEffect, string> = {
 };
 
 export const MUSIC_URLS: Record<BackgroundMusic, string> = {
+  // Legacy tracks (can be replaced with local files later)
   menu: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3', // Chill ambient (for reference)
   gameplay: 'https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe5c20c.mp3', // Different upbeat track
   gameOver: 'https://cdn.pixabay.com/download/audio/2022/03/20/audio_8d32d1f0e5.mp3', // Melancholic
-  // Dynamic background tracks that auto-rotate - 3 distinct working tracks
-  bg1: 'https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe5c20c.mp3', // Upbeat Electronic Beat
-  bg2: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3', // Smooth Chill Ambient
-  bg3: 'https://cdn.pixabay.com/download/audio/2022/03/24/audio_db6c963c7f.mp3', // Lounge Background
+
+  // Dynamic background tracks - LOCAL FILES (African & Afrobeat themed)
+  // Place downloaded files in: frontend/public/audio/music/
+  bg1: '/audio/music/bg1-smooth-chill.mp3', // Smooth Chill Ambient
+  bg2: '/audio/music/bg2-groovy-vibe.mp3', // Groovy Vibe (Pixabay ID: 427121)
+  bg3: '/audio/music/bg3-eclipse-valor.mp3', // Eclipse of Valor (Pixabay ID: 427664)
+  bg4: '/audio/music/bg4-african-background.mp3', // African Background Music (Pixabay ID: 348249)
+  bg5: '/audio/music/bg5-jabali-breakbeat.mp3', // Jabali Breakbeat (Pixabay ID: 253188)
+  bg6: '/audio/music/bg6-african-inspiring.mp3', // African Inspiring (Pixabay ID: 347205)
+  bg7: '/audio/music/bg7-afro-beat-pop.mp3', // Afro Beat Pop (Pixabay ID: 390207)
+  bg8: '/audio/music/bg8-african-tribal.mp3', // African Tribal (Pixabay ID: 342635)
+  bg9: '/audio/music/bg9-kora.mp3', // Kora (Pixabay ID: 336239)
+  bg10: '/audio/music/bg10-amapiano.mp3', // Amapiano (Pixabay ID: 244452)
+  bg11: '/audio/music/bg11-lofi-song.mp3', // Lofi Song (Pixabay ID: 424604)
 };
 
 // Local storage key for audio preferences

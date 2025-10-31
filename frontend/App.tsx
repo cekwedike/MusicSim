@@ -908,6 +908,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [welcomeArtistName, setWelcomeArtistName] = useState('');
     const [hasAutoLoaded, setHasAutoLoaded] = useState(false); // Prevent double-loading
 
+    // Login modal state for guest registration
+    const [showLoginModal, setShowLoginModal] = useState(false);
+
     const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
 
     // Auth context
@@ -1410,6 +1413,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                             statistics={state.statistics}
                             artistName={state.artistName}
                             difficulty={state.difficulty}
+                            onOpenAuth={() => setShowLoginModal(true)}
                         />
                     )}
 
@@ -1487,6 +1491,16 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 <WelcomeBackDialog
                     artistName={welcomeArtistName}
                     onClose={() => setShowWelcomeDialog(false)}
+                />
+            )}
+
+            {/* Login/Register Modal for guests */}
+            {showLoginModal && (
+                <LoginModal
+                    isOpen={showLoginModal}
+                    onClose={() => setShowLoginModal(false)}
+                    isGuestMode={isGuestMode}
+                    guestStatistics={isGuestMode ? state.statistics : undefined}
                 />
             )}
 

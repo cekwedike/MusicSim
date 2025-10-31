@@ -113,7 +113,7 @@ const generateToken = (userId) => {
  */
 router.post('/register', async (req, res, next) => {
   try {
-    const { email, username, password } = req.body;
+    const { email, username, password, profileImage, displayName } = req.body;
 
     // Validate input data
     const validation = validateRegistrationData({ email, username, password });
@@ -160,7 +160,9 @@ router.post('/register', async (req, res, next) => {
     const user = await User.create({
       email: sanitizedEmail,
       username: sanitizedUsername,
-      password: password
+      password: password,
+      profileImage: profileImage || null,
+      displayName: displayName || sanitizedUsername
     });
 
     // Create player statistics record
@@ -183,6 +185,8 @@ router.post('/register', async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
+          displayName: user.displayName,
+          profileImage: user.profileImage,
           createdAt: user.createdAt
         }
       }
@@ -295,6 +299,8 @@ router.post('/login', async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
+          displayName: user.displayName,
+          profileImage: user.profileImage,
           lastLogin: user.lastLogin
         }
       }
@@ -376,6 +382,73 @@ router.post('/verify', authMiddleware, (req, res) => {
 
 /**
  * @swagger
+ * /api/auth/profile:
+ *   patch:
+ *     summary: Update user profile (name and image)
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               displayName:
+ *                 type: string
+ *               profileImage:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ */
+router.patch('/profile', authMiddleware, async (req, res, next) => {
+  try {
+    const { displayName, profileImage } = req.body;
+    const userId = req.userId;
+
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Update fields if provided
+    if (displayName !== undefined) {
+      user.displayName = displayName;
+    }
+    if (profileImage !== undefined) {
+      user.profileImage = profileImage;
+    }
+
+    await user.save();
+
+    console.log(`User profile updated: ${user.username}`);
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          displayName: user.displayName,
+          profileImage: user.profileImage,
+          lastLogin: user.lastLogin
+        }
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
  * /api/auth/logout:
  *   post:
  *     summary: Logout user (stateless JWT)
@@ -422,6 +495,139 @@ router.post('/refresh', authMiddleware, (req, res) => {
       success: false,
       message: 'Failed to refresh token'
     });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/register-from-guest:
+ *   post:
+ *     summary: Register a new user from guest mode and transfer history
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - username
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               guestData:
+ *                 type: object
+ *                 description: Guest statistics and history to transfer
+ *     responses:
+ *       201:
+ *         description: User registered successfully with transferred history
+ */
+router.post('/register-from-guest', async (req, res, next) => {
+  try {
+    const { email, username, password, guestData, profileImage, displayName } = req.body;
+
+    // Validate input data
+    const validation = validateRegistrationData({ email, username, password });
+    if (!validation.isValid) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: validation.errors
+      });
+    }
+
+    // Sanitize inputs
+    const sanitizedEmail = sanitizeInput(email).toLowerCase();
+    const sanitizedUsername = sanitizeInput(username);
+
+    // Check if user already exists
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [
+          { email: sanitizedEmail },
+          { username: sanitizedUsername }
+        ]
+      }
+    });
+
+    if (existingUser) {
+      if (existingUser.email === sanitizedEmail) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email already registered',
+          field: 'email'
+        });
+      }
+      if (existingUser.username === sanitizedUsername) {
+        return res.status(400).json({
+          success: false,
+          message: 'Username already taken',
+          field: 'username'
+        });
+      }
+    }
+
+    // Create user
+    const user = await User.create({
+      email: sanitizedEmail,
+      username: sanitizedUsername,
+      password: password,
+      profileImage: profileImage || null,
+      displayName: displayName || sanitizedUsername
+    });
+
+    // Create or update player statistics with guest data
+    let statistics = await PlayerStatistics.create({
+      userId: user.id
+    });
+
+    // If guest data provided, merge it with the statistics
+    if (guestData && guestData.statistics) {
+      const guestStats = guestData.statistics;
+
+      // Merge guest statistics into user statistics
+      statistics.totalGamesPlayed = guestStats.totalGamesPlayed || 0;
+      statistics.totalWeeksPlayed = guestStats.totalWeeksPlayed || 0;
+      statistics.longestCareerWeeks = guestStats.longestCareerWeeks || 0;
+      statistics.highestCash = guestStats.highestCash || 0;
+      statistics.highestFame = guestStats.highestFameReached || 0;
+      statistics.totalPlayTimeMinutes = guestStats.totalPlayTimeMinutes || 0;
+      statistics.totalAchievementsUnlocked = guestStats.achievementsUnlocked || 0;
+      statistics.totalModulesCompleted = guestStats.modulesCompleted || 0;
+      statistics.averageQuizScore = guestStats.averageQuizScore || 0;
+      statistics.totalCashEarned = guestStats.totalCashEarned || 0;
+
+      await statistics.save();
+    }
+
+    // Generate token
+    const token = generateToken(user.id);
+
+    console.log(`New user registered from guest: ${user.username} (${user.email})`);
+
+    res.status(201).json({
+      success: true,
+      message: 'User registered successfully with history transferred',
+      data: {
+        token,
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          displayName: user.displayName,
+          profileImage: user.profileImage,
+          createdAt: user.createdAt
+        }
+      }
+    });
+  } catch (error) {
+    next(error);
   }
 });
 

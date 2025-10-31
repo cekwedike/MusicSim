@@ -2,17 +2,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { Eye, EyeOff, Check } from 'lucide-react';
+import type { GameStatistics } from '../types';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialMode?: 'login' | 'register';
+  isGuestMode?: boolean;
+  guestStatistics?: GameStatistics;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({
   isOpen,
   onClose,
-  initialMode = 'login'
+  initialMode = 'login',
+  isGuestMode = false,
+  guestStatistics
 }) => {
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [email, setEmail] = useState('');
@@ -21,9 +26,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
+  const [displayName, setDisplayName] = useState('');
 
-  const { login, register } = useAuth();
+  const { login, register, registerFromGuest } = useAuth();
   const toast = useToast();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -43,12 +51,40 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       setEmail('');
       setUsername('');
       setPassword('');
+      setDisplayName('');
+      setProfileImage(undefined);
       setError('');
       setMode(initialMode);
       // focus email field when modal opens
       setTimeout(() => emailRef.current?.focus(), 50);
     }
   }, [isOpen, initialMode]);
+
+  // Handle profile image upload
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.show('Please select an image file', 'error');
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.show('Image size must be less than 2MB', 'error');
+      return;
+    }
+
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target?.result as string;
+      setProfileImage(base64);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,8 +109,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           return;
         }
 
-        await register(username, email, password);
-        toast.show('Account created. Signing you in...', 'success');
+        // Use registerFromGuest if guest data is available, otherwise use regular register
+        if (isGuestMode && guestStatistics) {
+          await registerFromGuest(username, email, password, { statistics: guestStatistics }, profileImage, displayName || username);
+          toast.show('Account created with your progress saved!', 'success');
+        } else {
+          await register(username, email, password, profileImage, displayName || username);
+          toast.show('Account created. Signing you in...', 'success');
+        }
         setLoading(false);
         setTimeout(() => {
           onClose();
@@ -155,22 +197,79 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         <h2 className="text-3xl font-bold text-violet-300 mb-2 text-center">{mode === 'login' ? 'Welcome Back!' : 'Join MusicSim'}</h2>
         <p className="text-gray-400 text-center mb-6">{mode === 'login' ? 'Login to continue your music career' : 'Create an account to start your journey'}</p>
 
+        {isGuestMode && mode === 'register' && guestStatistics && (
+          <div className="bg-green-600/20 border border-green-600/30 rounded-lg p-3 mb-4">
+            <div className="flex items-start gap-2">
+              <span className="text-lg">✅</span>
+              <div>
+                <h4 className="text-sm font-semibold text-green-300 mb-1">Save Your Progress!</h4>
+                <p className="text-xs text-green-200 leading-relaxed">
+                  Your current stats and achievements will be saved to your new account.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === 'register' && (
-            <div>
-              <label className="block text-gray-300 mb-2 font-medium">Username</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                placeholder="Choose a username"
-                required
-                minLength={3}
-                maxLength={30}
-              />
-              <p className="text-gray-400 text-xs mt-1">3-30 characters, letters, numbers, and underscores only</p>
-            </div>
+            <>
+              <div>
+                <label className="block text-gray-300 mb-2 font-medium">Username</label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  placeholder="Choose a username"
+                  required
+                  minLength={3}
+                  maxLength={30}
+                />
+                <p className="text-gray-400 text-xs mt-1">3-30 characters, letters, numbers, and underscores only</p>
+              </div>
+
+              <div>
+                <label className="block text-gray-300 mb-2 font-medium">Display Name (Optional)</label>
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                  placeholder="How should we call you?"
+                  maxLength={50}
+                />
+                <p className="text-gray-400 text-xs mt-1">Leave empty to use your username</p>
+              </div>
+
+              <div>
+                <label className="block text-gray-300 mb-2 font-medium">Profile Image (Optional)</label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <div className="flex items-center gap-3">
+                  <div className="w-16 h-16 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
+                    {profileImage ? (
+                      <img src={profileImage} alt="Profile preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-gray-400 text-2xl">👤</span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  >
+                    {profileImage ? 'Change Image' : 'Upload Image'}
+                  </button>
+                </div>
+                <p className="text-gray-400 text-xs mt-1">Max 2MB, JPG, PNG, or GIF</p>
+              </div>
+            </>
           )}
 
           <div>

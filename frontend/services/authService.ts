@@ -20,6 +20,8 @@ export interface RegisterData {
   email: string;
   username: string;
   password: string;
+  profileImage?: string;
+  displayName?: string;
 }
 
 export interface LoginData {
@@ -31,6 +33,8 @@ export interface User {
   id: string;
   email: string;
   username: string;
+  displayName?: string;
+  profileImage?: string;
   lastLogin?: string;
 }
 
@@ -198,6 +202,38 @@ export const authService = {
   clearAuth: (): void => {
     localStorage.removeItem('musicsim_token');
     localStorage.removeItem('musicsim_user');
+  },
+
+  // Update user profile (name and image)
+  updateProfile: async (data: { displayName?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
+    try {
+      const response = await api.patch<ApiResponse<{ user: User }>>('/auth/profile', data);
+
+      if (response.data.success && response.data.data) {
+        // Update stored user data
+        localStorage.setItem('musicsim_user', JSON.stringify(response.data.data.user));
+      }
+
+      return response.data;
+    } catch (error: any) {
+      console.error('[authService] Update profile error:', error);
+      throw error;
+    }
+  },
+
+  // Register from guest mode with history transfer
+  registerFromGuest: async (data: RegisterData & { guestData?: any }): Promise<AuthResponse> => {
+    try {
+      const response = await api.post<AuthResponse>('/auth/register-from-guest', data);
+      if (response.data.success) {
+        localStorage.setItem('musicsim_token', response.data.data.token);
+        localStorage.setItem('musicsim_user', JSON.stringify(response.data.data.user));
+      }
+      return response.data;
+    } catch (error: any) {
+      console.error('[authService] Register from guest error:', error);
+      throw error;
+    }
   },
 
   // Delete user account permanently

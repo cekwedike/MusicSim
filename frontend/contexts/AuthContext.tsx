@@ -7,9 +7,11 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (username: string, email: string, password: string) => Promise<boolean>;
+  register: (username: string, email: string, password: string, profileImage?: string, displayName?: string) => Promise<boolean>;
+  registerFromGuest: (username: string, email: string, password: string, guestData?: any, profileImage?: string, displayName?: string) => Promise<boolean>;
   logout: () => void;
   deleteAccount: () => Promise<{ success: boolean; message: string }>;
+  updateProfile: (data: { displayName?: string; profileImage?: string }) => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
   clearError: () => void;
   error: string | null;
@@ -122,14 +124,46 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Register function - throws on failure so calling components can handle/display errors
-  const register = useCallback(async (username: string, email: string, password: string): Promise<boolean> => {
+  const register = useCallback(async (username: string, email: string, password: string, profileImage?: string, displayName?: string): Promise<boolean> => {
     setIsLoading(true);
 
     try {
       const response = await authService.register({
         username,
         email,
-        password
+        password,
+        profileImage,
+        displayName
+      });
+
+      if (response.success && response.data) {
+        const { user: userData, token: authToken } = response.data;
+
+        // Store in state
+        setUser(userData);
+        setToken(authToken);
+
+        return true;
+      } else {
+        throw new Error(response.message || 'Registration failed');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Register from guest function
+  const registerFromGuest = useCallback(async (username: string, email: string, password: string, guestData?: any, profileImage?: string, displayName?: string): Promise<boolean> => {
+    setIsLoading(true);
+
+    try {
+      const response = await authService.registerFromGuest({
+        username,
+        email,
+        password,
+        profileImage,
+        displayName,
+        guestData
       });
 
       if (response.success && response.data) {
@@ -166,6 +200,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setError(null);
 
     setIsLoading(false);
+  }, []);
+
+  // Update profile function
+  const updateProfile = useCallback(async (data: { displayName?: string; profileImage?: string }): Promise<boolean> => {
+    setIsLoading(true);
+
+    try {
+      const response = await authService.updateProfile(data);
+
+      if (response.success && response.data) {
+        // Update user state with new data
+        setUser(response.data.user);
+        return true;
+      } else {
+        throw new Error(response.message || 'Failed to update profile');
+      }
+    } catch (error) {
+      console.error('[AuthContext] Update profile failed:', error);
+      const message = (error as any)?.message || 'Failed to update profile';
+      setError(message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   // Delete account function
@@ -247,8 +305,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isAuthenticated,
     login,
     register,
+    registerFromGuest,
     logout,
     deleteAccount,
+    updateProfile,
     refreshToken,
     clearError,
     error,

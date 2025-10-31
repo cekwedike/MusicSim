@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import type { GameStatistics, Difficulty } from '../types';
 import ConfirmDialog from './ConfirmDialog';
+import { loadStatistics } from '../services/statisticsService';
 
 interface ProfilePanelProps {
 	isGuestMode: boolean;
@@ -10,6 +11,7 @@ interface ProfilePanelProps {
 	statistics?: GameStatistics;
 	artistName?: string;
 	difficulty?: Difficulty;
+	onOpenAuth?: () => void; // Callback to open login/register modal
 }
 
 const ProfilePanel: React.FC<ProfilePanelProps> = ({
@@ -18,10 +20,18 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	onClose,
 	statistics,
 	artistName,
-	difficulty
+	difficulty,
+	onOpenAuth
 }) => {
-	const { user, isAuthenticated, logout, deleteAccount } = useAuth();
+	const { user, isAuthenticated, logout, deleteAccount, updateProfile } = useAuth();
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+	const [isEditingName, setIsEditingName] = useState(false);
+	const [editedName, setEditedName] = useState('');
+	const [guestName, setGuestName] = useState(() => {
+		return localStorage.getItem('guestPlayerName') || 'Guest Player';
+	});
+	const [isUploadingImage, setIsUploadingImage] = useState(false);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleLogout = async () => {
 		console.log('[ProfilePanel] Logging out...');
@@ -78,6 +88,105 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		}
 	};
 
+	const handleStartEditName = () => {
+		if (isGuestMode) {
+			setEditedName(guestName);
+		} else {
+			setEditedName(user?.displayName || user?.username || '');
+		}
+		setIsEditingName(true);
+	};
+
+	const handleSaveName = async () => {
+		if (!editedName.trim()) {
+			alert('Name cannot be empty');
+			return;
+		}
+
+		if (isGuestMode) {
+			// Save guest name to localStorage
+			localStorage.setItem('guestPlayerName', editedName.trim());
+			setGuestName(editedName.trim());
+		} else {
+			// Update registered user's name
+			try {
+				const success = await updateProfile({ displayName: editedName.trim() });
+				if (!success) {
+					alert('Failed to update name. Please try again.');
+					return;
+				}
+			} catch (error) {
+				console.error('Error updating name:', error);
+				alert('Failed to update name. Please try again.');
+				return;
+			}
+		}
+
+		setIsEditingName(false);
+	};
+
+	const handleCancelEditName = () => {
+		setIsEditingName(false);
+		setEditedName('');
+	};
+
+	const handleImageClick = () => {
+		if (!isGuestMode && fileInputRef.current) {
+			fileInputRef.current.click();
+		}
+	};
+
+	const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0];
+		if (!file) return;
+
+		// Validate file type
+		if (!file.type.startsWith('image/')) {
+			alert('Please select an image file');
+			return;
+		}
+
+		// Validate file size (max 2MB)
+		if (file.size > 2 * 1024 * 1024) {
+			alert('Image size must be less than 2MB');
+			return;
+		}
+
+		setIsUploadingImage(true);
+
+		try {
+			// Convert to base64
+			const reader = new FileReader();
+			reader.onload = async (e) => {
+				const base64 = e.target?.result as string;
+
+				try {
+					const success = await updateProfile({ profileImage: base64 });
+					if (!success) {
+						alert('Failed to upload image. Please try again.');
+					}
+				} catch (error) {
+					console.error('Error uploading image:', error);
+					alert('Failed to upload image. Please try again.');
+				} finally {
+					setIsUploadingImage(false);
+				}
+			};
+			reader.readAsDataURL(file);
+		} catch (error) {
+			console.error('Error reading file:', error);
+			alert('Failed to read image file');
+			setIsUploadingImage(false);
+		}
+	};
+
+	const handleOpenAuthModal = () => {
+		if (onOpenAuth) {
+			if (onClose) onClose();
+			onOpenAuth();
+		}
+	};
+
 	const formatPlayTime = (minutes: number) => {
 		if (minutes < 60) return `${minutes}m`;
 		const hours = Math.floor(minutes / 60);
@@ -93,15 +202,68 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 	return (
 		<div className="h-full overflow-y-auto -mx-4 px-4">
+			{/* Hidden file input for image upload */}
+			<input
+				ref={fileInputRef}
+				type="file"
+				accept="image/*"
+				onChange={handleImageUpload}
+				className="hidden"
+			/>
+
 			{/* Account Header */}
 			<div className="bg-gradient-to-br from-violet-600/20 to-purple-600/20 border border-violet-600/30 rounded-lg p-4 mb-4">
 				{isAuthenticated && user ? (
 					<div className="flex items-center gap-3">
-						<div className="w-16 h-16 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg">
-							{user.username.charAt(0).toUpperCase()}
+						<div
+							className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden ${!user.profileImage ? 'bg-gradient-to-br from-violet-500 to-purple-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:opacity-80' : 'opacity-50'}`}
+							onClick={handleImageClick}
+							title="Click to change profile image"
+						>
+							{isUploadingImage ? (
+								<div className="text-sm">⏳</div>
+							) : user.profileImage ? (
+								<img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+							) : (
+								user.username.charAt(0).toUpperCase()
+							)}
 						</div>
 						<div className="flex-1">
-							<div className="font-bold text-lg text-white">{user.username}</div>
+							{isEditingName ? (
+								<div className="flex items-center gap-2 mb-1">
+									<input
+										type="text"
+										value={editedName}
+										onChange={(e) => setEditedName(e.target.value)}
+										className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-sm"
+										placeholder="Display name"
+										autoFocus
+									/>
+									<button
+										onClick={handleSaveName}
+										className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+									>
+										Save
+									</button>
+									<button
+										onClick={handleCancelEditName}
+										className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs"
+									>
+										Cancel
+									</button>
+								</div>
+							) : (
+								<div className="flex items-center gap-2">
+									<div className="font-bold text-lg text-white">{user.displayName || user.username}</div>
+									<button
+										onClick={handleStartEditName}
+										className="text-violet-300 hover:text-violet-200 text-xs"
+										title="Edit name"
+									>
+										✏️
+									</button>
+								</div>
+							)}
 							<div className="text-sm text-violet-200">{user.email}</div>
 							<div className="flex items-center gap-2 mt-1">
 								<span className="text-xs bg-violet-600/50 text-violet-200 px-2 py-0.5 rounded">
@@ -116,7 +278,41 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 							👤
 						</div>
 						<div className="flex-1">
-							<div className="font-bold text-lg text-white">Guest Player</div>
+							{isEditingName ? (
+								<div className="flex items-center gap-2 mb-1">
+									<input
+										type="text"
+										value={editedName}
+										onChange={(e) => setEditedName(e.target.value)}
+										className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-sm"
+										placeholder="Guest name"
+										autoFocus
+									/>
+									<button
+										onClick={handleSaveName}
+										className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+									>
+										Save
+									</button>
+									<button
+										onClick={handleCancelEditName}
+										className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs"
+									>
+										Cancel
+									</button>
+								</div>
+							) : (
+								<div className="flex items-center gap-2">
+									<div className="font-bold text-lg text-white">{guestName}</div>
+									<button
+										onClick={handleStartEditName}
+										className="text-gray-300 hover:text-white text-xs"
+										title="Edit name"
+									>
+										✏️
+									</button>
+								</div>
+							)}
 							<div className="text-sm text-gray-300">Playing without an account</div>
 							<div className="flex items-center gap-2 mt-1">
 								<span className="text-xs bg-yellow-600/50 text-yellow-200 px-2 py-0.5 rounded">
@@ -238,6 +434,29 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 			{/* Actions */}
 			<div className="space-y-3 mb-4">
+				{isGuestMode && onOpenAuth && (
+					<>
+						<button
+							onClick={handleOpenAuthModal}
+							className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-lg"
+						>
+							<span>✨</span>
+							Register / Login
+						</button>
+						<div className="bg-blue-600/20 border border-blue-600/30 rounded-lg p-3">
+							<div className="flex items-start gap-2">
+								<span className="text-lg">💡</span>
+								<div>
+									<h4 className="text-sm font-semibold text-blue-300 mb-1">Save Your Progress!</h4>
+									<p className="text-xs text-blue-200 leading-relaxed">
+										Register now to keep all your current stats, achievements, and game history. Don't lose your progress!
+									</p>
+								</div>
+							</div>
+						</div>
+					</>
+				)}
+
 				<button
 					onClick={isGuestMode ? handleExitGuest : handleLogout}
 					className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
@@ -254,20 +473,6 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					<span>🗑️</span>
 					Delete All Data
 				</button>
-
-				{isGuestMode && (
-					<div className="bg-blue-600/20 border border-blue-600/30 rounded-lg p-3">
-						<div className="flex items-start gap-2">
-							<span className="text-lg">💡</span>
-							<div>
-								<h4 className="text-sm font-semibold text-blue-300 mb-1">Sign Up to Save Progress</h4>
-								<p className="text-xs text-blue-200 leading-relaxed">
-									Create an account to save your progress, unlock achievements, and access your stats across devices.
-								</p>
-							</div>
-						</div>
-					</div>
-				)}
 			</div>
 
 			{/* Delete Confirmation Dialog */}

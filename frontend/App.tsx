@@ -1242,8 +1242,42 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleSignContract = () => {
-        audioManager.playSound('contractSign');
+        // First dispatch the sign so game state updates immediately
         dispatch({ type: 'SIGN_CONTRACT' });
+
+        // Then play a short label executive voiceover followed by an excited manager clip.
+        try {
+            const execAudio = new Audio('/audio/scenarios/contract-signing.m4a');
+            execAudio.preload = 'auto';
+            execAudio.muted = !!audioManager.audioState?.isSfxMuted;
+            execAudio.volume = audioManager.audioState?.sfxVolume ?? 1;
+            // Duck background music while voiceover plays
+            try { audioManager.duckMusic(); } catch (e) { /* ignore */ }
+            execAudio.play().catch(err => {
+                console.warn('[Sign Contract] Exec voiceover play failed:', err);
+            });
+            execAudio.addEventListener('ended', () => {
+                // Play manager excited follow-up
+                try { audioManager.unduckMusic(); } catch (e) { /* ignore */ }
+                try {
+                    const managerAudio = new Audio('/audio/scenarios/first-record-deal.m4a');
+                    managerAudio.preload = 'auto';
+                    managerAudio.muted = !!audioManager.audioState?.isSfxMuted;
+                    managerAudio.volume = audioManager.audioState?.sfxVolume ?? 1;
+                    try { audioManager.duckMusic(); } catch (e) { /* ignore */ }
+                    managerAudio.play().catch(err => {
+                        console.warn('[Sign Contract] Manager voiceover play failed:', err);
+                    });
+                    managerAudio.addEventListener('ended', () => {
+                        try { audioManager.unduckMusic(); } catch (e) { /* ignore */ }
+                    });
+                } catch (err) {
+                    console.error('[Sign Contract] Failed to play manager audio:', err);
+                }
+            });
+        } catch (err) {
+            console.error('[Sign Contract] Failed to play sign voiceovers:', err);
+        }
     };
 
     const handleDeclineContract = () => {

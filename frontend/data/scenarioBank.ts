@@ -554,13 +554,13 @@ export const scenarioBank: Scenario[] = [
         description: "Boomplay, Africa's biggest streaming platform, offers to feature you on their 'New Fire' playlist reaching 5 million users. The exposure is massive across Nigeria, Ghana, and Kenya. However, they pay $0.003 per stream compared to Spotify's $0.004. Your manager insists you should focus on Spotify to build international credibility, but Boomplay is where your fans actually listen to music.",
         conditions: { minFame: 15, maxFame: 50 },
         once: true,
-        // celebratory / chart-success style audio
-        audioFile: '/audio/scenarios/chart-success.m4a',
-        autoPlayAudio: true,
         choices: [
             {
                 text: "Take the Boomplay feature - my audience is in Africa",
                 outcome: {
+                        // celebratory / chart-success style audio — play only when this outcome occurs
+                        audioFile: '/audio/scenarios/chart-success.m4a',
+                        autoPlayAudio: true,
                     text: "Your song explodes on Boomplay! You gain 80,000 streams in the first week across African markets. Local radio stations pick it up after seeing the numbers. Your fanbase becomes strongly African-centered, and you become a household name in Lagos, Accra, and Nairobi. International playlists remain out of reach for now.",
                     cash: 1200, fame: 25, wellBeing: 5, careerProgress: 8, hype: 30,
                     lesson: {

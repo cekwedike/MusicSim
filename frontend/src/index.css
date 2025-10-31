@@ -415,5 +415,8 @@ html.light * {
 
 /* Fix any gradient issues */
 html.light .bg-gradient-to-r {
-  /* Gradients stay vibrant */
+  /* Gradients stay vibrant: ensure gradients use the light theme violet accents by default */
+  --tw-gradient-from: var(--light-violet-50);
+  --tw-gradient-to: var(--light-violet-300);
+  background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
 }

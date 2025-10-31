@@ -1,5 +1,7 @@
 import React from 'react';
 import type { ChoiceOutcome } from '../types';
+import { AudioPlayer } from '../src/components/AudioPlayer';
+import AudioErrorBoundary from './AudioErrorBoundary';
 
 interface OutcomeModalProps {
     outcome: ChoiceOutcome;
@@ -28,6 +30,15 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
             <div className={`bg-gray-800 border border-gray-700 rounded-xl shadow-2xl p-4 md:p-6 lg:p-8 w-full ${hasLesson ? 'max-w-2xl' : 'max-w-md'} max-h-[90vh] overflow-y-auto`}>
                 <h3 className="text-xl md:text-2xl font-bold text-violet-300 mb-4">Outcome</h3>
                 <p className="text-gray-300 mb-6 leading-relaxed text-sm md:text-base">{outcome.text}</p>
+
+                {/* Outcome voiceover player (play/replay) */}
+                {outcome.audioFile && (
+                    <div className="mb-4">
+                        <AudioErrorBoundary>
+                            <AudioPlayer audioSrc={outcome.audioFile} autoPlay={!!outcome.autoPlayAudio} />
+                        </AudioErrorBoundary>
+                    </div>
+                )}
 
                 <div className="space-y-2 mb-6">
                     <StatChange label="Cash" value={outcome.cash} />

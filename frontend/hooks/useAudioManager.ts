@@ -28,6 +28,11 @@ export const useAudioManager = (): AudioManager => {
   const [audioState, setAudioState] = useState<AudioState>(loadSavedPreferences);
   const [isUserInteracted, setIsUserInteracted] = useState(false);
 
+  // Playlist management for rotating background music
+  const BACKGROUND_TRACK_KEYS: BackgroundMusic[] = ['bg1', 'bg2', 'bg3', 'menu'];
+  const playlistIndexRef = useRef<number>(0);
+  const previousMusicVolumeRef = useRef<number | null>(null);
+
   // Audio element refs
   const musicAudioRef = useRef<HTMLAudioElement | null>(null);
   const soundPoolRef = useRef<Map<SoundEffect, HTMLAudioElement>>(new Map());
@@ -50,6 +55,22 @@ export const useAudioManager = (): AudioManager => {
       audio.loop = true;
       audio.volume = audioState.musicVolume;
       musicAudioRef.current = audio;
+      // when a track naturally ends (we won't loop here since we manage rotation), rotate
+      audio.addEventListener('ended', () => {
+        // rotate to next playlist track
+        try {
+          const nextIdx = (playlistIndexRef.current + 1) % BACKGROUND_TRACK_KEYS.length;
+          playlistIndexRef.current = nextIdx;
+          const nextKey = BACKGROUND_TRACK_KEYS[nextIdx];
+          const nextUrl = MUSIC_URLS[nextKey];
+          audio.src = nextUrl;
+          audio.load();
+          audio.play().catch((e) => console.warn('Playlist autoplay prevented:', e));
+          setAudioState((prev) => ({ ...prev, currentTrack: nextKey }));
+        } catch (e) {
+          console.error('Error rotating background track:', e);
+        }
+      });
 
       // Handle audio loading errors
       audio.addEventListener('error', (e) => {
@@ -89,6 +110,7 @@ export const useAudioManager = (): AudioManager => {
       }
     });
   }, []);
+
 
   // Update music volume when it changes
   useEffect(() => {
@@ -325,6 +347,36 @@ export const useAudioManager = (): AudioManager => {
     }
   }, [isUserInteracted, playMusic]);
 
+  // Start playlist randomly on mount (but obey user interaction rules)
+  useEffect(() => {
+    // Choose a random starting index
+    const idx = Math.floor(Math.random() * BACKGROUND_TRACK_KEYS.length);
+    playlistIndexRef.current = idx;
+    const startKey = BACKGROUND_TRACK_KEYS[idx];
+    // If user has already interacted, play immediately; otherwise queue
+    if (isUserInteracted) {
+      playMusic(startKey as BackgroundMusic);
+    } else {
+      nextTrackRef.current = startKey as BackgroundMusic;
+    }
+  }, []);
+
+  // Ducking: lower music volume while voiceovers play
+  const duckMusic = useCallback(() => {
+    if (!musicAudioRef.current) return;
+    if (previousMusicVolumeRef.current == null) previousMusicVolumeRef.current = musicAudioRef.current.volume;
+    musicAudioRef.current.volume = Math.max(0, (previousMusicVolumeRef.current ?? audioState.musicVolume) * 0.12);
+    setAudioState((prev) => ({ ...prev, isMusicDucked: true }));
+  }, [audioState.musicVolume]);
+
+  const unduckMusic = useCallback(() => {
+    if (!musicAudioRef.current) return;
+    const prev = previousMusicVolumeRef.current ?? audioState.musicVolume;
+    musicAudioRef.current.volume = prev;
+    previousMusicVolumeRef.current = null;
+    setAudioState((prev) => ({ ...prev, isMusicDucked: false }));
+  }, [audioState.musicVolume]);
+
   return {
     playSound,
     playMusic,
@@ -337,6 +389,8 @@ export const useAudioManager = (): AudioManager => {
     toggleSfxMute,
     setMusicMuted,
     setSfxMuted,
+    duckMusic,
+    unduckMusic,
     audioState,
   };
 };

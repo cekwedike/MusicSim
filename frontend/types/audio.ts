@@ -13,7 +13,10 @@ export type SoundEffect =
 export type BackgroundMusic =
   | 'menu'
   | 'gameplay'
-  | 'gameOver';
+  | 'gameOver'
+  | 'bg1'
+  | 'bg2'
+  | 'bg3';
 
 export interface AudioState {
   isMusicMuted: boolean;
@@ -21,6 +24,8 @@ export interface AudioState {
   musicVolume: number; // 0-1
   sfxVolume: number; // 0-1
   currentTrack: BackgroundMusic | null;
+  // Whether music is currently ducked because a voiceover is playing
+  isMusicDucked?: boolean;
 }
 
 export interface AudioManager {
@@ -40,6 +45,10 @@ export interface AudioManager {
   toggleSfxMute: () => void;
   setMusicMuted: (muted: boolean) => void;
   setSfxMuted: (muted: boolean) => void;
+
+  // Ducking controls for voiceover — temporarily lower background music
+  duckMusic: () => void;
+  unduckMusic: () => void;
 
   // State
   audioState: AudioState;
@@ -63,6 +72,9 @@ export const MUSIC_URLS: Record<BackgroundMusic, string> = {
   menu: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3', // Chill ambient
   gameplay: 'https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe5c20c.mp3', // Different upbeat track
   gameOver: 'https://cdn.pixabay.com/download/audio/2022/03/20/audio_8d32d1f0e5.mp3', // Melancholic
+  bg1: 'https://cdn.pixabay.com/download/audio/2021/09/22/audio_5d21a1e9f4.mp3',
+  bg2: 'https://cdn.pixabay.com/download/audio/2020/11/07/audio_7e9f7e7c4a.mp3',
+  bg3: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3',
 };
 
 // Local storage key for audio preferences

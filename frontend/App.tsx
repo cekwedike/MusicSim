@@ -1145,26 +1145,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             setPendingChoice(choice);
             setShowMistakeWarning(true);
         } else {
-            // If this particular outcome has an associated audio file, play it now so the voiceover occurs
-            // only when the player selects this outcome (e.g., hiring a manager).
-            if (choice.outcome && choice.outcome.audioFile) {
-                try {
-                    const outcomeAudio = new Audio(choice.outcome.audioFile);
-                    outcomeAudio.preload = 'auto';
-                    // Respect SFX mute/volume from audio manager
-                    outcomeAudio.muted = !!audioManager.audioState?.isSfxMuted;
-                    outcomeAudio.volume = audioManager.audioState?.sfxVolume ?? 1;
-                    const p = outcomeAudio.play();
-                    if (p && typeof p.catch === 'function') {
-                        p.catch((err) => {
-                            console.warn('[App] Outcome audio play prevented or failed:', err);
-                        });
-                    }
-                } catch (err) {
-                    console.error('[App] Failed to play outcome audio:', err);
-                }
-            }
-
+            // Let the OutcomeModal handle autoplay/replay of any outcome-specific audio.
+            // This avoids duplicate playback and centralizes playback controls to the modal.
             dispatch({ type: 'SELECT_CHOICE', payload: choice });
         }
     };

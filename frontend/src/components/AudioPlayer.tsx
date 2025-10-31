@@ -22,8 +22,11 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   // useAudio throws if the provider is missing; guard to avoid crashing when used outside provider
   let volume = 1;
   let isMuted = false;
+  // Keep a reference to audio manager so we can duck/unduck background music when voiceovers play
+  let audioManagerCtx: any = null;
   try {
     const ctx = useAudio();
+    audioManagerCtx = ctx;
     // AudioManager exposes audioState with sfx/music volumes
     volume = ctx.audioState?.sfxVolume ?? 1;
     isMuted = ctx.audioState?.isSfxMuted ?? false;
@@ -55,6 +58,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
             .then(() => {
               console.log('[AudioPlayer] Auto-playing:', audioSrc);
               setIsPlaying(true);
+              // Duck background music when a voiceover starts
+              try { audioManagerCtx?.duckMusic?.(); } catch (err) { /* ignore */ }
             })
             .catch(error => {
               console.warn('[AudioPlayer] Auto-play prevented:', error);
@@ -70,6 +75,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       if (audio) {
         audio.pause();
         audio.currentTime = 0;
+        // Ensure we unduck music on cleanup
+        try { audioManagerCtx?.unduckMusic?.(); } catch (err) { /* ignore */ }
       }
     };
   }, [audioSrc, autoPlay, isMuted]);
@@ -94,6 +101,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         playPromise
           .then(() => {
             setIsPlaying(true);
+            try { audioManagerCtx?.duckMusic?.(); } catch (err) { /* ignore */ }
           })
           .catch(error => {
             console.error('[AudioPlayer] Play error:', error);
@@ -116,6 +124,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       playPromise
         .then(() => {
           setIsPlaying(true);
+          try { audioManagerCtx?.duckMusic?.(); } catch (err) { /* ignore */ }
         })
         .catch(error => {
           console.error('[AudioPlayer] Replay error:', error);
@@ -127,6 +136,8 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
   const handleAudioEnded = () => {
     setIsPlaying(false);
     setHasEnded(true);
+    // Restore music volume when voiceover finishes
+    try { audioManagerCtx?.unduckMusic?.(); } catch (err) { /* ignore */ }
     onEnded?.();
   };
 
@@ -134,6 +145,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
     console.error('[AudioPlayer] Error loading audio:', audioSrc, e);
     setHasError(true);
     setIsPlaying(false);
+    try { audioManagerCtx?.unduckMusic?.(); } catch (err) { /* ignore */ }
   };
 
   // If error loading audio, don't render anything (graceful degradation)

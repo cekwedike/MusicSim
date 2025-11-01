@@ -369,8 +369,9 @@ function gameReducer(state: GameState, action: Action): GameState {
                 }
             }
             
-            // Random events (realistic and hardcore)
-            if (settings.randomEvents && Math.random() < 0.15) { // 15% chance each week
+            // Random events (realistic and hardcore) with competition frequency multiplier
+            const eventChance = 0.15 * (settings.competition.enabled ? settings.competition.frequencyMultiplier : 1.0);
+            if (settings.randomEvents && Math.random() < eventChance) {
                 const randomEvents = state.difficulty === 'hardcore' ? [
                     // Hardcore events - more severe
                     {
@@ -422,6 +423,17 @@ function gameReducer(state: GameState, action: Action): GameState {
                         description: 'Influencer shares your music organically!',
                         fame: 8,
                         hype: 15
+                    },
+                    {
+                        description: 'Rival artist releases competing album same day!',
+                        fame: -6,
+                        hype: -12,
+                        wellBeing: -10
+                    },
+                    {
+                        description: 'Label pressures you for faster recoupment!',
+                        cash: -700,
+                        wellBeing: -15
                     }
                 ] : [
                     // Realistic events - balanced
@@ -475,15 +487,48 @@ function gameReducer(state: GameState, action: Action): GameState {
                         description: 'Friend hooks you up with free studio time!',
                         cash: 300,
                         wellBeing: 5
+                    },
+                    {
+                        description: 'Another artist drops surprise album - stealing spotlight!',
+                        fame: -3,
+                        hype: -8
+                    },
+                    {
+                        description: 'Collaborative opportunity with rising star!',
+                        fame: 7,
+                        hype: 10,
+                        cash: -200
                     }
                 ];
 
                 const randomEvent = randomEvents[Math.floor(Math.random() * randomEvents.length)];
                 eventsThisWeek.push(randomEvent.description);
-                newStats.cash += randomEvent.cash || 0;
-                newStats.fame += randomEvent.fame || 0;
+
+                // Apply volatility to event impacts
+                let eventCash = randomEvent.cash || 0;
+                let eventFame = randomEvent.fame || 0;
+                let eventHype = randomEvent.hype || 0;
+
+                if (settings.marketVolatility.enabled) {
+                    if (eventCash !== 0) {
+                        const [minSwing, maxSwing] = settings.marketVolatility.cashSwingRange;
+                        const swing = minSwing + Math.random() * (maxSwing - minSwing);
+                        eventCash = Math.floor(eventCash * (1 + swing));
+                    }
+                    if (eventFame !== 0) {
+                        const swing = (Math.random() - 0.5) * 2 * settings.marketVolatility.fameVolatility;
+                        eventFame = Math.floor(eventFame * (1 + swing));
+                    }
+                    if (eventHype !== 0) {
+                        const swing = (Math.random() - 0.5) * 2 * settings.marketVolatility.hypeVolatility;
+                        eventHype = Math.floor(eventHype * (1 + swing));
+                    }
+                }
+
+                newStats.cash += eventCash;
+                newStats.fame += eventFame;
                 newStats.wellBeing += randomEvent.wellBeing || 0;
-                newStats.hype += randomEvent.hype || 0;
+                newStats.hype += eventHype;
             }
             
             // 3. Project Release Check
@@ -521,15 +566,15 @@ function gameReducer(state: GameState, action: Action): GameState {
                 const netIncome = projectIncome - taxAmount;
 
                 newStats.cash += netIncome;
-                if (taxAmount > 0) {
-                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${projectIncome.toLocaleString()} (-$${taxAmount.toLocaleString()} tax = $${netIncome.toLocaleString()} net)`);
-                } else {
-                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${netIncome.toLocaleString()}`);
-                }
                 newStats.fame += fameBonus;
                 newStats.hype += hypeBonus;
                 newStats.careerProgress += careerBonus;
-                eventsThisWeek.push(`You released '${newProject.name}'! Earned $${projectIncome.toLocaleString()}, gained ${fameBonus} Fame, ${hypeBonus} Hype, and ${careerBonus} Career Progress.`);
+
+                if (taxAmount > 0) {
+                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${projectIncome.toLocaleString()} (-$${taxAmount.toLocaleString()} tax), gained ${fameBonus} Fame, ${hypeBonus} Hype, ${careerBonus} Career Progress.`);
+                } else {
+                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${netIncome.toLocaleString()}, gained ${fameBonus} Fame, ${hypeBonus} Hype, ${careerBonus} Career Progress.`);
+                }
                 const projectAchievement = updatedAchievements.find(a => a.id === `PROJECT_${newProject?.id}`);
                 if(projectAchievement && !projectAchievement.unlocked){
                     projectAchievement.unlocked = true;
@@ -538,31 +583,38 @@ function gameReducer(state: GameState, action: Action): GameState {
                 newProject = null;
             }
 
-            // 4. Update Stats with difficulty modifiers
+            // 4. Update Stats with dynamic difficulty modifiers
             newStats.fame = Math.min(100, Math.max(0, newStats.fame + bonusFame));
 
-            // Apply stat decay with difficulty modifiers
-            const hypeDecay = Math.floor(2 * settings.statsDecayRate);
-            const fameDecay = Math.floor(1 * settings.statsDecayRate);
-            const wellBeingDecay = Math.floor(1 * settings.statsDecayRate);
+            // Apply stat decay with dynamic difficulty modifiers
+            const hypeDecay = Math.floor(2 * dynamicMods.decayMultiplier);
+            const fameDecay = Math.floor(1 * dynamicMods.decayMultiplier);
+            const wellBeingDecay = Math.floor(1 * dynamicMods.decayMultiplier);
 
-            newStats.hype = Math.min(100, Math.max(0, newStats.hype + bonusHype - hypeDecay));
-            newStats.fame = Math.min(100, Math.max(0, newStats.fame - fameDecay));
+            // Apply competition pressure (fame and hype drain)
+            const competitionFameLoss = settings.competition.enabled ? settings.competition.fameDrain : 0;
+            const competitionHypeLoss = settings.competition.enabled ? settings.competition.hypeDrain : 0;
+
+            newStats.hype = Math.min(100, Math.max(0, newStats.hype + bonusHype - hypeDecay - competitionHypeLoss));
+            newStats.fame = Math.min(100, Math.max(0, newStats.fame - fameDecay - competitionFameLoss));
             newStats.wellBeing = Math.min(100, Math.max(0, newStats.wellBeing - wellBeingDecay));
+
+            // Log if significant competition impact
+            if (totalWeeksPlayed > 10 && settings.competition.enabled && (competitionFameLoss + competitionHypeLoss) > 2) {
+                eventsThisWeek.push(`Competition from other artists is heating up! (-${competitionFameLoss.toFixed(1)} fame, -${competitionHypeLoss.toFixed(1)} hype)`);
+            }
             
             // Advance current date by random 3-7 days
             const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days
             const newCurrentDate = new Date(state.currentDate);
             newCurrentDate.setDate(newCurrentDate.getDate() + daysToAdvance);
-            
+
             // Determine game-week derived from newCurrentDate
             const newGameDate = toGameDate(newCurrentDate, state.startDate);
-            // Record historical data point every 4 weeks (using totalWeeks derived from newGameDate)
-            const totalWeeks = (newGameDate.year - 1) * 48 + (newGameDate.month - 1) * 4 + newGameDate.week;
             let newHistory = [...state.currentHistory];
-            if (totalWeeks % 4 === 0) {
+            if (totalWeeksPlayed % 4 === 0) {
                 newHistory.push({
-                    week: totalWeeks,
+                    week: totalWeeksPlayed,
                     cash: newStats.cash,
                     fame: newStats.fame,
                     wellBeing: newStats.wellBeing,
@@ -618,7 +670,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     startDate: state.sessionStartTime,
                     endDate: Date.now(),
                     finalStats: newStats,
-                    weeksPlayed: totalWeeks,
+                    weeksPlayed: totalWeeksPlayed,
                     outcome: outcome,
                     historicalData: newHistory,
                     majorEvents: (state.logs && state.logs.length > 0) ? state.logs.slice(-10).reverse().map(l => ({ message: l.message, timestamp: l.timestamp.getTime() })) : [],
@@ -757,8 +809,17 @@ function gameReducer(state: GameState, action: Action): GameState {
         case 'SIGN_CONTRACT': {
             if (!state.currentLabelOffer) return state;
 
+            // Calculate dynamic modifiers for contract
+            const currentGameDate = toGameDate(state.currentDate, state.startDate);
+            const totalWeeksPlayed = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
             const settings = getDifficultySettings(state.difficulty);
-            const adjustedAdvance = Math.floor(state.currentLabelOffer.terms.advance * settings.advanceMultiplier);
+            const dynamicMods = calculateDynamicModifiers(
+                settings,
+                totalWeeksPlayed,
+                state.playerStats.careerProgress,
+                state.playerStats.cash
+            );
+            const adjustedAdvance = Math.floor(state.currentLabelOffer.terms.advance * dynamicMods.incomeMultiplier);
 
             const newStats = { ...state.playerStats };
             newStats.cash += adjustedAdvance;

@@ -1589,6 +1589,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     hasUnseenAchievements={unseenAchievements.length > 0}
                     isMobileOpen={isMobileSidebarOpen}
                     onMobileToggle={setIsMobileSidebarOpen}
+                    artistName={artistName}
+                    difficulty={status === 'playing' ? state.difficulty : undefined}
                 >
                     {/* Render content based on active view */}
                     {activeSidebarView === 'saveload' && (
@@ -1637,13 +1639,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
             
-            <div className="flex-grow w-full max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4 flex flex-col">
+            <div className="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-5 lg:px-6 py-4 sm:py-4 flex flex-col">
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
 
-                <main className="flex justify-center mt-2 sm:mt-3 mb-16 sm:mb-6">
+                <main className="flex justify-center mt-3 sm:mt-3 mb-20 sm:mb-6">
                     {renderGameContent()}
                 </main>
             </div>

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon, MusicNoteIcon, UserIcon } from './icons/Icons';
 import { useTheme } from '../contexts/ThemeContext';
 import { Sun, Moon, Menu, X } from 'lucide-react';
+import type { Difficulty } from '../types';
+import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 
 export type SidebarView = 'profile' | 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
 
@@ -12,6 +14,8 @@ interface SidebarProps {
   children?: React.ReactNode;
   isMobileOpen?: boolean;
   onMobileToggle?: (open: boolean) => void;
+  artistName?: string;
+  difficulty?: Difficulty;
 }
 
 interface SidebarButton {
@@ -22,7 +26,7 @@ interface SidebarButton {
   badge?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children, isMobileOpen = false, onMobileToggle }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children, isMobileOpen = false, onMobileToggle, artistName, difficulty }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
@@ -115,11 +119,33 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       <div
         id="mobile-sidebar"
         className={`
-          fixed right-0 top-16 bottom-0 z-50 flex
+          fixed right-0 top-16 bottom-0 z-50 flex flex-col
           transition-transform duration-300 ease-in-out
           ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
         `}
       >
+        {/* Mobile Header Info (only visible on mobile when sidebar is open) */}
+        {artistName && (
+          <div className="lg:hidden bg-gray-800/98 border-b border-gray-700 p-3 flex flex-col items-center gap-2">
+            <h1 className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              MusicSim
+            </h1>
+            <div className="flex flex-col items-center gap-1">
+              <p className="text-yellow-400 text-xs font-semibold tracking-wider">Artist: {artistName}</p>
+              {difficulty && (
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-bold ${getDifficultyColor(difficulty)} bg-gray-800/50 border border-current whitespace-nowrap`}
+                  title={`Playing on ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} difficulty`}
+                >
+                  {getDifficultyIcon(difficulty)} {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Icon Bar and Expanded Panel Container */}
+        <div className="flex flex-row flex-1 overflow-hidden">
         {/* Icon Bar */}
         <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-3 shadow-xl overflow-y-auto">
         {buttons.map((button) => (
@@ -197,7 +223,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         className={`
           bg-gray-800/98 backdrop-blur-md border-l border-gray-700
           transition-all duration-300 ease-in-out
-          ${isExpanded && activeView ? 'w-[28rem]' : 'w-0'}
+          ${isExpanded && activeView ? 'w-[calc(100vw-4rem)] lg:w-[28rem]' : 'w-0'}
           overflow-hidden shadow-2xl
         `}
         style={{ willChange: 'width' }}
@@ -228,6 +254,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
           </div>
         )}
       </div>
+    </div>
     </div>
     </>
   );

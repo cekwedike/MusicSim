@@ -135,7 +135,7 @@ export const useAudioManager = (): AudioManager => {
           musicAudioRef.current.pause();
         }
       } else {
-        if (musicAudioRef.current && audioState.currentTrack && isUserInteracted) {
+        if (musicAudioRef.current && audioState.currentTrack && isUserInteracted && !audioState.isMusicMuted) {
           musicAudioRef.current.play().catch((error) => {
             console.log('Autoplay prevented:', error);
           });
@@ -147,7 +147,7 @@ export const useAudioManager = (): AudioManager => {
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [audioState.currentTrack, isUserInteracted]);
+  }, [audioState.currentTrack, audioState.isMusicMuted, isUserInteracted]);
 
   // Detect user interaction for autoplay policy compliance
   useEffect(() => {

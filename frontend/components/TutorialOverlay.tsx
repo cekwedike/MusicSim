@@ -68,8 +68,8 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
 
           if (rect.width > 0 && rect.height > 0) {
             const position: ElementPosition = {
-              top: rect.top + window.scrollY,
-              left: rect.left + window.scrollX,
+              top: rect.top,
+              left: rect.left,
               width: rect.width,
               height: rect.height
             };

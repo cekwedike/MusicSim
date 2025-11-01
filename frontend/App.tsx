@@ -11,7 +11,7 @@ import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
-import { getDifficultySettings } from './data/difficultySettings';
+import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
 import { projects as allProjects } from './data/projects';
 import { staff as allStaff } from './data/staff';
@@ -312,11 +312,24 @@ function gameReducer(state: GameState, action: Action): GameState {
         }
         case 'DISMISS_OUTCOME': {
             if (state.status !== 'playing') return { ...state, lastOutcome: null };
-            
+
             // --- Weekly Processing ---
             let newStats = { ...state.playerStats };
             let newStaff = [...state.staff];
             let eventsThisWeek: string[] = [];
+
+            // Calculate total weeks played
+            const currentGameDate = toGameDate(state.currentDate, state.startDate);
+            const totalWeeksPlayed = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
+
+            // Get base difficulty settings and calculate dynamic modifiers
+            const settings = getDifficultySettings(state.difficulty);
+            const dynamicMods = calculateDynamicModifiers(
+                settings,
+                totalWeeksPlayed,
+                state.playerStats.careerProgress,
+                state.playerStats.cash
+            );
 
             // 1. Apply staff bonuses
             let bonusFame = 0;
@@ -331,11 +344,21 @@ function gameReducer(state: GameState, action: Action): GameState {
             });
             newStats.cash = Math.floor(newStats.cash * cashModifier);
 
-            // 2. Apply difficulty modifiers and pay staff salaries
-            const settings = getDifficultySettings(state.difficulty);
-            const totalSalary = Math.floor(newStaff.reduce((sum, s) => sum + s.salary, 0) * settings.salaryMultiplier);
+            // 2. Pay staff salaries with dynamic cost multiplier
+            const totalSalary = Math.floor(
+                newStaff.reduce((sum, s) => sum + s.salary, 0) *
+                dynamicMods.costMultiplier *
+                dynamicMods.inflationMultiplier
+            );
             newStats.cash -= totalSalary;
             if (totalSalary > 0) eventsThisWeek.push(`Paid $${totalSalary.toLocaleString()} in staff salaries.`);
+
+            // Apply minimum cash flow (living expenses)
+            if (settings.economicPressure.minimumCashFlow > 0) {
+                const livingExpenses = Math.floor(settings.economicPressure.minimumCashFlow * dynamicMods.inflationMultiplier);
+                newStats.cash -= livingExpenses;
+                if (livingExpenses > 0) eventsThisWeek.push(`Living expenses: -$${livingExpenses.toLocaleString()}`);
+            }
 
             // Apply debt interest (hardcore only)
             if (settings.debtInterest && newStats.cash < 0) {
@@ -474,16 +497,35 @@ function gameReducer(state: GameState, action: Action): GameState {
                 const careerBonus = 10 + qualityBonus;
 
                 // Calculate project income based on type and quality, modified by difficulty
-                let projectIncome = 0;
+                let baseIncome = 0;
                 if (newProject.id.includes('SINGLE')) {
-                    projectIncome = Math.floor((200 + newProject.quality * 10) * settings.advanceMultiplier);
+                    baseIncome = 200 + newProject.quality * 10;
                 } else if (newProject.id.includes('EP')) {
-                    projectIncome = Math.floor((800 + newProject.quality * 25) * settings.advanceMultiplier);
+                    baseIncome = 800 + newProject.quality * 25;
                 } else if (newProject.id.includes('ALBUM')) {
-                    projectIncome = Math.floor((3000 + newProject.quality * 50) * settings.advanceMultiplier);
+                    baseIncome = 3000 + newProject.quality * 50;
                 }
 
-                newStats.cash += projectIncome;
+                // Apply dynamic income multiplier and market volatility
+                let projectIncome = Math.floor(baseIncome * dynamicMods.incomeMultiplier);
+                if (settings.marketVolatility.enabled) {
+                    const [minSwing, maxSwing] = settings.marketVolatility.cashSwingRange;
+                    const swing = minSwing + Math.random() * (maxSwing - minSwing);
+                    projectIncome = Math.floor(projectIncome * (1 + swing));
+                }
+
+                // Apply tax on income
+                const taxAmount = settings.economicPressure.taxRate > 0
+                    ? Math.floor(projectIncome * settings.economicPressure.taxRate)
+                    : 0;
+                const netIncome = projectIncome - taxAmount;
+
+                newStats.cash += netIncome;
+                if (taxAmount > 0) {
+                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${projectIncome.toLocaleString()} (-$${taxAmount.toLocaleString()} tax = $${netIncome.toLocaleString()} net)`);
+                } else {
+                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${netIncome.toLocaleString()}`);
+                }
                 newStats.fame += fameBonus;
                 newStats.hype += hypeBonus;
                 newStats.careerProgress += careerBonus;

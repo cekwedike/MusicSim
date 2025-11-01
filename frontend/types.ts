@@ -88,6 +88,42 @@ export interface DifficultySettings {
   advanceMultiplier: number;
   debtInterest: boolean;
   randomEvents: boolean;
+
+  // Dynamic difficulty modifiers
+  timeScaling: {
+    enabled: boolean;
+    decayIncrease: number; // How much decay increases per 26 weeks (0.1 = +10% every 6 months)
+    costIncrease: number; // How much costs increase over time
+    incomeDecrease: number; // How much income decreases over time
+  };
+
+  marketVolatility: {
+    enabled: boolean;
+    cashSwingRange: [number, number]; // Random % swing in cash events
+    fameVolatility: number; // How volatile fame gains/losses are
+    hypeVolatility: number; // How volatile hype is
+  };
+
+  competition: {
+    enabled: boolean;
+    fameDrain: number; // Passive fame loss due to other artists
+    hypeDrain: number; // Passive hype loss due to competition
+    frequencyMultiplier: number; // How often competitive events occur
+  };
+
+  economicPressure: {
+    inflation: number; // Weekly cost increase %
+    recoupmentPressure: boolean; // Labels demand faster recoupment
+    minimumCashFlow: number; // Minimum weekly expenses
+    taxRate: number; // Percentage tax on income
+  };
+
+  performanceScaling: {
+    enabled: boolean;
+    successPenalty: number; // When doing well, difficulty increases
+    failureRelief: number; // When struggling, difficulty decreases
+    threshold: number; // Career progress threshold for scaling
+  };
 }
 
 export interface RecordLabel {

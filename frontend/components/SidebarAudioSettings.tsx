@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAudio } from '../contexts/AudioContext';
 import { MusicNoteIcon } from './icons/Icons';
+import { Volume2, VolumeX, AlertTriangle } from 'lucide-react';
 
 const SidebarAudioSettings: React.FC = () => {
   const { audioState, setMusicVolume, setSfxVolume, toggleMusicMute, toggleSfxMute, playSound, nextTrack } = useAudio();
@@ -16,6 +17,25 @@ const SidebarAudioSettings: React.FC = () => {
           <p className="text-xs text-gray-400">Music & sound effects controls</p>
         </div>
       </div>
+
+      {/* Browser Muted Warning */}
+      {audioState.isBrowserMuted && (
+        <div className="mb-4 bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-3 flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <h4 className="font-semibold text-yellow-300 text-sm mb-1">Browser Tab Muted</h4>
+            <p className="text-xs text-yellow-200/90 leading-relaxed mb-2">
+              Your browser has muted this tab. Audio won't play until you unmute it.
+            </p>
+            <button
+              onClick={toggleMusicMute}
+              className="text-xs bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1.5 rounded transition-colors font-medium"
+            >
+              Unmute Audio
+            </button>
+          </div>
+        </div>
+      )}
 
       <section className="mb-6 bg-gray-800/60 p-4 rounded-lg border border-gray-700">
         <div className="flex items-center justify-between mb-3">

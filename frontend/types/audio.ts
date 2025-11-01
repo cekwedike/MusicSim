@@ -34,6 +34,8 @@ export interface AudioState {
   currentTrack: BackgroundMusic | null;
   // Whether music is currently ducked because a voiceover is playing
   isMusicDucked?: boolean;
+  // Whether the browser has externally muted the tab (e.g., user right-clicked tab → Mute)
+  isBrowserMuted?: boolean;
 }
 
 export interface AudioManager {

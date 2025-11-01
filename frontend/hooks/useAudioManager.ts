@@ -56,6 +56,7 @@ export const useAudioManager = (): AudioManager => {
       audio.loop = false;
       audio.volume = audioState.musicVolume;
       musicAudioRef.current = audio;
+
       // when a track naturally ends (we won't loop here since we manage rotation), rotate
       audio.addEventListener('ended', () => {
         // rotate to next playlist track
@@ -81,6 +82,19 @@ export const useAudioManager = (): AudioManager => {
       // Handle successful load
       audio.addEventListener('canplaythrough', () => {
         console.log('Music loaded successfully');
+      });
+
+      // Detect when browser mutes the tab (e.g., user mutes tab from browser UI)
+      audio.addEventListener('volumechange', () => {
+        // If browser has muted the audio element externally
+        if (audio.muted && !audioState.isMusicMuted) {
+          console.log('[Audio Manager] Browser muted the tab, syncing game state...');
+          setAudioState((prev) => ({
+            ...prev,
+            isMusicMuted: true,
+            isBrowserMuted: true
+          }));
+        }
       });
     }
 
@@ -116,6 +130,8 @@ export const useAudioManager = (): AudioManager => {
   // Update music volume when it changes
   useEffect(() => {
     if (musicAudioRef.current) {
+      // Set both volume and muted property for proper browser integration
+      musicAudioRef.current.muted = audioState.isMusicMuted;
       musicAudioRef.current.volume = audioState.isMusicMuted ? 0 : audioState.musicVolume;
     }
   }, [audioState.musicVolume, audioState.isMusicMuted]);
@@ -123,6 +139,7 @@ export const useAudioManager = (): AudioManager => {
   // Update SFX volume for all cached sounds
   useEffect(() => {
     soundPoolRef.current.forEach((audio) => {
+      audio.muted = audioState.isSfxMuted;
       audio.volume = audioState.isSfxMuted ? 0 : audioState.sfxVolume;
     });
   }, [audioState.sfxVolume, audioState.isSfxMuted]);
@@ -217,6 +234,7 @@ export const useAudioManager = (): AudioManager => {
 
       // Reset and play (clone for overlapping sounds)
       const clone = audio.cloneNode() as HTMLAudioElement;
+      clone.muted = audioState.isSfxMuted;
       clone.volume = audioState.isSfxMuted ? 0 : audioState.sfxVolume;
       clone.play().catch((error) => {
         console.error(`Failed to play sound "${sound}":`, error);
@@ -324,7 +342,12 @@ export const useAudioManager = (): AudioManager => {
 
   // Toggle music mute
   const toggleMusicMute = useCallback(() => {
-    setAudioState((prev) => ({ ...prev, isMusicMuted: !prev.isMusicMuted }));
+    setAudioState((prev) => ({
+      ...prev,
+      isMusicMuted: !prev.isMusicMuted,
+      // Clear browser muted flag when user manually toggles
+      isBrowserMuted: false
+    }));
   }, []);
 
   // Toggle SFX mute
@@ -334,7 +357,12 @@ export const useAudioManager = (): AudioManager => {
 
   // Set music muted state
   const setMusicMuted = useCallback((muted: boolean) => {
-    setAudioState((prev) => ({ ...prev, isMusicMuted: muted }));
+    setAudioState((prev) => ({
+      ...prev,
+      isMusicMuted: muted,
+      // Clear browser muted flag when user manually sets mute state
+      isBrowserMuted: false
+    }));
   }, []);
 
   // Set SFX muted state

@@ -1095,6 +1095,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Sidebar state
     const [activeSidebarView, setActiveSidebarView] = useState<SidebarView>(null);
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [saveLoadPanelKey, setSaveLoadPanelKey] = useState(0);
 
     // Welcome dialog state
@@ -1576,6 +1577,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             <Header
                 artistName={artistName || undefined}
                 difficulty={status === 'playing' ? state.difficulty : undefined}
+                onMenuClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+                showMenuButton={!!artistName}
             />
 
             {/* Sidebar - only show when game has started */}
@@ -1584,6 +1587,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     activeView={activeSidebarView}
                     onViewChange={handleSidebarViewChange}
                     hasUnseenAchievements={unseenAchievements.length > 0}
+                    isMobileOpen={isMobileSidebarOpen}
+                    onMobileToggle={setIsMobileSidebarOpen}
                 >
                     {/* Render content based on active view */}
                     {activeSidebarView === 'saveload' && (
@@ -1632,13 +1637,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
             
-            <div className="flex-grow w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6 py-2 sm:py-4 flex flex-col">
+            <div className="flex-grow w-full max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4 flex flex-col">
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
 
-                <main className="flex justify-center mt-1 sm:mt-2 mb-4 sm:mb-6">
+                <main className="flex justify-center mt-2 sm:mt-3 mb-16 sm:mb-6">
                     {renderGameContent()}
                 </main>
             </div>

@@ -14,6 +14,38 @@
   animation: slide-up 0.3s ease-out;
 }
 
+/* Responsive body font sizing and mobile optimizations */
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  body {
+    @apply text-sm sm:text-base;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improve scrolling on iOS */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better button and link touch targets on mobile */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  @media (min-width: 640px) {
+    button, a {
+      min-height: auto;
+      min-width: auto;
+    }
+  }
+}
+
 /* ========================================
    LIGHT MODE THEME - Comprehensive Redesign
    ======================================== */

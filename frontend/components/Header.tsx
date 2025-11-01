@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import type { Difficulty } from '../types';
 import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 import { getAutosaveAge } from '../services/storageService';
+import { Menu } from 'lucide-react';
 
 interface HeaderProps {
     artistName?: string;
     difficulty?: Difficulty;
+    onMenuClick?: () => void;
+    showMenuButton?: boolean;
 }
 
 
-const Header: React.FC<HeaderProps> = ({ artistName, difficulty }) => {
+const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, showMenuButton = false }) => {
     const [autosaveAge, setAutosaveAge] = useState<number | null>(null);
     const [justSaved, setJustSaved] = useState(false);
 
@@ -71,7 +74,17 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty }) => {
                 </div>
             )}
 
-            {/* Audio controls moved into the Sidebar (Audio Panel) */}
+            {/* Mobile Menu Button */}
+            {showMenuButton && (
+                <button
+                    id="mobile-menu-button"
+                    onClick={onMenuClick}
+                    className="absolute top-2 sm:top-4 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-gray-800/80 border border-gray-700 hover:bg-gray-700 transition-colors"
+                    aria-label="Toggle menu"
+                >
+                    <Menu className="w-5 h-5 text-gray-300" />
+                </button>
+            )}
         </header>
     );
 };

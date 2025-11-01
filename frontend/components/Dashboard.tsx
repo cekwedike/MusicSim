@@ -87,12 +87,16 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
 
     return (
         <div>
-            <div className="player-stats grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
+            {/* Mobile: 2 columns, Tablet: 3 columns, Desktop: 5 columns */}
+            <div className="player-stats grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3 lg:gap-4">
                 <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
                 <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
                 <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
                 <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
-                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
+                {/* Date spans full width on mobile */}
+                <div className="col-span-2 md:col-span-1">
+                    <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
+                </div>
             </div>
         </div>
     );

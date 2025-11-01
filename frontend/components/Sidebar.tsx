@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon, MusicNoteIcon, UserIcon } from './icons/Icons';
 import { useTheme } from '../contexts/ThemeContext';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Menu, X } from 'lucide-react';
 
 export type SidebarView = 'profile' | 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
 
@@ -10,6 +10,8 @@ interface SidebarProps {
   onViewChange: (view: SidebarView) => void;
   hasUnseenAchievements?: boolean;
   children?: React.ReactNode;
+  isMobileOpen?: boolean;
+  onMobileToggle?: (open: boolean) => void;
 }
 
 interface SidebarButton {
@@ -20,9 +22,25 @@ interface SidebarButton {
   badge?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children, isMobileOpen = false, onMobileToggle }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { theme, toggleTheme } = useTheme();
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    if (!isMobileOpen) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const sidebar = document.getElementById('mobile-sidebar');
+      const menuButton = document.getElementById('mobile-menu-button');
+      if (sidebar && !sidebar.contains(e.target as Node) && !menuButton?.contains(e.target as Node)) {
+        onMobileToggle?.(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobileOpen, onMobileToggle]);
 
   const buttons: SidebarButton[] = [
     {
@@ -84,10 +102,26 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
   };
 
   return (
-    // Sidebar positioned below the app header (top-16) and stretches to the bottom
-    <div className="fixed right-0 top-16 bottom-0 z-60 flex">
-      {/* Icon Bar */}
-      <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-4 shadow-xl">
+    <>
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => onMobileToggle?.(false)}
+        />
+      )}
+
+      {/* Sidebar - Hidden on mobile unless opened, always visible on desktop */}
+      <div
+        id="mobile-sidebar"
+        className={`
+          fixed right-0 top-16 bottom-0 z-50 flex
+          transition-transform duration-300 ease-in-out
+          ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+        `}
+      >
+        {/* Icon Bar */}
+        <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-3 shadow-xl overflow-y-auto">
         {buttons.map((button) => (
           <button
             key={button.id}
@@ -195,6 +229,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         )}
       </div>
     </div>
+    </>
   );
 };
 

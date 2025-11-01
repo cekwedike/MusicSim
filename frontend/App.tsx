@@ -339,7 +339,7 @@ function gameReducer(state: GameState, action: Action): GameState {
 
             // Apply debt interest (hardcore only)
             if (settings.debtInterest && newStats.cash < 0) {
-                const interest = Math.floor(Math.abs(newStats.cash) * 0.05); // 5% weekly interest
+                const interest = Math.floor(Math.abs(newStats.cash) * 0.03); // 3% weekly interest (reduced from 5%)
                 newStats.cash -= interest;
                 if (interest > 0) {
                     eventsThisWeek.push(`Debt interest: -$${interest.toLocaleString()}`);
@@ -347,40 +347,114 @@ function gameReducer(state: GameState, action: Action): GameState {
             }
             
             // Random events (realistic and hardcore)
-            if (settings.randomEvents && Math.random() < 0.1) { // 10% chance each week
-                const randomEvents = [
-                    { 
-                        description: 'Equipment breakdown! Emergency repair needed.', 
-                        cash: -500, 
-                        wellBeing: -5 
+            if (settings.randomEvents && Math.random() < 0.15) { // 15% chance each week
+                const randomEvents = state.difficulty === 'hardcore' ? [
+                    // Hardcore events - more severe
+                    {
+                        description: 'Equipment breakdown! Emergency repair needed.',
+                        cash: -800,
+                        wellBeing: -8
                     },
-                    { 
-                        description: 'Viral social media moment! Unexpected hype boost.', 
-                        hype: 15, 
-                        fame: 5 
+                    {
+                        description: 'Viral social media moment! Unexpected hype boost.',
+                        hype: 12,
+                        fame: 4
                     },
-                    { 
-                        description: 'Show cancelled last minute due to venue issues.', 
-                        cash: -300, 
-                        wellBeing: -10 
+                    {
+                        description: 'Show cancelled - venue went bankrupt!',
+                        cash: -500,
+                        wellBeing: -12
                     },
-                    { 
-                        description: 'Local radio spontaneously plays your song!', 
-                        fame: 10, 
-                        hype: 10 
+                    {
+                        description: 'Radio DJ demands payment to play your song.',
+                        cash: -400,
+                        hype: -8
                     },
-                    { 
-                        description: 'Tax audit - unexpected expense.', 
-                        cash: -800 
+                    {
+                        description: 'Tax audit - unexpected expense.',
+                        cash: -1200
+                    },
+                    {
+                        description: 'Streaming platform featuring boost!',
+                        cash: 300,
+                        fame: 4,
+                        hype: 8
+                    },
+                    {
+                        description: 'Staff member quits unexpectedly!',
+                        wellBeing: -10,
+                        hype: -5
+                    },
+                    {
+                        description: 'Piracy hits hard - album leaked early.',
+                        cash: -600,
+                        hype: -10
+                    },
+                    {
+                        description: 'Power outage ruins studio session.',
+                        cash: -400,
+                        wellBeing: -8
+                    },
+                    {
+                        description: 'Influencer shares your music organically!',
+                        fame: 8,
+                        hype: 15
+                    }
+                ] : [
+                    // Realistic events - balanced
+                    {
+                        description: 'Equipment breakdown! Emergency repair needed.',
+                        cash: -500,
+                        wellBeing: -5
+                    },
+                    {
+                        description: 'Viral social media moment! Unexpected hype boost.',
+                        hype: 15,
+                        fame: 5
+                    },
+                    {
+                        description: 'Show cancelled last minute due to venue issues.',
+                        cash: -300,
+                        wellBeing: -10
+                    },
+                    {
+                        description: 'Local radio spontaneously plays your song!',
+                        fame: 10,
+                        hype: 10
+                    },
+                    {
+                        description: 'Tax audit - unexpected expense.',
+                        cash: -800
                     },
                     {
                         description: 'Streaming platform featuring boost!',
                         cash: 400,
                         fame: 5,
                         hype: 10
+                    },
+                    {
+                        description: 'Small festival invites you last minute!',
+                        cash: 600,
+                        fame: 5,
+                        wellBeing: -5
+                    },
+                    {
+                        description: 'Blogger writes positive review!',
+                        fame: 8,
+                        hype: 12
+                    },
+                    {
+                        description: 'Unexpected medical expense.',
+                        cash: -400,
+                        wellBeing: -8
+                    },
+                    {
+                        description: 'Friend hooks you up with free studio time!',
+                        cash: 300,
+                        wellBeing: 5
                     }
                 ];
-                
+
                 const randomEvent = randomEvents[Math.floor(Math.random() * randomEvents.length)];
                 eventsThisWeek.push(randomEvent.description);
                 newStats.cash += randomEvent.cash || 0;
@@ -398,10 +472,22 @@ function gameReducer(state: GameState, action: Action): GameState {
                 const hypeBonus = Math.floor(newProject.quality / 5 + state.playerStats.hype / 10);
                 const fameBonus = 5 + qualityBonus;
                 const careerBonus = 10 + qualityBonus;
+
+                // Calculate project income based on type and quality, modified by difficulty
+                let projectIncome = 0;
+                if (newProject.id.includes('SINGLE')) {
+                    projectIncome = Math.floor((200 + newProject.quality * 10) * settings.advanceMultiplier);
+                } else if (newProject.id.includes('EP')) {
+                    projectIncome = Math.floor((800 + newProject.quality * 25) * settings.advanceMultiplier);
+                } else if (newProject.id.includes('ALBUM')) {
+                    projectIncome = Math.floor((3000 + newProject.quality * 50) * settings.advanceMultiplier);
+                }
+
+                newStats.cash += projectIncome;
                 newStats.fame += fameBonus;
                 newStats.hype += hypeBonus;
                 newStats.careerProgress += careerBonus;
-                eventsThisWeek.push(`You released '${newProject.name}'! It gained ${fameBonus} Fame, ${hypeBonus} Hype, and ${careerBonus} Career Progress.`);
+                eventsThisWeek.push(`You released '${newProject.name}'! Earned $${projectIncome.toLocaleString()}, gained ${fameBonus} Fame, ${hypeBonus} Hype, and ${careerBonus} Career Progress.`);
                 const projectAchievement = updatedAchievements.find(a => a.id === `PROJECT_${newProject?.id}`);
                 if(projectAchievement && !projectAchievement.unlocked){
                     projectAchievement.unlocked = true;
@@ -412,10 +498,15 @@ function gameReducer(state: GameState, action: Action): GameState {
 
             // 4. Update Stats with difficulty modifiers
             newStats.fame = Math.min(100, Math.max(0, newStats.fame + bonusFame));
-            
-            // Apply hype decay with difficulty modifier
+
+            // Apply stat decay with difficulty modifiers
             const hypeDecay = Math.floor(2 * settings.statsDecayRate);
+            const fameDecay = Math.floor(1 * settings.statsDecayRate);
+            const wellBeingDecay = Math.floor(1 * settings.statsDecayRate);
+
             newStats.hype = Math.min(100, Math.max(0, newStats.hype + bonusHype - hypeDecay));
+            newStats.fame = Math.min(100, Math.max(0, newStats.fame - fameDecay));
+            newStats.wellBeing = Math.min(100, Math.max(0, newStats.wellBeing - wellBeingDecay));
             
             // Advance current date by random 3-7 days
             const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days
@@ -623,15 +714,15 @@ function gameReducer(state: GameState, action: Action): GameState {
             return { ...state, modal: 'contract' };
         case 'SIGN_CONTRACT': {
             if (!state.currentLabelOffer) return state;
-            
+
             const settings = getDifficultySettings(state.difficulty);
             const adjustedAdvance = Math.floor(state.currentLabelOffer.terms.advance * settings.advanceMultiplier);
-            
+
             const newStats = { ...state.playerStats };
             newStats.cash += adjustedAdvance;
             newStats.fame += 10;
             newStats.hype += 15;
-            newStats.careerProgress += 10;
+            newStats.careerProgress += 15;
             
             let updatedAchievements = [...state.achievements];
             let newUnseenAchievements = [...state.unseenAchievements];
@@ -651,7 +742,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
                 // legacy careerLog append removed; Date-based log added instead
-                logs: appendLogToArray(state.logs, createLog(`Signed with ${state.currentLabelOffer.name}! Received $${state.currentLabelOffer.terms.advance.toLocaleString()} advance.`, 'success', new Date(state.currentDate || new Date())))
+                logs: appendLogToArray(state.logs, createLog(`Signed with ${state.currentLabelOffer.name}! Received $${adjustedAdvance.toLocaleString()} advance.`, 'success', new Date(state.currentDate || new Date())))
             };
         }
         case 'DECLINE_CONTRACT': {

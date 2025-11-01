@@ -22,7 +22,7 @@
   }
 
   body {
-    @apply text-sm sm:text-base;
+    font-size: 0.875rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -39,6 +39,9 @@
   }
 
   @media (min-width: 640px) {
+    body {
+      font-size: 1rem;
+    }
     button, a {
       min-height: auto;
       min-width: auto;

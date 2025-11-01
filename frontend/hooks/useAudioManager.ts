@@ -400,6 +400,12 @@ export const useAudioManager = (): AudioManager => {
   const duckMusic = useCallback(async () => {
     if (!musicAudioRef.current) return;
     try {
+      // If music is muted, don't duck (it's already at 0)
+      if (audioState.isMusicMuted) {
+        setAudioState((prev) => ({ ...prev, isMusicDucked: true }));
+        return;
+      }
+
       if (previousMusicVolumeRef.current == null) previousMusicVolumeRef.current = musicAudioRef.current.volume;
       const baseVol = previousMusicVolumeRef.current ?? audioState.musicVolume;
       const target = Math.max(0, baseVol * 0.12);
@@ -409,20 +415,21 @@ export const useAudioManager = (): AudioManager => {
     } catch (e) {
       console.error('Error while ducking music:', e);
     }
-  }, [audioState.musicVolume, fadeMusic]);
+  }, [audioState.musicVolume, audioState.isMusicMuted, fadeMusic]);
 
   const unduckMusic = useCallback(async () => {
     if (!musicAudioRef.current) return;
     try {
       const prev = previousMusicVolumeRef.current ?? audioState.musicVolume;
-      // Smoothly fade back to previous volume
-      await fadeMusic(prev, 300);
+      // Only restore volume if music is not muted
+      const targetVolume = audioState.isMusicMuted ? 0 : prev;
+      await fadeMusic(targetVolume, 300);
       previousMusicVolumeRef.current = null;
       setAudioState((prev) => ({ ...prev, isMusicDucked: false }));
     } catch (e) {
       console.error('Error while unducking music:', e);
     }
-  }, [audioState.musicVolume, fadeMusic]);
+  }, [audioState.musicVolume, audioState.isMusicMuted, fadeMusic]);
 
   return {
     playSound,

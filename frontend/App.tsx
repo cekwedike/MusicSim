@@ -426,6 +426,11 @@ function gameReducer(state: GameState, action: Action): GameState {
             });
             newStats.cash = Math.floor(newStats.cash * cashModifier);
 
+            // Advance current date by random 3-7 days
+            const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days
+            const newCurrentDate = new Date(state.currentDate);
+            newCurrentDate.setDate(newCurrentDate.getDate() + daysToAdvance);
+
             // 2. Pay staff salaries MONTHLY (not weekly)
             let lastStaffPaymentDate = new Date(state.lastStaffPaymentDate);
             let shouldPayStaff = false;
@@ -446,7 +451,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 newStats.cash -= totalSalary;
                 eventsThisWeek.push(`💰 Monthly staff salaries paid: $${totalSalary.toLocaleString()}`);
 
-                // Update staff contract time
+                // Update staff contract time (recalculate monthsRemaining based on the advanced date)
                 newStaff = updateStaffContractTime(newStaff, newCurrentDate);
 
                 // Check for expiring contracts (< 1 month remaining)
@@ -719,10 +724,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 eventsThisWeek.push(`Competition from other artists is heating up! (-${competitionFameLoss.toFixed(1)} fame, -${competitionHypeLoss.toFixed(1)} hype)`);
             }
             
-            // Advance current date by random 3-7 days
-            const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days
-            const newCurrentDate = new Date(state.currentDate);
-            newCurrentDate.setDate(newCurrentDate.getDate() + daysToAdvance);
+            // newCurrentDate was advanced earlier before salary/payment logic
 
             // Determine game-week derived from newCurrentDate
             const newGameDate = toGameDate(newCurrentDate, state.startDate);
@@ -742,11 +744,10 @@ function gameReducer(state: GameState, action: Action): GameState {
             // Update statistics (pass through a derived legacy date for calculation where needed)
             let newStatistics = updateStatistics({...state, playerStats: newStats, date: newGameDate as any}, state.statistics);
 
-            // 6. Update Staff Contracts
-            newStaff.forEach(s => s.contractLength--);
-            const expiredStaff = newStaff.find(s => s.contractLength === 0);
-            if(expiredStaff) {
-                 eventsThisWeek.push(`${expiredStaff.name}'s contract has expired! You'll need to decide whether to renew.`);
+            // 6. Update Staff Contracts - monthsRemaining already updated earlier when we advanced the date
+            const soonToExpire = newStaff.find(s => s.monthsRemaining === 0);
+            if (soonToExpire) {
+                eventsThisWeek.push(`${soonToExpire.name}'s contract has expired! You'll need to decide whether to renew.`);
             }
             
             // 7. Check Game Over Grace Period

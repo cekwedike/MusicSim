@@ -86,7 +86,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
     const displayDate = currentDate ? formatDate(currentDate) : `Y${date.year} M${date.month} W${date.week}`;
 
     return (
-        <div className="mb-4 md:mb-0">
+        <div className="mb-4 md:mb-0 mt-2">
             {/* Mobile: 2 columns, Tablet: 3 columns, Desktop: 5 columns */}
             <div className="player-stats grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 lg:gap-4">
                 <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />

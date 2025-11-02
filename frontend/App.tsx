@@ -108,14 +108,19 @@ const INITIAL_STATE = generateInitialState();
 // Log helpers moved to src/utils/logUtils.ts (createLog, appendLogToArray)
 
 function checkAchievements(state: GameState, newStats: PlayerStats): { achievements: GameState['achievements'], unseenAchievements: string[] } {
+    console.log('[checkAchievements] Called with stats:', newStats, 'staff:', state.staff);
     const unlockedAchievements = [...state.achievements];
     const newUnseen = [...state.unseenAchievements];
 
     const checkAndUnlock = (id: string, condition: boolean) => {
         const achievement = unlockedAchievements.find(a => a.id === id);
         if (achievement && !achievement.unlocked && condition) {
+            console.log(`[checkAchievements] 🎉 Unlocking achievement: ${id} (${achievement.name})`);
             achievement.unlocked = true;
-            if(!newUnseen.includes(id)) newUnseen.push(id);
+            if(!newUnseen.includes(id)) {
+                newUnseen.push(id);
+                console.log(`[checkAchievements] Added to newUnseen: ${id}. Total unseen now:`, newUnseen);
+            }
         }
     };
     
@@ -176,6 +181,7 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     const hardcoreCareers = state.statistics.careersByDifficulty.hardcore;
     checkAndUnlock('DIFFICULTY_MASTER', beginnerCareers > 0 && realisticCareers > 0 && hardcoreCareers > 0);
     
+    console.log('[checkAchievements] Returning. Unseen achievements:', newUnseen);
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
 

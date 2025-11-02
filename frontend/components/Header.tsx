@@ -79,7 +79,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                 <button
                     id="mobile-menu-button"
                     onClick={onMenuClick}
-                    className="absolute top-3 sm:top-4 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-gray-800/80 border border-gray-700 hover:bg-gray-700 transition-colors"
+                    className="absolute top-3 sm:top-4 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-gray-800/80 border border-gray-700 hover:bg-gray-700 transition-colors z-10"
                     aria-label="Toggle menu"
                 >
                     <Menu className="w-5 h-5 text-gray-300" />

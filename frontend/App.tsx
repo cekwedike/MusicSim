@@ -1139,11 +1139,69 @@ function gameReducer(state: GameState, action: Action): GameState {
             // Hire the staff - deduct first month's salary immediately
             const hiredStaff = hireStaffFromTemplate(template, contractDuration, new Date(state.currentDate));
             const newStats = { ...state.playerStats, cash: state.playerStats.cash - template.salary };
+            // Construct an outcome modal payload that mirrors the old scenario-based outcome
+            const hireOutcome = (() => {
+                if (template.role === 'Manager') {
+                    return {
+                        text: `You put out feelers and a respected local manager agrees to take you on. Their services aren't cheap, but the relief is immediate.`,
+                        cash: 0,
+                        fame: 0,
+                        wellBeing: 10,
+                        careerProgress: 0,
+                        hype: 0,
+                        audioFile: '/audio/scenarios/first-staff-hire.m4a',
+                        autoPlayAudio: true,
+                        lesson: {
+                            title: 'The Value of Professional Management',
+                            explanation: "A good manager handles business so you can focus on creativity. They take 10-20% of your income but often increase your earnings by far more through better deals and opportunities.",
+                            realWorldExample: "Davido's manager helped negotiate his Sony Music deal and international collaborations. The 15% management fee paid for itself through better contract terms and global opportunities.",
+                            tipForFuture: 'Look for managers with industry connections and a track record of growing artists\' careers. Their network and experience are worth the commission.',
+                            conceptTaught: 'Contract Basics'
+                        }
+                    };
+                }
+
+                if (template.role === 'Booker') {
+                    return {
+                        text: 'You connect with a local booker who has connections to all the best venues. Gigs start rolling in almost immediately.',
+                        cash: 0,
+                        fame: 0,
+                        wellBeing: 5,
+                        careerProgress: 0,
+                        hype: 0,
+                        lesson: {
+                            title: 'The Power of Industry Connections',
+                            explanation: "Bookers have relationships that take years to build. Their network and reputation can open doors that would remain closed to new artists trying to book directly.",
+                            realWorldExample: 'Successful booking agents in Lagos and Johannesburg often represent multiple artists, giving them leverage when negotiating with venues and festivals.',
+                            tipForFuture: 'Invest in people who have the relationships you need. Their connections are often worth more than their fees.',
+                            conceptTaught: 'Revenue Streams'
+                        }
+                    };
+                }
+
+                // Promoter
+                return {
+                    text: 'You bring on a savvy promoter who immediately starts getting your name out there. Blog posts and radio interviews follow.',
+                    cash: 0,
+                    fame: 0,
+                    wellBeing: 5,
+                    careerProgress: 0,
+                    hype: 0,
+                    lesson: {
+                        title: 'Professional Promotion vs DIY Marketing',
+                        explanation: "Promoters have relationships with playlist curators, radio DJs, and influencers that take years to develop. Their credibility can get your music heard by the right people.",
+                        realWorldExample: 'Many Afrobeats artists gained international recognition through promoters who had connections with global playlist curators and international radio stations.',
+                        tipForFuture: 'Good promotion is an investment, not an expense. The right promoter can multiply your reach far beyond what you could achieve alone.',
+                        conceptTaught: 'Branding and Image'
+                    }
+                };
+            })();
 
             return {
                 ...state,
                 staff: [...state.staff, hiredStaff],
                 playerStats: newStats,
+                // Keep a concise log entry and also surface the hire outcome as the lastOutcome so the OutcomeModal shows
                 logs: appendLogToArray(
                     state.logs,
                     createLog(
@@ -1152,7 +1210,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                         new Date(state.currentDate || new Date()),
                         '🤝'
                     )
-                )
+                ),
+                lastOutcome: hireOutcome as any
             };
         }
 

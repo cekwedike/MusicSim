@@ -5,7 +5,7 @@ import { AudioProvider } from './contexts/AudioContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LoginModal } from './components/LoginModal';
 import LandingPage from './components/LandingPage';
-import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
+import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, HiredStaff, StaffTemplate, ContractDuration, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
@@ -14,7 +14,7 @@ import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCa
 import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
 import { projects as allProjects } from './data/projects';
-import { staff as allStaff } from './data/staff';
+import { staffTemplates, getStaffTemplate, getAvailableStaff } from './data/staff';
 import { labels as allLabels } from './data/labels';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
@@ -80,6 +80,8 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         lessonsViewed: [],
         consecutiveFallbackCount: 0,
         staff: [],
+        staffHiringUnlocked: false, // Unlocked at 10 fame or via scenario
+        lastStaffPaymentDate: new Date(),
         currentLabel: null,
         currentLabelOffer: null,
         contractsViewed: [],
@@ -105,6 +107,39 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
 const INITIAL_STATE = generateInitialState();
 
 // Log helpers moved to src/utils/logUtils.ts (createLog, appendLogToArray)
+
+/**
+ * Helper function to create a HiredStaff from a StaffTemplate
+ */
+function hireStaffFromTemplate(template: StaffTemplate, contractDuration: ContractDuration, hiredDate: Date = new Date()): HiredStaff {
+    const contractExpiresDate = new Date(hiredDate);
+    contractExpiresDate.setMonth(contractExpiresDate.getMonth() + contractDuration);
+
+    return {
+        templateId: template.id,
+        name: template.name,
+        role: template.role,
+        tier: template.tier,
+        salary: template.salary,
+        bonuses: [...template.bonuses],
+        hiredDate: new Date(hiredDate),
+        contractDuration,
+        contractExpiresDate,
+        monthsRemaining: contractDuration
+    };
+}
+
+/**
+ * Update monthsRemaining for all hired staff based on current date
+ */
+function updateStaffContractTime(staff: HiredStaff[], currentDate: Date): HiredStaff[] {
+    return staff.map(s => {
+        const monthsRemaining = Math.max(0, Math.ceil(
+            (s.contractExpiresDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24 * 30)
+        ));
+        return { ...s, monthsRemaining };
+    });
+}
 
 function checkAchievements(state: GameState, newStats: PlayerStats): { achievements: GameState['achievements'], unseenAchievements: string[] } {
     const unlockedAchievements = [...state.achievements];
@@ -242,12 +277,23 @@ function gameReducer(state: GameState, action: Action): GameState {
 
             // Handle Staff changes
             let newStaff = [...state.staff];
+            let staffHiringUnlocked = state.staffHiringUnlocked;
+
             if (outcome.hireStaff) {
+                // Scenario-based hiring: unlock staff feature and hire entry-level staff
                 const existingStaff = newStaff.find(s => s.role === outcome.hireStaff);
                 if (!existingStaff) {
-                    const staffTemplate = allStaff.find(s => s.role === outcome.hireStaff);
+                    // Find entry-level template for this role
+                    const templateId = `${outcome.hireStaff.toUpperCase()}_ENTRY`;
+                    const staffTemplate = getStaffTemplate(templateId);
+
                     if (staffTemplate) {
-                        newStaff.push({ ...staffTemplate });
+                        // Unlock staff hiring feature
+                        staffHiringUnlocked = true;
+
+                        // Hire the staff member with a 12-month contract
+                        const hiredStaff = hireStaffFromTemplate(staffTemplate, 12, new Date(state.currentDate));
+                        newStaff.push(hiredStaff);
 
                         // Check staff hiring achievements
                         const staffAchievementId = `STAFF_${outcome.hireStaff.toUpperCase()}`;
@@ -259,16 +305,9 @@ function gameReducer(state: GameState, action: Action): GameState {
                     }
                 }
             }
-             if (outcome.fireStaff) {
-                newStaff = newStaff.filter(s => s.role !== outcome.fireStaff);
-            }
-            if (outcome.renewStaff) {
-                const staffToRenew = newStaff.find(s => s.role === outcome.renewStaff);
-                const staffTemplate = allStaff.find(s => s.role === outcome.renewStaff);
-                if(staffToRenew && staffTemplate) {
-                    staffToRenew.contractLength = staffTemplate.contractLength;
-                }
-            }
+
+            // Note: fireStaff and renewStaff from outcomes are now handled through the new UI
+            // These outcome properties are deprecated but kept for backward compatibility
             
             // Handle Label signing
             let newLabel: RecordLabel | null = state.currentLabel;
@@ -344,6 +383,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
                 staff: newStaff,
+                staffHiringUnlocked,
                 currentLabel: newLabel,
                 currentLabelOffer: newLabelOffer,
                 contractsViewed: newContractsViewed,
@@ -373,7 +413,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 state.playerStats.cash
             );
 
-            // 1. Apply staff bonuses
+            // 1. Apply staff bonuses (weekly)
             let bonusFame = 0;
             let bonusHype = 0;
             let cashModifier = 1.0;
@@ -386,14 +426,47 @@ function gameReducer(state: GameState, action: Action): GameState {
             });
             newStats.cash = Math.floor(newStats.cash * cashModifier);
 
-            // 2. Pay staff salaries with dynamic cost multiplier
-            const totalSalary = Math.floor(
-                newStaff.reduce((sum, s) => sum + s.salary, 0) *
-                dynamicMods.costMultiplier *
-                dynamicMods.inflationMultiplier
+            // 2. Pay staff salaries MONTHLY (not weekly)
+            let lastStaffPaymentDate = new Date(state.lastStaffPaymentDate);
+            let shouldPayStaff = false;
+            const daysSinceLastPayment = Math.floor(
+                (newCurrentDate.getTime() - lastStaffPaymentDate.getTime()) / (1000 * 60 * 60 * 24)
             );
-            newStats.cash -= totalSalary;
-            if (totalSalary > 0) eventsThisWeek.push(`Paid $${totalSalary.toLocaleString()} in staff salaries.`);
+
+            // Pay staff every 30 days
+            if (daysSinceLastPayment >= 30 && newStaff.length > 0) {
+                shouldPayStaff = true;
+                lastStaffPaymentDate = new Date(newCurrentDate);
+
+                const totalSalary = Math.floor(
+                    newStaff.reduce((sum, s) => sum + s.salary, 0) *
+                    dynamicMods.costMultiplier *
+                    dynamicMods.inflationMultiplier
+                );
+                newStats.cash -= totalSalary;
+                eventsThisWeek.push(`💰 Monthly staff salaries paid: $${totalSalary.toLocaleString()}`);
+
+                // Update staff contract time
+                newStaff = updateStaffContractTime(newStaff, newCurrentDate);
+
+                // Check for expiring contracts (< 1 month remaining)
+                newStaff.forEach(s => {
+                    if (s.monthsRemaining === 1) {
+                        eventsThisWeek.push(`⚠️ ${s.name}'s contract expires in 1 month! Consider extending or replacing them.`);
+                    } else if (s.monthsRemaining === 0) {
+                        eventsThisWeek.push(`⏰ ${s.name}'s contract has expired! They will leave unless extended.`);
+                    }
+                });
+
+                // Remove staff with expired contracts
+                const expiredStaff = newStaff.filter(s => s.monthsRemaining === 0);
+                if (expiredStaff.length > 0) {
+                    expiredStaff.forEach(s => {
+                        eventsThisWeek.push(`👋 ${s.name} has left your team. Their contract expired.`);
+                    });
+                    newStaff = newStaff.filter(s => s.monthsRemaining > 0);
+                }
+            }
 
             // Apply minimum cash flow (living expenses)
             if (settings.economicPressure.minimumCashFlow > 0) {
@@ -733,6 +806,22 @@ function gameReducer(state: GameState, action: Action): GameState {
             const milestoneCheck = checkAchievements({...state, achievements: updatedAchievements}, newStats);
             const finalUnseenAchievements = [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])];
 
+            // Auto-unlock staff hiring based on difficulty level
+            let staffHiringUnlocked = state.staffHiringUnlocked;
+            if (!staffHiringUnlocked) {
+                const unlockThresholds = {
+                    beginner: 20,
+                    realistic: 35,
+                    hardcore: 50
+                };
+                const threshold = unlockThresholds[state.difficulty];
+
+                if (newStats.fame >= threshold) {
+                    staffHiringUnlocked = true;
+                    eventsThisWeek.push(`🎉 You've reached ${threshold} Fame! You can now hire professional staff from the Management Hub!`);
+                }
+            }
+
             const newLogs = eventsThisWeek.length > 0 ? appendLogToArray(state.logs, createLog(eventsThisWeek.join(' '), 'info', new Date(newCurrentDate))) : state.logs;
 
             return {
@@ -749,6 +838,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 achievements: milestoneCheck.achievements,
                 unseenAchievements: finalUnseenAchievements,
                 staff: newStaff,
+                staffHiringUnlocked,
+                lastStaffPaymentDate,
                 debtTurns: newDebtTurns,
                 burnoutTurns: newBurnoutTurns,
                 gameOverReason: newGameOverReason,
@@ -1015,6 +1106,137 @@ function gameReducer(state: GameState, action: Action): GameState {
         }
         case 'CLEAR_UNSEEN_ACHIEVEMENTS':
             return { ...state, unseenAchievements: [] };
+
+        case 'UNLOCK_STAFF_HIRING':
+            return {
+                ...state,
+                staffHiringUnlocked: true,
+                logs: appendLogToArray(state.logs, createLog('You can now hire professional staff to boost your career!', 'success', new Date(state.currentDate || new Date()), '👥'))
+            };
+
+        case 'HIRE_STAFF': {
+            const { templateId, contractDuration } = action.payload;
+            const template = getStaffTemplate(templateId);
+
+            if (!template) {
+                return state; // Template not found
+            }
+
+            // Cash capacity check: Must be able to afford 3 months of salary minimum
+            // This ensures financial stability and prevents immediate bankruptcy
+            const minimumCashRequired = template.salary * 3;
+            if (state.playerStats.cash < minimumCashRequired) {
+                return state; // Can't afford - UI should prevent this
+            }
+
+            // Check if player already has this role
+            const hasRole = state.staff.some(s => s.role === template.role);
+            if (hasRole) {
+                return state; // Already has this role - UI should prevent this
+            }
+
+            // Hire the staff - deduct first month's salary immediately
+            const hiredStaff = hireStaffFromTemplate(template, contractDuration, new Date(state.currentDate));
+            const newStats = { ...state.playerStats, cash: state.playerStats.cash - template.salary };
+
+            return {
+                ...state,
+                staff: [...state.staff, hiredStaff],
+                playerStats: newStats,
+                logs: appendLogToArray(
+                    state.logs,
+                    createLog(
+                        `Hired ${hiredStaff.name} as your ${hiredStaff.role} for ${contractDuration} months! First month's salary: $${template.salary.toLocaleString()}. (Minimum cash capacity: $${minimumCashRequired.toLocaleString()})`,
+                        'success',
+                        new Date(state.currentDate || new Date()),
+                        '🤝'
+                    )
+                )
+            };
+        }
+
+        case 'TERMINATE_STAFF': {
+            const { staffIndex } = action.payload;
+
+            if (staffIndex < 0 || staffIndex >= state.staff.length) {
+                return state; // Invalid index
+            }
+
+            const terminatedStaff = state.staff[staffIndex];
+            const newStaff = state.staff.filter((_, i) => i !== staffIndex);
+
+            // Termination penalty: pay 2 months salary
+            const penalty = terminatedStaff.salary * 2;
+            const newStats = {
+                ...state.playerStats,
+                cash: state.playerStats.cash - penalty,
+                wellBeing: Math.max(0, state.playerStats.wellBeing - 5) // Guilt/stress
+            };
+
+            return {
+                ...state,
+                staff: newStaff,
+                playerStats: newStats,
+                logs: appendLogToArray(
+                    state.logs,
+                    createLog(
+                        `Terminated ${terminatedStaff.name}'s contract. Severance pay: $${penalty.toLocaleString()}. Your well-being drops from the difficult decision.`,
+                        'warning',
+                        new Date(state.currentDate || new Date()),
+                        '⚠️'
+                    )
+                )
+            };
+        }
+
+        case 'EXTEND_STAFF_CONTRACT': {
+            const { staffIndex, additionalMonths } = action.payload;
+
+            if (staffIndex < 0 || staffIndex >= state.staff.length) {
+                return state; // Invalid index
+            }
+
+            const staffMember = state.staff[staffIndex];
+
+            // Extension bonus: pay 1 month upfront
+            const extensionFee = staffMember.salary;
+            if (state.playerStats.cash < extensionFee) {
+                return state; // Can't afford - UI should prevent this
+            }
+
+            // Extend the contract
+            const newExpiresDate = new Date(staffMember.contractExpiresDate);
+            newExpiresDate.setMonth(newExpiresDate.getMonth() + additionalMonths);
+
+            const updatedStaff = [...state.staff];
+            updatedStaff[staffIndex] = {
+                ...staffMember,
+                contractExpiresDate: newExpiresDate,
+                monthsRemaining: staffMember.monthsRemaining + additionalMonths
+            };
+
+            const newStats = {
+                ...state.playerStats,
+                cash: state.playerStats.cash - extensionFee,
+                wellBeing: Math.min(100, state.playerStats.wellBeing + 3) // Positive morale boost
+            };
+
+            return {
+                ...state,
+                staff: updatedStaff,
+                playerStats: newStats,
+                logs: appendLogToArray(
+                    state.logs,
+                    createLog(
+                        `Extended ${staffMember.name}'s contract by ${additionalMonths} months! Extension fee: $${extensionFee.toLocaleString()}. Your team appreciates your commitment.`,
+                        'success',
+                        new Date(state.currentDate || new Date()),
+                        '📝'
+                    )
+                )
+            };
+        }
+
         default:
             return state;
     }
@@ -1722,7 +1944,22 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     )}
 
                     {activeSidebarView === 'achievements' && (
-                        <ManagementPanel achievements={achievements} logs={logs} staff={staff} />
+                        <ManagementPanel
+                            achievements={achievements}
+                            staff={staff}
+                            playerStats={playerStats}
+                            staffHiringUnlocked={state.staffHiringUnlocked}
+                            difficulty={state.difficulty}
+                            onHireStaff={(templateId, contractDuration) => {
+                                dispatch({ type: 'HIRE_STAFF', payload: { templateId, contractDuration } });
+                            }}
+                            onTerminateStaff={(staffIndex) => {
+                                dispatch({ type: 'TERMINATE_STAFF', payload: { staffIndex } });
+                            }}
+                            onExtendContract={(staffIndex, additionalMonths) => {
+                                dispatch({ type: 'EXTEND_STAFF_CONTRACT', payload: { staffIndex, additionalMonths } });
+                            }}
+                        />
                     )}
 
                     {activeSidebarView === 'learning' && (

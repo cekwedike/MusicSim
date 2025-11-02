@@ -1,5 +1,7 @@
 
 export type StaffRole = 'Manager' | 'Booker' | 'Promoter';
+export type StaffTier = 'entry' | 'professional' | 'expert' | 'elite';
+export type ContractDuration = 6 | 12; // in months
 
 export interface StaffBonus {
     stat: 'cash' | 'fame' | 'hype';
@@ -7,11 +9,51 @@ export interface StaffBonus {
     description: string;
 }
 
+/**
+ * Staff Template - The blueprint for hiring staff
+ * These are the available staff that players can hire
+ */
+export interface StaffTemplate {
+    id: string; // e.g., "MANAGER_PROFESSIONAL"
+    name: string;
+    role: StaffRole;
+    tier: StaffTier;
+    salary: number; // per month
+    description: string;
+    bonuses: StaffBonus[];
+    unlockRequirement: {
+        type: 'feature' | 'fame' | 'careerProgress';
+        value?: number;
+        message: string;
+    };
+}
+
+/**
+ * Hired Staff - An active staff member working for the player
+ * This represents a staff member that has been hired from a template
+ */
+export interface HiredStaff {
+    templateId: string; // Reference to StaffTemplate.id
+    name: string;
+    role: StaffRole;
+    tier: StaffTier;
+    salary: number; // per month
+    bonuses: StaffBonus[];
+    hiredDate: Date; // When they were hired
+    contractDuration: ContractDuration; // 6 or 12 months
+    contractExpiresDate: Date; // When contract expires
+    monthsRemaining: number; // Calculated field for display
+}
+
+/**
+ * Legacy Staff interface - kept for backward compatibility
+ * @deprecated Use HiredStaff instead
+ */
 export interface Staff {
     name: string;
     role: StaffRole;
-    salary: number; // per week
-    contractLength: number; // in weeks
+    salary: number; // per week (legacy)
+    contractLength: number; // in weeks (legacy)
     bonuses: StaffBonus[];
 }
 
@@ -298,7 +340,9 @@ export interface GameState {
   currentLabelOffer: RecordLabel | null;
   contractsViewed: string[];
   consecutiveFallbackCount: number;
-  staff: Staff[];
+  staff: HiredStaff[];
+  staffHiringUnlocked: boolean; // Whether player has unlocked the ability to hire staff
+  lastStaffPaymentDate: Date; // Track when we last paid staff (monthly)
   currentLabel: RecordLabel | null;
   debtTurns: number;
   burnoutTurns: number;
@@ -403,4 +447,8 @@ export type Action =
   | { type: 'SKIP_TUTORIAL' }
   | { type: 'COMPLETE_TUTORIAL' }
   | { type: 'CLEAR_UNSEEN_ACHIEVEMENTS' }
+  | { type: 'UNLOCK_STAFF_HIRING' } // Unlock the staff hiring feature
+  | { type: 'HIRE_STAFF'; payload: { templateId: string; contractDuration: ContractDuration } }
+  | { type: 'TERMINATE_STAFF'; payload: { staffIndex: number } }
+  | { type: 'EXTEND_STAFF_CONTRACT'; payload: { staffIndex: number; additionalMonths: ContractDuration } }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

@@ -98,6 +98,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       // Clicking active button closes the panel
       onViewChange(null);
       setIsExpanded(false);
+      // Also close mobile sidebar on mobile when closing the panel
+      if (window.innerWidth < 1024) {
+        onMobileToggle?.(false);
+      }
     } else {
       // Clicking new button opens that panel
       onViewChange(id);
@@ -239,6 +243,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
                 onClick={() => {
                   onViewChange(null);
                   setIsExpanded(false);
+                  // Also close mobile sidebar when closing panel on mobile
+                  if (window.innerWidth < 1024) {
+                    onMobileToggle?.(false);
+                  }
                 }}
                 className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700 rounded-lg"
                 aria-label="Close panel"

@@ -370,6 +370,7 @@ function gameReducer(state: GameState, action: Action): GameState {
             };
         }
         case 'DISMISS_OUTCOME': {
+            console.log('[DISMISS_OUTCOME] Action dispatched. Current unseenAchievements:', state.unseenAchievements);
             if (state.status !== 'playing') return { ...state, lastOutcome: null };
 
             // --- Weekly Processing ---
@@ -748,7 +749,13 @@ function gameReducer(state: GameState, action: Action): GameState {
             saveStatistics(newStatistics);
 
 
+            console.log('[DISMISS_OUTCOME] Calling checkAchievements with newStats:', newStats);
             const milestoneCheck = checkAchievements({...state, achievements: updatedAchievements}, newStats);
+            console.log('[DISMISS_OUTCOME] checkAchievements returned unseenAchievements:', milestoneCheck.unseenAchievements);
+
+            const finalUnseenAchievements = [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])];
+            console.log('[DISMISS_OUTCOME] Final unseenAchievements to set in state:', finalUnseenAchievements);
+
             const newLogs = eventsThisWeek.length > 0 ? appendLogToArray(state.logs, createLog(eventsThisWeek.join(' '), 'info', new Date(newCurrentDate))) : state.logs;
 
             return {
@@ -763,7 +770,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 // careerLog removed; preserve only Date-based logs
                 logs: newLogs,
                 achievements: milestoneCheck.achievements,
-                unseenAchievements: [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])],
+                unseenAchievements: finalUnseenAchievements,
                 staff: newStaff,
                 debtTurns: newDebtTurns,
                 burnoutTurns: newBurnoutTurns,

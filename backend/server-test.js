@@ -62,11 +62,11 @@ app.use((err, req, res, next) => {
 
 // Start server
 const server = app.listen(PORT, () => {
-  console.log(`🚀 MusicSim Test Backend running on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
-  console.log(`🧪 Test endpoint: http://localhost:${PORT}/api/auth/test`);
-  console.log('📋 This is a test server without database dependencies');
+  console.log(`MusicSim Test Backend running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Health check: http://localhost:${PORT}/api/health`);
+  console.log(`Test endpoint: http://localhost:${PORT}/api/auth/test`);
+  console.log('This is a test server without database dependencies');
 });
 
 // Graceful shutdown

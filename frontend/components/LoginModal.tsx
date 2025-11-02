@@ -192,7 +192,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
       <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl w-full max-w-md p-8 relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold min-w-[44px] min-h-[44px] flex items-center justify-center">✕</button>
+  <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold min-w-[44px] min-h-[44px] flex items-center justify-center">x</button>
 
         <h2 className="text-3xl font-bold text-violet-300 mb-2 text-center">{mode === 'login' ? 'Welcome Back!' : 'Join MusicSim'}</h2>
         <p className="text-gray-400 text-center mb-6">{mode === 'login' ? 'Login to continue your music career' : 'Create an account to start your journey'}</p>
@@ -200,7 +200,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         {isGuestMode && mode === 'register' && guestStatistics && (
           <div className="bg-green-600/20 border border-green-600/30 rounded-lg p-3 mb-4">
             <div className="flex items-start gap-2">
-              <span className="text-lg">✅</span>
+              <span className="text-lg">[OK]</span>
               <div>
                 <h4 className="text-sm font-semibold text-green-300 mb-1">Save Your Progress!</h4>
                 <p className="text-xs text-green-200 leading-relaxed">

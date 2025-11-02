@@ -215,7 +215,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
               {/* Green Flags */}
               <div>
                 <h3 className="text-lg font-semibold text-green-400 mb-3 flex items-center gap-2">
-                  <span className="text-xl">✅</span>
+                  <span className="text-xl">[OK]</span>
                   What's Good About This Deal
                 </h3>
                 <div className="space-y-3">

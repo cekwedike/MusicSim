@@ -61,7 +61,7 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         currentScenario: null,
         lastOutcome: null,
     // legacy careerLog removed; use `logs` (Date-based) instead
-        logs: [createLog('Your music career begins today!', 'success', new Date(), '🎵')],
+    logs: [createLog('Your music career begins today!', 'success', new Date(), '')],
         date: { week: 1, month: 1, year: 1 },
         currentDate: new Date(),
         startDate: new Date(),
@@ -227,7 +227,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 artistGenre: action.payload.genre,
                 difficulty: action.payload.difficulty,
                 // legacy careerLog entry removed; add Date-based log in logs
-                logs: appendLogToArray(state.logs, createLog(`The artist '${action.payload.name}' (${action.payload.genre}) is born!`, 'success', new Date(state.currentDate || new Date()), '🎵'))
+                logs: appendLogToArray(state.logs, createLog(`The artist '${action.payload.name}' (${action.payload.genre}) is born!`, 'success', new Date(state.currentDate || new Date()), ''))
             };
         case 'SCENARIO_LOADING':
             return { ...state, status: 'loading' };
@@ -449,7 +449,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     dynamicMods.inflationMultiplier
                 );
                 newStats.cash -= totalSalary;
-                eventsThisWeek.push(`💰 Monthly staff salaries paid: $${totalSalary.toLocaleString()}`);
+                eventsThisWeek.push(`Monthly staff salaries paid: $${totalSalary.toLocaleString()}`);
 
                 // Update staff contract time (recalculate monthsRemaining based on the advanced date)
                 newStaff = updateStaffContractTime(newStaff, newCurrentDate);
@@ -457,9 +457,9 @@ function gameReducer(state: GameState, action: Action): GameState {
                 // Check for expiring contracts (< 1 month remaining)
                 newStaff.forEach(s => {
                     if (s.monthsRemaining === 1) {
-                        eventsThisWeek.push(`⚠️ ${s.name}'s contract expires in 1 month! Consider extending or replacing them.`);
+                        eventsThisWeek.push(`${s.name}'s contract expires in 1 month! Consider extending or replacing them.`);
                     } else if (s.monthsRemaining === 0) {
-                        eventsThisWeek.push(`⏰ ${s.name}'s contract has expired! They will leave unless extended.`);
+                        eventsThisWeek.push(`${s.name}'s contract has expired! They will leave unless extended.`);
                     }
                 });
 
@@ -467,7 +467,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 const expiredStaff = newStaff.filter(s => s.monthsRemaining === 0);
                 if (expiredStaff.length > 0) {
                     expiredStaff.forEach(s => {
-                        eventsThisWeek.push(`👋 ${s.name} has left your team. Their contract expired.`);
+                        eventsThisWeek.push(`${s.name} has left your team. Their contract expired.`);
                     });
                     newStaff = newStaff.filter(s => s.monthsRemaining > 0);
                 }
@@ -817,9 +817,9 @@ function gameReducer(state: GameState, action: Action): GameState {
                 };
                 const threshold = unlockThresholds[state.difficulty];
 
-                if (newStats.fame >= threshold) {
+                    if (newStats.fame >= threshold) {
                     staffHiringUnlocked = true;
-                    eventsThisWeek.push(`🎉 You've reached ${threshold} Fame! You can now hire professional staff from the Management Hub!`);
+                    eventsThisWeek.push(`You've reached ${threshold} Fame! You can now hire professional staff from the Management Hub!`);
                 }
             }
 
@@ -1112,7 +1112,7 @@ function gameReducer(state: GameState, action: Action): GameState {
             return {
                 ...state,
                 staffHiringUnlocked: true,
-                logs: appendLogToArray(state.logs, createLog('You can now hire professional staff to boost your career!', 'success', new Date(state.currentDate || new Date()), '👥'))
+                logs: appendLogToArray(state.logs, createLog('You can now hire professional staff to boost your career!', 'success', new Date(state.currentDate || new Date()), ''))
             };
 
         case 'HIRE_STAFF': {
@@ -1208,7 +1208,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                         `Hired ${hiredStaff.name} as your ${hiredStaff.role} for ${contractDuration} months! First month's salary: $${template.salary.toLocaleString()}. (Minimum cash capacity: $${minimumCashRequired.toLocaleString()})`,
                         'success',
                         new Date(state.currentDate || new Date()),
-                        '🤝'
+                        ''
                     )
                 ),
                 lastOutcome: hireOutcome as any
@@ -1243,7 +1243,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                         `Terminated ${terminatedStaff.name}'s contract. Severance pay: $${penalty.toLocaleString()}. Your well-being drops from the difficult decision.`,
                         'warning',
                         new Date(state.currentDate || new Date()),
-                        '⚠️'
+                        ''
                     )
                 )
             };
@@ -1291,7 +1291,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                         `Extended ${staffMember.name}'s contract by ${additionalMonths} months! Extension fee: $${extensionFee.toLocaleString()}. Your team appreciates your commitment.`,
                         'success',
                         new Date(state.currentDate || new Date()),
-                        '📝'
+                        ''
                     )
                 )
             };

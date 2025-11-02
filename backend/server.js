@@ -114,43 +114,43 @@ let isDatabaseConnected = false;
 const startServer = async () => {
   try {
     // Test database connection
-    await sequelize.authenticate();
-    console.log('✅ Database connection established successfully.');
+  await sequelize.authenticate();
+  console.log('Database connection established successfully.');
     isDatabaseConnected = true;
 
     // Sync models (create tables if they don't exist)
-    await sequelize.sync({ alter: false }); // Set to true only during development
-    console.log('✅ Database models synchronized.');
+  await sequelize.sync({ alter: false }); // Set to true only during development
+  console.log('Database models synchronized.');
 
     // Start listening
     server = app.listen(PORT, () => {
-      console.log(`🚀 MusicSim Backend running on port ${PORT}`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`� API Documentation: http://localhost:${PORT}/api-docs`);
-      console.log(`�🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
-      console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game`);
-      console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career`);
-      console.log(`🎓 Learning analytics endpoints: http://localhost:${PORT}/api/learning`);
-      console.log(`📚 Lesson tracking endpoints: http://localhost:${PORT}/api/lessons`);
-      console.log(`📊 Analytics dashboard endpoints: http://localhost:${PORT}/api/analytics`);
+      console.log(`MusicSim Backend running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`Health check: http://localhost:${PORT}/api/health`);
+      console.log(`API Documentation: http://localhost:${PORT}/api-docs`);
+      console.log(`Auth endpoints: http://localhost:${PORT}/api/auth`);
+      console.log(`Game state endpoints: http://localhost:${PORT}/api/game`);
+      console.log(`Career history endpoints: http://localhost:${PORT}/api/career`);
+      console.log(`Learning analytics endpoints: http://localhost:${PORT}/api/learning`);
+      console.log(`Lesson tracking endpoints: http://localhost:${PORT}/api/lessons`);
+      console.log(`Analytics dashboard endpoints: http://localhost:${PORT}/api/analytics`);
     });
   } catch (error) {
-    console.error('❌ Unable to connect to the database:', error.message);
-    console.error('🔄 Server starting without database connection...');
+  console.error('Unable to connect to the database:', error.message);
+  console.error('Server starting without database connection...');
     
     // Start server anyway (for development)
     server = app.listen(PORT, () => {
-      console.log(`⚠️  MusicSim Backend running on port ${PORT} (NO DATABASE)`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`� API Documentation: http://localhost:${PORT}/api-docs`);
-      console.log(`�🔐 Auth endpoints: http://localhost:${PORT}/api/auth (limited functionality)`);
-      console.log(`🎮 Game state endpoints: http://localhost:${PORT}/api/game (limited functionality)`);
-      console.log(`📈 Career history endpoints: http://localhost:${PORT}/api/career (limited functionality)`);
-      console.log(`🎓 Learning analytics endpoints: http://localhost:${PORT}/api/learning (limited functionality)`);
-      console.log(`📚 Lesson tracking endpoints: http://localhost:${PORT}/api/lessons (limited functionality)`);
-      console.log(`📊 Analytics dashboard endpoints: http://localhost:${PORT}/api/analytics (limited functionality)`);
+      console.log(`MusicSim Backend running on port ${PORT} (NO DATABASE)`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`Health check: http://localhost:${PORT}/api/health`);
+      console.log(`API Documentation: http://localhost:${PORT}/api-docs`);
+      console.log(`Auth endpoints: http://localhost:${PORT}/api/auth (limited functionality)`);
+      console.log(`Game state endpoints: http://localhost:${PORT}/api/game (limited functionality)`);
+      console.log(`Career history endpoints: http://localhost:${PORT}/api/career (limited functionality)`);
+      console.log(`Learning analytics endpoints: http://localhost:${PORT}/api/learning (limited functionality)`);
+      console.log(`Lesson tracking endpoints: http://localhost:${PORT}/api/lessons (limited functionality)`);
+      console.log(`Analytics dashboard endpoints: http://localhost:${PORT}/api/analytics (limited functionality)`);
       console.log('Database connection failed - some features may not work');
     });
   }

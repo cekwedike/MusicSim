@@ -82,8 +82,8 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     try {
       // Ensure we can stringify before writing — helps surface circular/reference errors
       const payload = JSON.stringify(saves);
-      localStorage.setItem('musicsim_saves', payload);
-      console.log(`[storageService] ✅ Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+  localStorage.setItem('musicsim_saves', payload);
+  console.log(`[storageService] Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
 
       // Verify the save was written
       const verification = localStorage.getItem('musicsim_saves');
@@ -91,9 +91,9 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
         const verified = JSON.parse(verification);
         console.log('[storageService] Verification - saved slots:', Object.keys(verified));
         if (verified[slotId]) {
-          console.log('[storageService] ✅ Verification successful - save exists in localStorage');
+          console.log('[storageService] Verification successful - save exists in localStorage');
         } else {
-          console.error('[storageService] ❌ Verification failed - save not found in localStorage after writing!');
+          console.error('[storageService] Verification failed - save not found in localStorage after writing!');
         }
       }
     } catch (err) {
@@ -108,8 +108,8 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     saves[slotId] = saveData;
     try {
       const payload = JSON.stringify(saves);
-      localStorage.setItem('musicsim_saves', payload);
-      console.log(`[storageService] Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+  localStorage.setItem('musicsim_saves', payload);
+  console.log(`[storageService] Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
     } catch (err) {
       console.error('[storageService] Fallback: failed to write saves to localStorage (stringify error):', err);
       // Re-throw so callers can surface the error if needed

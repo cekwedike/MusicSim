@@ -4,10 +4,10 @@ import { createLog, appendLogToArray } from './logUtils';
 describe('logUtils', () => {
   it('createLog returns a LogEntry with expected fields', () => {
     const now = new Date();
-    const log = createLog('Test message', 'success', now, '🎵');
+  const log = createLog('Test message', 'success', now, '');
     expect(log.message).toBe('Test message');
     expect(log.type).toBe('success');
-    expect(log.icon).toBe('🎵');
+  expect(log.icon).toBe('');
     expect(log.timestamp).toBe(now);
   });
 

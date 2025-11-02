@@ -2,7 +2,7 @@
 
 This is the backend server for the MusicSim game, providing API endpoints for user authentication, game state management, career tracking, and learning analytics.
 
-## 🚀 Quick Start
+## Quick Start
 
 1. Navigate to the backend directory:
 ```bash
@@ -21,7 +21,7 @@ npm run dev
 
 The server will start on http://localhost:3001
 
-## 📖 API Documentation
+## API Documentation
 
 **Swagger UI is available at: http://localhost:3001/api-docs**
 

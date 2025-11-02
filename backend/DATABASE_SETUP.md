@@ -63,11 +63,11 @@ npm run dev
 - **PlayerStatistics**: Global player statistics and achievements
 
 ### Key Features:
-- 🔒 **Secure Authentication**: bcrypt password hashing, JWT tokens
-- 📊 **Flexible Storage**: JSONB fields for complex game states
-- 🎯 **Performance**: Proper indexing on frequently queried fields
-- 🔗 **Relationships**: Foreign keys maintain data integrity
-- 📈 **Analytics**: Comprehensive player tracking and statistics
+ - Secure Authentication: bcrypt password hashing, JWT tokens
+ - Flexible Storage: JSONB fields for complex game states
+ - Performance: Proper indexing on frequently queried fields
+ - Relationships: Foreign keys maintain data integrity
+ - Analytics: Comprehensive player tracking and statistics
 
 ## API Endpoints (To Be Implemented)
 
@@ -143,9 +143,9 @@ psql -d musicsim
 \d Users
 ```
 
-## Security Notes
+- ## Security Notes
 
-⚠️ **Important Security Reminders:**
+Important Security Reminders:
 - Change JWT_SECRET in production
 - Never commit .env file to version control
 - Use environment-specific configurations

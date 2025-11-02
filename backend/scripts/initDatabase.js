@@ -2,11 +2,11 @@ const { sequelize } = require('../models');
 
 async function initDatabase() {
   try {
-    console.log('🔗 Testing database connection...');
+  console.log('Testing database connection...');
     await sequelize.authenticate();
-    console.log('✅ Database connection established successfully.');
+  console.log('Database connection established successfully.');
 
-    console.log('📋 Syncing database models...');
+  console.log('Syncing database models...');
     
     // Sync models with force: false (won't drop existing tables)
     await sequelize.sync({ 
@@ -14,13 +14,13 @@ async function initDatabase() {
       alter: false   // Set to true to alter existing tables to match models
     });
     
-    console.log('✅ Database models synced successfully.');
+  console.log('Database models synced successfully.');
     
     // List all created tables
     const tables = await sequelize.getQueryInterface().showAllTables();
-    console.log('📊 Created tables:', tables);
+  console.log('Created tables:', tables);
     
-    console.log('🎉 Database initialization complete!');
+  console.log('Database initialization complete!');
     console.log('');
     console.log('Tables created:');
     console.log('- Users: User accounts and authentication');
@@ -33,7 +33,7 @@ async function initDatabase() {
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Unable to connect to the database:', error);
+  console.error('Unable to connect to the database:', error);
     console.log('');
     console.log('Troubleshooting tips:');
     console.log('1. Make sure PostgreSQL is running');
@@ -46,6 +46,6 @@ async function initDatabase() {
 }
 
 // Run the initialization
-console.log('🚀 Starting MusicSim Database Initialization...');
+console.log('Starting MusicSim Database Initialization...');
 console.log('');
 initDatabase();

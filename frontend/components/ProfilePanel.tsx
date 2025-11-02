@@ -439,7 +439,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 							onClick={handleOpenAuthModal}
 							className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-lg"
 						>
-							<span>✨</span>
+							<span></span>
 							Register / Login
 						</button>
 						<div className="bg-blue-600/20 border border-blue-600/30 rounded-lg p-3">

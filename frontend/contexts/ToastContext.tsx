@@ -57,7 +57,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 className="text-white/80 hover:text-white ml-2 text-sm font-medium"
                 aria-label="Dismiss notification"
               >
-                ✕
+                x
               </button>
             </div>
           </div>

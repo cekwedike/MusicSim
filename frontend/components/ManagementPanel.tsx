@@ -96,7 +96,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
         >
-          🏆 Achievements
+          Achievements
         </button>
         <button
           onClick={() => setActiveTab('staff')}
@@ -106,7 +106,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
         >
-          👥 Staff Management
+          Staff Management
         </button>
       </div>
 
@@ -150,7 +150,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
               </p>
               <div className="mt-4 bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 max-w-md mx-auto">
                 <p className="text-xs text-blue-300">
-                  💡 <strong>Tip:</strong> Hiring staff gives you powerful weekly bonuses but requires monthly salary payments. Build your fame first!
+                  Tip: <strong>Hiring staff gives you powerful weekly bonuses but requires monthly salary payments. Build your fame first!</strong>
                 </p>
               </div>
             </div>
@@ -269,7 +269,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                         </div>
 
                         {playerStats.cash < member.salary && member.monthsRemaining <= 2 && (
-                          <p className="text-xs text-red-400 mt-2">⚠️ Insufficient funds to extend contract</p>
+                          <p className="text-xs text-red-400 mt-2">Insufficient funds to extend contract</p>
                         )}
                       </div>
                     ))
@@ -294,7 +294,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                   {/* Info Banner */}
                   <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
                     <p className="text-sm text-blue-300">
-                      <strong>💰 Cash Capacity Required:</strong> You need 3 months of salary available to hire staff. Monthly payments are automatic.
+                      <strong>Cash Capacity Required:</strong> You need 3 months of salary available to hire staff. Monthly payments are automatic.
                     </p>
                   </div>
 
@@ -344,7 +344,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                 {template.unlockRequirement.type === 'fame' && playerStats.fame < (template.unlockRequirement.value || 0) && (
                                   <div className="mb-2 p-2 bg-red-500/10 border border-red-500/30 rounded">
                                     <p className="text-xs text-red-400">
-                                      🔒 {template.unlockRequirement.message}
+                                      {template.unlockRequirement.message}
                                     </p>
                                   </div>
                                 )}

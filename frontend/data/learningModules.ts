@@ -5,7 +5,7 @@ export const learningModules: LearningModule[] = [
     id: 'contracts-basics',
     title: 'Contract Basics: What Every Artist Must Know',
     category: 'contracts',
-    icon: '📝',
+  icon: '',
     difficulty: 'beginner',
     estimatedMinutes: 6,
     content: {
@@ -121,7 +121,7 @@ export const learningModules: LearningModule[] = [
     id: 'revenue-streams',
     title: 'Understanding Revenue Streams',
     category: 'revenue',
-    icon: '💰',
+  icon: '',
     difficulty: 'beginner',
     estimatedMinutes: 7,
     content: {
@@ -382,7 +382,7 @@ export const learningModules: LearningModule[] = [
     id: 'predatory-deals',
     title: 'Spotting Predatory Deals',
     category: 'legal',
-    icon: '🚩',
+  icon: '',
     difficulty: 'intermediate',
     estimatedMinutes: 6,
     prerequisites: ['contracts-basics', 'copyright-rights'],
@@ -513,7 +513,7 @@ export const learningModules: LearningModule[] = [
     id: 'brand-building',
     title: 'Building Your Brand',
     category: 'marketing',
-    icon: '🎯',
+  icon: '',
     difficulty: 'beginner',
     estimatedMinutes: 7,
     content: {

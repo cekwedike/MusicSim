@@ -248,20 +248,29 @@ function gameReducer(state: GameState, action: Action): GameState {
             // Handle Staff changes
             let newStaff = [...state.staff];
             if (outcome.hireStaff) {
+                console.log('[SELECT_CHOICE] Hiring staff:', outcome.hireStaff);
                 const existingStaff = newStaff.find(s => s.role === outcome.hireStaff);
                 if (!existingStaff) {
                     const staffTemplate = allStaff.find(s => s.role === outcome.hireStaff);
                     if (staffTemplate) {
                         newStaff.push({ ...staffTemplate });
+                        console.log('[SELECT_CHOICE] Staff hired successfully. New staff:', newStaff);
 
                         // Check staff hiring achievements
                         const staffAchievementId = `STAFF_${outcome.hireStaff.toUpperCase()}`;
+                        console.log('[SELECT_CHOICE] Looking for achievement ID:', staffAchievementId);
                         const staffAchievement = updatedAchievements.find(a => a.id === staffAchievementId);
                         if (staffAchievement && !staffAchievement.unlocked) {
+                            console.log('[SELECT_CHOICE] 🎉 Unlocking staff achievement:', staffAchievementId);
                             staffAchievement.unlocked = true;
                             newUnseenAchievements = [...newUnseenAchievements, staffAchievement.id];
+                            console.log('[SELECT_CHOICE] newUnseenAchievements:', newUnseenAchievements);
+                        } else {
+                            console.log('[SELECT_CHOICE] Achievement not found or already unlocked:', staffAchievement);
                         }
                     }
+                } else {
+                    console.log('[SELECT_CHOICE] Staff already exists:', existingStaff);
                 }
             }
              if (outcome.fireStaff) {
@@ -338,6 +347,9 @@ function gameReducer(state: GameState, action: Action): GameState {
             const milestoneCheck = checkAchievements({...state, staff: newStaff, lessonsViewed: newLessonsViewed}, newStats);
             updatedAchievements = milestoneCheck.achievements;
             newUnseenAchievements = [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])];
+            console.log('[SELECT_CHOICE] After checkAchievements. newUnseenAchievements:', newUnseenAchievements);
+
+            console.log('[SELECT_CHOICE] Returning new state with unseenAchievements:', newUnseenAchievements);
 
             return {
                 ...state,
@@ -1167,6 +1179,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     });
 
     const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
+
+    // Debug: Log unseenAchievements whenever state changes
+    console.log('[GameApp] State unseenAchievements:', unseenAchievements);
 
     // Auth context
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();

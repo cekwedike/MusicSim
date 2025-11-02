@@ -23,7 +23,6 @@ import OutcomeModal from './components/OutcomeModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
 import LearningHub from './components/LearningHub';
-import NotificationToast, { type Notification } from './components/NotificationToast';
 import AudioUnlockPrompt from './components/AudioUnlockPrompt';
 import LearningPanel from './components/LearningPanel';
 import ModuleViewer from './components/ModuleViewer';
@@ -108,18 +107,15 @@ const INITIAL_STATE = generateInitialState();
 // Log helpers moved to src/utils/logUtils.ts (createLog, appendLogToArray)
 
 function checkAchievements(state: GameState, newStats: PlayerStats): { achievements: GameState['achievements'], unseenAchievements: string[] } {
-    console.log('[checkAchievements] Called with stats:', newStats, 'staff:', state.staff);
     const unlockedAchievements = [...state.achievements];
     const newUnseen = [...state.unseenAchievements];
 
     const checkAndUnlock = (id: string, condition: boolean) => {
         const achievement = unlockedAchievements.find(a => a.id === id);
         if (achievement && !achievement.unlocked && condition) {
-            console.log(`[checkAchievements] 🎉 Unlocking achievement: ${id} (${achievement.name})`);
             achievement.unlocked = true;
             if(!newUnseen.includes(id)) {
                 newUnseen.push(id);
-                console.log(`[checkAchievements] Added to newUnseen: ${id}. Total unseen now:`, newUnseen);
             }
         }
     };
@@ -180,8 +176,7 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     const realisticCareers = state.statistics.careersByDifficulty.realistic;
     const hardcoreCareers = state.statistics.careersByDifficulty.hardcore;
     checkAndUnlock('DIFFICULTY_MASTER', beginnerCareers > 0 && realisticCareers > 0 && hardcoreCareers > 0);
-    
-    console.log('[checkAchievements] Returning. Unseen achievements:', newUnseen);
+
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
 
@@ -248,29 +243,20 @@ function gameReducer(state: GameState, action: Action): GameState {
             // Handle Staff changes
             let newStaff = [...state.staff];
             if (outcome.hireStaff) {
-                console.log('[SELECT_CHOICE] Hiring staff:', outcome.hireStaff);
                 const existingStaff = newStaff.find(s => s.role === outcome.hireStaff);
                 if (!existingStaff) {
                     const staffTemplate = allStaff.find(s => s.role === outcome.hireStaff);
                     if (staffTemplate) {
                         newStaff.push({ ...staffTemplate });
-                        console.log('[SELECT_CHOICE] Staff hired successfully. New staff:', newStaff);
 
                         // Check staff hiring achievements
                         const staffAchievementId = `STAFF_${outcome.hireStaff.toUpperCase()}`;
-                        console.log('[SELECT_CHOICE] Looking for achievement ID:', staffAchievementId);
                         const staffAchievement = updatedAchievements.find(a => a.id === staffAchievementId);
                         if (staffAchievement && !staffAchievement.unlocked) {
-                            console.log('[SELECT_CHOICE] 🎉 Unlocking staff achievement:', staffAchievementId);
                             staffAchievement.unlocked = true;
                             newUnseenAchievements = [...newUnseenAchievements, staffAchievement.id];
-                            console.log('[SELECT_CHOICE] newUnseenAchievements:', newUnseenAchievements);
-                        } else {
-                            console.log('[SELECT_CHOICE] Achievement not found or already unlocked:', staffAchievement);
                         }
                     }
-                } else {
-                    console.log('[SELECT_CHOICE] Staff already exists:', existingStaff);
                 }
             }
              if (outcome.fireStaff) {
@@ -347,9 +333,6 @@ function gameReducer(state: GameState, action: Action): GameState {
             const milestoneCheck = checkAchievements({...state, staff: newStaff, lessonsViewed: newLessonsViewed}, newStats);
             updatedAchievements = milestoneCheck.achievements;
             newUnseenAchievements = [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])];
-            console.log('[SELECT_CHOICE] After checkAchievements. newUnseenAchievements:', newUnseenAchievements);
-
-            console.log('[SELECT_CHOICE] Returning new state with unseenAchievements:', newUnseenAchievements);
 
             return {
                 ...state,
@@ -370,7 +353,6 @@ function gameReducer(state: GameState, action: Action): GameState {
             };
         }
         case 'DISMISS_OUTCOME': {
-            console.log('[DISMISS_OUTCOME] Action dispatched. Current unseenAchievements:', state.unseenAchievements);
             if (state.status !== 'playing') return { ...state, lastOutcome: null };
 
             // --- Weekly Processing ---
@@ -748,13 +730,8 @@ function gameReducer(state: GameState, action: Action): GameState {
             // Save statistics after each turn
             saveStatistics(newStatistics);
 
-
-            console.log('[DISMISS_OUTCOME] Calling checkAchievements with newStats:', newStats);
             const milestoneCheck = checkAchievements({...state, achievements: updatedAchievements}, newStats);
-            console.log('[DISMISS_OUTCOME] checkAchievements returned unseenAchievements:', milestoneCheck.unseenAchievements);
-
             const finalUnseenAchievements = [...new Set([...newUnseenAchievements, ...milestoneCheck.unseenAchievements])];
-            console.log('[DISMISS_OUTCOME] Final unseenAchievements to set in state:', finalUnseenAchievements);
 
             const newLogs = eventsThisWeek.length > 0 ? appendLogToArray(state.logs, createLog(eventsThisWeek.join(' '), 'info', new Date(newCurrentDate))) : state.logs;
 
@@ -1175,9 +1152,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     // Login modal state for guest registration
     const [showLoginModal, setShowLoginModal] = useState(false);
 
-    // Notification state
-    const [notifications, setNotifications] = useState<Notification[]>([]);
-
     // Audio unlock prompt state
     const [showAudioUnlock, setShowAudioUnlock] = useState(false);
     const [hasShownAudioPrompt, setHasShownAudioPrompt] = useState(() => {
@@ -1186,9 +1160,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     });
 
     const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
-
-    // Debug: Log unseenAchievements whenever state changes
-    console.log('[GameApp] State unseenAchievements:', unseenAchievements);
 
     // Auth context
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -1209,11 +1180,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Background music management - random rotation handled by useAudioManager
     useEffect(() => {
-        console.log('[Audio] Game status changed to:', status);
         // Random background music (bg1, bg2, bg3) is automatically queued and rotates
         // Only override for game over state
         if (status === 'gameOver') {
-            console.log('[Audio] Playing game over music');
             audioManager.playMusic('gameOver');
             audioManager.playSound('gameOver');
         }
@@ -1222,31 +1191,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     // Play achievement unlock sound when new achievements are unlocked
     // Play special audio for first achievement
     const firstAchievementAudioRef = useRef<HTMLAudioElement | null>(null);
-    const processedAchievementsRef = useRef<Set<string>>(new Set());
-
     useEffect(() => {
         if (unseenAchievements.length > 0) {
-            console.log('[Achievements] Unseen achievements detected:', unseenAchievements);
-
-            // Filter out already processed achievements
-            const newAchievements = unseenAchievements.filter(id => !processedAchievementsRef.current.has(id));
-
-            if (newAchievements.length === 0) {
-                console.log('[Achievements] All achievements already processed, skipping');
-                return;
-            }
-
-            console.log('[Achievements] New achievements to process:', newAchievements);
-
-            // Mark these as processed
-            newAchievements.forEach(id => processedAchievementsRef.current.add(id));
-
             // Check if this is the player's first achievement ever in this career
             const totalUnlockedAchievements = achievements.filter(a => a.unlocked).length;
             const isFirstAchievement = totalUnlockedAchievements === 1;
 
             if (isFirstAchievement) {
-                console.log('[Achievements] First achievement ever! Playing special audio');
                 // Play first achievement audio
                 if (!firstAchievementAudioRef.current) {
                     firstAchievementAudioRef.current = new Audio('/audio/scenarios/first-achievement.m4a');
@@ -1258,85 +1209,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 });
             } else {
                 // Play regular achievement unlock sound
-                console.log('[Achievements] Playing achievement unlock sound');
                 audioManager.playSound('achievementUnlock');
             }
 
-            // Create notifications for each new unseen achievement
-            const timestamp = Date.now();
-            const newNotifications: Notification[] = newAchievements.map((achievementId, index) => {
-                const achievement = achievements.find(a => a.id === achievementId);
-
-                // Determine if this is a milestone achievement
-                const isMilestone = achievementId.includes('FAME_100') ||
-                                   achievementId.includes('CAREER_100') ||
-                                   achievementId.includes('CASH_1M') ||
-                                   achievementId.includes('HYPE_100') ||
-                                   achievementId.includes('LEGENDARY') ||
-                                   achievementId.includes('HARDCORE');
-
-                console.log(`[Achievements] Creating notification for ${achievementId}: ${achievement?.name}`);
-
-                return {
-                    id: `achievement-${achievementId}-${timestamp}-${index}`,
-                    type: isMilestone ? 'milestone' : 'achievement',
-                    title: achievement?.name || 'Achievement Unlocked!',
-                    description: achievement?.description || '',
-                    duration: isMilestone ? 8000 : 6000
-                };
-            });
-
-            console.log('[Achievements] Adding notifications to state:', newNotifications);
-            setNotifications(prev => {
-                const updated = [...prev, ...newNotifications];
-                console.log('[Achievements] Notifications state updated. Total notifications:', updated.length);
-                return updated;
-            });
-
-            // Clear unseen achievements after a short delay to ensure notifications are created
-            setTimeout(() => {
-                console.log('[Achievements] Clearing unseen achievements');
-                dispatch({ type: 'CLEAR_UNSEEN_ACHIEVEMENTS' });
-            }, 100);
+            // Clear unseen achievements after playing sound
+            dispatch({ type: 'CLEAR_UNSEEN_ACHIEVEMENTS' });
         }
-    }, [unseenAchievements, audioManager, achievements]);
+    }, [unseenAchievements.length, audioManager, achievements]);
 
-    // Watch for project releases and other events in logs
-    const lastLogCountRef = useRef(0);
-    useEffect(() => {
-        if (logs.length > lastLogCountRef.current) {
-            const newLogs = logs.slice(lastLogCountRef.current);
-            lastLogCountRef.current = logs.length;
-
-            newLogs.forEach(log => {
-                // Check for project releases
-                if (log.message.includes('Released') && (log.message.includes('album') || log.message.includes('EP') || log.message.includes('single'))) {
-                    const projectMatch = log.message.match(/Released '([^']+)'/);
-                    if (projectMatch) {
-                        const projectName = projectMatch[1];
-                        setNotifications(prev => [...prev, {
-                            id: `project-${Date.now()}`,
-                            type: 'success',
-                            title: 'Project Released!',
-                            description: `You've released "${projectName}"! Great work!`,
-                            duration: 5000
-                        }]);
-                    }
-                }
-
-                // Check for major cash milestones in events
-                if (log.message.includes('$') && (log.message.includes('100,000') || log.message.includes('1,000,000'))) {
-                    setNotifications(prev => [...prev, {
-                        id: `cash-milestone-${Date.now()}`,
-                        type: 'milestone',
-                        title: 'Financial Milestone!',
-                        description: 'Your bank account is looking healthy!',
-                        duration: 5000
-                    }]);
-                }
-            });
-        }
-    }, [logs]);
 
     // Play one year milestone audio at 48 weeks
     const hasPlayedMilestoneAudioRef = useRef(false);
@@ -1359,15 +1239,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 milestoneAudioRef.current.play().catch(err => {
                     console.warn('[One Year Milestone Audio] Playback failed:', err);
                 });
-
-                // Show notification for 1 year milestone
-                setNotifications(prev => [...prev, {
-                    id: `time-milestone-${Date.now()}`,
-                    type: 'milestone',
-                    title: 'One Year Anniversary!',
-                    description: "You've survived a full year in the music industry! That's impressive!",
-                    duration: 7000
-                }]);
             }
         }
     }, [status, state.currentDate, state.startDate, audioManager]);
@@ -1433,7 +1304,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         if (status !== 'playing') return;
 
         const autoSaveInterval = setInterval(async () => {
-            console.log('Auto-saving game...');
             await saveGame(state, 'auto');
         }, 5 * 60 * 1000); // 5 minutes
 
@@ -1445,7 +1315,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         if (status !== 'playing') return; // Only cleanup during gameplay
 
         const cleanupInterval = setInterval(async () => {
-            console.log('Checking for expired autosaves...');
             await cleanupExpiredAutosaves();
         }, 60 * 1000); // 1 minute
 
@@ -1459,20 +1328,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     useEffect(() => {
         const handleReset = async () => {
             if (!isAuthenticated && !isGuestMode && status !== 'start') {
-                console.log('User logged out - saving game and resetting state...');
-
                 // Save the current game state before resetting
                 if (status === 'playing' && state.artistName && isStorageAvailable()) {
-                    console.log('Saving game before logout...');
                     try {
                         await saveGame(state, 'auto');
-                        console.log('Game saved successfully before logout');
                     } catch (error) {
                         console.error('Failed to save game before logout:', error);
                     }
                 }
 
-                console.log('Resetting game state to landing page...');
                 dispatch({ type: 'RESET_TO_LANDING' });
             }
         };
@@ -1499,7 +1363,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                            state.artistName.trim() !== '';
 
         if (isNewPlayer) {
-            console.log('[GameApp] First-time player detected, starting tutorial...');
             localStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
 
             // Delay tutorial start to let the game render first
@@ -1770,15 +1633,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const handleManualSave = async (slotName: string) => {
         try {
             // First, delete the autosave
-            console.log('Manual save triggered. Deleting autosave...');
             await deleteSave('auto');
-            
+
             // Then save to the new slot
             await saveGame(state, slotName);
-            
+
             // Also create a new autosave that's a copy of this manual save
             await saveGame(state, 'auto');
-            
+
             alert(`Game saved successfully to "${slotName}"!`);
         } catch (error) {
             console.error('Error saving game:', error);
@@ -1842,7 +1704,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                             currentGameState={state}
                             onClose={() => setActiveSidebarView(null)}
                             onSaveComplete={() => {
-                                console.log('[App] Save complete, refreshing panel...');
                                 setSaveLoadPanelKey((prev: number) => prev + 1);
                             }}
                         />
@@ -1946,12 +1807,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     guestStatistics={isGuestMode ? state.statistics : undefined}
                 />
             )}
-
-            {/* Notification Toast */}
-            <NotificationToast
-                notifications={notifications}
-                onDismiss={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
-            />
 
             {/* Audio Unlock Prompt */}
             {showAudioUnlock && (

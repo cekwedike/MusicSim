@@ -165,11 +165,10 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
               {isLastSection && (
                 <div className="mb-6 p-4 bg-green-900 rounded-lg border border-green-700">
                   <h4 className="text-white font-semibold mb-3">🎯 Key Takeaways</h4>
-                  <ul className="space-y-2">
+                  <ul className="space-y-2 list-disc list-inside">
                     {module.content.keyTakeaways.map((takeaway, index) => (
-                      <li key={index} className="text-green-200 text-sm flex items-start gap-2">
-                        <span className="text-green-400 mt-1">✓</span>
-                        <span>{takeaway}</span>
+                      <li key={index} className="text-green-200 text-sm">
+                        {takeaway}
                       </li>
                     ))}
                   </ul>
@@ -187,12 +186,11 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
               {/* Common Pitfalls */}
               {isLastSection && (
                 <div className="mb-6 p-4 bg-red-900 rounded-lg border border-red-700">
-                  <h4 className="text-white font-semibold mb-3">⚠️ Common Pitfalls to Avoid</h4>
-                  <ul className="space-y-2">
+                  <h4 className="text-white font-semibold mb-3">Common Pitfalls to Avoid</h4>
+                  <ul className="space-y-2 list-disc list-inside">
                     {module.content.commonPitfalls.map((pitfall, index) => (
-                      <li key={index} className="text-red-200 text-sm flex items-start gap-2">
-                        <span className="text-red-400 mt-1">⚠️</span>
-                        <span>{pitfall}</span>
+                      <li key={index} className="text-red-200 text-sm">
+                        {pitfall}
                       </li>
                     ))}
                   </ul>
@@ -261,7 +259,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                       <div className="mb-2">
                         <span className="text-sm text-gray-400">Your answer: </span>
                         <span className={isCorrect ? 'text-green-400' : 'text-red-400'}>
-                          {question.options[userAnswer]} {isCorrect ? '✓' : '✗'}
+                          {question.options[userAnswer]} {isCorrect ? '(Correct)' : '(Incorrect)'}
                         </span>
                       </div>
                       {!isCorrect && (
@@ -337,7 +335,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                 onClick={handleCompleteModule}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition-colors"
               >
-                Complete Module ✓
+                Complete Module
               </button>
             </>
           )}

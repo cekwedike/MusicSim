@@ -226,12 +226,12 @@ export const getDifficultyColor = (difficulty: Difficulty): string => {
 export const getDifficultyIcon = (difficulty: Difficulty): string => {
   switch (difficulty) {
     case 'beginner':
-      return '🎓';
+      return '';
     case 'realistic':
-      return '⚖️';
+      return '';
     case 'hardcore':
-      return '💀';
+      return '';
     default:
-      return '⚖️';
+      return '';
   }
 };

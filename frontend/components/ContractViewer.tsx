@@ -236,7 +236,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
               {/* Red Flags */}
               <div>
                 <h3 className="text-lg font-semibold text-red-400 mb-3 flex items-center gap-2">
-                  <span className="text-xl">⚠️</span>
                   Red Flags to Watch
                 </h3>
                 <div className="space-y-3">

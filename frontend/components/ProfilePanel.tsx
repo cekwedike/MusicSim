@@ -328,7 +328,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			{artistName && (
 				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
-						<span>🎵</span> Current Session
+						Current Session
 					</h3>
 					<div className="space-y-2">
 						<div className="flex justify-between items-center">

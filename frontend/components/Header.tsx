@@ -62,14 +62,13 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                 <div className="absolute top-3 sm:top-4 left-2 sm:left-4 flex items-center gap-1 sm:gap-2">
                     {justSaved && (
                         <div className="bg-green-500/20 border border-green-500 rounded-lg px-2 sm:px-3 py-1 text-green-300 text-xs sm:text-sm animate-fade-in">
-                            ✓ Saved
+                            Saved
                         </div>
                     )}
 
                     {autosaveAge !== null && autosaveAge > 0 && (
                         <div className={`text-xs sm:text-sm ${autosaveAge >= 8 ? 'text-yellow-400' : 'text-gray-400'} hidden sm:block`}>
                             Autosave: {autosaveAge}m ago
-                            {autosaveAge >= 8 && ' ⚠️'}
                         </div>
                     )}
                 </div>

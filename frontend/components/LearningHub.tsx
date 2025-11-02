@@ -124,7 +124,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                 <div className="absolute top-3 right-3 flex gap-2">
                   {isCompleted && (
                     <div className="bg-green-600 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-                      ✓ {score}%
+                      {score}%
                     </div>
                   )}
                   {!isUnlocked && (

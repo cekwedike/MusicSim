@@ -52,14 +52,13 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
                 {hasLesson && (
                     <div className="bg-gradient-to-r from-blue-900 to-purple-900 rounded-lg p-4 sm:p-6 mb-6 border border-blue-700">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="text-xl sm:text-2xl">🎓</span>
                             <h4 className="text-base sm:text-xl font-bold text-blue-200">{outcome.lesson.title}</h4>
                         </div>
 
                         <div className="space-y-3 sm:space-y-4">
                             {/* Why this happened */}
                             <div>
-                                <h5 className="font-semibold text-blue-300 mb-2 text-sm sm:text-base">📚 Why This Happened:</h5>
+                                <h5 className="font-semibold text-blue-300 mb-2 text-sm sm:text-base">Why This Happened:</h5>
                                 <p className="text-blue-100 text-sm sm:text-sm leading-relaxed">
                                     {outcome.lesson.explanation}
                                 </p>
@@ -68,7 +67,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
                             {/* Real world example */}
                             {outcome.lesson.realWorldExample && (
                                 <div className="bg-blue-800/50 rounded-md p-3">
-                                    <h5 className="font-semibold text-blue-300 mb-2 text-sm sm:text-base">🌍 Real-World Example:</h5>
+                                    <h5 className="font-semibold text-blue-300 mb-2 text-sm sm:text-base">Real-World Example:</h5>
                                     <p className="text-blue-100 text-sm italic">
                                         {outcome.lesson.realWorldExample}
                                     </p>
@@ -77,7 +76,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
 
                             {/* Tip for future */}
                             <div className="bg-gradient-to-r from-yellow-800 to-orange-800 rounded-md p-3">
-                                <h5 className="font-semibold text-yellow-200 mb-2 text-sm sm:text-base">💡 Tip for Future:</h5>
+                                <h5 className="font-semibold text-yellow-200 mb-2 text-sm sm:text-base">Tip for Future:</h5>
                                 <p className="text-yellow-100 text-sm">
                                     {outcome.lesson.tipForFuture}
                                 </p>
@@ -87,7 +86,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
                             {outcome.lesson.conceptTaught && (
                                 <div className="text-center">
                                     <p className="text-blue-300 text-xs mb-1">
-                                        📖 Learn more about this concept:
+                                        Learn more about this concept:
                                     </p>
                                     <span className="inline-block bg-purple-700 text-purple-200 px-3 py-1 rounded-full text-xs font-medium">
                                         {outcome.lesson.conceptTaught}

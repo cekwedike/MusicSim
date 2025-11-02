@@ -437,7 +437,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
         }
 
         .tutorial-lesson::before {
-          content: "💡 Music Business Insight: ";
+          content: "Music Business Insight: ";
           font-weight: 600;
           color: #4CAF50;
         }

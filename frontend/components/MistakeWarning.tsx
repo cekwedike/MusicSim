@@ -20,7 +20,6 @@ export const MistakeWarning: React.FC<MistakeWarningProps> = ({
       <div className="bg-gray-800 rounded-xl border border-yellow-500 max-w-md w-full mx-4 p-6 shadow-2xl">
         {/* Warning Icon */}
         <div className="text-center mb-4">
-          <div className="text-6xl mb-2">⚠️</div>
           <h2 className="text-2xl font-bold text-yellow-400">Are you sure?</h2>
         </div>
 

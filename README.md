@@ -4,6 +4,8 @@ A comprehensive strategic music business simulation where players navigate the c
 
 ## Demo Video
 
+**[Watch MusicSim in Action - UPDATED](https://www.loom.com/share/4d77df71abf64e25ab0583a1e1e66496)**
+
 **[Watch MusicSim in Action](https://www.loom.com/share/301477b7660b4f62802950b39f4910c3)**
 
 See the complete gameplay experience, from artist setup to career management and decision-making scenarios.

@@ -120,18 +120,19 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         id="mobile-sidebar"
         className={`
           fixed right-0 top-16 bottom-0 z-50 flex flex-col
+          w-full lg:w-auto
           transition-transform duration-300 ease-in-out
           ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
         `}
       >
         {/* Mobile Header Info (only visible on mobile when sidebar is open) */}
         {artistName && (
-          <div className="lg:hidden bg-gray-800/98 border-b border-gray-700 p-3 flex flex-col items-center gap-2">
+          <div className="lg:hidden bg-gray-800/98 border-b border-gray-700 p-3 w-full flex flex-col items-center gap-2">
             <h1 className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               MusicSim
             </h1>
-            <div className="flex flex-col items-center gap-1">
-              <p className="text-yellow-400 text-xs font-semibold tracking-wider">Artist: {artistName}</p>
+            <div className="flex flex-col items-center gap-1 w-full">
+              <p className="text-yellow-400 text-xs font-semibold tracking-wider text-center">Artist: {artistName}</p>
               {difficulty && (
                 <span
                   className={`px-2 py-1 rounded-full text-xs font-bold ${getDifficultyColor(difficulty)} bg-gray-800/50 border border-current whitespace-nowrap`}
@@ -223,7 +224,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         className={`
           bg-gray-800/98 backdrop-blur-md border-l border-gray-700
           transition-all duration-300 ease-in-out
-          ${isExpanded && activeView ? 'w-[calc(100vw-4rem)] lg:w-[28rem]' : 'w-0'}
+          ${isExpanded && activeView ? 'flex-1 lg:w-[28rem]' : 'w-0'}
           overflow-hidden shadow-2xl
         `}
         style={{ willChange: 'width' }}

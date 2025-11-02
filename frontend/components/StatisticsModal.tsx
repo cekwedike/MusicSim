@@ -15,10 +15,10 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
   const stats = state.statistics;
 
   const tabs = [
-    { id: 'current' as const, label: 'Current Career', icon: '🎵' },
-    { id: 'alltime' as const, label: 'All-Time Stats', icon: '📊' },
-    { id: 'history' as const, label: 'Career History', icon: '📚' },
-    { id: 'patterns' as const, label: 'Patterns', icon: '🔍' },
+    { id: 'current' as const, label: 'Current Career', icon: '' },
+    { id: 'alltime' as const, label: 'All-Time Stats', icon: '' },
+    { id: 'history' as const, label: 'Career History', icon: '' },
+    { id: 'patterns' as const, label: 'Patterns', icon: '' },
   ];
 
   const gd = toGameDate(state.currentDate, state.startDate);
@@ -68,32 +68,26 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
       {/* Current Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-          <div className="text-2xl mb-2">💰</div>
           <p className="text-lg font-bold text-white">${state.playerStats.cash.toLocaleString()}</p>
           <p className="text-sm text-gray-400">Cash</p>
         </div>
         <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-          <div className="text-2xl mb-2">⭐</div>
           <p className="text-lg font-bold text-white">{state.playerStats.fame}</p>
           <p className="text-sm text-gray-400">Fame</p>
         </div>
         <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-          <div className="text-2xl mb-2">💝</div>
           <p className="text-lg font-bold text-white">{state.playerStats.wellBeing}</p>
           <p className="text-sm text-gray-400">Well-Being</p>
         </div>
         <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-          <div className="text-2xl mb-2">🔥</div>
           <p className="text-lg font-bold text-white">{state.playerStats.hype}</p>
           <p className="text-sm text-gray-400">Hype</p>
         </div>
         <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-          <div className="text-2xl mb-2">🎯</div>
           <p className="text-lg font-bold text-white">{state.playerStats.careerProgress}</p>
           <p className="text-sm text-gray-400">Career Progress</p>
         </div>
         <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-          <div className="text-2xl mb-2">🏆</div>
           <p className="text-lg font-bold text-white">{state.achievements.filter(a => a.unlocked).length}</p>
           <p className="text-sm text-gray-400">Achievements</p>
         </div>
@@ -141,73 +135,61 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
   const renderAllTimeTab = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-        <div className="text-2xl mb-2">🎮</div>
         <p className="text-xl font-bold text-white">{stats.totalGamesPlayed}</p>
         <p className="text-sm text-gray-400">Total Careers Played</p>
       </div>
-      
+
       <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-        <div className="text-2xl mb-2">⏱️</div>
         <p className="text-xl font-bold text-white">{formatDuration(stats.longestCareerWeeks)}</p>
         <p className="text-sm text-gray-400">Longest Career</p>
       </div>
-      
+
       <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
-        <div className="text-2xl mb-2">📊</div>
         <p className="text-xl font-bold text-white">{formatDuration(stats.averageCareerLength)}</p>
         <p className="text-sm text-gray-400">Average Career Length</p>
       </div>
 
       <div className="bg-red-500/20 p-4 rounded-lg border border-red-500/50">
-        <div className="text-2xl mb-2">💸</div>
         <p className="text-xl font-bold text-red-300">{stats.gamesLostToDebt} ({debtPercentage}%)</p>
         <p className="text-sm text-gray-400">Ended by Debt</p>
       </div>
 
       <div className="bg-orange-500/20 p-4 rounded-lg border border-orange-500/50">
-        <div className="text-2xl mb-2">😰</div>
         <p className="text-xl font-bold text-orange-300">{stats.gamesLostToBurnout} ({burnoutPercentage}%)</p>
         <p className="text-sm text-gray-400">Ended by Burnout</p>
       </div>
 
       <div className="bg-gray-500/20 p-4 rounded-lg border border-gray-500/50">
-        <div className="text-2xl mb-2">🚪</div>
         <p className="text-xl font-bold text-gray-300">{stats.careersAbandoned} ({abandonedPercentage}%)</p>
         <p className="text-sm text-gray-400">Abandoned</p>
       </div>
 
       <div className="bg-green-500/20 p-4 rounded-lg border border-green-500/50">
-        <div className="text-2xl mb-2">💰</div>
         <p className="text-xl font-bold text-green-300">${stats.highestCash.toLocaleString()}</p>
         <p className="text-sm text-gray-400">Highest Cash Ever</p>
       </div>
 
       <div className="bg-purple-500/20 p-4 rounded-lg border border-purple-500/50">
-        <div className="text-2xl mb-2">⭐</div>
         <p className="text-xl font-bold text-purple-300">{stats.highestFameReached}</p>
         <p className="text-sm text-gray-400">Highest Fame Ever</p>
       </div>
 
       <div className="bg-blue-500/20 p-4 rounded-lg border border-blue-500/50">
-        <div className="text-2xl mb-2">🎯</div>
         <p className="text-xl font-bold text-blue-300">{stats.highestCareerProgressReached}</p>
         <p className="text-sm text-gray-400">Highest Career Progress</p>
       </div>
 
       <div className="bg-yellow-500/20 p-4 rounded-lg border border-yellow-500/50">
-        <div className="text-2xl mb-2">📚</div>
         <p className="text-xl font-bold text-yellow-300">{stats.lessonsViewed}</p>
         <p className="text-sm text-gray-400">Total Lessons Viewed</p>
       </div>
 
       <div className="bg-indigo-500/20 p-4 rounded-lg border border-indigo-500/50">
-        <div className="text-2xl mb-2">🏆</div>
         <p className="text-xl font-bold text-indigo-300">{stats.achievementsUnlocked} / {state.achievements.length}</p>
         <p className="text-sm text-gray-400">Achievements Unlocked</p>
       </div>
 
       <div className="bg-pink-500/20 p-4 rounded-lg border border-pink-500/50">
-        <div className="text-2xl mb-2">🎵</div>
         <p className="text-xl font-bold text-pink-300">{stats.projectsReleased}</p>
         <p className="text-sm text-gray-400">Projects Released</p>
       </div>
@@ -249,7 +231,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
                   <p className="text-xs text-gray-400">Duration</p>
                   <p className="text-sm font-medium text-white">{formatDuration(career.weeksPlayed)}</p>
                   {career.weeksPlayed === stats.longestCareerWeeks && (
-                    <span className="text-xs text-yellow-400">🏆 Longest</span>
+                    <span className="text-xs text-yellow-400">Longest</span>
                   )}
                 </div>
                 <div>
@@ -355,22 +337,22 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
         <h4 className="font-semibold text-white mb-3">Insights</h4>
         <div className="space-y-2 text-sm text-gray-300">
           {debtPercentage > 50 && (
-            <p className="text-red-300">💡 You lose to debt {debtPercentage}% of the time - focus on cash management and steady income.</p>
+            <p className="text-red-300">You lose to debt {debtPercentage}% of the time - focus on cash management and steady income.</p>
           )}
           {burnoutPercentage > 50 && (
-            <p className="text-orange-300">💡 You lose to burnout {burnoutPercentage}% of the time - prioritize well-being and take breaks.</p>
+            <p className="text-orange-300">You lose to burnout {burnoutPercentage}% of the time - prioritize well-being and take breaks.</p>
           )}
           {learningEngagement < 50 && (
-            <p className="text-blue-300">💡 Try reading more lessons to improve your music industry knowledge.</p>
+            <p className="text-blue-300">Try reading more lessons to improve your music industry knowledge.</p>
           )}
           {stats.longestCareerWeeks >= 104 && (
-            <p className="text-green-300">🎉 Impressive! You've survived over 2 years in your longest career.</p>
+            <p className="text-green-300">Impressive! You've survived over 2 years in your longest career.</p>
           )}
           {achievementProgress >= 80 && (
-            <p className="text-yellow-300">🏆 You're an achievement hunter with {achievementProgress}% completion!</p>
+            <p className="text-yellow-300">You're an achievement hunter with {achievementProgress}% completion!</p>
           )}
           {stats.totalGamesPlayed >= 10 && (
-            <p className="text-purple-300">🎯 Experienced player with {stats.totalGamesPlayed} careers completed!</p>
+            <p className="text-purple-300">Experienced player with {stats.totalGamesPlayed} careers completed!</p>
           )}
         </div>
       </div>

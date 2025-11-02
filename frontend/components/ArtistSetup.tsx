@@ -51,10 +51,10 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                                             {settings.description}
                                         </p>
                                         <div className="text-xs text-gray-500 space-y-1">
-                                            <div>💰 Starting: ${settings.startingCash.toLocaleString()}</div>
-                                            <div>⏰ Grace: {settings.gracePeriodWeeks} weeks</div>
-                                            <div>💡 Hints: {settings.scenarioHints ? 'Yes' : 'No'}</div>
-                                            <div>🛡️ Forgiving: {settings.mistakeForgiveness ? 'Yes' : 'No'}</div>
+                                            <div>Starting: ${settings.startingCash.toLocaleString()}</div>
+                                            <div>Grace: {settings.gracePeriodWeeks} weeks</div>
+                                            <div>Hints: {settings.scenarioHints ? 'Yes' : 'No'}</div>
+                                            <div>Forgiving: {settings.mistakeForgiveness ? 'Yes' : 'No'}</div>
                                         </div>
                                     </div>
                                 </div>

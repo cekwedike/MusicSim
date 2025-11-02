@@ -41,7 +41,7 @@ export const MistakeWarning: React.FC<MistakeWarningProps> = ({
           </div>
 
           <div className="bg-green-900/30 border border-green-500/50 p-3 rounded-lg">
-            <h3 className="text-sm font-bold text-green-400 mb-1">💡 Beginner Mode Tip:</h3>
+            <h3 className="text-sm font-bold text-green-400 mb-1">Beginner Mode Tip:</h3>
             <p className="text-green-300 text-sm">
               This choice might significantly hurt your career. Beginner Mode lets you reconsider 
               choices that could cause major setbacks while you're learning the music business.

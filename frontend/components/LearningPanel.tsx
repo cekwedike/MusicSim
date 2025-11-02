@@ -111,12 +111,12 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
               <div className="absolute top-2 right-2 flex gap-1">
                 {isCompleted && (
                   <div className="bg-green-600 text-white text-xs px-2 py-0.5 rounded flex items-center gap-1">
-                    ✓ {score}%
+                    {score}%
                   </div>
                 )}
                 {!isUnlocked && (
                   <div className="bg-red-600 text-white text-xs px-2 py-0.5 rounded">
-                    🔒
+                    Locked
                   </div>
                 )}
               </div>
@@ -143,8 +143,8 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
 
               <div className="text-gray-400 text-xs mb-2">
                 <div className="flex items-center gap-2 mb-1">
-                  <span>⏱️ {module.estimatedMinutes}min</span>
-                  <span>📊 {module.quiz.length} quiz</span>
+                  <span>{module.estimatedMinutes}min</span>
+                  <span>{module.quiz.length} quiz</span>
                 </div>
 
                 {module.prerequisites && module.prerequisites.length > 0 && (
@@ -165,7 +165,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
               {/* Action indicator */}
               {isUnlocked && (
                 <div className="mt-2 text-violet-400 text-xs font-medium">
-                  {isCompleted ? '🔄 Review' : '▶️ Start'}
+                  {isCompleted ? 'Review' : 'Start'}
                 </div>
               )}
             </div>
@@ -175,7 +175,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
 
       {/* Bottom Info */}
       <div className="mt-4 bg-gradient-to-r from-violet-600/20 to-purple-600/20 border border-violet-600/30 rounded-lg p-3">
-        <h3 className="text-white font-bold text-sm mb-1">💡 Why Learn?</h3>
+        <h3 className="text-white font-bold text-sm mb-1">Why Learn?</h3>
         <p className="text-violet-200 text-xs leading-relaxed">
           Knowledge is power in the music industry. Understanding contracts, rights, and revenue streams
           helps you make better decisions and build a sustainable career.

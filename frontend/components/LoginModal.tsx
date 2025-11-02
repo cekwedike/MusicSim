@@ -256,7 +256,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                     {profileImage ? (
                       <img src={profileImage} alt="Profile preview" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-gray-400 text-2xl">👤</span>
+                      <span className="text-gray-400 text-2xl"></span>
                     )}
                   </div>
                   <button

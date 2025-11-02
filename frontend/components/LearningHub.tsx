@@ -129,7 +129,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                   )}
                   {!isUnlocked && (
                     <div className="bg-red-600 text-white text-xs px-2 py-1 rounded">
-                      🔒 Locked
+                      Locked
                     </div>
                   )}
                 </div>
@@ -156,8 +156,8 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
 
                 <div className="text-gray-300 text-sm mb-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <span>⏱️ {module.estimatedMinutes} minutes</span>
-                    <span>📊 {module.quiz.length} quiz questions</span>
+                    <span>{module.estimatedMinutes} minutes</span>
+                    <span>{module.quiz.length} quiz questions</span>
                   </div>
                   
                   {module.prerequisites && module.prerequisites.length > 0 && (
@@ -178,7 +178,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                 {/* Action indicator */}
                 {isUnlocked && (
                   <div className="mt-4 text-violet-400 text-sm font-medium">
-                    {isCompleted ? '🔄 Review Module' : '▶️ Start Learning'}
+                    {isCompleted ? 'Review Module' : 'Start Learning'}
                   </div>
                 )}
               </div>
@@ -188,10 +188,10 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
 
         {/* Bottom Info */}
         <div className="mt-6 bg-gradient-to-r from-violet-600 to-purple-600 rounded-lg p-4">
-          <h3 className="text-white font-bold mb-2">💡 Why Learn Music Business?</h3>
+          <h3 className="text-white font-bold mb-2">Why Learn Music Business?</h3>
           <p className="text-violet-100 text-sm">
-            Knowledge is power in the music industry. Understanding contracts, rights, and revenue streams 
-            helps you make better decisions, avoid predatory deals, and build a sustainable career. 
+            Knowledge is power in the music industry. Understanding contracts, rights, and revenue streams
+            helps you make better decisions, avoid predatory deals, and build a sustainable career.
             Each module teaches real-world concepts with African music industry context.
           </p>
         </div>

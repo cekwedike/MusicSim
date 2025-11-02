@@ -84,8 +84,8 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                 <div>
                   <h2 className="text-xl md:text-2xl font-bold text-white">{module.title}</h2>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-violet-200">
-                    <span className="text-sm">⏱️ {module.estimatedMinutes} minutes</span>
-                    <span className="text-sm">📊 {module.difficulty}</span>
+                    <span className="text-sm">{module.estimatedMinutes} minutes</span>
+                    <span className="text-sm">{module.difficulty}</span>
                   </div>
                 </div>
               </div>
@@ -140,7 +140,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                   {/* Examples */}
                   {module.content.sections[currentSection].examples && (
                     <div className="bg-gray-700 rounded-lg p-4 mb-4">
-                      <h4 className="text-white font-semibold mb-2">📋 Examples:</h4>
+                      <h4 className="text-white font-semibold mb-2">Examples:</h4>
                       <ul className="space-y-1">
                         {module.content.sections[currentSection].examples!.map((example, index) => (
                           <li key={index} className="text-gray-300 text-sm">• {example}</li>
@@ -152,7 +152,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                   {/* Tip */}
                   {module.content.sections[currentSection].tip && (
                     <div className="bg-gradient-to-r from-yellow-600 to-orange-600 rounded-lg p-4 mb-4">
-                      <h4 className="text-white font-semibold mb-2">💡 Pro Tip:</h4>
+                      <h4 className="text-white font-semibold mb-2">Pro Tip:</h4>
                       <p className="text-yellow-100 text-sm">
                         {module.content.sections[currentSection].tip}
                       </p>
@@ -164,7 +164,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
               {/* Key Takeaways (only show on last section) */}
               {isLastSection && (
                 <div className="mb-6 p-4 bg-green-900 rounded-lg border border-green-700">
-                  <h4 className="text-white font-semibold mb-3">🎯 Key Takeaways</h4>
+                  <h4 className="text-white font-semibold mb-3">Key Takeaways</h4>
                   <ul className="space-y-2 list-disc list-inside">
                     {module.content.keyTakeaways.map((takeaway, index) => (
                       <li key={index} className="text-green-200 text-sm">
@@ -178,7 +178,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
               {/* Cultural Context */}
               {isLastSection && module.content.culturalContext && (
                 <div className="mb-6 p-4 bg-purple-900 rounded-lg border border-purple-700">
-                  <h4 className="text-white font-semibold mb-2">🌍 African Music Industry Context</h4>
+                  <h4 className="text-white font-semibold mb-2">African Music Industry Context</h4>
                   <p className="text-purple-200 text-sm">{module.content.culturalContext}</p>
                 </div>
               )}
@@ -203,7 +203,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
           {showQuiz && !showQuizResults && (
             <div>
               <div className="mb-6 text-center">
-                <h3 className="text-xl font-bold text-white mb-2">📝 Knowledge Check</h3>
+                <h3 className="text-xl font-bold text-white mb-2">Knowledge Check</h3>
                 <p className="text-gray-300">Test your understanding of the material</p>
               </div>
 
@@ -238,7 +238,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
           {showQuizResults && (
             <div>
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">🎉 Quiz Complete!</h3>
+                <h3 className="text-2xl font-bold text-white mb-2">Quiz Complete!</h3>
                 <div className={`text-4xl font-bold mb-2 ${getScoreColor(quizScore)}`}>
                   {quizScore}%
                 </div>

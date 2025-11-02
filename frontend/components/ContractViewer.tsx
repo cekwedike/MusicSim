@@ -88,7 +88,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">💰</span>
                   <h3 className="font-semibold text-white">Advance</h3>
                 </div>
                 <p className={`text-2xl font-bold ${getAdvanceColor(label.terms.advance)}`}>
@@ -99,7 +98,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">📊</span>
                   <h3 className="font-semibold text-white">Royalty Rate</h3>
                 </div>
                 <p className={`text-2xl font-bold ${getRoyaltyComparison(label.terms.royaltyRate)}`}>
@@ -110,7 +108,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">📈</span>
                   <h3 className="font-semibold text-white">Marketing Budget</h3>
                 </div>
                 <p className="text-2xl font-bold text-white">
@@ -121,7 +118,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">🎤</span>
                   <h3 className="font-semibold text-white">Tour Support</h3>
                 </div>
                 <p className="text-2xl font-bold text-white">
@@ -132,7 +128,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">💿</span>
                   <h3 className="font-semibold text-white">Album Commitment</h3>
                 </div>
                 <p className="text-2xl font-bold text-white">
@@ -143,7 +138,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">⏰</span>
                   <h3 className="font-semibold text-white">Contract Length</h3>
                 </div>
                 <p className="text-2xl font-bold text-white">
@@ -254,7 +248,6 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
             <section>
               <div className="bg-red-500/20 border border-red-500 p-6 rounded-lg">
                 <h3 className="text-xl font-bold text-red-300 mb-4 flex items-center gap-2">
-                  <span className="text-2xl">🚨</span>
                   MAJOR CONCERNS
                 </h3>
                 <div className="space-y-2">

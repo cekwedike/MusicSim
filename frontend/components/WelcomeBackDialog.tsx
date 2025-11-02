@@ -10,7 +10,6 @@ const WelcomeBackDialog: React.FC<WelcomeBackDialogProps> = ({ artistName, onClo
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
       <div className="bg-gray-800 border-2 border-violet-500 rounded-xl shadow-2xl w-full max-w-md p-8 text-center animate-fade-in">
         <div className="mb-6">
-          <div className="text-5xl mb-4">👋</div>
           <h2 className="text-3xl font-bold text-violet-300 mb-2">
             Welcome Back!
           </h2>

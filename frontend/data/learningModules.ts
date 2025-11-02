@@ -251,7 +251,7 @@ export const learningModules: LearningModule[] = [
     id: 'copyright-rights',
     title: 'Copyright and Your Rights',
     category: 'rights',
-    icon: '⚖️',
+    icon: '',
     difficulty: 'intermediate',
     estimatedMinutes: 8,
     prerequisites: ['contracts-basics'],

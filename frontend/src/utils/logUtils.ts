@@ -8,10 +8,10 @@ export const createLog = (
 ): LogEntry => {
   const getIconForType = (logType: string): string => {
     switch (logType) {
-      case 'success': return '✅';
-      case 'warning': return '⚠️';
-      case 'danger': return '❌';
-      default: return 'ℹ️';
+      case 'success': return '';
+      case 'warning': return '';
+      case 'danger': return '';
+      default: return '';
     }
   };
 

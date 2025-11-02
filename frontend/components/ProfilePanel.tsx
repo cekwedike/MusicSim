@@ -260,7 +260,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 										className="text-violet-300 hover:text-violet-200 text-xs"
 										title="Edit name"
 									>
-										✏️
+										Edit
 									</button>
 								</div>
 							)}
@@ -275,7 +275,6 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 				) : (
 					<div className="flex items-center gap-3">
 						<div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-2xl">
-							👤
 						</div>
 						<div className="flex-1">
 							{isEditingName ? (
@@ -309,7 +308,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 										className="text-gray-300 hover:text-white text-xs"
 										title="Edit name"
 									>
-										✏️
+										Edit
 									</button>
 								</div>
 							)}
@@ -349,7 +348,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			{statistics && (
 				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
-						<span>📊</span> Career Statistics
+						Career Statistics
 					</h3>
 					<div className="grid grid-cols-2 gap-3">
 						<div className="bg-gray-800/50 rounded-lg p-3">
@@ -378,30 +377,30 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			{statistics && (statistics.highestCash > 0 || statistics.highestFameReached > 0) && (
 				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
-						<span>🏆</span> Personal Records
+						Personal Records
 					</h3>
 					<div className="space-y-2 text-sm">
 						{statistics.highestCash > 0 && (
 							<div className="flex justify-between items-center">
-								<span className="text-gray-400">💰 Peak Wealth</span>
+								<span className="text-gray-400">Peak Wealth</span>
 								<span className="font-semibold text-green-400">{formatCurrency(statistics.highestCash)}</span>
 							</div>
 						)}
 						{statistics.highestFameReached > 0 && (
 							<div className="flex justify-between items-center">
-								<span className="text-gray-400">⭐ Peak Fame</span>
+								<span className="text-gray-400">Peak Fame</span>
 								<span className="font-semibold text-yellow-400">{statistics.highestFameReached}</span>
 							</div>
 						)}
 						{statistics.longestCareerWeeks > 0 && (
 							<div className="flex justify-between items-center">
-								<span className="text-gray-400">📅 Longest Career</span>
+								<span className="text-gray-400">Longest Career</span>
 								<span className="font-semibold text-violet-400">{statistics.longestCareerWeeks} weeks</span>
 							</div>
 						)}
 						{statistics.totalCashEarned > 0 && (
 							<div className="flex justify-between items-center">
-								<span className="text-gray-400">💵 Total Earned</span>
+								<span className="text-gray-400">Total Earned</span>
 								<span className="font-semibold text-green-400">{formatCurrency(statistics.totalCashEarned)}</span>
 							</div>
 						)}
@@ -413,7 +412,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			{statistics && statistics.modulesCompleted > 0 && (
 				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
-						<span>📚</span> Learning Progress
+						Learning Progress
 					</h3>
 					<div className="space-y-2 text-sm">
 						<div className="flex justify-between items-center">
@@ -444,14 +443,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 							Register / Login
 						</button>
 						<div className="bg-blue-600/20 border border-blue-600/30 rounded-lg p-3">
-							<div className="flex items-start gap-2">
-								<span className="text-lg">💡</span>
-								<div>
-									<h4 className="text-sm font-semibold text-blue-300 mb-1">Save Your Progress!</h4>
-									<p className="text-xs text-blue-200 leading-relaxed">
-										Register now to keep all your current stats, achievements, and game history. Don't lose your progress!
-									</p>
-								</div>
+							<div>
+								<h4 className="text-sm font-semibold text-blue-300 mb-1">Save Your Progress!</h4>
+								<p className="text-xs text-blue-200 leading-relaxed">
+									Register now to keep all your current stats, achievements, and game history. Don't lose your progress!
+								</p>
 							</div>
 						</div>
 					</>
@@ -461,7 +457,6 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					onClick={isGuestMode ? handleExitGuest : handleLogout}
 					className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
 				>
-					<span>{isGuestMode ? '🚪' : '👋'}</span>
 					{isGuestMode ? 'Exit Guest Mode' : 'Logout'}
 				</button>
 
@@ -470,7 +465,6 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					onClick={() => setShowDeleteDialog(true)}
 					className="w-full bg-gray-700 hover:bg-gray-600 text-red-400 hover:text-red-300 px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 border border-gray-600"
 				>
-					<span>🗑️</span>
 					Delete All Data
 				</button>
 			</div>

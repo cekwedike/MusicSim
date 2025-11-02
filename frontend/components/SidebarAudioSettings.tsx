@@ -18,20 +18,20 @@ const SidebarAudioSettings: React.FC = () => {
         </div>
       </div>
 
-      {/* Browser Muted Warning */}
+      {/* Audio Blocked Warning */}
       {audioState.isBrowserMuted && (
         <div className="mb-4 bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-3 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h4 className="font-semibold text-yellow-300 text-sm mb-1">Browser Tab Muted</h4>
+            <h4 className="font-semibold text-yellow-300 text-sm mb-1">Audio Blocked</h4>
             <p className="text-xs text-yellow-200/90 leading-relaxed mb-2">
-              Your browser has muted this tab. Audio won't play until you unmute it.
+              Audio playback has been blocked by your system. Click below to enable it.
             </p>
             <button
               onClick={toggleMusicMute}
               className="text-xs bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1.5 rounded transition-colors font-medium"
             >
-              Unmute Audio
+              Enable Audio
             </button>
           </div>
         </div>

@@ -13,16 +13,11 @@ interface GameHistoryProps {
 }
 
 const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
-  // Start collapsed on mobile, expanded on desktop
-  const [isExpanded, setIsExpanded] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth >= 1024; // lg breakpoint
-    }
-    return false;
-  });
+  // Start collapsed for all views - let players choose to expand
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const [isMobileCollapsed, setIsMobileCollapsed] = useState(true);
-  const showCount = 3;
+  const showCount = 2;
 
   const formatDate = (date: Date): string => {
     return date.toLocaleDateString('en-GB', {
@@ -146,9 +141,9 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
         )}
       </div>
 
-      {/* Collapsed: fixed height for 3 items so layout doesn't shift; Expanded: allow larger max height */}
+      {/* Collapsed: fixed height for 2 items so layout doesn't shift; Expanded: allow larger max height */}
       <div className={
-        `space-y-2 overflow-y-auto ${isExpanded ? 'max-h-96' : 'h-36 sm:h-48'}`
+        `space-y-2 overflow-y-auto ${isExpanded ? 'max-h-96' : 'h-24 sm:h-32'}`
       }>
         {sortedLogs.length === 0 ? (
           <div className="text-gray-500 text-center py-6 sm:py-8 text-sm">

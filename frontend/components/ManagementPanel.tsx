@@ -24,15 +24,27 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({ achievements, staff }
 
       {activeTab === 'achievements' && (
         <div>
-          <p className="text-sm text-gray-400 mb-3">Unlocked: {unlockedCount}/{totalCount}</p>
-          <ul className="space-y-3">
-            {achievements.map(ach => (
-              <li key={ach.id} className={`p-3 rounded-lg border ${ach.unlocked ? 'border-yellow-500 bg-yellow-500/10' : 'border-gray-700 bg-gray-900/50'}`}>
-                <h4 className={`font-bold ${ach.unlocked ? 'text-yellow-400' : 'text-gray-300'}`}>{ach.name}</h4>
-                <p className="text-sm text-gray-400">{ach.description}</p>
-              </li>
-            ))}
-          </ul>
+          {unlockedCount === 0 ? (
+            <div className="text-center py-12">
+              <TrophyIcon className="w-16 h-16 mx-auto mb-4 text-gray-600" />
+              <h3 className="text-lg font-semibold text-gray-300 mb-2">No Achievements Yet</h3>
+              <p className="text-sm text-gray-400 max-w-sm mx-auto">
+                Keep playing to unlock achievements! Reach milestones, complete projects, and make smart decisions to earn your first trophy.
+              </p>
+            </div>
+          ) : (
+            <>
+              <p className="text-sm text-gray-400 mb-3">Unlocked: {unlockedCount}/{totalCount}</p>
+              <ul className="space-y-3">
+                {achievements.filter(a => a.unlocked).map(ach => (
+                  <li key={ach.id} className="p-3 rounded-lg border border-yellow-500 bg-yellow-500/10">
+                    <h4 className="font-bold text-yellow-400">{ach.name}</h4>
+                    <p className="text-sm text-gray-400">{ach.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       )}
 

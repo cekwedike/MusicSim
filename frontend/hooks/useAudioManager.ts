@@ -38,6 +38,7 @@ export const useAudioManager = (): AudioManager => {
   const soundPoolRef = useRef<Map<SoundEffect, HTMLAudioElement>>(new Map());
   const nextTrackRef = useRef<BackgroundMusic | null>(null);
   const isFadingRef = useRef(false);
+  const isProgrammaticMuteRef = useRef(false); // Track when WE change muted state
 
   // Save preferences to localStorage whenever they change
   useEffect(() => {
@@ -84,11 +85,17 @@ export const useAudioManager = (): AudioManager => {
         console.log('Music loaded successfully');
       });
 
-      // Detect when browser mutes the tab (e.g., user mutes tab from browser UI)
+      // Detect when audio is muted externally (e.g., system audio controls, browser tab mute)
       audio.addEventListener('volumechange', () => {
-        // If browser has muted the audio element externally
+        // Only react if this wasn't caused by our own code
+        if (isProgrammaticMuteRef.current) {
+          isProgrammaticMuteRef.current = false;
+          return;
+        }
+
+        // If audio has been muted externally (not by us)
         if (audio.muted && !audioState.isMusicMuted) {
-          console.log('[Audio Manager] Browser muted the tab, syncing game state...');
+          console.log('[Audio Manager] Audio muted externally, syncing game state...');
           setAudioState((prev) => ({
             ...prev,
             isMusicMuted: true,
@@ -130,6 +137,9 @@ export const useAudioManager = (): AudioManager => {
   // Update music volume when it changes
   useEffect(() => {
     if (musicAudioRef.current) {
+      // Set flag to indicate we're programmatically changing muted state
+      isProgrammaticMuteRef.current = true;
+
       // Set both volume and muted property for proper browser integration
       musicAudioRef.current.muted = audioState.isMusicMuted;
       musicAudioRef.current.volume = audioState.isMusicMuted ? 0 : audioState.musicVolume;
@@ -166,25 +176,10 @@ export const useAudioManager = (): AudioManager => {
     };
   }, [audioState.currentTrack, audioState.isMusicMuted, isUserInteracted]);
 
-  // Detect user interaction for autoplay policy compliance
-  useEffect(() => {
-    const handleUserInteraction = () => {
-      setIsUserInteracted(true);
-      // Remove listeners after first interaction
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-    };
-
-    document.addEventListener('click', handleUserInteraction);
-    document.addEventListener('keydown', handleUserInteraction);
-    document.addEventListener('touchstart', handleUserInteraction);
-
-    return () => {
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-    };
+  // Manual audio unlock function - called only when user explicitly enables audio
+  const unlockAudio = useCallback(() => {
+    console.log('[Audio Manager] Audio unlocked by user');
+    setIsUserInteracted(true);
   }, []);
 
   // Fade music volume
@@ -342,33 +337,61 @@ export const useAudioManager = (): AudioManager => {
 
   // Toggle music mute
   const toggleMusicMute = useCallback(() => {
-    setAudioState((prev) => ({
-      ...prev,
-      isMusicMuted: !prev.isMusicMuted,
-      // Clear browser muted flag when user manually toggles
-      isBrowserMuted: false
-    }));
-  }, []);
+    setAudioState((prev) => {
+      const willUnmute = prev.isMusicMuted;
+
+      // If unmuting and audio hasn't been unlocked yet, unlock it
+      if (willUnmute && !isUserInteracted) {
+        setIsUserInteracted(true);
+      }
+
+      return {
+        ...prev,
+        isMusicMuted: !prev.isMusicMuted,
+        // Clear browser muted flag when user manually toggles
+        isBrowserMuted: false
+      };
+    });
+  }, [isUserInteracted]);
 
   // Toggle SFX mute
   const toggleSfxMute = useCallback(() => {
-    setAudioState((prev) => ({ ...prev, isSfxMuted: !prev.isSfxMuted }));
-  }, []);
+    setAudioState((prev) => {
+      const willUnmute = prev.isSfxMuted;
+
+      // If unmuting and audio hasn't been unlocked yet, unlock it
+      if (willUnmute && !isUserInteracted) {
+        setIsUserInteracted(true);
+      }
+
+      return { ...prev, isSfxMuted: !prev.isSfxMuted };
+    });
+  }, [isUserInteracted]);
 
   // Set music muted state
   const setMusicMuted = useCallback((muted: boolean) => {
+    // If unmuting and audio hasn't been unlocked yet, unlock it
+    if (!muted && !isUserInteracted) {
+      setIsUserInteracted(true);
+    }
+
     setAudioState((prev) => ({
       ...prev,
       isMusicMuted: muted,
       // Clear browser muted flag when user manually sets mute state
       isBrowserMuted: false
     }));
-  }, []);
+  }, [isUserInteracted]);
 
   // Set SFX muted state
   const setSfxMuted = useCallback((muted: boolean) => {
+    // If unmuting and audio hasn't been unlocked yet, unlock it
+    if (!muted && !isUserInteracted) {
+      setIsUserInteracted(true);
+    }
+
     setAudioState((prev) => ({ ...prev, isSfxMuted: muted }));
-  }, []);
+  }, [isUserInteracted]);
 
   // Skip to next track in the playlist
   const nextTrack = useCallback(async () => {
@@ -474,6 +497,7 @@ export const useAudioManager = (): AudioManager => {
     duckMusic,
     unduckMusic,
     nextTrack,
+    unlockAudio,
     audioState,
   };
 };

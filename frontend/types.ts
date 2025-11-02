@@ -330,6 +330,7 @@ export interface ChoiceOutcome {
   renewStaff?: StaffRole;
   signLabel?: string; // ID of the label to sign with
   viewContract?: string; // ID of the label contract to view
+  achievementId?: string; // ID of achievement to unlock (for event-based achievements)
   lesson?: {
     title: string;
     explanation: string; // WHY this outcome happened
@@ -401,4 +402,5 @@ export type Action =
   | { type: 'PREVIOUS_TUTORIAL_STEP' }
   | { type: 'SKIP_TUTORIAL' }
   | { type: 'COMPLETE_TUTORIAL' }
+  | { type: 'CLEAR_UNSEEN_ACHIEVEMENTS' }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

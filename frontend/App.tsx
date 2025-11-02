@@ -23,6 +23,8 @@ import OutcomeModal from './components/OutcomeModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
 import LearningHub from './components/LearningHub';
+import NotificationToast, { type Notification } from './components/NotificationToast';
+import AudioUnlockPrompt from './components/AudioUnlockPrompt';
 import LearningPanel from './components/LearningPanel';
 import ModuleViewer from './components/ModuleViewer';
 import { ContractViewer } from './components/ContractViewer';
@@ -117,12 +119,32 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
         }
     };
     
-    // Milestones
+    // Milestones - Cash
     checkAndUnlock('CASH_10K', newStats.cash >= 10000);
+    checkAndUnlock('CASH_100K', newStats.cash >= 100000);
+    checkAndUnlock('CASH_1M', newStats.cash >= 1000000);
+
+    // Milestones - Fame
+    checkAndUnlock('FAME_25', newStats.fame >= 25);
     checkAndUnlock('FAME_50', newStats.fame >= 50);
+    checkAndUnlock('FAME_100', newStats.fame >= 100);
+
+    // Milestones - Hype
     checkAndUnlock('HYPE_50', newStats.hype >= 50);
+    checkAndUnlock('HYPE_100', newStats.hype >= 100);
+
+    // Milestones - Career Progress
     checkAndUnlock('CAREER_50', newStats.careerProgress >= 50);
-    checkAndUnlock('STAFF_FULL_TEAM', state.staff.length === 3);
+    checkAndUnlock('CAREER_100', newStats.careerProgress >= 100);
+
+    // Staff Achievements
+    const hasManager = state.staff.some(s => s.role === 'Manager');
+    const hasBooker = state.staff.some(s => s.role === 'Booker');
+    const hasPromoter = state.staff.some(s => s.role === 'Promoter');
+    checkAndUnlock('STAFF_MANAGER', hasManager);
+    checkAndUnlock('STAFF_BOOKER', hasBooker);
+    checkAndUnlock('STAFF_PROMOTER', hasPromoter);
+    checkAndUnlock('STAFF_FULL_TEAM', hasManager && hasBooker && hasPromoter);
     
     // Learning Achievements
     checkAndUnlock('EAGER_STUDENT', state.lessonsViewed.length >= 10);
@@ -223,7 +245,17 @@ function gameReducer(state: GameState, action: Action): GameState {
                 const existingStaff = newStaff.find(s => s.role === outcome.hireStaff);
                 if (!existingStaff) {
                     const staffTemplate = allStaff.find(s => s.role === outcome.hireStaff);
-                    if (staffTemplate) newStaff.push({ ...staffTemplate });
+                    if (staffTemplate) {
+                        newStaff.push({ ...staffTemplate });
+
+                        // Check staff hiring achievements
+                        const staffAchievementId = `STAFF_${outcome.hireStaff.toUpperCase()}`;
+                        const staffAchievement = updatedAchievements.find(a => a.id === staffAchievementId);
+                        if (staffAchievement && !staffAchievement.unlocked) {
+                            staffAchievement.unlocked = true;
+                            newUnseenAchievements = [...newUnseenAchievements, staffAchievement.id];
+                        }
+                    }
                 }
             }
              if (outcome.fireStaff) {
@@ -286,6 +318,15 @@ function gameReducer(state: GameState, action: Action): GameState {
             let newLessonsViewed = [...state.lessonsViewed];
             if (outcome.lesson && !newLessonsViewed.includes(outcome.lesson.title)) {
                 newLessonsViewed.push(outcome.lesson.title);
+            }
+
+            // Check for event-based achievements
+            if (outcome.achievementId) {
+                const eventAchievement = updatedAchievements.find(a => a.id === outcome.achievementId);
+                if (eventAchievement && !eventAchievement.unlocked) {
+                    eventAchievement.unlocked = true;
+                    newUnseenAchievements = [...newUnseenAchievements, eventAchievement.id];
+                }
             }
 
             const milestoneCheck = checkAchievements({...state, staff: newStaff, lessonsViewed: newLessonsViewed}, newStats);
@@ -761,7 +802,8 @@ function gameReducer(state: GameState, action: Action): GameState {
             };
         }
         case 'VIEW_MANAGEMENT_HUB':
-            return { ...state, modal: 'management', unseenAchievements: [] };
+            // Don't clear unseenAchievements immediately - let notifications show first
+            return { ...state, modal: 'management' };
         case 'VIEW_SAVE_LOAD':
             return { ...state, modal: 'saveload' };
         case 'VIEW_LEARNING_HUB':
@@ -969,6 +1011,8 @@ function gameReducer(state: GameState, action: Action): GameState {
                 unseenAchievements: [...state.unseenAchievements, ...finalUnseen]
             };
         }
+        case 'CLEAR_UNSEEN_ACHIEVEMENTS':
+            return { ...state, unseenAchievements: [] };
         default:
             return state;
     }
@@ -1106,6 +1150,16 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     // Login modal state for guest registration
     const [showLoginModal, setShowLoginModal] = useState(false);
 
+    // Notification state
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+
+    // Audio unlock prompt state
+    const [showAudioUnlock, setShowAudioUnlock] = useState(false);
+    const [hasShownAudioPrompt, setHasShownAudioPrompt] = useState(() => {
+        // Check if user has already seen the prompt
+        return localStorage.getItem('audioPromptShown') === 'true';
+    });
+
     const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
 
     // Auth context
@@ -1140,13 +1194,31 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     // Play achievement unlock sound when new achievements are unlocked
     // Play special audio for first achievement
     const firstAchievementAudioRef = useRef<HTMLAudioElement | null>(null);
+    const processedAchievementsRef = useRef<Set<string>>(new Set());
+
     useEffect(() => {
         if (unseenAchievements.length > 0) {
+            console.log('[Achievements] Unseen achievements detected:', unseenAchievements);
+
+            // Filter out already processed achievements
+            const newAchievements = unseenAchievements.filter(id => !processedAchievementsRef.current.has(id));
+
+            if (newAchievements.length === 0) {
+                console.log('[Achievements] All achievements already processed, skipping');
+                return;
+            }
+
+            console.log('[Achievements] New achievements to process:', newAchievements);
+
+            // Mark these as processed
+            newAchievements.forEach(id => processedAchievementsRef.current.add(id));
+
             // Check if this is the player's first achievement ever in this career
             const totalUnlockedAchievements = achievements.filter(a => a.unlocked).length;
             const isFirstAchievement = totalUnlockedAchievements === 1;
 
             if (isFirstAchievement) {
+                console.log('[Achievements] First achievement ever! Playing special audio');
                 // Play first achievement audio
                 if (!firstAchievementAudioRef.current) {
                     firstAchievementAudioRef.current = new Audio('/audio/scenarios/first-achievement.m4a');
@@ -1158,10 +1230,85 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 });
             } else {
                 // Play regular achievement unlock sound
+                console.log('[Achievements] Playing achievement unlock sound');
                 audioManager.playSound('achievementUnlock');
             }
+
+            // Create notifications for each new unseen achievement
+            const timestamp = Date.now();
+            const newNotifications: Notification[] = newAchievements.map((achievementId, index) => {
+                const achievement = achievements.find(a => a.id === achievementId);
+
+                // Determine if this is a milestone achievement
+                const isMilestone = achievementId.includes('FAME_100') ||
+                                   achievementId.includes('CAREER_100') ||
+                                   achievementId.includes('CASH_1M') ||
+                                   achievementId.includes('HYPE_100') ||
+                                   achievementId.includes('LEGENDARY') ||
+                                   achievementId.includes('HARDCORE');
+
+                console.log(`[Achievements] Creating notification for ${achievementId}: ${achievement?.name}`);
+
+                return {
+                    id: `achievement-${achievementId}-${timestamp}-${index}`,
+                    type: isMilestone ? 'milestone' : 'achievement',
+                    title: achievement?.name || 'Achievement Unlocked!',
+                    description: achievement?.description || '',
+                    duration: isMilestone ? 8000 : 6000
+                };
+            });
+
+            console.log('[Achievements] Adding notifications to state:', newNotifications);
+            setNotifications(prev => {
+                const updated = [...prev, ...newNotifications];
+                console.log('[Achievements] Notifications state updated. Total notifications:', updated.length);
+                return updated;
+            });
+
+            // Clear unseen achievements after a short delay to ensure notifications are created
+            setTimeout(() => {
+                console.log('[Achievements] Clearing unseen achievements');
+                dispatch({ type: 'CLEAR_UNSEEN_ACHIEVEMENTS' });
+            }, 100);
         }
-    }, [unseenAchievements.length, audioManager, achievements]);
+    }, [unseenAchievements, audioManager, achievements]);
+
+    // Watch for project releases and other events in logs
+    const lastLogCountRef = useRef(0);
+    useEffect(() => {
+        if (logs.length > lastLogCountRef.current) {
+            const newLogs = logs.slice(lastLogCountRef.current);
+            lastLogCountRef.current = logs.length;
+
+            newLogs.forEach(log => {
+                // Check for project releases
+                if (log.message.includes('Released') && (log.message.includes('album') || log.message.includes('EP') || log.message.includes('single'))) {
+                    const projectMatch = log.message.match(/Released '([^']+)'/);
+                    if (projectMatch) {
+                        const projectName = projectMatch[1];
+                        setNotifications(prev => [...prev, {
+                            id: `project-${Date.now()}`,
+                            type: 'success',
+                            title: 'Project Released!',
+                            description: `You've released "${projectName}"! Great work!`,
+                            duration: 5000
+                        }]);
+                    }
+                }
+
+                // Check for major cash milestones in events
+                if (log.message.includes('$') && (log.message.includes('100,000') || log.message.includes('1,000,000'))) {
+                    setNotifications(prev => [...prev, {
+                        id: `cash-milestone-${Date.now()}`,
+                        type: 'milestone',
+                        title: 'Financial Milestone!',
+                        description: 'Your bank account is looking healthy!',
+                        duration: 5000
+                    }]);
+                }
+            });
+        }
+    }, [logs]);
 
     // Play one year milestone audio at 48 weeks
     const hasPlayedMilestoneAudioRef = useRef(false);
@@ -1184,6 +1331,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 milestoneAudioRef.current.play().catch(err => {
                     console.warn('[One Year Milestone Audio] Playback failed:', err);
                 });
+
+                // Show notification for 1 year milestone
+                setNotifications(prev => [...prev, {
+                    id: `time-milestone-${Date.now()}`,
+                    type: 'milestone',
+                    title: 'One Year Anniversary!',
+                    description: "You've survived a full year in the music industry! That's impressive!",
+                    duration: 7000
+                }]);
             }
         }
     }, [status, state.currentDate, state.startDate, audioManager]);
@@ -1360,13 +1516,71 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleStartGame = () => {
-        audioManager.playSound('buttonClick');
-        dispatch({ type: 'START_SETUP' });
+        // Show audio unlock prompt if not shown before
+        if (!hasShownAudioPrompt) {
+            setShowAudioUnlock(true);
+        } else {
+            audioManager.playSound('buttonClick');
+            dispatch({ type: 'START_SETUP' });
+        }
+    };
+
+    const handleAudioUnlock = async () => {
+        setShowAudioUnlock(false);
+        setHasShownAudioPrompt(true);
+        localStorage.setItem('audioPromptShown', 'true');
+
+        // Unlock audio system - this enables user interaction flag
+        audioManager.unlockAudio();
+
+        // Try to play a sound to unlock audio context
+        try {
+            await audioManager.playSound('buttonClick');
+        } catch (error) {
+            console.log('Audio unlock attempt:', error);
+        }
+
+        // Check if we have a pending game load
+        const pendingLoad = sessionStorage.getItem('pendingLoadGame');
+        if (pendingLoad) {
+            sessionStorage.removeItem('pendingLoadGame');
+            const gameState = JSON.parse(pendingLoad);
+            dispatch({ type: 'LOAD_GAME', payload: gameState });
+        } else {
+            dispatch({ type: 'START_SETUP' });
+        }
+    };
+
+    const handleAudioSkip = () => {
+        setShowAudioUnlock(false);
+        setHasShownAudioPrompt(true);
+        localStorage.setItem('audioPromptShown', 'true');
+
+        // Mute audio if user skips
+        audioManager.setMusicMuted(true);
+        audioManager.setSfxMuted(true);
+
+        // Check if we have a pending game load
+        const pendingLoad = sessionStorage.getItem('pendingLoadGame');
+        if (pendingLoad) {
+            sessionStorage.removeItem('pendingLoadGame');
+            const gameState = JSON.parse(pendingLoad);
+            dispatch({ type: 'LOAD_GAME', payload: gameState });
+        } else {
+            dispatch({ type: 'START_SETUP' });
+        }
     };
 
     const handleContinueFromAutosave = (gameState: GameState) => {
-        audioManager.playSound('buttonClick');
-        dispatch({ type: 'LOAD_GAME', payload: gameState });
+        // Show audio unlock prompt if not shown before
+        if (!hasShownAudioPrompt) {
+            setShowAudioUnlock(true);
+            // Store the game state to load after audio unlock
+            sessionStorage.setItem('pendingLoadGame', JSON.stringify(gameState));
+        } else {
+            audioManager.playSound('buttonClick');
+            dispatch({ type: 'LOAD_GAME', payload: gameState });
+        }
     };
 
     const handleRestart = () => {
@@ -1702,6 +1916,20 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     onClose={() => setShowLoginModal(false)}
                     isGuestMode={isGuestMode}
                     guestStatistics={isGuestMode ? state.statistics : undefined}
+                />
+            )}
+
+            {/* Notification Toast */}
+            <NotificationToast
+                notifications={notifications}
+                onDismiss={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
+            />
+
+            {/* Audio Unlock Prompt */}
+            {showAudioUnlock && (
+                <AudioUnlockPrompt
+                    onUnlock={handleAudioUnlock}
+                    onSkip={handleAudioSkip}
                 />
             )}
 

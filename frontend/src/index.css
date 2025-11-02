@@ -63,11 +63,11 @@ html.light {
   --light-bg-elevated: #ffffff;          /* White for elevated cards */
 
   /* ===== TEXT COLORS ===== */
-  --light-text-primary: #111827;         /* Almost black - main text */
-  --light-text-secondary: #374151;       /* Dark gray - secondary text */
-  --light-text-tertiary: #6b7280;        /* Medium gray - muted text */
-  --light-text-quaternary: #9ca3af;      /* Light gray - very muted */
-  --light-text-disabled: #d1d5db;        /* Very light - disabled */
+  --light-text-primary: #0f172a;         /* Very dark slate - main text */
+  --light-text-secondary: #1e293b;       /* Dark slate - secondary text */
+  --light-text-tertiary: #475569;        /* Medium slate - muted text */
+  --light-text-quaternary: #64748b;      /* Slate - very muted */
+  --light-text-disabled: #cbd5e1;        /* Light slate - disabled */
 
   /* ===== BORDER COLORS ===== */
   --light-border-primary: #e5e7eb;       /* Main borders */
@@ -167,7 +167,7 @@ html.light .text-gray-100 {
 }
 
 html.light .text-gray-200 {
-  color: var(--light-text-secondary) !important;
+  color: var(--light-text-primary) !important;
 }
 
 html.light .text-gray-300 {
@@ -224,7 +224,7 @@ html.light .hover\:text-white:hover {
 }
 
 html.light .hover\:text-gray-300:hover {
-  color: var(--light-text-secondary) !important;
+  color: var(--light-text-primary) !important;
 }
 
 /* ========================================
@@ -454,4 +454,80 @@ html.light .bg-gradient-to-r {
   --tw-gradient-from: var(--light-violet-50);
   --tw-gradient-to: var(--light-violet-300);
   background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
+}
+
+/* Additional component overrides */
+html.light .bg-gray-900\/50 {
+  background-color: rgba(249, 250, 251, 0.8) !important;
+}
+
+html.light .bg-gray-800\/60 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: var(--light-border-primary) !important;
+}
+
+/* Sky/Blue colors for staff cards */
+html.light .text-sky-300,
+html.light .text-sky-400 {
+  color: #0284c7 !important;
+}
+
+html.light .bg-sky-500\/10 {
+  background-color: rgba(14, 165, 233, 0.1) !important;
+}
+
+html.light .border-sky-500\/30 {
+  border-color: rgba(14, 165, 233, 0.3) !important;
+}
+
+html.light .border-sky-500\/20 {
+  border-color: rgba(14, 165, 233, 0.2) !important;
+}
+
+/* Notification Toast specific */
+html.light .bg-gray-800\/95 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: var(--light-border-secondary) !important;
+}
+
+/* Buttons and interactive elements */
+html.light button:not(.bg-violet-600):not([class*="bg-"]) {
+  background-color: var(--light-bg-tertiary) !important;
+  color: var(--light-text-primary) !important;
+}
+
+html.light button:not(.bg-violet-600):not([class*="bg-"]):hover {
+  background-color: var(--light-bg-quaternary) !important;
+}
+
+/* Ensure all text is readable */
+html.light h1, html.light h2, html.light h3, html.light h4, html.light h5, html.light h6 {
+  color: var(--light-text-primary) !important;
+}
+
+html.light p {
+  color: var(--light-text-secondary) !important;
+}
+
+/* Modal overlays */
+html.light .fixed.inset-0.bg-black {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Additional gray shades */
+html.light .bg-gray-950 {
+  background-color: var(--light-bg-primary) !important;
+  color: var(--light-text-primary) !important;
+}
+
+html.light .text-gray-700 {
+  color: var(--light-text-tertiary) !important;
+}
+
+html.light .text-gray-800 {
+  color: var(--light-text-secondary) !important;
+}
+
+html.light .text-gray-900 {
+  color: var(--light-text-primary) !important;
 }

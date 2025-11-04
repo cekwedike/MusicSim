@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { LearningModule, PlayerKnowledge } from '../types';
 import learningModules from '../data/learningModules';
 
@@ -9,40 +9,57 @@ interface LearningHubProps {
   playerKnowledge: PlayerKnowledge;
 }
 
+interface DraggedCard {
+  moduleId: string;
+  fromIndex: number;
+}
+
 const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule, playerKnowledge }) => {
+  const [moduleOrder, setModuleOrder] = useState<string[]>(learningModules.map(m => m.id));
+  const [draggedCard, setDraggedCard] = useState<DraggedCard | null>(null);
+  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
+  // Calculate player level and XP
+  const totalXP = playerKnowledge.completedModules.length * 100 +
+                  (Object.values(playerKnowledge.moduleScores) as number[]).reduce((sum: number, score: number) => sum + score, 0);
+  const playerLevel = Math.floor(totalXP / 300) + 1;
+  const xpToNextLevel = 300 - (totalXP % 300);
+  const levelProgress = ((totalXP % 300) / 300) * 100;
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'beginner':
-        return 'text-green-400';
+        return 'from-green-500 to-emerald-600';
       case 'intermediate':
-        return 'text-yellow-400';
+        return 'from-yellow-500 to-orange-600';
       case 'advanced':
-        return 'text-red-400';
+        return 'from-red-500 to-rose-600';
       default:
-        return 'text-gray-400';
+        return 'from-gray-500 to-gray-600';
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'contracts':
-        return 'bg-blue-600';
+        return 'from-blue-500 to-cyan-600';
       case 'revenue':
-        return 'bg-green-600';
+        return 'from-green-500 to-teal-600';
       case 'rights':
-        return 'bg-purple-600';
+        return 'from-purple-500 to-indigo-600';
       case 'marketing':
-        return 'bg-pink-600';
+        return 'from-pink-500 to-fuchsia-600';
       case 'legal':
-        return 'bg-red-600';
+        return 'from-red-500 to-orange-600';
       default:
-        return 'bg-gray-600';
+        return 'from-gray-500 to-slate-600';
     }
   };
 
   const isModuleUnlocked = (module: LearningModule): boolean => {
     if (!module.prerequisites) return true;
-    return module.prerequisites.every(prereq => 
+    return module.prerequisites.every(prereq =>
       playerKnowledge.completedModules.includes(prereq)
     );
   };
@@ -55,156 +72,431 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
     return playerKnowledge.moduleScores[moduleId] || 0;
   };
 
+  const handleDragStart = (e: React.DragEvent, moduleId: string, index: number) => {
+    setDraggedCard({ moduleId, fromIndex: index });
+    e.dataTransfer.effectAllowed = 'move';
+    e.currentTarget.classList.add('opacity-50');
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    e.currentTarget.classList.remove('opacity-50');
+    setDraggedCard(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, toIndex: number) => {
+    e.preventDefault();
+
+    if (!draggedCard) return;
+
+    const newOrder = [...moduleOrder];
+    const [movedItem] = newOrder.splice(draggedCard.fromIndex, 1);
+    newOrder.splice(toIndex, 0, movedItem);
+
+    setModuleOrder(newOrder);
+    setDraggedCard(null);
+  };
+
+  const toggleCardFlip = (moduleId: string) => {
+    const newFlipped = new Set(flippedCards);
+    if (newFlipped.has(moduleId)) {
+      newFlipped.delete(moduleId);
+    } else {
+      newFlipped.add(moduleId);
+    }
+    setFlippedCards(newFlipped);
+  };
+
+  const orderedModules = moduleOrder.map(id => learningModules.find(m => m.id === id)!);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-lg p-4 md:p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-gray-700">
-        <div className="flex justify-between items-center mb-4 md:mb-6">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Music Business Academy</h2>
-            <p className="text-gray-300">Learn the business side of music to make smarter career decisions</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white text-2xl min-w-[44px] min-h-[44px] flex items-center justify-center"
-          >
-            ×
-          </button>
-        </div>
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-2xl w-full max-w-7xl max-h-[95vh] overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20">
 
-        {/* Progress Stats */}
-        <div className="bg-gray-700 rounded-lg p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-violet-400">
-                {playerKnowledge.completedModules.length}
+        {/* Header Section */}
+        <div className="relative bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 p-6 md:p-8">
+          <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+              <div className="flex-1">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">
+                  Music Business Academy
+                </h2>
+                <p className="text-purple-100 text-sm md:text-base">
+                  Master the business side of music through interactive learning
+                </p>
               </div>
-              <div className="text-gray-300 text-sm">Modules Completed</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-green-400">
-                {playerKnowledge.conceptsMastered.length}
-              </div>
-              <div className="text-gray-300 text-sm">Concepts Mastered</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-yellow-400">
-                {Math.round(
-                  (Object.values(playerKnowledge.moduleScores) as number[]).reduce((sum, score) => sum + score, 0) / 
-                  Math.max(Object.keys(playerKnowledge.moduleScores).length, 1)
-                )}%
-              </div>
-              <div className="text-gray-300 text-sm">Average Score</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Module Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {learningModules.map((module) => {
-            const isUnlocked = isModuleUnlocked(module);
-            const isCompleted = isModuleCompleted(module.id);
-            const score = getModuleScore(module.id);
-            
-            return (
-              <div
-                key={module.id}
-                className={`
-                  relative border rounded-lg p-6 transition-all duration-200
-                  ${isUnlocked 
-                    ? 'border-gray-600 bg-gray-700 hover:bg-gray-650 cursor-pointer hover:border-violet-500' 
-                    : 'border-gray-700 bg-gray-800 opacity-50 cursor-not-allowed'
-                  }
-                  ${isCompleted ? 'ring-2 ring-green-500' : ''}
-                `}
-                onClick={() => isUnlocked && onOpenModule(module)}
+              <button
+                onClick={onClose}
+                className="absolute top-4 right-4 md:relative md:top-0 md:right-0 text-purple-200 hover:text-white transition-all duration-200 hover:rotate-90 text-3xl min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-full"
+                aria-label="Close"
               >
-                {/* Status Indicators */}
-                <div className="absolute top-3 right-3 flex gap-2">
-                  {isCompleted && (
-                    <div className="bg-green-600 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-                      {score}%
-                    </div>
-                  )}
-                  {!isUnlocked && (
-                    <div className="bg-red-600 text-white text-xs px-2 py-1 rounded">
-                      Locked
-                    </div>
-                  )}
-                </div>
+                ×
+              </button>
+            </div>
 
-                {/* Module Content */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-2xl">{module.icon}</span>
+            {/* Player Stats & Level */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Level & XP */}
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                      {playerLevel}
+                    </div>
                     <div>
-                      <h3 className={`font-bold text-lg ${isUnlocked ? 'text-white' : 'text-gray-500'}`}>
-                        {module.title}
-                      </h3>
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${getCategoryColor(module.category)} text-white`}>
-                          {module.category.toUpperCase()}
-                        </span>
-                        <span className={getDifficultyColor(module.difficulty)}>
-                          {module.difficulty}
-                        </span>
+                      <div className="text-white font-semibold text-lg">Level {playerLevel}</div>
+                      <div className="text-purple-200 text-xs">{xpToNextLevel} XP to next level</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-yellow-300">{totalXP}</div>
+                    <div className="text-purple-200 text-xs">Total XP</div>
+                  </div>
+                </div>
+                <div className="w-full bg-purple-900/50 rounded-full h-3 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full transition-all duration-500 shadow-lg shadow-yellow-500/50"
+                    style={{ width: `${levelProgress}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Progress Stats */}
+              <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="transform hover:scale-110 transition-transform duration-200">
+                    <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                      {playerKnowledge.completedModules.length}
+                    </div>
+                    <div className="text-purple-200 text-xs mt-1">Completed</div>
+                  </div>
+                  <div className="transform hover:scale-110 transition-transform duration-200">
+                    <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                      {playerKnowledge.conceptsMastered.length}
+                    </div>
+                    <div className="text-purple-200 text-xs mt-1">Concepts</div>
+                  </div>
+                  <div className="transform hover:scale-110 transition-transform duration-200">
+                    <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                      {Math.round(
+                        (Object.values(playerKnowledge.moduleScores) as number[]).reduce((sum, score) => sum + score, 0) /
+                        Math.max(Object.keys(playerKnowledge.moduleScores).length, 1)
+                      )}%
+                    </div>
+                    <div className="text-purple-200 text-xs mt-1">Avg Score</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Drag Instruction */}
+        <div className="px-6 pt-4 pb-2">
+          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-3">
+            <p className="text-sm text-blue-200 text-center">
+              <span className="font-semibold">Tip:</span> Drag and drop course cards to organize them by priority. Tap cards to flip and reveal details.
+            </p>
+          </div>
+        </div>
+
+        {/* Course Cards Grid */}
+        <div className="p-4 md:p-6 overflow-y-auto" style={{ maxHeight: 'calc(95vh - 420px)' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {orderedModules.map((module, index) => {
+              const isUnlocked = isModuleUnlocked(module);
+              const isCompleted = isModuleCompleted(module.id);
+              const score = getModuleScore(module.id);
+              const isFlipped = flippedCards.has(module.id);
+              const isHovered = hoveredCard === module.id;
+
+              return (
+                <div
+                  key={module.id}
+                  draggable={isUnlocked}
+                  onDragStart={(e) => isUnlocked && handleDragStart(e, module.id, index)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, index)}
+                  onMouseEnter={() => setHoveredCard(module.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="perspective-1000"
+                  style={{ minHeight: '320px' }}
+                >
+                  <div
+                    className={`relative w-full h-full transition-all duration-500 transform-style-3d cursor-pointer ${
+                      isFlipped ? 'rotate-y-180' : ''
+                    } ${isHovered && isUnlocked ? 'scale-105' : 'scale-100'}`}
+                    onClick={() => isUnlocked && toggleCardFlip(module.id)}
+                  >
+                    {/* Front of Card */}
+                    <div
+                      className={`absolute inset-0 backface-hidden rounded-xl border-2 overflow-hidden shadow-xl transition-all duration-300 ${
+                        isUnlocked
+                          ? `bg-gradient-to-br ${getCategoryColor(module.category)} border-transparent hover:shadow-2xl hover:shadow-purple-500/30`
+                          : 'bg-gradient-to-br from-gray-700 to-gray-800 border-gray-600 opacity-60'
+                      } ${isCompleted ? 'ring-4 ring-green-400/50' : ''}`}
+                    >
+                      {/* Card Content */}
+                      <div className="relative h-full p-6 flex flex-col">
+                        {/* Status Badge */}
+                        <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                          {isCompleted && (
+                            <div className="bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 animate-slideInRight">
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              {score}%
+                            </div>
+                          )}
+                          {!isUnlocked && (
+                            <div className="bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                              </svg>
+                              Locked
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Icon & Title */}
+                        <div className="flex-1">
+                          <div className="text-5xl mb-4 filter drop-shadow-lg">{module.icon}</div>
+                          <h3 className="text-xl font-bold text-white mb-3 leading-tight line-clamp-2">
+                            {module.title}
+                          </h3>
+
+                          {/* Category Badge */}
+                          <div className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1.5 rounded-full mb-4 border border-white/30">
+                            {module.category.toUpperCase()}
+                          </div>
+
+                          {/* Module Info */}
+                          <div className="space-y-2 text-white/90 text-sm">
+                            <div className="flex items-center gap-2">
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                              </svg>
+                              <span>{module.estimatedMinutes} minutes</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                                <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+                              </svg>
+                              <span>{module.quiz.length} quiz questions</span>
+                            </div>
+                            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r ${getDifficultyColor(module.difficulty)} text-white text-xs font-semibold`}>
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                              </svg>
+                              {module.difficulty}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Action Button */}
+                        {isUnlocked && (
+                          <div className="mt-4 pt-4 border-t border-white/20">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onOpenModule(module);
+                              }}
+                              className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 border border-white/30 hover:border-white/50 flex items-center justify-center gap-2"
+                            >
+                              {isCompleted ? 'Review Module' : 'Start Learning'}
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                              </svg>
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Flip Indicator */}
+                        {isUnlocked && (
+                          <div className="absolute bottom-3 left-3 text-white/60 text-xs flex items-center gap-1">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Tap to flip
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Back of Card */}
+                    <div
+                      className={`absolute inset-0 backface-hidden rotate-y-180 rounded-xl border-2 overflow-hidden shadow-xl ${
+                        isUnlocked
+                          ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 border-purple-500/50'
+                          : 'bg-gradient-to-br from-gray-700 to-gray-800 border-gray-600'
+                      }`}
+                    >
+                      <div className="h-full p-6 overflow-y-auto">
+                        <div className="text-white">
+                          <h4 className="font-bold text-lg mb-3 text-purple-300">Module Overview</h4>
+                          <p className="text-sm text-gray-300 mb-4 leading-relaxed">
+                            {module.content.introduction}
+                          </p>
+
+                          {module.prerequisites && module.prerequisites.length > 0 && (
+                            <div className="mb-4">
+                              <h5 className="font-semibold text-sm text-purple-300 mb-2">Prerequisites:</h5>
+                              <div className="space-y-1">
+                                {module.prerequisites.map(prereq => {
+                                  const prereqModule = learningModules.find(m => m.id === prereq);
+                                  return (
+                                    <div key={prereq} className="text-xs text-gray-400 flex items-center gap-2">
+                                      <svg className="w-3 h-3 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                                      </svg>
+                                      {prereqModule?.title || prereq}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="mt-4 pt-4 border-t border-gray-700">
+                            <h5 className="font-semibold text-sm text-purple-300 mb-2">What you'll learn:</h5>
+                            <ul className="space-y-2">
+                              {module.content.keyTakeaways.slice(0, 3).map((takeaway, idx) => (
+                                <li key={idx} className="text-xs text-gray-300 flex items-start gap-2">
+                                  <svg className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                  </svg>
+                                  <span>{takeaway}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleCardFlip(module.id);
+                            }}
+                            className="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Flip Back
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="text-gray-300 text-sm mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span>{module.estimatedMinutes} minutes</span>
-                    <span>{module.quiz.length} quiz questions</span>
-                  </div>
-                  
-                  {module.prerequisites && module.prerequisites.length > 0 && (
-                    <div className="text-xs text-gray-400">
-                      <strong>Prerequisites:</strong> {module.prerequisites.map(prereq => {
-                        const prereqModule = learningModules.find(m => m.id === prereq);
-                        return prereqModule?.title || prereq;
-                      }).join(', ')}
-                    </div>
-                  )}
-                </div>
-
-                {/* Preview of content */}
-                <p className={`text-sm ${isUnlocked ? 'text-gray-300' : 'text-gray-500'}`}>
-                  {module.content.introduction.substring(0, 120)}...
-                </p>
-
-                {/* Action indicator */}
-                {isUnlocked && (
-                  <div className="mt-4 text-violet-400 text-sm font-medium">
-                    {isCompleted ? 'Review Module' : 'Start Learning'}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
-        {/* Bottom Info */}
-        <div className="mt-6 bg-gradient-to-r from-violet-600 to-purple-600 rounded-lg p-4">
-          <h3 className="text-white font-bold mb-2">Why Learn Music Business?</h3>
-          <p className="text-violet-100 text-sm">
-            Knowledge is power in the music industry. Understanding contracts, rights, and revenue streams
-            helps you make better decisions, avoid predatory deals, and build a sustainable career.
-            Each module teaches real-world concepts with African music industry context.
-          </p>
-        </div>
-
-        <div className="flex justify-end mt-6">
-          <button
-            onClick={onClose}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded transition-colors"
-          >
-            Close
-          </button>
+        {/* Bottom Info Section */}
+        <div className="bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-fuchsia-600/20 border-t border-purple-500/30 p-4 md:p-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex-1">
+              <h3 className="text-white font-bold mb-1 text-sm md:text-base">Why Learn Music Business?</h3>
+              <p className="text-purple-200 text-xs md:text-sm leading-relaxed">
+                Knowledge is power in the music industry. Understanding contracts, rights, and revenue streams
+                helps you make better decisions, avoid predatory deals, and build a sustainable career.
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold px-6 md:px-8 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap min-w-[120px]"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+
+        .animate-slideInRight {
+          animation: slideInRight 0.3s ease-out;
+        }
+
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+
+        .transform-style-3d {
+          transform-style: preserve-3d;
+        }
+
+        .backface-hidden {
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
+          transform: rotateY(180deg);
+        }
+
+        .bg-grid-pattern {
+          background-image:
+            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+          background-size: 20px 20px;
+        }
+
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        /* Scrollbar Styling */
+        .overflow-y-auto::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+          background: rgba(168, 85, 247, 0.5);
+          border-radius: 4px;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+          background: rgba(168, 85, 247, 0.7);
+        }
+      `}</style>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { achievements as allAchievements } from './data/achievements';
 import { projects as allProjects } from './data/projects';
 import { staffTemplates, getStaffTemplate, getAvailableStaff } from './data/staff';
 import { labels as allLabels } from './data/labels';
+import learningModules from './data/learningModules';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import ScenarioCard from './components/ScenarioCard';
@@ -43,6 +44,7 @@ import Sidebar, { SidebarView } from './components/Sidebar';
 import ProfilePanel from './components/ProfilePanel';
 import SaveLoadPanel from './components/SaveLoadPanel';
 import { AudioPlayer } from './src/components/AudioPlayer';
+import UnlockNotification from './components/UnlockNotification';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -88,6 +90,7 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         debtTurns: 0,
         burnoutTurns: 0,
         gameOverReason: null,
+        unlocksShown: [],
         statistics: loadStatistics(),
         currentHistory: [],
         sessionStartTime: Date.now(),
@@ -1297,6 +1300,12 @@ function gameReducer(state: GameState, action: Action): GameState {
             };
         }
 
+        case 'MARK_UNLOCKS_SHOWN':
+            return {
+                ...state,
+                unlocksShown: [...state.unlocksShown, ...action.unlockIds]
+            };
+
         default:
             return state;
     }
@@ -1441,6 +1450,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         return localStorage.getItem('audioPromptShown') === 'true';
     });
 
+    // Unlock notification state
+    interface UnlockNotif {
+        id: string;
+        title: string;
+        description: string;
+        icon?: React.ReactNode;
+    }
+    const [unlockNotifications, setUnlockNotifications] = useState<UnlockNotif[]>([]);
+
     const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
 
     // Auth context
@@ -1580,6 +1598,76 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         };
         cleanup();
     }, []);
+
+    // Check for new unlocks and show notifications
+    useEffect(() => {
+        if (status !== 'playing') return;
+
+        const newUnlocks: UnlockNotif[] = [];
+
+        // Check staff management unlock
+        if (playerStats.careerProgress >= 40 && !state.unlocksShown.includes('staff_management')) {
+            newUnlocks.push({
+                id: 'staff_management',
+                title: 'Staff Management Unlocked!',
+                description: 'You can now hire managers, bookers, and promoters to boost your career.',
+                icon: (
+                    <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                    </svg>
+                )
+            });
+        }
+
+        // Check learning module unlocks
+        const modules = learningModules;
+        modules.forEach(module => {
+            const unlockKey = `module_${module.id}`;
+            if (!state.unlocksShown.includes(unlockKey)) {
+                // Check if module just unlocked
+                const req = module.unlockRequirement;
+                if (req) {
+                    let justUnlocked = false;
+                    switch (req.type) {
+                        case 'fame':
+                            justUnlocked = playerStats.fame >= (req.value || 0);
+                            break;
+                        case 'careerProgress':
+                            justUnlocked = playerStats.careerProgress >= (req.value || 0);
+                            break;
+                        case 'hype':
+                            justUnlocked = playerStats.hype >= (req.value || 0);
+                            break;
+                        case 'contractViewed':
+                            justUnlocked = state.contractsViewed.length >= (req.value || 0);
+                            break;
+                    }
+
+                    if (justUnlocked) {
+                        newUnlocks.push({
+                            id: unlockKey,
+                            title: 'New Course Unlocked!',
+                            description: `You can now access "${module.title}" in the Learning Hub.`,
+                            icon: (
+                                <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                                </svg>
+                            )
+                        });
+                    }
+                }
+            }
+        });
+
+        // Add notifications and update unlocksShown
+        if (newUnlocks.length > 0) {
+            setUnlockNotifications(prev => [...prev, ...newUnlocks]);
+            dispatch({
+                type: 'MARK_UNLOCKS_SHOWN',
+                unlockIds: newUnlocks.map(u => u.id)
+            });
+        }
+    }, [playerStats, state.unlocksShown, state.contractsViewed, status]);
 
     // Auto-save every 5 minutes during gameplay
     useEffect(() => {
@@ -2113,6 +2201,19 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     onSkip={handleAudioSkip}
                 />
             )}
+
+            {/* Unlock Notifications */}
+            {unlockNotifications.map(notif => (
+                <UnlockNotification
+                    key={notif.id}
+                    title={notif.title}
+                    description={notif.description}
+                    icon={notif.icon}
+                    onClose={() => {
+                        setUnlockNotifications(prev => prev.filter(n => n.id !== notif.id));
+                    }}
+                />
+            ))}
 
             <footer className="text-center p-4 text-gray-500 text-sm">
                 A Music Industry Simulation

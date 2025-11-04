@@ -359,6 +359,7 @@ export interface GameState {
   difficulty: Difficulty;
   mistakesMade: number;
   lastMistakeWeek: number;
+  unlocksShown: string[]; // Track which unlock notifications have been shown
 }
 
 export interface ChoiceOutcome {
@@ -456,4 +457,5 @@ export type Action =
   | { type: 'HIRE_STAFF'; payload: { templateId: string; contractDuration: ContractDuration } }
   | { type: 'TERMINATE_STAFF'; payload: { staffIndex: number } }
   | { type: 'EXTEND_STAFF_CONTRACT'; payload: { staffIndex: number; additionalMonths: ContractDuration } }
+  | { type: 'MARK_UNLOCKS_SHOWN'; unlockIds: string[] }
   | { type: 'CHEAT_MAX_STATS' }; // For debugging

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import type { LearningModule, PlayerKnowledge } from '../types';
+import type { LearningModule, PlayerKnowledge, GameState } from '../types';
 import learningModules from '../data/learningModules';
 
 interface LearningPanelProps {
   onOpenModule: (module: LearningModule) => void;
   playerKnowledge: PlayerKnowledge;
+  gameState: GameState;
 }
 
-const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowledge }) => {
+const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowledge, gameState }) => {
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
 
   // Calculate player level and XP
@@ -46,7 +47,38 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
     }
   };
 
+  const checkMilestoneUnlock = (module: LearningModule): boolean => {
+    if (!module.unlockRequirement) return true;
+
+    const req = module.unlockRequirement;
+
+    switch (req.type) {
+      case 'always':
+        return true;
+      case 'fame':
+        return gameState.playerStats.fame >= (req.value || 0);
+      case 'cash':
+        return gameState.playerStats.cash >= (req.value || 0);
+      case 'careerProgress':
+        return gameState.playerStats.careerProgress >= (req.value || 0);
+      case 'hype':
+        return gameState.playerStats.hype >= (req.value || 0);
+      case 'decisions':
+        return gameState.statistics.totalDecisionsMade >= (req.value || 0);
+      case 'contractViewed':
+        return gameState.contractsViewed.length >= (req.value || 0);
+      case 'projectsReleased':
+        return gameState.statistics.projectsReleased >= (req.value || 0);
+      default:
+        return true;
+    }
+  };
+
   const isModuleUnlocked = (module: LearningModule): boolean => {
+    // Check milestone requirements first
+    if (!checkMilestoneUnlock(module)) return false;
+
+    // Then check prerequisites
     if (!module.prerequisites) return true;
     return module.prerequisites.every(prereq =>
       playerKnowledge.completedModules.includes(prereq)
@@ -198,8 +230,8 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
                   </div>
                 </div>
 
-                {/* Expand Indicator */}
-                {isUnlocked && (
+                {/* Expand Indicator or Lock Message */}
+                {isUnlocked ? (
                   <div className="flex items-center justify-between">
                     <span className="text-purple-400 text-xs font-medium">
                       {isCompleted ? 'Review' : 'Start'}
@@ -212,6 +244,10 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
+                  </div>
+                ) : module.unlockRequirement && (
+                  <div className="text-xs text-red-300 mt-1">
+                    {module.unlockRequirement.message}
                   </div>
                 )}
               </div>

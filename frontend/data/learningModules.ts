@@ -5,9 +5,13 @@ export const learningModules: LearningModule[] = [
     id: 'contracts-basics',
     title: 'Contract Basics: What Every Artist Must Know',
     category: 'contracts',
-  icon: '',
+    icon: '',
     difficulty: 'beginner',
     estimatedMinutes: 6,
+    unlockRequirement: {
+      type: 'always',
+      message: 'Always available'
+    },
     content: {
       introduction: "Contracts are the foundation of your music career. They determine how much money you make, how much control you have, and how long you're committed. Many African artists lose millions because they don't understand what they're signing. Let's change that.",
       sections: [
@@ -121,9 +125,14 @@ export const learningModules: LearningModule[] = [
     id: 'revenue-streams',
     title: 'Understanding Revenue Streams',
     category: 'revenue',
-  icon: '',
+    icon: '',
     difficulty: 'beginner',
     estimatedMinutes: 7,
+    unlockRequirement: {
+      type: 'careerProgress',
+      value: 20,
+      message: 'Reach 20% career progress to unlock'
+    },
     content: {
       introduction: "There are many ways to make money from music beyond just selling songs. Smart artists diversify their income streams to build sustainable careers. In Africa's growing digital economy, new opportunities emerge daily.",
       sections: [
@@ -255,6 +264,11 @@ export const learningModules: LearningModule[] = [
     difficulty: 'intermediate',
     estimatedMinutes: 8,
     prerequisites: ['contracts-basics'],
+    unlockRequirement: {
+      type: 'fame',
+      value: 30,
+      message: 'Reach 30 fame to unlock'
+    },
     content: {
       introduction: "Copyright is your most valuable asset as an artist. It determines who owns your music, who profits from it, and how long those rights last. Many artists give away millions by not understanding their rights.",
       sections: [
@@ -382,10 +396,15 @@ export const learningModules: LearningModule[] = [
     id: 'predatory-deals',
     title: 'Spotting Predatory Deals',
     category: 'legal',
-  icon: '',
+    icon: '',
     difficulty: 'intermediate',
     estimatedMinutes: 6,
     prerequisites: ['contracts-basics', 'copyright-rights'],
+    unlockRequirement: {
+      type: 'contractViewed',
+      value: 1,
+      message: 'View at least 1 contract offer to unlock'
+    },
     content: {
       introduction: "The music industry has sharks waiting to exploit new artists. Learn to recognize red flags that signal predatory deals designed to take advantage of your inexperience and eagerness for success.",
       sections: [
@@ -513,9 +532,14 @@ export const learningModules: LearningModule[] = [
     id: 'brand-building',
     title: 'Building Your Brand',
     category: 'marketing',
-  icon: '',
+    icon: '',
     difficulty: 'beginner',
     estimatedMinutes: 7,
+    unlockRequirement: {
+      type: 'hype',
+      value: 25,
+      message: 'Reach 25 hype to unlock'
+    },
     content: {
       introduction: "Your brand is everything beyond your music - how fans perceive you, what you represent, and why they choose you over thousands of other artists. In today's digital world, brand building happens 24/7 across multiple platforms.",
       sections: [

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { LearningModule, PlayerKnowledge } from '../types';
+import type { LearningModule, PlayerKnowledge, GameState } from '../types';
 import learningModules from '../data/learningModules';
 
 interface LearningHubProps {
@@ -7,6 +7,7 @@ interface LearningHubProps {
   onClose: () => void;
   onOpenModule: (module: LearningModule) => void;
   playerKnowledge: PlayerKnowledge;
+  gameState: GameState;
 }
 
 interface DraggedCard {
@@ -14,7 +15,7 @@ interface DraggedCard {
   fromIndex: number;
 }
 
-const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule, playerKnowledge }) => {
+const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule, playerKnowledge, gameState }) => {
   const [moduleOrder, setModuleOrder] = useState<string[]>(learningModules.map(m => m.id));
   const [draggedCard, setDraggedCard] = useState<DraggedCard | null>(null);
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
@@ -57,7 +58,38 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
     }
   };
 
+  const checkMilestoneUnlock = (module: LearningModule): boolean => {
+    if (!module.unlockRequirement) return true;
+
+    const req = module.unlockRequirement;
+
+    switch (req.type) {
+      case 'always':
+        return true;
+      case 'fame':
+        return gameState.playerStats.fame >= (req.value || 0);
+      case 'cash':
+        return gameState.playerStats.cash >= (req.value || 0);
+      case 'careerProgress':
+        return gameState.playerStats.careerProgress >= (req.value || 0);
+      case 'hype':
+        return gameState.playerStats.hype >= (req.value || 0);
+      case 'decisions':
+        return gameState.statistics.totalDecisionsMade >= (req.value || 0);
+      case 'contractViewed':
+        return gameState.contractsViewed.length >= (req.value || 0);
+      case 'projectsReleased':
+        return gameState.statistics.projectsReleased >= (req.value || 0);
+      default:
+        return true;
+    }
+  };
+
   const isModuleUnlocked = (module: LearningModule): boolean => {
+    // Check milestone requirements first
+    if (!checkMilestoneUnlock(module)) return false;
+
+    // Then check prerequisites
     if (!module.prerequisites) return true;
     return module.prerequisites.every(prereq =>
       playerKnowledge.completedModules.includes(prereq)
@@ -317,6 +349,23 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                               </svg>
                             </button>
+                          </div>
+                        )}
+
+                        {/* Unlock Requirement */}
+                        {!isUnlocked && module.unlockRequirement && (
+                          <div className="mt-4 pt-4 border-t border-white/20">
+                            <div className="bg-red-900/40 border border-red-500/30 rounded-lg p-3">
+                              <div className="flex items-start gap-2">
+                                <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                </svg>
+                                <div className="flex-1">
+                                  <h4 className="text-red-300 font-semibold text-xs mb-1">Unlock Requirement</h4>
+                                  <p className="text-red-200 text-xs leading-relaxed">{module.unlockRequirement.message}</p>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         )}
 

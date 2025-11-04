@@ -212,6 +212,11 @@ export interface LearningModule {
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedMinutes: number;
   prerequisites?: string[]; // Other module IDs
+  unlockRequirement?: {
+    type: 'always' | 'fame' | 'cash' | 'careerProgress' | 'decisions' | 'hype' | 'contractViewed' | 'projectsReleased';
+    value?: number;
+    message: string;
+  };
   content: {
     introduction: string;
     sections: ModuleSection[];

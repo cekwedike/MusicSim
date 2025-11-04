@@ -2026,6 +2026,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         <LearningPanel
                             onOpenModule={handleOpenModule}
                             playerKnowledge={state.playerKnowledge}
+                            gameState={state}
                         />
                     )}
 
@@ -2051,7 +2052,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             </div>
 
             {lastOutcome && <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />}
-            {modal === 'learning' && <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} />}
+            {modal === 'learning' && <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} gameState={state} />}
             {modal === 'moduleViewer' && state.currentModule && (
                 <ModuleViewer 
                     module={state.currentModule} 

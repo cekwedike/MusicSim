@@ -18,7 +18,7 @@ const User = sequelize.define('User', {
   },
   username: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true, // Allow null for OAuth users initially
     unique: true,
     validate: {
       len: [3, 30]
@@ -26,7 +26,17 @@ const User = sequelize.define('User', {
   },
   password: {
     type: DataTypes.STRING,
+    allowNull: true // Allow null for OAuth users
+  },
+  authProvider: {
+    type: DataTypes.STRING,
+    defaultValue: 'local', // 'local' or 'google'
     allowNull: false
+  },
+  googleId: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true
   },
   lastLogin: {
     type: DataTypes.DATE

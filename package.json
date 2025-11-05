@@ -17,6 +17,7 @@
     "install:backend": "cd backend && npm install"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "axios": "^1.12.2",
     "lucide-react": "^0.545.0",
     "png-to-ico": "^3.0.1",

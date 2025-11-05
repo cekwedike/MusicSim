@@ -3,12 +3,13 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { User, PlayerStatistics } = require('../models');
 const authMiddleware = require('../middleware/auth');
-const { 
-  validateRegistrationData, 
+const {
+  validateRegistrationData,
   validateLoginData,
-  sanitizeInput 
+  sanitizeInput
 } = require('../utils/validation');
 const { Op } = require('sequelize');
+const passport = require('../config/passport');
 
 // Generate JWT token
 const generateToken = (userId) => {
@@ -685,5 +686,65 @@ router.delete('/account', authMiddleware, async (req, res, next) => {
     next(error);
   }
 });
+
+/**
+ * @swagger
+ * /api/auth/google:
+ *   get:
+ *     summary: Initiate Google OAuth login
+ *     description: Redirects to Google OAuth consent screen
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirect to Google OAuth
+ */
+
+/**
+ * @route   GET /api/auth/google
+ * @desc    Initiate Google OAuth login
+ * @access  Public
+ */
+router.get('/google', passport.authenticate('google', {
+  scope: ['profile', 'email'],
+  session: false
+}));
+
+/**
+ * @swagger
+ * /api/auth/google/callback:
+ *   get:
+ *     summary: Google OAuth callback
+ *     description: Handles the callback from Google OAuth
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Login successful
+ */
+
+/**
+ * @route   GET /api/auth/google/callback
+ * @desc    Google OAuth callback
+ * @access  Public
+ */
+router.get('/google/callback',
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: process.env.FRONTEND_URL || 'http://localhost:5173'
+  }),
+  (req, res) => {
+    try {
+      // Generate JWT token
+      const token = generateToken(req.user.id);
+
+      // Redirect to frontend with token
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+      res.redirect(`${frontendUrl}?token=${token}&authType=google`);
+    } catch (error) {
+      console.error('Google OAuth callback error:', error);
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+      res.redirect(`${frontendUrl}?error=oauth_failed`);
+    }
+  }
+);
 
 module.exports = router;

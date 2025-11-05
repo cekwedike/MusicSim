@@ -44,11 +44,55 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setError(null);
   }, []);
 
-  // Initialize auth state from localStorage
+  // Initialize auth state from localStorage or OAuth callback
   useEffect(() => {
     const initializeAuth = async () => {
       setIsLoading(true);
       try {
+        // Check for OAuth callback parameters in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const oauthToken = urlParams.get('token');
+        const authType = urlParams.get('authType');
+        const oauthError = urlParams.get('error');
+
+        // Handle OAuth callback
+        if (oauthToken && authType === 'google') {
+          console.log('Processing Google OAuth callback');
+
+          // Store the token
+          localStorage.setItem('musicsim_token', oauthToken);
+          setToken(oauthToken);
+
+          // Fetch user data with the new token
+          try {
+            const currentUserResponse = await authService.getCurrentUser();
+            if (currentUserResponse.success && currentUserResponse.data) {
+              const userData = currentUserResponse.data.user;
+              setUser(userData);
+              localStorage.setItem('musicsim_user', JSON.stringify(userData));
+              console.log('Google OAuth login successful');
+            }
+          } catch (error) {
+            console.error('Error fetching user data after OAuth:', error);
+            setError('Failed to complete Google sign-in');
+          }
+
+          // Clean up URL parameters
+          window.history.replaceState({}, document.title, window.location.pathname);
+          setIsLoading(false);
+          return;
+        }
+
+        // Handle OAuth error
+        if (oauthError) {
+          console.error('OAuth error:', oauthError);
+          setError('Google sign-in failed. Please try again.');
+          window.history.replaceState({}, document.title, window.location.pathname);
+          setIsLoading(false);
+          return;
+        }
+
+        // Regular initialization from localStorage
         const storedToken = authService.getStoredToken();
         const storedUser = authService.getStoredUser();
 
@@ -57,7 +101,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           try {
             setToken(storedToken);
             setUser(storedUser);
-            
+
             // Test token validity - if this fails, we'll catch and clear auth
             const isValid = await authService.verifyToken();
             if (isValid) {

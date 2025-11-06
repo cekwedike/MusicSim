@@ -204,8 +204,8 @@ export const authService = {
     localStorage.removeItem('musicsim_user');
   },
 
-  // Update user profile (name and image)
-  updateProfile: async (data: { displayName?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
+  // Update user profile (username, name, and image)
+  updateProfile: async (data: { username?: string; displayName?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
     try {
       const response = await api.patch<ApiResponse<{ user: User }>>('/auth/profile', data);
 

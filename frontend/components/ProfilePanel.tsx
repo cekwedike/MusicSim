@@ -26,7 +26,10 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	const { user, isAuthenticated, logout, deleteAccount, updateProfile } = useAuth();
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 	const [isEditingName, setIsEditingName] = useState(false);
+	const [isEditingUsername, setIsEditingUsername] = useState(false);
 	const [editedName, setEditedName] = useState('');
+	const [editedUsername, setEditedUsername] = useState('');
+	const [usernameError, setUsernameError] = useState('');
 	const [guestName, setGuestName] = useState(() => {
 		return localStorage.getItem('guestPlayerName') || 'Guest Player';
 	});
@@ -128,6 +131,44 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	const handleCancelEditName = () => {
 		setIsEditingName(false);
 		setEditedName('');
+	};
+
+	const handleStartEditUsername = () => {
+		setEditedUsername(user?.username || '');
+		setUsernameError('');
+		setIsEditingUsername(true);
+	};
+
+	const handleSaveUsername = async () => {
+		if (!editedUsername.trim()) {
+			setUsernameError('Username cannot be empty');
+			return;
+		}
+
+		if (editedUsername.trim().length < 3 || editedUsername.trim().length > 30) {
+			setUsernameError('Username must be between 3 and 30 characters');
+			return;
+		}
+
+		try {
+			const success = await updateProfile({ username: editedUsername.trim() });
+			if (!success) {
+				setUsernameError('Failed to update username. Please try again.');
+				return;
+			}
+			setIsEditingUsername(false);
+			setUsernameError('');
+		} catch (error: any) {
+			console.error('Error updating username:', error);
+			const errorMessage = error?.response?.data?.message || 'Failed to update username. Please try again.';
+			setUsernameError(errorMessage);
+		}
+	};
+
+	const handleCancelEditUsername = () => {
+		setIsEditingUsername(false);
+		setEditedUsername('');
+		setUsernameError('');
 	};
 
 	const handleImageClick = () => {
@@ -258,13 +299,53 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 									<button
 										onClick={handleStartEditName}
 										className="text-violet-300 hover:text-violet-200 text-xs"
-										title="Edit name"
+										title="Edit display name"
 									>
-										Edit
+										✏️
 									</button>
 								</div>
 							)}
-							<div className="text-sm text-violet-200">{user.email}</div>
+							{isEditingUsername ? (
+								<div className="mt-1">
+									<div className="flex items-center gap-2">
+										<input
+											type="text"
+											value={editedUsername}
+											onChange={(e) => setEditedUsername(e.target.value)}
+											className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-xs"
+											placeholder="Username"
+											maxLength={30}
+										/>
+										<button
+											onClick={handleSaveUsername}
+											className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+										>
+											Save
+										</button>
+										<button
+											onClick={handleCancelEditUsername}
+											className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs"
+										>
+											Cancel
+										</button>
+									</div>
+									{usernameError && (
+										<div className="text-xs text-red-400 mt-1">{usernameError}</div>
+									)}
+								</div>
+							) : (
+								<div className="flex items-center gap-2 mt-0.5">
+									<div className="text-xs text-violet-200">@{user.username}</div>
+									<button
+										onClick={handleStartEditUsername}
+										className="text-violet-300 hover:text-violet-200 text-xs"
+										title="Edit username"
+									>
+										✏️
+									</button>
+								</div>
+							)}
+							<div className="text-xs text-violet-200/70 mt-0.5">{user.email}</div>
 							<div className="flex items-center gap-2 mt-1">
 								<span className="text-xs bg-violet-600/50 text-violet-200 px-2 py-0.5 rounded">
 									Signed In

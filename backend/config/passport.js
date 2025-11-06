@@ -2,6 +2,45 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 
+// Helper function to generate username from display name
+// "John Doe" -> "JohnDoe_4729"
+const generateUsernameFromName = (displayName) => {
+  // Remove special characters and split by spaces
+  const cleanName = displayName.replace(/[^a-zA-Z\s]/g, '');
+  const words = cleanName.split(/\s+/).filter(word => word.length > 0);
+
+  // Convert to PascalCase (capitalize first letter of each word)
+  const pascalCase = words
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('');
+
+  // Generate 4 random digits
+  const randomDigits = Math.floor(1000 + Math.random() * 9000);
+
+  return `${pascalCase}_${randomDigits}`;
+};
+
+// Helper function to ensure username is unique
+const generateUniqueUsername = async (displayName) => {
+  let username = generateUsernameFromName(displayName);
+  let attempts = 0;
+  const maxAttempts = 10;
+
+  // Keep trying until we find a unique username
+  while (attempts < maxAttempts) {
+    const existingUser = await User.findOne({ where: { username } });
+    if (!existingUser) {
+      return username;
+    }
+    // Generate a new one with different random digits
+    username = generateUsernameFromName(displayName);
+    attempts++;
+  }
+
+  // Fallback: use email prefix with timestamp if all attempts fail
+  return `user_${Date.now()}`;
+};
+
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -57,12 +96,15 @@ passport.use(
           return done(null, user);
         }
 
+        // Generate unique username from display name
+        const username = await generateUniqueUsername(profile.displayName);
+
         // Create new user from Google profile
         const newUser = await User.create({
           email: profile.emails[0].value,
           googleId: profile.id,
           authProvider: 'google',
-          username: profile.emails[0].value.split('@')[0] + '_' + Date.now(), // Generate unique username
+          username: username,
           displayName: profile.displayName,
           profileImage: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null,
           lastLogin: new Date(),

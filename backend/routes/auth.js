@@ -385,7 +385,7 @@ router.post('/verify', authMiddleware, (req, res) => {
  * @swagger
  * /api/auth/profile:
  *   patch:
- *     summary: Update user profile (name and image)
+ *     summary: Update user profile (username, name, and image)
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
@@ -395,6 +395,10 @@ router.post('/verify', authMiddleware, (req, res) => {
  *           schema:
  *             type: object
  *             properties:
+ *               username:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 30
  *               displayName:
  *                 type: string
  *               profileImage:
@@ -402,10 +406,12 @@ router.post('/verify', authMiddleware, (req, res) => {
  *     responses:
  *       200:
  *         description: Profile updated successfully
+ *       400:
+ *         description: Invalid input or username already taken
  */
 router.patch('/profile', authMiddleware, async (req, res, next) => {
   try {
-    const { displayName, profileImage } = req.body;
+    const { username, displayName, profileImage } = req.body;
     const userId = req.userId;
 
     const user = await User.findByPk(userId);
@@ -417,7 +423,40 @@ router.patch('/profile', authMiddleware, async (req, res, next) => {
       });
     }
 
-    // Update fields if provided
+    // Handle username update
+    if (username !== undefined && username !== user.username) {
+      // Validate username length
+      if (username.length < 3 || username.length > 30) {
+        return res.status(400).json({
+          success: false,
+          message: 'Username must be between 3 and 30 characters',
+          field: 'username'
+        });
+      }
+
+      // Sanitize username
+      const sanitizedUsername = sanitizeInput(username);
+
+      // Check if username is already taken by another user
+      const existingUser = await User.findOne({
+        where: {
+          username: sanitizedUsername,
+          id: { [Op.ne]: userId } // Exclude current user
+        }
+      });
+
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: 'Username already taken',
+          field: 'username'
+        });
+      }
+
+      user.username = sanitizedUsername;
+    }
+
+    // Update other fields if provided
     if (displayName !== undefined) {
       user.displayName = displayName;
     }

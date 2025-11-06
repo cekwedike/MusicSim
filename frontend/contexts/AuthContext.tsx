@@ -11,7 +11,7 @@ interface AuthContextType {
   registerFromGuest: (username: string, email: string, password: string, guestData?: any, profileImage?: string, displayName?: string) => Promise<boolean>;
   logout: () => void;
   deleteAccount: () => Promise<{ success: boolean; message: string }>;
-  updateProfile: (data: { displayName?: string; profileImage?: string }) => Promise<boolean>;
+  updateProfile: (data: { username?: string; displayName?: string; profileImage?: string }) => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
   clearError: () => void;
   error: string | null;
@@ -247,7 +247,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Update profile function
-  const updateProfile = useCallback(async (data: { displayName?: string; profileImage?: string }): Promise<boolean> => {
+  const updateProfile = useCallback(async (data: { username?: string; displayName?: string; profileImage?: string }): Promise<boolean> => {
     setIsLoading(true);
 
     try {

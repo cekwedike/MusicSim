@@ -2,7 +2,7 @@ services:
   - type: web
     name: musicsim-backend
     env: node
-    buildCommand: npm install
+    buildCommand: npm ci
     startCommand: npm start
     envVars:
       - key: NODE_ENV

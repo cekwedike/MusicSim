@@ -29,7 +29,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [displayName, setDisplayName] = useState('');
 
-  const { login, register, registerFromGuest } = useAuth();
+  const { login, register, registerFromGuest, signInWithGoogle } = useAuth();
   const toast = useToast();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -370,9 +370,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
           <button
             type="button"
-            onClick={() => {
-              const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
-              window.location.href = `${apiUrl}/auth/google`;
+            onClick={async () => {
+              try {
+                await signInWithGoogle();
+                // Supabase will redirect to Google, then back to app
+              } catch (error) {
+                console.error('Google sign-in error:', error);
+                toast.show('Failed to sign in with Google', 'error');
+              }
             }}
             disabled={loading}
             className="mt-4 w-full bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"

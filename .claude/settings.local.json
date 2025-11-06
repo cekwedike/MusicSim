@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "mcp__ide__getDiagnostics",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm start)",
+      "Bash(npm run dev:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill //F //PID 38552)",
+      "Bash(timeout:*)",
+      "Bash(taskkill //F //PID 38552 2)",
+      "Bash(nul)",
+      "Bash(taskkill //F //PID 31732)"
     ],
     "deny": [],
     "ask": []

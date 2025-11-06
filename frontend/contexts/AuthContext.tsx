@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { authService, type User } from '../services/authService';
+import { supabase } from '../services/supabase';
+import authServiceSupabase, { type User } from '../services/authService.supabase';
 
 interface AuthContextType {
   user: User | null;
@@ -9,6 +10,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (username: string, email: string, password: string, profileImage?: string, displayName?: string) => Promise<boolean>;
   registerFromGuest: (username: string, email: string, password: string, guestData?: any, profileImage?: string, displayName?: string) => Promise<boolean>;
+  signInWithGoogle: () => Promise<void>;
   logout: () => void;
   deleteAccount: () => Promise<{ success: boolean; message: string }>;
   updateProfile: (data: { username?: string; displayName?: string; profileImage?: string }) => Promise<boolean>;
@@ -44,135 +46,122 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setError(null);
   }, []);
 
-  // Initialize auth state from localStorage or OAuth callback
+  // Sync user profile with backend
+  const syncUserProfile = useCallback(async (supabaseUser: any) => {
+    try {
+      // Get user profile from backend
+      const profileResponse = await authServiceSupabase.getCurrentUser();
+
+      if (profileResponse.success && profileResponse.data) {
+        setUser(profileResponse.data.user);
+      } else {
+        // If no backend profile exists, use Supabase user data
+        setUser({
+          id: supabaseUser.id,
+          email: supabaseUser.email!,
+          username: supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0],
+          displayName: supabaseUser.user_metadata.display_name,
+          profileImage: supabaseUser.user_metadata.profile_image,
+        });
+      }
+    } catch (error) {
+      console.error('Error syncing user profile:', error);
+      // Fallback to Supabase user data
+      setUser({
+        id: supabaseUser.id,
+        email: supabaseUser.email!,
+        username: supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0],
+        displayName: supabaseUser.user_metadata.display_name,
+        profileImage: supabaseUser.user_metadata.profile_image,
+      });
+    }
+  }, []);
+
+  // Initialize auth state and listen to Supabase auth changes
   useEffect(() => {
+    let mounted = true;
+
     const initializeAuth = async () => {
-      setIsLoading(true);
       try {
-        // Check for OAuth callback parameters in URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const oauthToken = urlParams.get('token');
-        const authType = urlParams.get('authType');
-        const oauthError = urlParams.get('error');
+        // Get current session
+        const { data: { session } } = await supabase.auth.getSession();
 
-        // Handle OAuth callback
-        if (oauthToken && authType === 'google') {
-          console.log('Processing Google OAuth callback');
-
-          // Store the token
-          localStorage.setItem('musicsim_token', oauthToken);
-          setToken(oauthToken);
-
-          // Fetch user data with the new token
-          try {
-            const currentUserResponse = await authService.getCurrentUser();
-            if (currentUserResponse.success && currentUserResponse.data) {
-              const userData = currentUserResponse.data.user;
-              setUser(userData);
-              localStorage.setItem('musicsim_user', JSON.stringify(userData));
-              console.log('Google OAuth login successful');
-            }
-          } catch (error) {
-            console.error('Error fetching user data after OAuth:', error);
-            setError('Failed to complete Google sign-in');
-          }
-
-          // Clean up URL parameters
-          window.history.replaceState({}, document.title, window.location.pathname);
-          setIsLoading(false);
-          return;
-        }
-
-        // Handle OAuth error
-        if (oauthError) {
-          console.error('OAuth error:', oauthError);
-          setError('Google sign-in failed. Please try again.');
-          window.history.replaceState({}, document.title, window.location.pathname);
-          setIsLoading(false);
-          return;
-        }
-
-        // Regular initialization from localStorage
-        const storedToken = authService.getStoredToken();
-        const storedUser = authService.getStoredUser();
-
-        if (storedToken && storedUser) {
-          // Validate token is still valid by making a test request
-          try {
-            setToken(storedToken);
-            setUser(storedUser);
-
-            // Test token validity - if this fails, we'll catch and clear auth
-            const isValid = await authService.verifyToken();
-            if (isValid) {
-              // Optionally get fresh user data from server
-              try {
-                const currentUserResponse = await authService.getCurrentUser();
-                if (currentUserResponse.success && currentUserResponse.data) {
-                  setUser(currentUserResponse.data.user);
-                }
-              } catch (error) {
-                // If getting current user fails, keep the stored user data
-                console.warn('Could not fetch current user data:', error);
-              }
-            } else {
-              // Token is invalid or expired
-              console.log('Stored token invalid, clearing auth state');
-              authService.clearAuth();
-              setToken(null);
-              setUser(null);
-            }
-          } catch (error) {
-            // Token is invalid or expired
-            console.log('Stored token invalid, clearing auth state');
-            authService.clearAuth();
-            setToken(null);
-            setUser(null);
-          }
+        if (session && session.user && mounted) {
+          setToken(session.access_token);
+          await syncUserProfile(session.user);
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
         setError('Failed to initialize authentication');
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     initializeAuth();
-  }, []);
 
-  // Login function - throws on failure so calling components can handle/display errors
+    // Listen to auth changes (login, logout, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('[AuthContext] Auth state changed:', event);
+
+      if (!mounted) return;
+
+      if (event === 'SIGNED_IN' && session) {
+        setToken(session.access_token);
+        await syncUserProfile(session.user);
+        setError(null);
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+        setToken(null);
+        setError(null);
+      } else if (event === 'TOKEN_REFRESHED' && session) {
+        setToken(session.access_token);
+      } else if (event === 'USER_UPDATED' && session) {
+        await syncUserProfile(session.user);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [syncUserProfile]);
+
+  // Login function
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
+    setError(null);
 
     try {
-      const response = await authService.login({
+      const response = await authServiceSupabase.login({
         emailOrUsername: email,
         password
       });
 
       if (response.success && response.data) {
-        const { user: userData, token: authToken } = response.data;
-
-        // Store in state
-        setUser(userData);
-        setToken(authToken);
-
+        // State will be updated by onAuthStateChange listener
         return true;
       } else {
         throw new Error(response.message || 'Login failed');
       }
+    } catch (err: any) {
+      const message = err?.message || 'Login failed';
+      setError(message);
+      throw err;
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Register function - throws on failure so calling components can handle/display errors
+  // Register function
   const register = useCallback(async (username: string, email: string, password: string, profileImage?: string, displayName?: string): Promise<boolean> => {
     setIsLoading(true);
+    setError(null);
 
     try {
-      const response = await authService.register({
+      const response = await authServiceSupabase.register({
         username,
         email,
         password,
@@ -181,16 +170,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (response.success && response.data) {
-        const { user: userData, token: authToken } = response.data;
-
-        // Store in state
-        setUser(userData);
-        setToken(authToken);
-
+        // State will be updated by onAuthStateChange listener
         return true;
       } else {
         throw new Error(response.message || 'Registration failed');
       }
+    } catch (err: any) {
+      const message = err?.message || 'Registration failed';
+      setError(message);
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -199,9 +187,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Register from guest function
   const registerFromGuest = useCallback(async (username: string, email: string, password: string, guestData?: any, profileImage?: string, displayName?: string): Promise<boolean> => {
     setIsLoading(true);
+    setError(null);
 
     try {
-      const response = await authService.registerFromGuest({
+      const response = await authServiceSupabase.registerFromGuest({
         username,
         email,
         password,
@@ -211,18 +200,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (response.success && response.data) {
-        const { user: userData, token: authToken } = response.data;
-
-        // Store in state
-        setUser(userData);
-        setToken(authToken);
-
+        // State will be updated by onAuthStateChange listener
         return true;
       } else {
         throw new Error(response.message || 'Registration failed');
       }
+    } catch (err: any) {
+      const message = err?.message || 'Registration failed';
+      setError(message);
+      throw err;
     } finally {
       setIsLoading(false);
+    }
+  }, []);
+
+  // Sign in with Google
+  const signInWithGoogle = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      await authServiceSupabase.signInWithGoogle();
+      // Supabase will redirect to Google OAuth
+      // When they come back, onAuthStateChange will handle it
+    } catch (err: any) {
+      const message = err?.message || 'Google sign-in failed';
+      setError(message);
+      setIsLoading(false);
+      throw err;
     }
   }, []);
 
@@ -231,19 +236,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
 
     try {
-      // Call server logout
-      await authService.logout();
+      await authServiceSupabase.logout();
+      // State will be cleared by onAuthStateChange listener
     } catch (error) {
-      // Don't prevent logout on server error
-      console.warn('Server logout failed:', error);
+      console.warn('Logout error:', error);
+      // Force clear state even on error
+      setUser(null);
+      setToken(null);
+      setError(null);
+    } finally {
+      setIsLoading(false);
     }
-
-    // Clear local state
-    setUser(null);
-    setToken(null);
-    setError(null);
-
-    setIsLoading(false);
   }, []);
 
   // Update profile function
@@ -251,7 +254,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
 
     try {
-      const response = await authService.updateProfile(data);
+      const response = await authServiceSupabase.updateProfile(data);
 
       if (response.success && response.data) {
         // Update user state with new data
@@ -275,8 +278,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
 
     try {
-      // Call delete account service (also clears localStorage)
-      const result = await authService.deleteAccount();
+      const result = await authServiceSupabase.deleteAccount();
 
       // Clear local state
       setUser(null);
@@ -300,47 +302,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
-  // Refresh token function
+  // Refresh token function (Supabase handles this automatically)
   const refreshToken = useCallback(async (): Promise<boolean> => {
-    if (!token) return false;
-    
-    try {
-      const response = await authService.refreshToken();
-      
-      if (response && response.success && response.data) {
-        const { user: userData, token: newToken } = response.data;
-        
-        // Update state
-        setUser(userData);
-        setToken(newToken);
-        
-        return true;
-      } else {
-        // Refresh failed, set context error and logout user
-        setError((response && response.message) || 'Token refresh failed');
-        logout();
-        return false;
-      }
-    } catch (error) {
-      const msg = (error as any)?.message || 'Token refresh failed';
-      console.error('Token refresh failed:', error);
-      setError(msg);
-      logout();
-      return false;
-    }
-  }, [token, logout]);
-
-  // Listen for token expiration and handle automatic refresh
-  useEffect(() => {
-    if (!token) return;
-
-    // Set up periodic token refresh (every 45 minutes if token expires in 1 hour)
-    const refreshInterval = setInterval(() => {
-      refreshToken();
-    }, 45 * 60 * 1000); // 45 minutes
-
-    return () => clearInterval(refreshInterval);
-  }, [token, refreshToken]);
+    // Supabase automatically refreshes tokens
+    // This function is kept for compatibility but does nothing
+    return true;
+  }, []);
 
   const value: AuthContextType = {
     user,
@@ -350,6 +317,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     register,
     registerFromGuest,
+    signInWithGoogle,
     logout,
     deleteAccount,
     updateProfile,

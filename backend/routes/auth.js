@@ -807,4 +807,172 @@ router.get('/google/callback', (req, res, next) => {
   });
 });
 
+/**
+ * @swagger
+ * /api/auth/sync-profile:
+ *   post:
+ *     summary: Sync Supabase user with backend profile
+ *     description: Creates or updates user profile in backend database from Supabase auth
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               displayName:
+ *                 type: string
+ *               profileImage:
+ *                 type: string
+ *               authProvider:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Profile synced successfully
+ *       201:
+ *         description: Profile created successfully
+ */
+
+/**
+ * @route   POST /api/auth/sync-profile
+ * @desc    Sync Supabase user profile with backend database
+ * @access  Private (requires Supabase JWT)
+ */
+router.post('/sync-profile', authMiddleware, async (req, res, next) => {
+  try {
+    const { userId, email, username, displayName, profileImage, authProvider } = req.body;
+
+    // Check if user already exists
+    let user = await User.findByPk(userId || req.userId);
+
+    if (user) {
+      // Update existing user
+      user.email = email || user.email;
+      user.username = username || user.username;
+      user.displayName = displayName || user.displayName;
+      user.profileImage = profileImage || user.profileImage;
+      user.authProvider = authProvider || user.authProvider;
+      user.lastLogin = new Date();
+
+      await user.save();
+
+      console.log(`User profile updated: ${user.username}`);
+
+      return res.json({
+        success: true,
+        message: 'Profile synced successfully',
+        data: {
+          user: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            displayName: user.displayName,
+            profileImage: user.profileImage,
+            lastLogin: user.lastLogin
+          }
+        }
+      });
+    }
+
+    // Create new user profile
+    user = await User.create({
+      id: userId || req.userId,
+      email,
+      username,
+      displayName: displayName || username,
+      profileImage,
+      authProvider: authProvider || 'local',
+      lastLogin: new Date(),
+      isActive: true
+    });
+
+    // Create associated PlayerStatistics record
+    await PlayerStatistics.create({
+      userId: user.id
+    });
+
+    console.log(`New user profile created: ${user.username} (${user.email})`);
+
+    res.status(201).json({
+      success: true,
+      message: 'Profile created successfully',
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          displayName: user.displayName,
+          profileImage: user.profileImage,
+          lastLogin: user.lastLogin
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error syncing profile:', error);
+    next(error);
+  }
+});
+
+/**
+ * @route   POST /api/auth/sync-guest-data
+ * @desc    Sync guest data to user profile after registration
+ * @access  Private
+ */
+router.post('/sync-guest-data', authMiddleware, async (req, res, next) => {
+  try {
+    const { userId, guestData } = req.body;
+
+    if (!guestData || !guestData.statistics) {
+      return res.json({
+        success: true,
+        message: 'No guest data to sync'
+      });
+    }
+
+    // Find user's statistics
+    const statistics = await PlayerStatistics.findOne({ where: { userId: userId || req.userId } });
+
+    if (!statistics) {
+      return res.status(404).json({
+        success: false,
+        message: 'User statistics not found'
+      });
+    }
+
+    // Merge guest statistics
+    const guestStats = guestData.statistics;
+    statistics.totalGamesPlayed = guestStats.totalGamesPlayed || 0;
+    statistics.totalWeeksPlayed = guestStats.totalWeeksPlayed || 0;
+    statistics.longestCareerWeeks = guestStats.longestCareerWeeks || 0;
+    statistics.highestCash = guestStats.highestCash || 0;
+    statistics.highestFame = guestStats.highestFameReached || 0;
+    statistics.totalPlayTimeMinutes = guestStats.totalPlayTimeMinutes || 0;
+    statistics.totalAchievementsUnlocked = guestStats.achievementsUnlocked || 0;
+    statistics.totalModulesCompleted = guestStats.modulesCompleted || 0;
+    statistics.averageQuizScore = guestStats.averageQuizScore || 0;
+    statistics.totalCashEarned = guestStats.totalCashEarned || 0;
+
+    await statistics.save();
+
+    console.log(`Guest data synced for user: ${userId || req.userId}`);
+
+    res.json({
+      success: true,
+      message: 'Guest data synced successfully'
+    });
+  } catch (error) {
+    console.error('Error syncing guest data:', error);
+    next(error);
+  }
+});
+
 module.exports = router;

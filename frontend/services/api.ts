@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { supabase } from './supabase';
 
 // Type-safe environment variable access
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001/api';
@@ -12,13 +13,16 @@ const api = axios.create({
   timeout: 10000, // 10 second timeout
 });
 
-// Request interceptor to add auth token
+// Request interceptor to add auth token from Supabase
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('musicsim_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  async (config) => {
+    // Get token from Supabase session
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session?.access_token) {
+      config.headers.Authorization = `Bearer ${session.access_token}`;
     }
+
     return config;
   },
   (error) => {
@@ -49,10 +53,9 @@ api.interceptors.response.use(
 
     // Handle authentication errors
     if (error.response?.status === 401) {
-      // Token expired or invalid
-      localStorage.removeItem('musicsim_token');
-      localStorage.removeItem('musicsim_user');
-      
+      // Token expired or invalid - sign out from Supabase
+      supabase.auth.signOut().catch(console.error);
+
       // Only redirect if we're not already on the login page
       if (window.location.pathname !== '/') {
         window.location.href = '/'; // Redirect to login

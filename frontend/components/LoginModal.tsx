@@ -111,7 +111,13 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
         // Use registerFromGuest if guest data is available, otherwise use regular register
         if (isGuestMode && guestStatistics) {
-          await registerFromGuest(username, email, password, { statistics: guestStatistics }, profileImage, displayName || username);
+          // Capture all guest data including game saves from localStorage
+          const gameSaves = localStorage.getItem('musicsim_saves');
+          const guestData = {
+            statistics: guestStatistics,
+            saves: gameSaves ? JSON.parse(gameSaves) : null
+          };
+          await registerFromGuest(username, email, password, guestData, profileImage, displayName || username);
           toast.show('Account created with your progress saved!', 'success');
         } else {
           await register(username, email, password, profileImage, displayName || username);

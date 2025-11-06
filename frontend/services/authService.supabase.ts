@@ -221,13 +221,25 @@ export const authServiceSupabase = {
     return !!session;
   },
 
+  // Sync profile with backend (used for OAuth and profile creation)
+  syncProfile: async (data: { userId: string; email: string; username: string; displayName?: string; profileImage?: string; authProvider?: string }): Promise<ApiResponse<{ user: User }>> => {
+    try {
+      const response = await api.post<ApiResponse<{ user: User }>>('/auth/sync-profile', data);
+      return response.data;
+    } catch (error: any) {
+      console.error('[authService] Sync profile error:', error);
+      throw error;
+    }
+  },
+
   // Update profile
   updateProfile: async (data: { username?: string; displayName?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
     try {
       // Update Supabase user metadata
-      if (data.displayName || data.profileImage) {
+      if (data.username || data.displayName || data.profileImage) {
         await supabase.auth.updateUser({
           data: {
+            username: data.username,
             display_name: data.displayName,
             profile_image: data.profileImage,
           }

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const { User, PlayerStatistics } = require('../models');
+const { User, PlayerStatistics, GameSave } = require('../models');
 const authMiddleware = require('../middleware/auth');
 const {
   validateRegistrationData,
@@ -938,8 +938,10 @@ router.post('/sync-guest-data', authMiddleware, async (req, res, next) => {
       });
     }
 
+    const targetUserId = userId || req.userId;
+
     // Find user's statistics
-    const statistics = await PlayerStatistics.findOne({ where: { userId: userId || req.userId } });
+    const statistics = await PlayerStatistics.findOne({ where: { userId: targetUserId } });
 
     if (!statistics) {
       return res.status(404).json({
@@ -963,7 +965,46 @@ router.post('/sync-guest-data', authMiddleware, async (req, res, next) => {
 
     await statistics.save();
 
-    console.log(`Guest data synced for user: ${userId || req.userId}`);
+    // Sync game saves if provided
+    if (guestData.saves) {
+      const saves = guestData.saves;
+      const savePromises = [];
+
+      // Iterate through each save slot and create GameSave records
+      for (const [slotName, saveData] of Object.entries(saves)) {
+        if (saveData && typeof saveData === 'object') {
+          savePromises.push(
+            GameSave.findOrCreate({
+              where: {
+                userId: targetUserId,
+                slotName: slotName
+              },
+              defaults: {
+                userId: targetUserId,
+                slotName: slotName,
+                gameState: saveData.state || saveData,
+                timestamp: saveData.timestamp || Date.now(),
+                version: saveData.version || '1.0.0'
+              }
+            }).then(([gameSave, created]) => {
+              if (!created) {
+                // Update existing save
+                gameSave.gameState = saveData.state || saveData;
+                gameSave.timestamp = saveData.timestamp || Date.now();
+                gameSave.version = saveData.version || '1.0.0';
+                return gameSave.save();
+              }
+              return gameSave;
+            })
+          );
+        }
+      }
+
+      await Promise.all(savePromises);
+      console.log(`Guest saves synced for user: ${targetUserId} (${savePromises.length} saves)`);
+    }
+
+    console.log(`Guest data synced for user: ${targetUserId}`);
 
     res.json({
       success: true,

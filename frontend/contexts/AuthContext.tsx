@@ -49,30 +49,57 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Sync user profile with backend
   const syncUserProfile = useCallback(async (supabaseUser: any) => {
     try {
+      // Extract profile data from Supabase user
+      const username = supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0];
+      const displayName = supabaseUser.user_metadata.display_name || supabaseUser.user_metadata.full_name || supabaseUser.user_metadata.name;
+      // Google OAuth stores profile picture in avatar_url or picture
+      const profileImage = supabaseUser.user_metadata.profile_image ||
+                          supabaseUser.user_metadata.avatar_url ||
+                          supabaseUser.user_metadata.picture;
+
       // Get user profile from backend
       const profileResponse = await authServiceSupabase.getCurrentUser();
 
       if (profileResponse.success && profileResponse.data) {
         setUser(profileResponse.data.user);
       } else {
-        // If no backend profile exists, use Supabase user data
+        // If no backend profile exists, create it with Supabase data
+        const authProvider = supabaseUser.app_metadata.provider || 'google';
+
+        // Sync this new user to backend
+        await authServiceSupabase.syncProfile({
+          userId: supabaseUser.id,
+          email: supabaseUser.email!,
+          username,
+          displayName,
+          profileImage,
+          authProvider
+        });
+
+        // Set user state
         setUser({
           id: supabaseUser.id,
           email: supabaseUser.email!,
-          username: supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0],
-          displayName: supabaseUser.user_metadata.display_name,
-          profileImage: supabaseUser.user_metadata.profile_image,
+          username,
+          displayName,
+          profileImage,
         });
       }
     } catch (error) {
       console.error('Error syncing user profile:', error);
       // Fallback to Supabase user data
+      const username = supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0];
+      const displayName = supabaseUser.user_metadata.display_name || supabaseUser.user_metadata.full_name || supabaseUser.user_metadata.name;
+      const profileImage = supabaseUser.user_metadata.profile_image ||
+                          supabaseUser.user_metadata.avatar_url ||
+                          supabaseUser.user_metadata.picture;
+
       setUser({
         id: supabaseUser.id,
         email: supabaseUser.email!,
-        username: supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0],
-        displayName: supabaseUser.user_metadata.display_name,
-        profileImage: supabaseUser.user_metadata.profile_image,
+        username,
+        displayName,
+        profileImage,
       });
     }
   }, []);

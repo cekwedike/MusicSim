@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Difficulty } from '../types';
 import { difficultySettings, getDifficultyIcon } from '../data/difficultySettings';
+import { useAuth } from '../contexts/AuthContext';
 
 interface ArtistSetupProps {
     onSubmit: (name: string, genre: string, difficulty: Difficulty) => void;
 }
 
 const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
+    const { user, isAuthenticated } = useAuth();
     const [name, setName] = useState('');
     const [genre, setGenre] = useState('');
     const [difficulty, setDifficulty] = useState<Difficulty>('realistic');
+
+    // Pre-populate artist name with username when user is authenticated
+    useEffect(() => {
+        if (isAuthenticated && user) {
+            const defaultName = user.displayName || user.username;
+            setName(defaultName);
+        }
+    }, [isAuthenticated, user]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -66,16 +76,28 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                 {/* Artist Details */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
                     <div>
-                        <label htmlFor="artist-name" className="block text-left text-gray-300 font-medium mb-2">Artist / Band Name</label>
+                        <label htmlFor="artist-name" className="block text-left text-gray-300 font-medium mb-2">
+                            Artist / Band Name
+                            {isAuthenticated && (
+                                <span className="text-xs text-violet-400 ml-2">(Using your account name)</span>
+                            )}
+                        </label>
                         <input
                             id="artist-name"
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder="e.g., The Cosmic Drifters"
+                            placeholder={isAuthenticated ? (user?.displayName || user?.username) : "e.g., The Cosmic Drifters"}
                             className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
                             required
+                            readOnly={isAuthenticated}
+                            title={isAuthenticated ? "Artist name is linked to your account username. Edit it in your profile settings." : "Enter your artist or band name"}
                         />
+                        {isAuthenticated && (
+                            <p className="text-xs text-gray-400 mt-1">
+                                To change this, update your profile name in settings
+                            </p>
+                        )}
                     </div>
                     <div>
                         <label htmlFor="artist-genre" className="block text-left text-gray-300 font-medium mb-2">Genre</label>

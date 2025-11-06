@@ -743,10 +743,20 @@ router.delete('/account', authMiddleware, async (req, res, next) => {
  * @desc    Initiate Google OAuth login
  * @access  Public
  */
-router.get('/google', passport.authenticate('google', {
-  scope: ['profile', 'email'],
-  session: false
-}));
+router.get('/google', (req, res, next) => {
+  // Check if Google OAuth is configured
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    return res.status(503).json({
+      success: false,
+      message: 'Google OAuth is not configured on this server'
+    });
+  }
+
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false
+  })(req, res, next);
+});
 
 /**
  * @swagger
@@ -765,12 +775,23 @@ router.get('/google', passport.authenticate('google', {
  * @desc    Google OAuth callback
  * @access  Public
  */
-router.get('/google/callback',
+router.get('/google/callback', (req, res, next) => {
+  // Check if Google OAuth is configured
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    return res.redirect(`${frontendUrl}?error=oauth_not_configured`);
+  }
+
   passport.authenticate('google', {
     session: false,
     failureRedirect: process.env.FRONTEND_URL || 'http://localhost:5173'
-  }),
-  (req, res) => {
+  })(req, res, (err) => {
+    if (err) {
+      console.error('Google OAuth callback error:', err);
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+      return res.redirect(`${frontendUrl}?error=oauth_failed`);
+    }
+
     try {
       // Generate JWT token
       const token = generateToken(req.user.id);
@@ -783,7 +804,7 @@ router.get('/google/callback',
       const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
       res.redirect(`${frontendUrl}?error=oauth_failed`);
     }
-  }
-);
+  });
+});
 
 module.exports = router;

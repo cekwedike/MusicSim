@@ -2226,6 +2226,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 const UserProfile: React.FC<{ onOpenLoginModal: () => void }> = ({ onOpenLoginModal }) => {
     const { user, logout, isAuthenticated } = useAuth();
 
+    const handleLogout = async () => {
+        await logout();
+    };
+
     if (!isAuthenticated || !user) {
         return (
             <div className="flex items-center space-x-4">
@@ -2244,7 +2248,7 @@ const UserProfile: React.FC<{ onOpenLoginModal: () => void }> = ({ onOpenLoginMo
         <div className="flex items-center space-x-4">
             <span className="text-gray-300 text-sm">Welcome, {user.username}!</span>
             <button
-                onClick={logout}
+                onClick={handleLogout}
                 className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm transition-colors"
             >
                 Logout

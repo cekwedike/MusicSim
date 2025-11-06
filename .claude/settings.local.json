@@ -12,7 +12,8 @@
       "Bash(taskkill //F //PID 38552 2)",
       "Bash(nul)",
       "Bash(taskkill //F //PID 31732)",
-      "Bash(taskkill //F //PID 46200)"
+      "Bash(taskkill //F //PID 46200)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

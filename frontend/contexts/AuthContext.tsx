@@ -110,6 +110,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const initializeAuth = async () => {
       try {
+        // Check for OAuth errors in URL (from Supabase OAuth callback)
+        const params = new URLSearchParams(window.location.search);
+        const errorParam = params.get('error');
+        const errorDescription = params.get('error_description');
+
+        if (errorParam) {
+          console.error('[AuthContext] OAuth error:', errorParam, errorDescription);
+
+          // Clean up the URL by removing error parameters
+          const cleanUrl = window.location.origin + window.location.pathname;
+          window.history.replaceState({}, document.title, cleanUrl);
+
+          // Set user-friendly error message
+          let friendlyMessage = 'Authentication failed. Please try again.';
+          if (errorDescription) {
+            const desc = decodeURIComponent(errorDescription);
+            if (desc.includes('exchange') || desc.includes('code')) {
+              friendlyMessage = 'Google sign-in failed. Please check your internet connection and try again.';
+            }
+          }
+          setError(friendlyMessage);
+
+          if (mounted) {
+            setIsLoading(false);
+          }
+          return;
+        }
+
         // Get current session
         const { data: { session } } = await supabase.auth.getSession();
 
@@ -147,6 +175,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(session.access_token);
       } else if (event === 'USER_UPDATED' && session) {
         await syncUserProfile(session.user);
+      } else if (event === 'PASSWORD_RECOVERY') {
+        console.log('[AuthContext] Password recovery initiated');
       }
     });
 

@@ -25,14 +25,14 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 }) => {
 	const { user, isAuthenticated, logout, deleteAccount, updateProfile } = useAuth();
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-	const [isEditingName, setIsEditingName] = useState(false);
 	const [isEditingUsername, setIsEditingUsername] = useState(false);
-	const [editedName, setEditedName] = useState('');
 	const [editedUsername, setEditedUsername] = useState('');
 	const [usernameError, setUsernameError] = useState('');
 	const [guestName, setGuestName] = useState(() => {
 		return localStorage.getItem('guestPlayerName') || 'Guest Player';
 	});
+	const [isEditingGuestName, setIsEditingGuestName] = useState(false);
+	const [editedGuestName, setEditedGuestName] = useState('');
 	const [isUploadingImage, setIsUploadingImage] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -91,46 +91,25 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		}
 	};
 
-	const handleStartEditName = () => {
-		if (isGuestMode) {
-			setEditedName(guestName);
-		} else {
-			setEditedName(user?.displayName || user?.username || '');
-		}
-		setIsEditingName(true);
+	const handleStartEditGuestName = () => {
+		setEditedGuestName(guestName);
+		setIsEditingGuestName(true);
 	};
 
-	const handleSaveName = async () => {
-		if (!editedName.trim()) {
+	const handleSaveGuestName = () => {
+		if (!editedGuestName.trim()) {
 			alert('Name cannot be empty');
 			return;
 		}
 
-		if (isGuestMode) {
-			// Save guest name to localStorage
-			localStorage.setItem('guestPlayerName', editedName.trim());
-			setGuestName(editedName.trim());
-		} else {
-			// Update registered user's name
-			try {
-				const success = await updateProfile({ displayName: editedName.trim() });
-				if (!success) {
-					alert('Failed to update name. Please try again.');
-					return;
-				}
-			} catch (error) {
-				console.error('Error updating name:', error);
-				alert('Failed to update name. Please try again.');
-				return;
-			}
-		}
-
-		setIsEditingName(false);
+		localStorage.setItem('guestPlayerName', editedGuestName.trim());
+		setGuestName(editedGuestName.trim());
+		setIsEditingGuestName(false);
 	};
 
-	const handleCancelEditName = () => {
-		setIsEditingName(false);
-		setEditedName('');
+	const handleCancelEditGuestName = () => {
+		setIsEditingGuestName(false);
+		setEditedGuestName('');
 	};
 
 	const handleStartEditUsername = () => {
@@ -270,51 +249,17 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 							)}
 						</div>
 						<div className="flex-1">
-							{isEditingName ? (
-								<div className="flex items-center gap-2 mb-1">
-									<input
-										type="text"
-										value={editedName}
-										onChange={(e) => setEditedName(e.target.value)}
-										className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-sm"
-										placeholder="Display name"
-										autoFocus
-									/>
-									<button
-										onClick={handleSaveName}
-										className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
-									>
-										Save
-									</button>
-									<button
-										onClick={handleCancelEditName}
-										className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs"
-									>
-										Cancel
-									</button>
-								</div>
-							) : (
-								<div className="flex items-center gap-2">
-									<div className="font-bold text-lg text-white">{user.displayName || user.username}</div>
-									<button
-										onClick={handleStartEditName}
-										className="text-violet-300 hover:text-violet-200 text-xs"
-										title="Edit display name"
-									>
-										✏️
-									</button>
-								</div>
-							)}
 							{isEditingUsername ? (
-								<div className="mt-1">
+								<div>
 									<div className="flex items-center gap-2">
 										<input
 											type="text"
 											value={editedUsername}
 											onChange={(e) => setEditedUsername(e.target.value)}
-											className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-xs"
+											className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-sm"
 											placeholder="Username"
 											maxLength={30}
+											autoFocus
 										/>
 										<button
 											onClick={handleSaveUsername}
@@ -334,8 +279,8 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 									)}
 								</div>
 							) : (
-								<div className="flex items-center gap-2 mt-0.5">
-									<div className="text-xs text-violet-200">@{user.username}</div>
+								<div className="flex items-center gap-2">
+									<div className="font-bold text-lg text-white">{user.username}</div>
 									<button
 										onClick={handleStartEditUsername}
 										className="text-violet-300 hover:text-violet-200 text-xs"
@@ -356,26 +301,27 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 				) : (
 					<div className="flex items-center gap-3">
 						<div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-2xl">
+						🎮
 						</div>
 						<div className="flex-1">
-							{isEditingName ? (
+							{isEditingGuestName ? (
 								<div className="flex items-center gap-2 mb-1">
 									<input
 										type="text"
-										value={editedName}
-										onChange={(e) => setEditedName(e.target.value)}
+										value={editedGuestName}
+										onChange={(e) => setEditedGuestName(e.target.value)}
 										className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-sm"
 										placeholder="Guest name"
 										autoFocus
 									/>
 									<button
-										onClick={handleSaveName}
+										onClick={handleSaveGuestName}
 										className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
 									>
 										Save
 									</button>
 									<button
-										onClick={handleCancelEditName}
+										onClick={handleCancelEditGuestName}
 										className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs"
 									>
 										Cancel
@@ -385,11 +331,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 								<div className="flex items-center gap-2">
 									<div className="font-bold text-lg text-white">{guestName}</div>
 									<button
-										onClick={handleStartEditName}
+										onClick={handleStartEditGuestName}
 										className="text-gray-300 hover:text-white text-xs"
 										title="Edit name"
 									>
-										Edit
+										✏️
 									</button>
 								</div>
 							)}

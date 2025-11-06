@@ -27,7 +27,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
-  const [displayName, setDisplayName] = useState('');
 
   const { login, register, registerFromGuest, signInWithGoogle } = useAuth();
   const toast = useToast();
@@ -51,7 +50,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({
       setEmail('');
       setUsername('');
       setPassword('');
-      setDisplayName('');
       setProfileImage(undefined);
       setError('');
       setMode(initialMode);
@@ -117,10 +115,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             statistics: guestStatistics,
             saves: gameSaves ? JSON.parse(gameSaves) : null
           };
-          await registerFromGuest(username, email, password, guestData, profileImage, displayName || username);
+          await registerFromGuest(username, email, password, guestData, profileImage);
           toast.show('Account created with your progress saved!', 'success');
         } else {
-          await register(username, email, password, profileImage, displayName || username);
+          await register(username, email, password, profileImage);
           toast.show('Account created. Signing you in...', 'success');
         }
         setLoading(false);
@@ -232,20 +230,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
                   minLength={3}
                   maxLength={30}
                 />
-                <p className="text-gray-400 text-xs mt-1">3-30 characters, letters, numbers, and underscores only</p>
-              </div>
-
-              <div>
-                <label className="block text-gray-300 mb-2 font-medium">Display Name (Optional)</label>
-                <input
-                  type="text"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
-                  placeholder="How should we call you?"
-                  maxLength={50}
-                />
-                <p className="text-gray-400 text-xs mt-1">Leave empty to use your username</p>
+                <p className="text-gray-400 text-xs mt-1">This will be your display name. 3-30 characters.</p>
               </div>
 
               <div>

@@ -8,12 +8,12 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (username: string, email: string, password: string, profileImage?: string, displayName?: string) => Promise<boolean>;
-  registerFromGuest: (username: string, email: string, password: string, guestData?: any, profileImage?: string, displayName?: string) => Promise<boolean>;
+  register: (username: string, email: string, password: string, profileImage?: string) => Promise<boolean>;
+  registerFromGuest: (username: string, email: string, password: string, guestData?: any, profileImage?: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<{ success: boolean; message: string }>;
-  updateProfile: (data: { username?: string; displayName?: string; profileImage?: string }) => Promise<boolean>;
+  updateProfile: (data: { username?: string; profileImage?: string }) => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
   clearError: () => void;
   error: string | null;
@@ -50,8 +50,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const syncUserProfile = useCallback(async (supabaseUser: any) => {
     try {
       // Extract profile data from Supabase user
-      const username = supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0];
-      const displayName = supabaseUser.user_metadata.display_name || supabaseUser.user_metadata.full_name || supabaseUser.user_metadata.name;
+      const username = supabaseUser.user_metadata.username || supabaseUser.user_metadata.name || supabaseUser.email!.split('@')[0];
       // Google OAuth stores profile picture in avatar_url or picture
       const profileImage = supabaseUser.user_metadata.profile_image ||
                           supabaseUser.user_metadata.avatar_url ||
@@ -71,7 +70,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           userId: supabaseUser.id,
           email: supabaseUser.email!,
           username,
-          displayName,
           profileImage,
           authProvider
         });
@@ -81,15 +79,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           id: supabaseUser.id,
           email: supabaseUser.email!,
           username,
-          displayName,
           profileImage,
         });
       }
     } catch (error) {
       console.error('Error syncing user profile:', error);
       // Fallback to Supabase user data
-      const username = supabaseUser.user_metadata.username || supabaseUser.email!.split('@')[0];
-      const displayName = supabaseUser.user_metadata.display_name || supabaseUser.user_metadata.full_name || supabaseUser.user_metadata.name;
+      const username = supabaseUser.user_metadata.username || supabaseUser.user_metadata.name || supabaseUser.email!.split('@')[0];
       const profileImage = supabaseUser.user_metadata.profile_image ||
                           supabaseUser.user_metadata.avatar_url ||
                           supabaseUser.user_metadata.picture;
@@ -98,7 +94,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: supabaseUser.id,
         email: supabaseUser.email!,
         username,
-        displayName,
         profileImage,
       });
     }
@@ -213,7 +208,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Register function
-  const register = useCallback(async (username: string, email: string, password: string, profileImage?: string, displayName?: string): Promise<boolean> => {
+  const register = useCallback(async (username: string, email: string, password: string, profileImage?: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
@@ -222,8 +217,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         username,
         email,
         password,
-        profileImage,
-        displayName
+        profileImage
       });
 
       if (response.success && response.data) {
@@ -242,7 +236,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Register from guest function
-  const registerFromGuest = useCallback(async (username: string, email: string, password: string, guestData?: any, profileImage?: string, displayName?: string): Promise<boolean> => {
+  const registerFromGuest = useCallback(async (username: string, email: string, password: string, guestData?: any, profileImage?: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
@@ -252,7 +246,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email,
         password,
         profileImage,
-        displayName,
         guestData
       });
 
@@ -307,7 +300,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Update profile function
-  const updateProfile = useCallback(async (data: { username?: string; displayName?: string; profileImage?: string }): Promise<boolean> => {
+  const updateProfile = useCallback(async (data: { username?: string; profileImage?: string }): Promise<boolean> => {
     setIsLoading(true);
 
     try {

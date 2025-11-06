@@ -52,10 +52,6 @@ const User = sequelize.define('User', {
   profileImage: {
     type: DataTypes.TEXT, // Store base64 image or URL
     allowNull: true
-  },
-  displayName: {
-    type: DataTypes.STRING,
-    allowNull: true
   }
 }, {
   timestamps: true,
@@ -82,8 +78,8 @@ User.prototype.validatePassword = async function(password) {
 
 // Instance method to get safe user data (without password)
 User.prototype.toSafeObject = function() {
-  const { id, email, username, lastLogin, isActive, createdAt, updatedAt, profileImage, displayName } = this;
-  return { id, email, username, lastLogin, isActive, createdAt, updatedAt, profileImage, displayName };
+  const { id, email, username, lastLogin, isActive, createdAt, updatedAt, profileImage } = this;
+  return { id, email, username, lastLogin, isActive, createdAt, updatedAt, profileImage };
 };
 
 module.exports = User;

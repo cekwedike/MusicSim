@@ -16,7 +16,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
     // Pre-populate artist name with username when user is authenticated
     useEffect(() => {
         if (isAuthenticated && user) {
-            const defaultName = user.displayName || user.username;
+            const defaultName = user.username;
             setName(defaultName);
         }
     }, [isAuthenticated, user]);
@@ -87,7 +87,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            placeholder={isAuthenticated ? (user?.displayName || user?.username) : "e.g., The Cosmic Drifters"}
+                            placeholder={isAuthenticated ? user?.username : "e.g., The Cosmic Drifters"}
                             className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
                             required
                             readOnly={isAuthenticated}

@@ -89,11 +89,6 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
               user.profileImage = profile.photos[0].value;
             }
 
-            // Update display name if not set
-            if (!user.displayName) {
-              user.displayName = profile.displayName;
-            }
-
             await user.save();
             return done(null, user);
           }
@@ -107,7 +102,6 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
             googleId: profile.id,
             authProvider: 'google',
             username: username,
-            displayName: profile.displayName,
             profileImage: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : null,
             lastLogin: new Date(),
             isActive: true

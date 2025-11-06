@@ -6,7 +6,6 @@ export interface User {
   id: string;
   email: string;
   username: string;
-  displayName?: string;
   profileImage?: string;
   lastLogin?: Date;
   createdAt?: Date;
@@ -34,7 +33,6 @@ interface RegisterData {
   email: string;
   password: string;
   profileImage?: string;
-  displayName?: string;
 }
 
 // Auth Service using Supabase
@@ -42,7 +40,7 @@ export const authServiceSupabase = {
   // Register with email and password
   register: async (data: RegisterData): Promise<AuthResponse> => {
     try {
-      const { email, password, username, displayName, profileImage } = data;
+      const { email, password, username, profileImage } = data;
 
       // Sign up with Supabase
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -51,7 +49,6 @@ export const authServiceSupabase = {
         options: {
           data: {
             username,
-            display_name: displayName || username,
             profile_image: profileImage || null,
           }
         }
@@ -77,7 +74,6 @@ export const authServiceSupabase = {
         userId: authData.user.id,
         email: authData.user.email,
         username,
-        displayName: displayName || username,
         profileImage: profileImage || null,
         authProvider: 'local'
       });
@@ -91,7 +87,6 @@ export const authServiceSupabase = {
             id: authData.user.id,
             email: authData.user.email!,
             username,
-            displayName: displayName || username,
             profileImage: profileImage || undefined,
           }
         }
@@ -133,7 +128,6 @@ export const authServiceSupabase = {
             id: authData.user.id,
             email: authData.user.email!,
             username: authData.user.user_metadata.username || authData.user.email!.split('@')[0],
-            displayName: authData.user.user_metadata.display_name,
             profileImage: authData.user.user_metadata.profile_image,
           }
         }
@@ -222,7 +216,7 @@ export const authServiceSupabase = {
   },
 
   // Sync profile with backend (used for OAuth and profile creation)
-  syncProfile: async (data: { userId: string; email: string; username: string; displayName?: string; profileImage?: string; authProvider?: string }): Promise<ApiResponse<{ user: User }>> => {
+  syncProfile: async (data: { userId: string; email: string; username: string; profileImage?: string; authProvider?: string }): Promise<ApiResponse<{ user: User }>> => {
     try {
       const response = await api.post<ApiResponse<{ user: User }>>('/auth/sync-profile', data);
       return response.data;
@@ -233,14 +227,13 @@ export const authServiceSupabase = {
   },
 
   // Update profile
-  updateProfile: async (data: { username?: string; displayName?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
+  updateProfile: async (data: { username?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
     try {
       // Update Supabase user metadata
-      if (data.username || data.displayName || data.profileImage) {
+      if (data.username || data.profileImage) {
         await supabase.auth.updateUser({
           data: {
             username: data.username,
-            display_name: data.displayName,
             profile_image: data.profileImage,
           }
         });

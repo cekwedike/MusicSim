@@ -114,7 +114,7 @@ const generateToken = (userId) => {
  */
 router.post('/register', async (req, res, next) => {
   try {
-    const { email, username, password, profileImage, displayName } = req.body;
+    const { email, username, password, profileImage } = req.body;
 
     // Validate input data
     const validation = validateRegistrationData({ email, username, password });
@@ -162,8 +162,7 @@ router.post('/register', async (req, res, next) => {
       email: sanitizedEmail,
       username: sanitizedUsername,
       password: password,
-      profileImage: profileImage || null,
-      displayName: displayName || sanitizedUsername
+      profileImage: profileImage || null
     });
 
     // Create player statistics record
@@ -186,7 +185,6 @@ router.post('/register', async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
-          displayName: user.displayName,
           profileImage: user.profileImage,
           createdAt: user.createdAt
         }
@@ -300,7 +298,6 @@ router.post('/login', async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
-          displayName: user.displayName,
           profileImage: user.profileImage,
           lastLogin: user.lastLogin
         }
@@ -399,8 +396,6 @@ router.post('/verify', authMiddleware, (req, res) => {
  *                 type: string
  *                 minLength: 3
  *                 maxLength: 30
- *               displayName:
- *                 type: string
  *               profileImage:
  *                 type: string
  *     responses:
@@ -411,7 +406,7 @@ router.post('/verify', authMiddleware, (req, res) => {
  */
 router.patch('/profile', authMiddleware, async (req, res, next) => {
   try {
-    const { username, displayName, profileImage } = req.body;
+    const { username, profileImage } = req.body;
     const userId = req.userId;
 
     const user = await User.findByPk(userId);
@@ -457,9 +452,6 @@ router.patch('/profile', authMiddleware, async (req, res, next) => {
     }
 
     // Update other fields if provided
-    if (displayName !== undefined) {
-      user.displayName = displayName;
-    }
     if (profileImage !== undefined) {
       user.profileImage = profileImage;
     }
@@ -476,7 +468,6 @@ router.patch('/profile', authMiddleware, async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
-          displayName: user.displayName,
           profileImage: user.profileImage,
           lastLogin: user.lastLogin
         }
@@ -570,7 +561,7 @@ router.post('/refresh', authMiddleware, (req, res) => {
  */
 router.post('/register-from-guest', async (req, res, next) => {
   try {
-    const { email, username, password, guestData, profileImage, displayName } = req.body;
+    const { email, username, password, guestData, profileImage } = req.body;
 
     // Validate input data
     const validation = validateRegistrationData({ email, username, password });
@@ -618,8 +609,7 @@ router.post('/register-from-guest', async (req, res, next) => {
       email: sanitizedEmail,
       username: sanitizedUsername,
       password: password,
-      profileImage: profileImage || null,
-      displayName: displayName || sanitizedUsername
+      profileImage: profileImage || null
     });
 
     // Create or update player statistics with guest data
@@ -660,7 +650,6 @@ router.post('/register-from-guest', async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
-          displayName: user.displayName,
           profileImage: user.profileImage,
           createdAt: user.createdAt
         }
@@ -829,8 +818,6 @@ router.get('/google/callback', (req, res, next) => {
  *                 type: string
  *               username:
  *                 type: string
- *               displayName:
- *                 type: string
  *               profileImage:
  *                 type: string
  *               authProvider:
@@ -849,7 +836,7 @@ router.get('/google/callback', (req, res, next) => {
  */
 router.post('/sync-profile', authMiddleware, async (req, res, next) => {
   try {
-    const { userId, email, username, displayName, profileImage, authProvider } = req.body;
+    const { userId, email, username, profileImage, authProvider } = req.body;
 
     // Check if user already exists
     let user = await User.findByPk(userId || req.userId);
@@ -858,7 +845,6 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
       // Update existing user
       user.email = email || user.email;
       user.username = username || user.username;
-      user.displayName = displayName || user.displayName;
       user.profileImage = profileImage || user.profileImage;
       user.authProvider = authProvider || user.authProvider;
       user.lastLogin = new Date();
@@ -875,7 +861,6 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
             id: user.id,
             email: user.email,
             username: user.username,
-            displayName: user.displayName,
             profileImage: user.profileImage,
             lastLogin: user.lastLogin
           }
@@ -888,7 +873,6 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
       id: userId || req.userId,
       email,
       username,
-      displayName: displayName || username,
       profileImage,
       authProvider: authProvider || 'local',
       lastLogin: new Date(),
@@ -910,7 +894,6 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
-          displayName: user.displayName,
           profileImage: user.profileImage,
           lastLogin: user.lastLogin
         }

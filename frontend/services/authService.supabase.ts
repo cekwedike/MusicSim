@@ -302,6 +302,181 @@ export const authServiceSupabase = {
   clearAuth: (): void => {
     localStorage.clear();
   },
+
+  // Upload profile image to Supabase Storage
+  uploadProfileImage: async (file: File): Promise<{ success: boolean; url?: string; error?: string }> => {
+    try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
+
+      // Validate file
+      if (!file.type.startsWith('image/')) {
+        throw new Error('File must be an image');
+      }
+
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        throw new Error('Image must be less than 2MB');
+      }
+
+      // Create unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/profile.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('profile-images')
+        .upload(fileName, file, {
+          upsert: true, // Replace existing file
+          contentType: file.type,
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('profile-images')
+        .getPublicUrl(fileName);
+
+      // Update user profile with new image URL
+      await authServiceSupabase.updateProfile({ profileImage: publicUrl });
+
+      return {
+        success: true,
+        url: publicUrl
+      };
+    } catch (error: any) {
+      console.error('[authService] Upload profile image error:', error);
+      return {
+        success: false,
+        error: error.message || 'Failed to upload image'
+      };
+    }
+  },
+
+  // Update username
+  updateUsername: async (username: string): Promise<{ success: boolean; message?: string }> => {
+    try {
+      // Validate username
+      if (!username || username.length < 3 || username.length > 20) {
+        throw new Error('Username must be 3-20 characters');
+      }
+
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        throw new Error('Username can only contain letters, numbers, and underscores');
+      }
+
+      // Update backend
+      const response = await api.post('/auth/update-username', { username });
+
+      if (!response.data.success) {
+        throw new Error(response.data.message || 'Failed to update username');
+      }
+
+      // Update Supabase metadata
+      await supabase.auth.updateUser({
+        data: { username }
+      });
+
+      return {
+        success: true,
+        message: 'Username updated successfully'
+      };
+    } catch (error: any) {
+      console.error('[authService] Update username error:', error);
+      return {
+        success: false,
+        message: error.message || 'Failed to update username'
+      };
+    }
+  },
+
+  // Request password reset
+  resetPasswordRequest: async (email: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        success: true,
+        message: 'Password reset email sent! Please check your inbox.'
+      };
+    } catch (error: any) {
+      console.error('[authService] Password reset request error:', error);
+      return {
+        success: false,
+        message: error.message || 'Failed to send password reset email'
+      };
+    }
+  },
+
+  // Confirm password reset (set new password)
+  resetPasswordConfirm: async (newPassword: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      if (!newPassword || newPassword.length < 8) {
+        throw new Error('Password must be at least 8 characters');
+      }
+
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        success: true,
+        message: 'Password updated successfully! You can now log in with your new password.'
+      };
+    } catch (error: any) {
+      console.error('[authService] Password reset confirm error:', error);
+      return {
+        success: false,
+        message: error.message || 'Failed to update password'
+      };
+    }
+  },
+
+  // Resend verification email
+  resendVerificationEmail: async (): Promise<{ success: boolean; message: string }> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user || !user.email) {
+        throw new Error('No user found');
+      }
+
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: user.email,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      return {
+        success: true,
+        message: 'Verification email sent! Please check your inbox.'
+      };
+    } catch (error: any) {
+      console.error('[authService] Resend verification error:', error);
+      return {
+        success: false,
+        message: error.message || 'Failed to resend verification email'
+      };
+    }
+  },
 };
 
 export default authServiceSupabase;

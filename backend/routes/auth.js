@@ -999,4 +999,78 @@ router.post('/sync-guest-data', authMiddleware, async (req, res, next) => {
   }
 });
 
+/**
+ * @route   POST /api/auth/update-username
+ * @desc    Update user's username
+ * @access  Private
+ */
+router.post('/update-username', async (req, res, next) => {
+  try {
+    const { username } = req.body;
+
+    // Get user from Supabase session (set by supabase-auth middleware)
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Not authenticated'
+      });
+    }
+
+    // Validate username
+    if (!username || typeof username !== 'string') {
+      return res.status(400).json({
+        success: false,
+        message: 'Username is required'
+      });
+    }
+
+    if (username.length < 3 || username.length > 20) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username must be 3-20 characters'
+      });
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username can only contain letters, numbers, and underscores'
+      });
+    }
+
+    // Check if username is already taken
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser && existingUser.id !== user.id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username is already taken'
+      });
+    }
+
+    // Find and update user
+    const dbUser = await User.findOne({ where: { id: user.id } });
+
+    if (!dbUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    dbUser.username = username;
+    await dbUser.save();
+
+    res.json({
+      success: true,
+      message: 'Username updated successfully',
+      user: dbUser.toSafeObject()
+    });
+  } catch (error) {
+    console.error('Error updating username:', error);
+    next(error);
+  }
+});
+
 module.exports = router;

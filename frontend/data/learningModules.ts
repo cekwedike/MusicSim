@@ -1344,6 +1344,365 @@ export const learningModules: LearningModule[] = [
         explanation: "One authentic collaboration that genuinely fits your artistic direction and values creates more career value than numerous exploitative ones accepted for 'exposure.' Quality and strategic alignment matter more than quantity."
       }
     ]
+  },
+
+  {
+    id: 'copyright-registration-nigeria',
+    title: 'Copyright Registration in Nigeria: Complete Guide',
+    category: 'registration',
+    icon: '',
+    difficulty: 'intermediate',
+    estimatedMinutes: 12,
+    prerequisites: ['copyright-rights'],
+    unlockRequirement: {
+      type: 'fame',
+      value: 25,
+      message: 'Reach 25 fame to unlock'
+    },
+    content: {
+      introduction: "Copyright protection in Nigeria is automatic under the Berne Convention - your work is protected from creation. However, voluntary registration with the Nigerian Copyright Commission (NCC) provides crucial legal evidence, makes enforcement easier, and creates public records. Learn the complete registration process for Nigeria and other African countries.",
+      sections: [
+        {
+          heading: 'Understanding Nigerian Copyright Law',
+          content: "The Nigerian Copyright Act (as amended) provides automatic copyright protection from the moment your work is created in fixed form. Registration is voluntary, not mandatory for protection. However, registration provides strong legal evidence of ownership, making enforcement much easier if someone infringes your rights.",
+          examples: [
+            "Copyright automatically exists when you record your song",
+            "NCC registration provides certificate as legal evidence in court",
+            "Registration creates public database entry showing your ownership",
+            "Registered works get 60-day processing with official acknowledgment"
+          ],
+          tip: "Protection is automatic, but registration makes enforcement practical. Register your important works."
+        },
+        {
+          heading: 'Nigerian Copyright Commission (NCC) Registration Process',
+          content: "NCC offers two registration methods: online through NCeRS (Nigerian Copyright e-Registration System) and physical submission at NCC offices nationwide. Online registration is faster, more convenient, and provides digital tracking. The process involves creating an account, uploading your work, and paying prescribed fees.",
+          examples: [
+            "NCeRS website: www.eregistration.copyright.gov.ng",
+            "Create account with valid email for activation link",
+            "Upload copy of work as database evidence",
+            "Processing completed within 60 days of submission",
+            "Payment accepted in Naira (₦) or US Dollar ($)"
+          ],
+          tip: "Use online NCeRS system for faster processing. Keep activation email and upload highest quality copy of your work."
+        },
+        {
+          heading: 'Required Documentation and Fees',
+          content: "For registration, you need: completed application form, two copies of the work (physical) or one digital copy (online), proof of identity, evidence of payment. Fees vary by work type. Musical works and sound recordings are separate categories requiring individual registration.",
+          examples: [
+            "Musical composition (lyrics & melody): Separate registration",
+            "Sound recording (master): Separate registration from composition",
+            "Valid ID (National ID, Passport, Driver's License)",
+            "Payment receipt from approved banks or online payment",
+            "Clear, complete copy of work for Commission database"
+          ],
+          tip: "Register both composition AND sound recording separately. They're different copyrights with different values."
+        },
+        {
+          heading: 'COSON and Royalty Collection',
+          content: "Copyright Society of Nigeria (COSON) is a Collective Management Organization (CMO) for collecting performance royalties when your music plays publicly - radio, TV, clubs, events. NCC registration protects ownership; COSON registration collects money when your music is used. Both serve different but complementary purposes.",
+          examples: [
+            "COSON collects royalties from radio, TV, public venues",
+            "Membership open to songwriters, composers, publishers, performers",
+            "Register works with COSON after NCC registration",
+            "COSON distributes collected royalties to registered members",
+            "Forms available at www.cosonng.com or COSON House, Ikeja"
+          ],
+          tip: "Register with BOTH NCC (for ownership proof) and COSON (for royalty collection). They serve different purposes."
+        },
+        {
+          heading: 'Copyright Registration in Other African Countries',
+          content: "Most African countries follow the Berne Convention, providing automatic copyright. Registration processes vary by country. ARIPO (African Regional Intellectual Property Organization) has 22 member states, mostly English-speaking. The Kampala Protocol for voluntary regional copyright registration was adopted but hasn't entered force yet.",
+          examples: [
+            "Ghana: Copyright Office under Ministry of Justice registration",
+            "Kenya: Kenya Copyright Board (KECOBO) registration system",
+            "South Africa: Companies and Intellectual Property Commission (CIPC)",
+            "Tanzania: Copyright Society of Tanzania (COSOTA) for collection",
+            "Uganda: Uganda Registration Services Bureau (URSB)",
+            "ARIPO members: Botswana, Ghana, Kenya, Malawi, Mozambique, Rwanda, Tanzania, Uganda, Zambia, Zimbabwe (and 12 others)"
+          ],
+          tip: "Research specific country requirements. Many African countries have similar processes to Nigeria but with local variations."
+        },
+        {
+          heading: 'Enforcement and International Protection',
+          content: "Nigerian copyright is automatically recognized in all Berne Convention countries (181 countries worldwide) without additional registration. However, local registration in target markets (like US or UK) may be required for lawsuit filing. Keep detailed records of creation dates, drafts, and distribution as additional evidence.",
+          examples: [
+            "Berne Convention: Nigerian copyright valid in 181 countries",
+            "No need to register in every country for protection",
+            "US lawsuits require US Copyright Office registration",
+            "Document creation process: demos, studio logs, emails",
+            "Social media posts can establish creation dates publicly"
+          ],
+          tip: "Your Nigerian copyright is internationally valid, but register in countries where you expect disputes or major income."
+        }
+      ],
+      keyTakeaways: [
+        "Nigerian copyright is automatic but voluntary registration provides legal evidence",
+        "Use NCeRS (eregistration.copyright.gov.ng) for convenient online registration",
+        "Register compositions and sound recordings separately - they're different rights",
+        "Join COSON after NCC registration to collect performance royalties",
+        "ARIPO regional system exists but copyright protocol not yet operational",
+        "Research specific requirements for other African countries where you work",
+        "Berne Convention makes Nigerian copyright valid in 181 countries automatically"
+      ],
+      culturalContext: "Nigeria's copyright system balances international standards (Berne Convention) with local realities. The NCC's online system is relatively new and improving. COSON faces challenges in royalty collection from venues and broadcasters, but registration still provides routes to compensation. Many Nigerian artists don't register works, losing legal evidence for enforcement. Understanding the system gives you competitive advantage when disputes arise.",
+      commonPitfalls: [
+        "Assuming automatic protection means registration is unnecessary for enforcement",
+        "Not registering both composition and sound recording separately",
+        "Confusing NCC registration (ownership) with COSON membership (royalties)",
+        "Failing to keep copies of uploaded materials and certificates",
+        "Not documenting creation process beyond formal registration",
+        "Assuming Nigerian registration is sufficient for US litigation"
+      ]
+    },
+    quiz: [
+      {
+        question: "Is copyright registration mandatory for protection in Nigeria?",
+        options: [
+          "Yes, you must register for any copyright protection",
+          "No, copyright is automatic but registration provides legal evidence",
+          "Only for commercial works",
+          "Only for international protection"
+        ],
+        correctIndex: 1,
+        explanation: "Under Nigerian law and the Berne Convention, copyright exists automatically from creation. Registration with NCC is voluntary but provides crucial legal evidence of ownership and dates, making enforcement much more practical."
+      },
+      {
+        question: "What is NCeRS?",
+        options: [
+          "A music streaming platform",
+          "Nigerian Copyright e-Registration System for online registration",
+          "A royalty collection organization",
+          "An African regional copyright treaty"
+        ],
+        correctIndex: 1,
+        explanation: "NCeRS (Nigerian Copyright e-Registration System) is the NCC's online platform at eregistration.copyright.gov.ng for convenient copyright registration, offering faster processing than physical submission."
+      },
+      {
+        question: "What's the difference between NCC registration and COSON membership?",
+        options: [
+          "They're the same thing",
+          "NCC proves ownership, COSON collects public performance royalties",
+          "NCC is for international works, COSON is for local works",
+          "COSON is mandatory, NCC is optional"
+        ],
+        correctIndex: 1,
+        explanation: "NCC registration establishes legal evidence of copyright ownership. COSON membership enables collection of performance royalties when your music plays publicly. Both serve different but complementary purposes - you should do both."
+      },
+      {
+        question: "Should you register your musical composition and sound recording separately?",
+        options: [
+          "No, one registration covers both",
+          "Yes, they are different copyrights with different owners and values",
+          "Only if you have a record label",
+          "Only for international protection"
+        ],
+        correctIndex: 1,
+        explanation: "Musical composition (song/lyrics) and sound recording (master) are legally separate copyrights. They can have different owners and are exploited differently. Register both separately with NCC."
+      },
+      {
+        question: "How does the Berne Convention affect Nigerian artists?",
+        options: [
+          "It only applies to artists who register internationally",
+          "Nigerian copyright is automatically recognized in 181 member countries",
+          "You must pay fees to join the Convention",
+          "It only protects works registered in multiple countries"
+        ],
+        correctIndex: 1,
+        explanation: "As a Berne Convention member, Nigeria's copyright protections are automatically recognized in all 181 member countries without additional registration. This gives Nigerian artists international protection from creation."
+      },
+      {
+        question: "What is ARIPO's current role in copyright registration?",
+        options: [
+          "It provides mandatory regional copyright registration",
+          "It has a copyright protocol adopted but not yet in force",
+          "It only handles trademarks, not copyright",
+          "Nigerian artists can't use ARIPO"
+        ],
+        correctIndex: 1,
+        explanation: "ARIPO adopted the Kampala Protocol on Voluntary Registration of Copyright in 2021, but it hasn't entered force yet (needs 5 country ratifications). Currently, copyright registration remains national, not regional through ARIPO."
+      }
+    ]
+  },
+
+  {
+    id: 'copyright-registration-rwanda',
+    title: 'Copyright Registration in Rwanda: Complete Guide',
+    category: 'registration',
+    icon: '',
+    difficulty: 'intermediate',
+    estimatedMinutes: 12,
+    prerequisites: ['copyright-rights'],
+    unlockRequirement: {
+      type: 'fame',
+      value: 25,
+      message: 'Reach 25 fame to unlock'
+    },
+    content: {
+      introduction: "Rwanda modernized its intellectual property laws in 2024 with Law No. 055/2024, creating a streamlined copyright system. As a Berne Convention member and ARIPO participant, Rwandan copyright is automatically recognized internationally. Registration is voluntary but provides strong legal evidence. Learn Rwanda's registration process and how it connects to broader African and international systems.",
+      sections: [
+        {
+          heading: 'Rwanda's 2024 Copyright Law',
+          content: "Law No. 055/2024 on Protection of Intellectual Property came into force on July 31, 2024, modernizing Rwanda's copyright framework. Article 283 clarifies that works are protected when original, whether registered or not. Registration remains voluntary but provides legal advantages. The law protects literary, artistic, scientific works, performances, phonograms, broadcasts, and computer programs.",
+          examples: [
+            "Copyright automatic from creation if work is original",
+            "Registration provides legal evidence but isn't mandatory",
+            "Musical compositions and sound recordings both protected",
+            "Performers' rights and phonogram producers' rights recognized",
+            "Computer-generated music protected as 'intellectual work'"
+          ],
+          tip: "Rwanda's new 2024 law is modern and clear. Review Article 283-286 for complete copyright provisions."
+        },
+        {
+          heading: 'Registration Through Rwanda Development Board (RDB)',
+          content: "The Office of the Registrar General at Rwanda Development Board (RDB) handles all intellectual property registration, including copyright. Article 286 sets registration requirements and procedures. Applications must include work details, creator information, and creation date. The RDB provides streamlined online and physical submission options.",
+          examples: [
+            "RDB website: www.rdb.rw - Intellectual Property section",
+            "Submit application with work copy and creator details",
+            "Include statement of originality and creation date",
+            "Processing through RDB Office of Registrar General",
+            "Certificate of registration issued upon approval"
+          ],
+          tip: "Contact RDB's IP office directly for current fees and detailed forms. The 2024 law is new, so processes are still being fully implemented."
+        },
+        {
+          heading: 'Required Documentation and Process',
+          content: "To register copyright in Rwanda, prepare: completed application form, copy of the work (physical or digital), proof of authorship/ownership, identification documents, and payment evidence. For musical works, provide both composition (if you wrote it) and sound recording (if you own the master) as separate registrations.",
+          examples: [
+            "Application form from RDB Registrar General's office",
+            "Clear copy of musical work - score, lyrics, or recording",
+            "National ID, passport, or other government identification",
+            "Declaration of authorship and originality",
+            "Payment proof (fees set by ministerial order)",
+            "For collaborations: co-author agreements and consent"
+          ],
+          tip: "Prepare clean, complete copies of your work. For songs, include lyrics, any musical notation, and high-quality recording."
+        },
+        {
+          heading: 'Collective Management in Rwanda',
+          content: "Rwanda's 2024 law provides for Collective Management Organizations (CMOs) to collect and distribute royalties. CMOs collect when your music plays on radio, TV, public venues, and streaming platforms. While specific CMO registration details are being finalized under the new law, artists should monitor RDB announcements for operational CMOs.",
+          examples: [
+            "CMOs will collect from broadcasters, venues, streaming",
+            "Separate registration from copyright ownership registration",
+            "Regional CMOs may serve Rwandan artists through agreements",
+            "East African CMOs: KAMP (Kenya), COSOTA (Tanzania)",
+            "Monitor www.rdb.rw for Rwanda CMO announcements"
+          ],
+          tip: "While Rwanda establishes its CMO framework, consider registering with regional East African CMOs that may have reciprocal agreements."
+        },
+        {
+          heading: 'ARIPO and Regional Copyright Protection',
+          content: "Rwanda is a member of ARIPO (African Regional Intellectual Property Organization) along with 21 other countries. ARIPO's Kampala Protocol on Voluntary Registration of Copyright was adopted in 2021 but requires 5 member states to ratify before entering force. Once operational, it will allow single registration valid across multiple African countries.",
+          examples: [
+            "ARIPO members include: Kenya, Tanzania, Uganda, Ghana, Zambia, Zimbabwe, Botswana, Mozambique, Lesotho, Liberia, Malawi",
+            "Kampala Protocol pending - not yet operational",
+            "When active: one ARIPO filing covers all ratifying states",
+            "Until then: register nationally in each country separately",
+            "Regional database planned for copyright works"
+          ],
+          tip: "Monitor ARIPO website (www.aripo.org) for Kampala Protocol status. Once operational, it will simplify multi-country registration."
+        },
+        {
+          heading: 'Copyright in Other African Countries',
+          content: "Most African countries provide automatic copyright under Berne Convention but have national registration systems. East African Community (EAC) members - Rwanda, Kenya, Tanzania, Uganda, Burundi, South Sudan - are working toward harmonized IP frameworks. Each country currently maintains separate registration systems with varying procedures and fees.",
+          examples: [
+            "Kenya: Register with Kenya Copyright Board (KECOBO)",
+            "Tanzania: Tanzania Copyright Society (COSOTA)",
+            "Uganda: Uganda Registration Services Bureau (URSB)",
+            "DRC: Ministry of Culture and Arts copyright office",
+            "Burundi: Institut National de la Propriété Industrielle",
+            "South Africa: Companies and Intellectual Property Commission",
+            "Ethiopia: Ethiopian Intellectual Property Office"
+          ],
+          tip: "Focus registration efforts on countries where you generate significant income or anticipate disputes. Start with home country plus key markets."
+        }
+      ],
+      keyTakeaways: [
+        "Rwanda's 2024 IP law provides automatic copyright with voluntary registration",
+        "Register through RDB Office of Registrar General for legal evidence",
+        "Musical compositions and sound recordings require separate registrations",
+        "Monitor RDB for Collective Management Organization announcements",
+        "ARIPO's Kampala Protocol will simplify regional registration once operational",
+        "Rwanda is part of EAC working toward harmonized IP framework",
+        "Berne Convention makes Rwandan copyright valid in 181 countries automatically"
+      ],
+      culturalContext: "Rwanda's 2024 IP law represents significant modernization, reflecting the country's broader economic transformation. The government recognizes creative industries' economic potential. RDB's efficiency in other business areas suggests copyright registration will be well-managed once fully implemented. Rwanda's regional integration through EAC and ARIPO positions artists well for East African market access.",
+      commonPitfalls: [
+        "Waiting for 'perfect' CMO system - register ownership with RDB now",
+        "Not registering because protection is automatic - registration provides legal evidence",
+        "Assuming ARIPO Kampala Protocol is operational (it's not yet)",
+        "Confusing ARIPO trademark system with copyright system (different protocols)",
+        "Not keeping copies of registration applications and certificates",
+        "Forgetting to register in Kenya/Tanzania if earning significant income there"
+      ]
+    },
+    quiz: [
+      {
+        question: "When did Rwanda's current copyright law come into force?",
+        options: [
+          "2009",
+          "2020",
+          "July 31, 2024",
+          "It's still pending"
+        ],
+        correctIndex: 2,
+        explanation: "Law No. 055/2024 on Protection of Intellectual Property came into force on July 31, 2024, modernizing Rwanda's entire IP framework including copyright provisions."
+      },
+      {
+        question: "Which organization handles copyright registration in Rwanda?",
+        options: [
+          "Ministry of Culture",
+          "Rwanda Development Board (RDB) - Office of Registrar General",
+          "ARIPO directly",
+          "Rwanda Copyright Society"
+        ],
+        correctIndex: 1,
+        explanation: "The Office of the Registrar General at Rwanda Development Board (RDB) is the competent authority for copyright registration in Rwanda under the 2024 law."
+      },
+      {
+        question: "Is copyright registration mandatory for protection in Rwanda?",
+        options: [
+          "Yes, required for any protection",
+          "No, Article 283 provides automatic protection for original works",
+          "Only for commercial works",
+          "Only for works distributed internationally"
+        ],
+        correctIndex: 1,
+        explanation: "Article 283 of Rwanda's 2024 law states that original works are protected whether registered or not. Registration is voluntary but provides strong legal evidence of ownership."
+      },
+      {
+        question: "What is the current status of ARIPO's copyright registration system?",
+        options: [
+          "Fully operational across all member states",
+          "Kampala Protocol adopted but not yet in force (needs 5 ratifications)",
+          "Only available for trademark registration",
+          "Rwanda is not eligible"
+        ],
+        correctIndex: 1,
+        explanation: "ARIPO adopted the Kampala Protocol on Voluntary Registration of Copyright in 2021, but it requires 5 member states to ratify before entering force. Until then, copyright registration remains national, not regional."
+      },
+      {
+        question: "What should Rwandan artists do regarding Collective Management Organizations?",
+        options: [
+          "Wait indefinitely for Rwanda to establish one",
+          "Monitor RDB for CMO announcements while considering regional East African CMOs",
+          "CMOs are illegal in Rwanda",
+          "Only international artists need CMOs"
+        ],
+        correctIndex: 1,
+        explanation: "While Rwanda's 2024 law provides for CMOs, specific operational details are being finalized. Artists should monitor RDB for announcements and can consider registering with established East African CMOs (like KAMP in Kenya or COSOTA in Tanzania) that may have reciprocal agreements."
+      },
+      {
+        question: "How does Rwanda's membership in the Berne Convention benefit artists?",
+        options: [
+          "It only helps if you register internationally",
+          "Rwandan copyright is automatically recognized in 181 member countries",
+          "You must pay annual fees to maintain protection",
+          "It only applies to works published in Europe"
+        ],
+        correctIndex: 1,
+        explanation: "As a Berne Convention member, Rwanda's copyright protections are automatically recognized in all 181 member countries without additional registration, giving Rwandan artists immediate international protection from creation."
+      }
+    ]
   }
 ];
 

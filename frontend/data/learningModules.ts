@@ -661,6 +661,689 @@ export const learningModules: LearningModule[] = [
         explanation: "The strongest brands find the sweet spot between authentic self-expression and what resonates with audiences. This creates genuine connection while maintaining commercial appeal."
       }
     ]
+  },
+
+  {
+    id: 'cultural-appropriation',
+    title: 'Cultural Appropriation: Protecting Your Heritage',
+    category: 'culture',
+    icon: '',
+    difficulty: 'intermediate',
+    estimatedMinutes: 10,
+    unlockRequirement: {
+      type: 'fame',
+      value: 35,
+      message: 'Reach 35 fame to unlock'
+    },
+    content: {
+      introduction: "Cultural appropriation occurs when Western artists or companies take African music, styles, or cultural elements without credit, compensation, or understanding. As African music gains global popularity, protecting your cultural heritage becomes crucial. Learn to recognize, prevent, and fight cultural theft.",
+      sections: [
+        {
+          heading: 'What is Cultural Appropriation in Music?',
+          content: "Cultural appropriation happens when dominant cultures (often Western) extract profitable elements from marginalized cultures (like African music) without proper credit, compensation, or respect for the source. It's different from cultural exchange, which involves mutual respect and benefit.",
+          examples: [
+            "European DJs sampling traditional African songs without credit or payment",
+            "Western pop stars using African aesthetics in videos without acknowledging influence",
+            "Companies trademarking traditional African musical instruments or patterns",
+            "Artists copying Afrobeats sound while calling it 'tropical house' or generic 'world music'"
+          ],
+          tip: "Cultural exchange involves collaboration and credit. Appropriation involves extraction and erasure."
+        },
+        {
+          heading: 'The Economic Impact',
+          content: "When your cultural work is appropriated, you lose both money and recognition. Western artists make millions from African sounds while African creators get called 'the inspiration' with no compensation. This perpetuates economic inequality and cultural erasure.",
+          examples: [
+            "Lion King earned billions using African music with minimal African artist compensation",
+            "European DJs making millions from songs that sampled African recordings without payment",
+            "Fashion brands profiting from African prints while African designers struggle",
+            "Streaming playlists labeling African music as 'world music' instead of naming specific genres"
+          ],
+          tip: "Always document your work publicly and register copyrights. Digital trails make appropriation harder to deny."
+        },
+        {
+          heading: 'Legal Protection Strategies',
+          content: "International copyright law often fails African artists. But you have tools: Register with Nigerian Copyright Commission, join COSON, document your work online, and use social media to create accountability. Public pressure often works better than lawsuits.",
+          examples: [
+            "Register all original compositions with NCC immediately",
+            "Upload demos and works-in-progress to establish creation dates",
+            "Use social media to publicly document your creative process",
+            "Build international legal protections through proper registration"
+          ],
+          tip: "Create paper trails. Upload your creative process to YouTube, Instagram, or TikTok to establish creation dates."
+        },
+        {
+          heading: 'When to Fight vs. When to Collaborate',
+          content: "Not every use of African sounds is theft. Distinguish between exploitation and genuine collaboration. Real collaborators credit you, compensate you fairly, and treat your culture with respect. Exploiters take without asking, credit, or payment.",
+          examples: [
+            "GOOD: Beyoncé collaborating with Wizkid and giving full credit",
+            "BAD: Sampling traditional songs without clearance or credit",
+            "GOOD: Justin Bieber featuring Burna Boy with proper splits",
+            "BAD: Calling Afrobeats 'tropical house' to avoid crediting African origins"
+          ],
+          tip: "If someone respects you enough to ask permission and offer credit/payment, consider collaboration over confrontation."
+        },
+        {
+          heading: 'Building Cultural Awareness',
+          content: "Educate your audience about African musical traditions. When people understand the cultural significance of your work, they're more likely to call out appropriation. Your platform gives you power to shape narratives about African music.",
+          examples: [
+            "Share the history behind your musical choices in interviews",
+            "Explain traditional instruments and rhythms in your content",
+            "Call out cultural erasure when you see it, even if not directly affecting you",
+            "Amplify other African artists who are being appropriated"
+          ],
+          tip: "Use your platform to educate. The more people understand African music's origins, the harder appropriation becomes."
+        },
+        {
+          heading: 'Social Media as Protection Tool',
+          content: "Social media has given African artists powerful weapons against appropriation. Public call-outs can force acknowledgment and compensation when legal systems fail. But use this power strategically - gather evidence, be clear about what happened, and present facts.",
+          examples: [
+            "Video side-by-side comparisons showing original vs. appropriated work",
+            "Threads explaining the cultural significance of what was taken",
+            "Tagging influential music journalists and industry figures",
+            "Building coalitions with other affected artists for collective action"
+          ],
+          tip: "Document everything before going public. Have clear evidence, dates, and specific demands ready before calling someone out."
+        }
+      ],
+      keyTakeaways: [
+        "Cultural appropriation is theft that costs African artists money and recognition",
+        "Documentation and registration are your first line of defense",
+        "Social media can be more effective than lawsuits for forcing accountability",
+        "Distinguish between genuine collaboration and exploitation",
+        "Your platform helps educate others and prevent future appropriation",
+        "Build coalitions - collective action is more powerful than individual fights"
+      ],
+      culturalContext: "The global rise of Afrobeats has increased both opportunities and risks for African artists. As African music influences mainstream Western pop, rock, and electronic music, instances of unacknowledged sampling and stylistic appropriation have multiplied. The same colonial dynamics that historically extracted African resources now operate in cultural markets.",
+      commonPitfalls: [
+        "Not documenting your creative process publicly",
+        "Failing to register copyrights with proper authorities",
+        "Accepting 'exposure' instead of proper compensation",
+        "Not calling out appropriation when you see it",
+        "Fighting alone instead of building coalitions",
+        "Expensive lawsuits without first trying public pressure"
+      ]
+    },
+    quiz: [
+      {
+        question: "What's the main difference between cultural exchange and cultural appropriation?",
+        options: [
+          "Exchange happens in Africa, appropriation happens abroad",
+          "Exchange involves mutual respect and credit, appropriation involves extraction without acknowledgment",
+          "Exchange is free, appropriation costs money",
+          "They're the same thing"
+        ],
+        correctIndex: 1,
+        explanation: "Cultural exchange involves mutual respect, proper credit, and fair compensation. Appropriation takes cultural elements without permission, credit, or compensation while often misrepresenting or erasing the source culture."
+      },
+      {
+        question: "Why is documenting your creative process online important?",
+        options: [
+          "To get more followers",
+          "To establish creation dates and ownership if theft occurs",
+          "Because labels require it",
+          "To practice transparency"
+        ],
+        correctIndex: 1,
+        explanation: "Public documentation creates time-stamped evidence of your creative process. If someone appropriates your work, you have clear proof of when you created it, making theft much harder to deny."
+      },
+      {
+        question: "What's often more effective than lawsuits for fighting appropriation?",
+        options: [
+          "Ignoring it completely",
+          "Public social media campaigns with evidence",
+          "Sending private messages",
+          "Complaining to friends"
+        ],
+        correctIndex: 1,
+        explanation: "Social media call-outs with clear evidence can create public pressure that forces acknowledgment and compensation more quickly and cheaply than expensive international lawsuits that African artists often can't afford."
+      },
+      {
+        question: "Which situation represents legitimate collaboration, not appropriation?",
+        options: [
+          "Sampling without permission or payment",
+          "Justin Bieber featuring Burna Boy with proper credit and payment splits",
+          "Calling Afrobeats 'tropical house' to avoid crediting African origins",
+          "Using traditional melodies without acknowledging the culture"
+        ],
+        correctIndex: 1,
+        explanation: "Legitimate collaboration involves asking permission, giving proper credit, providing fair compensation, and respecting the cultural source. When Justin Bieber featured Burna Boy with proper credits and splits, that's respectful collaboration."
+      },
+      {
+        question: "What should be your first step when you discover someone has appropriated your work?",
+        options: [
+          "Immediately sue them",
+          "Gather evidence and document the appropriation clearly",
+          "Do nothing and hope they stop",
+          "Copy their work back"
+        ],
+        correctIndex: 1,
+        explanation: "Before taking any action, gather clear evidence: side-by-side comparisons, timestamps, screenshots, and documentation. This makes your case stronger whether you pursue legal action, public pressure, or private negotiation."
+      },
+      {
+        question: "Why is collective action more powerful than fighting appropriation alone?",
+        options: [
+          "It's more fun",
+          "Combined voices create more pressure and make systemic change more likely",
+          "It's required by law",
+          "It costs less money"
+        ],
+        correctIndex: 1,
+        explanation: "When multiple artists come together to address appropriation, it becomes harder to ignore, creates larger public pressure, and can lead to industry-wide changes in how African music and artists are treated and compensated."
+      }
+    ]
+  },
+
+  {
+    id: 'african-music-economics',
+    title: 'African Music Industry: Economics & Reality',
+    category: 'business',
+    icon: '',
+    difficulty: 'intermediate',
+    estimatedMinutes: 9,
+    unlockRequirement: {
+      type: 'careerProgress',
+      value: 30,
+      message: 'Reach 30% career progress to unlock'
+    },
+    content: {
+      introduction: "The African music industry operates differently from Western markets. Understanding these unique economic realities - from mobile-first consumption to diaspora markets to alternative revenue streams - is crucial for building sustainable careers as an African artist.",
+      sections: [
+        {
+          heading: 'Mobile-First Music Consumption',
+          content: "Africa is the most mobile-first continent in the world. Most fans access music through smartphones with limited data and storage. This affects everything from file formats to platform choices to how you release music.",
+          examples: [
+            "Boomplay and Audiomack dominate because they work well on low-end phones",
+            "MP3 downloads still outpace streaming in many African countries",
+            "WhatsApp and Telegram are major music distribution channels",
+            "Data costs heavily influence streaming habits"
+          ],
+          tip: "Release music on platforms your African fans actually use, not just Western platforms. Boomplay, Audiomack, and even WhatsApp matter."
+        },
+        {
+          heading: 'The Diaspora Market Advantage',
+          content: "Africans living abroad are often your most profitable audience. They stream more (reliable internet), attend more shows (higher ticket prices), and spend more on merchandise. Building diaspora fanbases is crucial for financial sustainability.",
+          examples: [
+            "Afrobeats concerts in London often outgross Lagos shows",
+            "Nigerian diaspora in US/UK stream more than local audiences",
+            "Diaspora audiences pay 10-50x more for concert tickets",
+            "Merchandise sales to diaspora can exceed local sales by 20x"
+          ],
+          tip: "Tour diaspora markets early and often. One UK tour can fund six months of career development back home."
+        },
+        {
+          heading: 'Alternative Revenue Streams',
+          content: "Because streaming pays poorly in Africa, successful artists diversify heavily. Endorsements, private events, and influencer partnerships often outpace music revenue. Your music is the marketing; other revenue streams are the business.",
+          examples: [
+            "Private birthday parties paying ₦5-20M for 30-minute performances",
+            "Brand ambassadorships with telecoms, banks, and beverage companies",
+            "Influencer marketing deals on Instagram and TikTok",
+            "Corporate event performances at premium rates"
+          ],
+          tip: "Build your brand consistently. Companies pay for influence and image, not just musical talent."
+        },
+        {
+          heading: 'Festival Economy',
+          content: "African music festivals have exploded - from Afronation to Detty December to Nyege Nyege. Festival circuits provide crucial income, exposure, and networking opportunities. Festival performance quality directly affects booking rates.",
+          examples: [
+            "Afronation Portugal/Ghana featuring mostly African artists",
+            "Detty December concerts in Lagos paying top-tier rates",
+            "Nyege Nyege Festival in Uganda showcasing East African talent",
+            "Festival performances leading to international booking opportunities"
+          ],
+          tip: "Invest in your live performance quality. Festival bookers watch other festivals to scout talent."
+        },
+        {
+          heading: 'Communal Business Models',
+          content: "Unlike Western individualism, African music business often involves collective labels (like Mavin Records' family approach) and shared success. This creates support networks but also financial obligations. Balance is crucial.",
+          examples: [
+            "Mavin Records' collective promotion lifting all artists",
+            "YBNL Records' family model supporting emerging artists",
+            "Shared production costs among label mates",
+            "Collective touring reducing individual artist costs"
+          ],
+          tip: "Choose labels that genuinely invest in artist development, not just extraction of talent."
+        },
+        {
+          heading: 'Direct Fan Monetization',
+          content: "African artists increasingly monetize fans directly through social media, WhatsApp groups, and direct messaging. This cuts out middlemen and creates more sustainable income than waiting for streaming payouts.",
+          examples: [
+            "Premium WhatsApp groups offering exclusive content",
+            "Direct song sales via mobile money (M-Pesa, bank transfers)",
+            "Instagram Live performances with virtual tip jars",
+            "Direct bookings through DMs for private events"
+          ],
+          tip: "Build direct relationships with super-fans. 1,000 true fans paying ₦10K/year = ₦10M annual income."
+        }
+      ],
+      keyTakeaways: [
+        "African music consumption is mobile-first - optimize for that reality",
+        "Diaspora markets often provide more revenue than local markets",
+        "Diversify beyond music sales - endorsements and events pay better",
+        "Festival circuits are crucial for income and career development",
+        "Communal label models can provide support but require boundaries",
+        "Direct fan monetization reduces dependence on streaming platforms"
+      ],
+      culturalContext: "African music markets are characterized by low streaming payouts, high mobile phone penetration, strong live music culture, and growing diaspora engagement. The informal economy plays a huge role - many transactions happen via mobile money and cash rather than traditional banking. Understanding these realities makes the difference between sustainable careers and starvation despite popularity.",
+      commonPitfalls: [
+        "Focusing only on Spotify when African fans use Boomplay and Audiomack",
+        "Ignoring diaspora markets until late in career",
+        "Relying solely on streaming revenue",
+        "Underpricing private events and corporate gigs",
+        "Not building direct fan relationships",
+        "Expecting Western music economics to apply to African markets"
+      ]
+    },
+    quiz: [
+      {
+        question: "Why is Africa considered 'mobile-first' for music consumption?",
+        options: [
+          "Everyone prefers mobile phones to computers",
+          "Most music access happens via smartphones due to infrastructure and costs",
+          "Mobile phones are cheaper to buy",
+          "Desktop computers are banned"
+        ],
+        correctIndex: 1,
+        explanation: "Limited desktop/laptop access, strong mobile phone penetration, and mobile-optimized platforms make smartphones the primary music access point for most African consumers. This affects platform choices and consumption patterns."
+      },
+      {
+        question: "Why are diaspora audiences often more profitable than local audiences?",
+        options: [
+          "They like the music more",
+          "They have reliable internet, higher purchasing power, and pay premium ticket prices",
+          "There are more of them",
+          "They're easier to reach"
+        ],
+        correctIndex: 1,
+        explanation: "Diaspora audiences in Western countries stream more consistently, pay 10-50x more for concert tickets, and have higher disposable income for merchandise and premium content compared to fans in African countries."
+      },
+      {
+        question: "What's often more profitable for African artists than streaming revenue?",
+        options: [
+          "YouTube views",
+          "Social media likes",
+          "Private events, brand deals, and endorsements",
+          "Radio play"
+        ],
+        correctIndex: 2,
+        explanation: "Streaming pays poorly in African markets. Private events (₦5-20M for 30 minutes), brand ambassadorships, and corporate endorsements typically generate far more income than streaming royalties for most African artists."
+      },
+      {
+        question: "What makes festival performances particularly valuable?",
+        options: [
+          "They're fun to perform",
+          "They pay well AND provide exposure to bookers and international audiences",
+          "They require no preparation",
+          "They're easy to get"
+        ],
+        correctIndex: 1,
+        explanation: "Festivals provide both immediate income and crucial exposure. International bookers and promoters attend festivals to scout talent, so strong festival performances lead to international tour opportunities and higher booking rates."
+      },
+      {
+        question: "What's the '1,000 true fans' monetization strategy?",
+        options: [
+          "Getting 1,000 fans to attend each show",
+          "Building direct relationships with fans who pay regularly for exclusive content",
+          "Having exactly 1,000 social media followers",
+          "Performing 1,000 concerts"
+        ],
+        correctIndex: 1,
+        explanation: "The '1,000 true fans' concept means building direct relationships with dedicated fans willing to pay annually for exclusive content, early releases, and special access. This creates sustainable income independent of streaming platforms."
+      },
+      {
+        question: "Why should African artists prioritize platforms like Boomplay and Audiomack?",
+        options: [
+          "They pay higher rates than Spotify",
+          "They're required by law",
+          "They're optimized for African mobile users and where African fans actually listen",
+          "They're easier to upload to"
+        ],
+        correctIndex: 2,
+        explanation: "Boomplay and Audiomack are designed for low-data environments, low-end phones, and African user behavior. While they may pay less per stream, they reach more African fans and provide better user experiences for the continent's mobile-first reality."
+      }
+    ]
+  },
+
+  {
+    id: 'mental-health-wellbeing',
+    title: 'Mental Health & Wellbeing for Artists',
+    category: 'wellness',
+    icon: '',
+    difficulty: 'beginner',
+    estimatedMinutes: 8,
+    unlockRequirement: {
+      type: 'careerProgress',
+      value: 25,
+      message: 'Reach 25% career progress to unlock'
+    },
+    content: {
+      introduction: "The music industry is glamorous on Instagram but brutal on mental health. Constant pressure, public scrutiny, financial stress, family expectations, and the hustle culture take heavy tolls. Understanding mental health isn't weakness - it's career survival.",
+      sections: [
+        {
+          heading: 'The African Hustle Culture Trap',
+          content: "African music culture glorifies relentless grinding. 'Sleep is for the weak.' 'Rest when you die.' This mindset destroys artists. Burnout is real, common, and can end careers. Sustainable success requires rest, boundaries, and self-care - concepts often dismissed as 'Western' but actually universal.",
+          examples: [
+            "Artists collapsing from exhaustion during tours",
+            "Mental breakdowns during album rollouts",
+            "Substance abuse to maintain grinding pace",
+            "Damaged relationships with family and friends from overwork"
+          ],
+          tip: "Your mental health is your career foundation. You can't create, perform, or build when you're burnt out."
+        },
+        {
+          heading: 'Family Pressure and Mental Load',
+          content: "As an African artist, success means becoming everyone's ATM. Every achievement brings more family requests. The mental load of constant guilt, expectations, and financial demands is enormous. This isn't discussed but affects most successful African artists deeply.",
+          examples: [
+            "Anxiety from constant family financial requests",
+            "Guilt when saying no to extended family needs",
+            "Fear of being called selfish or 'too Western'",
+            "Depression from feeling you can never do enough"
+          ],
+          tip: "Set clear boundaries early. You can support family sustainably without destroying yourself financially or mentally."
+        },
+        {
+          heading: 'Public Scrutiny and Social Media Pressure',
+          content: "Every post is judged. Every outfit criticized. Every relationship analyzed. African social media can be particularly brutal. Cyberbullying, constant comparisons to other artists, and the pressure to always appear successful creates massive mental strain.",
+          examples: [
+            "Constant negative comments affecting self-esteem",
+            "Comparisons to other artists creating imposter syndrome",
+            "Pressure to fake success when struggling",
+            "Fear of showing vulnerability or asking for help"
+          ],
+          tip: "Curate your social media carefully. Unfollow toxicity. You don't need to read every comment or prove anything to strangers."
+        },
+        {
+          heading: 'Warning Signs You're Heading for Burnout',
+          content: "Recognize warning signs early: persistent exhaustion, loss of creativity, irritability, physical symptoms (headaches, stomach issues), avoiding music, isolation, substance use increasing. These aren't weakness - they're your body and mind demanding attention.",
+          examples: [
+            "Can't write or create despite having studio time",
+            "Dreading performances you used to love",
+            "Snapping at friends, family, or team members",
+            "Using alcohol or drugs to cope with pressure",
+            "Panic attacks before shows or interviews"
+          ],
+          tip: "If you recognize 3+ of these signs, you need to slow down immediately. These problems only get worse if ignored."
+        },
+        {
+          heading: 'Practical Mental Health Strategies',
+          content: "Therapy isn't common in African culture but it works. Find mental health professionals, even online. Build a trusted inner circle who understand the pressure. Schedule actual downtime - not 'grind on other projects' but real rest. Exercise, sleep, and relationships aren't luxuries - they're necessities.",
+          examples: [
+            "Online therapy services like BetterHelp work internationally",
+            "Nigerian mental health platforms like MindBody and WellNewMe",
+            "Scheduled digital detoxes (no phone weekends)",
+            "Regular exercise - even walks help mental clarity",
+            "Mandatory rest days with no music industry activities"
+          ],
+          tip: "Schedule rest like you schedule studio time. Put it in your calendar. Treat it as non-negotiable."
+        },
+        {
+          heading: 'When to Take a Break',
+          content: "Sometimes you need to stop completely. This terrifies artists - 'competitors will pass me.' But burnout breaks happen anyway, usually at worse times with public meltdowns. Strategic breaks, while scary, often save careers. Return stronger or don't return at all.",
+          examples: [
+            "Kendrick Lamar's multi-year breaks between albums",
+            "Kid Cudi's public mental health leaves",
+            "Billie Eilish taking time off despite being at her peak",
+            "Local artists who quietly step back to recover"
+          ],
+          tip: "A planned 3-month break is better than an unplanned 3-year absence from a public breakdown."
+        }
+      ],
+      keyTakeaways: [
+        "Hustle culture is destroying African artists - rest is not weakness",
+        "Family financial pressure creates massive mental load that's rarely discussed",
+        "Social media scrutiny affects mental health more than most artists admit",
+        "Recognize burnout warning signs early before crisis hits",
+        "Therapy and mental health support work even if culturally uncommon",
+        "Strategic breaks save careers more often than grinding through does"
+      ],
+      culturalContext: "African cultures often view mental health discussions as taboo or 'Western concepts.' The communal nature of African societies creates support but also pressure. Extended family expectations, public success standards, and hustling culture combine to create unique mental health challenges that Western music industry advice rarely addresses.",
+      commonPitfalls: [
+        "Dismissing mental health concerns as 'being weak'",
+        "Pushing through burnout warning signs",
+        "Not setting boundaries with family demands",
+        "Comparing your behind-the-scenes to others' highlight reels",
+        "Using substances to cope with pressure",
+        "Believing rest will make you lose relevance"
+      ]
+    },
+    quiz: [
+      {
+        question: "What's the main problem with African hustle culture in music?",
+        options: [
+          "It makes artists work hard",
+          "It promotes unsustainable grinding that leads to burnout",
+          "It's only a Western concept",
+          "It helps artists succeed faster"
+        ],
+        correctIndex: 1,
+        explanation: "While hard work is important, hustle culture that glorifies not sleeping, constant grinding, and no rest leads to burnout, mental health crises, and often ends careers. Sustainable success requires balance."
+      },
+      {
+        question: "Why is family financial pressure particularly challenging for African artists?",
+        options: [
+          "African families are larger",
+          "It combines financial stress with cultural guilt and emotional obligation",
+          "Western artists don't have families",
+          "It only affects new artists"
+        ],
+        correctIndex: 1,
+        explanation: "African communal culture means individual success is seen as family success, creating constant requests combined with cultural guilt when saying no. This creates mental and financial pressure that Western-focused career advice rarely addresses."
+      },
+      {
+        question: "What should you do if you notice 3+ burnout warning signs?",
+        options: [
+          "Push harder to overcome them",
+          "Ignore them and keep grinding",
+          "Slow down immediately and address them",
+          "Wait until you collapse"
+        ],
+        correctIndex: 2,
+        explanation: "Burnout warning signs are your mind and body demanding attention. Addressing them early prevents full crisis. Pushing through makes them worse and can lead to complete career-ending breakdowns."
+      },
+      {
+        question: "What's the best approach to taking career breaks?",
+        options: [
+          "Never take breaks - competitors will pass you",
+          "Only take breaks after you collapse",
+          "Plan strategic breaks before crisis hits",
+          "Take breaks randomly without planning"
+        ],
+        correctIndex: 2,
+        explanation: "Strategic planned breaks let you recover and return stronger. Unplanned breaks happen anyway if you ignore warning signs, usually as public meltdowns at worse times. Planned breaks protect careers better than grinding until collapse."
+      },
+      {
+        question: "Why is therapy valuable even though it's uncommon in African culture?",
+        options: [
+          "It's required by labels",
+          "It provides professional help for mental health that cultural stigma shouldn't prevent",
+          "It's only for Western artists",
+          "It's just talking to anyone"
+        ],
+        correctIndex: 1,
+        explanation: "Professional therapy provides tools and support for mental health challenges. Cultural stigma around mental health doesn't change the fact that therapy works. Many African artists privately use therapy despite public stigma."
+      },
+      {
+        question: "What's the relationship between rest and career longevity?",
+        options: [
+          "Rest makes you lose relevance",
+          "They're unrelated",
+          "Strategic rest enables sustainable long-term careers",
+          "Only unsuccessful artists rest"
+        ],
+        correctIndex: 2,
+        explanation: "Artists with long sustainable careers typically incorporate rest and boundaries. Those who grind without rest often burn out quickly. Rest isn't laziness - it's career maintenance and creativity fuel."
+      }
+    ]
+  },
+
+  {
+    id: 'international-collaborations',
+    title: 'International Collaborations: Cross-Cultural Partnerships',
+    category: 'collaboration',
+    icon: '',
+    difficulty: 'intermediate',
+    estimatedMinutes: 9,
+    prerequisites: ['brand-building'],
+    unlockRequirement: {
+      type: 'fame',
+      value: 45,
+      message: 'Reach 45 fame to unlock'
+    },
+    content: {
+      introduction: "International collaborations can explode your career or expose cultural tensions. Success requires understanding cultural differences, fair deal structuring, linguistic considerations, and maintaining authenticity. Learn to build partnerships that respect all parties rather than exploit African artists.",
+      sections: [
+        {
+          heading: 'Types of International Collaborations',
+          content: "Not all collaborations are equal. Featured verses, co-productions, remix features, and full joint projects serve different purposes and require different approaches. Understanding what each collaboration type achieves helps you make strategic choices.",
+          examples: [
+            "Featured verse: Quick exposure, modest payment (e.g., Wizkid on Drake's 'One Dance')",
+            "Co-production: Shared creative control and ownership (e.g., Burna Boy's Grammy album)",
+            "Remix feature: Extending reach to new markets with existing song",
+            "Joint album/EP: Deep collaboration requiring trust and alignment"
+          ],
+          tip: "Start with featured verses. Deeper collaborations require established trust and understanding."
+        },
+        {
+          heading: 'Negotiating Fair Splits',
+          content: "African artists often get exploited in international collaborations. 'Exposure' isn't payment. Fair splits account for: writing contribution, performance, production, promotion reach, and rights ownership. Don't accept minimal percentages just for 'the opportunity' - you bring unique value.",
+          examples: [
+            "Equal writing splits if both contribute meaningfully to composition",
+            "Production credits should match actual production contribution",
+            "Don't accept 5% because they're 'more famous' - your African sound is the value",
+            "Negotiate separately for streaming, sync, and performance rights"
+          ],
+          tip: "If someone wants your African sound, you're bringing essential value. Never accept token percentages for core contributions."
+        },
+        {
+          heading: 'Linguistic Authenticity',
+          content: "Maintain linguistic identity in collaborations. Singing in languages you don't speak for market access often backfires. True multilingual collaborations celebrate each artist's linguistic identity rather than requiring assimilation into English or other dominant languages.",
+          examples: [
+            "Burna Boy mixing Yoruba with English in international features",
+            "J Balvin and Bad Bunny keeping Spanish in English-market collabs",
+            "Beyoncé embracing multilingualism in Lion King album",
+            "Artists being mocked for phonetically singing languages they don't speak"
+          ],
+          tip: "Propose keeping your linguistic identity. Your language is part of your unique value - don't abandon it for 'accessibility.'"
+        },
+        {
+          heading: 'Cultural Respect vs. Appropriation',
+          content: "Great collaborations involve mutual learning and respect. Red flags: partners who don't credit African influence, use African aesthetics without understanding, or treat you as exotic accessory rather than equal creative. Demand respect for your cultural contribution.",
+          examples: [
+            "GOOD: Partners who learn about and publicly credit African musical traditions",
+            "BAD: Using African dancers and aesthetics without acknowledging or compensating African input",
+            "GOOD: Joint creative sessions where both cultures contribute equally",
+            "BAD: 'Can you make it sound more African?' without respect for what that means"
+          ],
+          tip: "If partners don't respect your culture enough to learn about it, they don't respect you enough to collaborate fairly."
+        },
+        {
+          heading: 'Managing Time Zones and Distance',
+          content: "International collaboration means working across time zones, cultures, and working styles. Western artists often expect immediate responses; African artists might work on different schedules. Set clear communication expectations, use collaborative tools effectively, and respect different working cultures.",
+          examples: [
+            "Use platforms like Splice, WeTransfer, and WhatsApp for file sharing",
+            "Schedule video calls respecting both time zones",
+            "Be clear about response time expectations",
+            "Understand different studios, equipment, and working styles"
+          ],
+          tip: "Over-communicate. Assume nothing about working styles, deadlines, or expectations. Make everything explicit."
+        },
+        {
+          heading: 'Leveraging Collaborations for Career Growth',
+          content: "Strategic collaborations open markets, increase credibility, and build relationships. But chase opportunities that genuinely fit your artistic direction and values. One authentic collaboration that feels right beats ten exploitative ones for 'exposure.'",
+          examples: [
+            "Wizkid's Drake collab opened massive markets",
+            "Burna Boy's Stormzy collab built UK following",
+            "Tems' Drake/Future features established international presence",
+            "Strategic collabs with artists whose audiences align with yours"
+          ],
+          tip: "Quality over quantity. One major authentic collaboration can change your career. Ten exploitative ones won't."
+        }
+      ],
+      keyTakeaways: [
+        "Different collaboration types serve different strategic purposes",
+        "Never accept token percentages - your cultural contribution has real value",
+        "Maintain linguistic and cultural authenticity in international work",
+        "Demand cultural respect and fair treatment as baseline",
+        "Clear communication across time zones prevents misunderstandings",
+        "Strategic authentic collaborations beat numerous exploitative ones"
+      ],
+      culturalContext: "Global appetite for African music creates collaboration opportunities and exploitation risks. Colonial dynamics persist - Western artists often approach African artists from positions of assumed superiority. Successful African artists navigate these dynamics by demanding respect, fair payment, and creative equality rather than accepting 'grateful for the opportunity' positioning.",
+      commonPitfalls: [
+        "Accepting minimal splits because the other artist is 'bigger'",
+        "Abandoning linguistic identity for perceived commercial appeal",
+        "Working with partners who don't respect African culture",
+        "Not clarifying rights ownership before collaboration",
+        "Chasing every collaboration opportunity instead of strategic ones",
+        "Accepting 'exposure' instead of fair payment"
+      ]
+    },
+    quiz: [
+      {
+        question: "What's the most important factor in negotiating collaboration splits?",
+        options: [
+          "Who is more famous",
+          "Who has more money",
+          "Actual creative and promotional contribution from each party",
+          "Who initiated the collaboration"
+        ],
+        correctIndex: 2,
+        explanation: "Fair splits should reflect actual contributions: writing, production, performance, and promotional reach. Fame doesn't determine fair splits - value contributed does. African artists bring unique cultural value that deserves fair compensation."
+      },
+      {
+        question: "How should African artists approach language in international collaborations?",
+        options: [
+          "Always sing in English only for accessibility",
+          "Learn to phonetically sing languages you don't speak",
+          "Maintain your linguistic identity while collaborating multilingually",
+          "Avoid collaborations with non-English speakers"
+        ],
+        correctIndex: 2,
+        explanation: "The most successful international collaborations celebrate each artist's linguistic identity. Authentic multilingual collaboration respects everyone's language rather than requiring assimilation. Your native language is part of your unique value."
+      },
+      {
+        question: "What's a major red flag in international collaboration offers?",
+        options: [
+          "They want to meet in person",
+          "They offer exposure but minimal payment and credits",
+          "They suggest video calls",
+          "They ask about your influences"
+        ],
+        correctIndex: 1,
+        explanation: "'Exposure' isn't payment. If partners value your contribution, they'll offer fair payment and credits. Offers heavy on 'opportunity' but light on compensation and credits often signal exploitation rather than partnership."
+      },
+      {
+        question: "What distinguishes cultural respect from appropriation in collaborations?",
+        options: [
+          "Respect involves learning, crediting, and fair compensation; appropriation extracts without acknowledgment",
+          "Respect is when Africans collaborate with Westerners",
+          "They're the same thing",
+          "Appropriation only happens without collaboration"
+        ],
+        correctIndex: 0,
+        explanation: "Respectful collaboration involves partners who learn about, publicly credit, and fairly compensate African cultural contribution. Appropriation takes cultural elements without proper acknowledgment, understanding, or compensation."
+      },
+      {
+        question: "Why is over-communication important in international collaborations?",
+        options: [
+          "It's annoying but necessary",
+          "Different time zones, cultures, and working styles require explicit clarity",
+          "To prove you're professional",
+          "Labels require it"
+        ],
+        correctIndex: 1,
+        explanation: "Working across time zones, cultures, and different working styles creates opportunities for misunderstanding. Making expectations, timelines, and processes explicit prevents conflicts and ensures smoother collaboration."
+      },
+      {
+        question: "What's the best collaboration strategy for career growth?",
+        options: [
+          "Accept every collaboration offer for maximum exposure",
+          "Only work with the most famous artists",
+          "Choose strategic authentic collaborations aligned with your artistic direction",
+          "Avoid all international collaborations"
+        ],
+        correctIndex: 2,
+        explanation: "One authentic collaboration that genuinely fits your artistic direction and values creates more career value than numerous exploitative ones accepted for 'exposure.' Quality and strategic alignment matter more than quantity."
+      }
+    ]
   }
 ];
 

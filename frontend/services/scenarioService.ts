@@ -54,8 +54,65 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
 };
 
 /**
- * Selects a new scenario for the player.
- * Filters the scenario bank based on current game state and avoids repeating scenarios.
+ * Calculates a weight for a scenario based on how recently it was seen.
+ * More recently seen scenarios get lower weights.
+ * @param scenario The scenario to check
+ * @param usedScenarioTitles Array of used scenario titles (most recent last)
+ * @returns A weight multiplier (0.1 to 1.0)
+ */
+const getScenarioWeight = (scenario: Scenario, usedScenarioTitles: string[]): number => {
+    const titleIndex = usedScenarioTitles.lastIndexOf(scenario.title);
+
+    // If never seen, full weight
+    if (titleIndex === -1) return 1.0;
+
+    // Calculate how many scenarios ago this was seen
+    const scenariosAgo = usedScenarioTitles.length - titleIndex;
+
+    // Weight based on recency:
+    // Just seen (1 ago): 0.1x weight
+    // 2 ago: 0.2x weight
+    // 3 ago: 0.3x weight
+    // 4-5 ago: 0.5x weight
+    // 6-7 ago: 0.7x weight
+    // 8+ ago: 1.0x weight (full weight)
+    if (scenariosAgo === 1) return 0.05; // Very unlikely to repeat immediately
+    if (scenariosAgo === 2) return 0.15;
+    if (scenariosAgo === 3) return 0.3;
+    if (scenariosAgo <= 5) return 0.5;
+    if (scenariosAgo <= 7) return 0.7;
+    return 1.0;
+};
+
+/**
+ * Performs weighted random selection from an array of scenarios.
+ * @param scenarios Array of scenarios to choose from
+ * @param usedScenarioTitles Array of recently used scenario titles
+ * @returns Selected scenario
+ */
+const weightedRandomSelect = (scenarios: Scenario[], usedScenarioTitles: string[]): Scenario => {
+    // Calculate weights for each scenario
+    const weights = scenarios.map(s => getScenarioWeight(s, usedScenarioTitles));
+    const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+
+    // Select random value between 0 and total weight
+    let random = Math.random() * totalWeight;
+
+    // Find the scenario that corresponds to this random value
+    for (let i = 0; i < scenarios.length; i++) {
+        random -= weights[i];
+        if (random <= 0) {
+            return scenarios[i];
+        }
+    }
+
+    // Fallback (should never reach here, but just in case)
+    return scenarios[scenarios.length - 1];
+};
+
+/**
+ * Selects a new scenario for the player with improved randomization.
+ * Filters the scenario bank based on current game state and avoids repeating recent scenarios.
  * @param state The current game state.
  * @returns A new Scenario object.
  */
@@ -70,24 +127,25 @@ export const getNewScenario = (state: GameState): Scenario => {
         return true;
     });
 
+    // Get scenarios that fit the current game state
     const fittingScenarios = availableScenarios.filter(s => checkConditions(s, state));
-    
-    // If there are scenarios that fit the current state, pick one at random
+
+    // If there are scenarios that fit, use weighted random selection to avoid repetition
     if (fittingScenarios.length > 0) {
-        const randomIndex = Math.floor(Math.random() * fittingScenarios.length);
-        return fittingScenarios[randomIndex];
+        // Use weighted random selection to prefer scenarios not seen recently
+        return weightedRandomSelect(fittingScenarios, usedScenarioTitles);
     }
-    
-    // If no fitting scenarios, check if we've had too many fallbacks in a row.
+
+    // If no fitting scenarios, check if we've had too many fallbacks in a row
     if (state.consecutiveFallbackCount >= 3) {
-        // Force a different scenario to break the loop. Pick a random one from all available.
+        // Force a different scenario to break the loop
         const nonFittingButAvailable = availableScenarios.filter(s => s.title !== "An Uneventful Week");
         if (nonFittingButAvailable.length > 0) {
-            const randomIndex = Math.floor(Math.random() * nonFittingButAvailable.length);
-            return nonFittingButAvailable[randomIndex];
+            // Still use weighted selection even for forced scenarios
+            return weightedRandomSelect(nonFittingButAvailable, usedScenarioTitles);
         }
     }
-    
+
     // As a final resort, return the default fallback scenario
     return fallbackScenario;
 };

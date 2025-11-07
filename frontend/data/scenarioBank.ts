@@ -1190,7 +1190,556 @@ export const scenarioBank: Scenario[] = [
             }
         ]
     },
-    // ... (include more diverse scenarios here)
+    {
+        title: "The Traditional Instrument Fusion",
+        description: "You're in the studio working on your new album when a master kora player stops by. He offers to collaborate, adding traditional West African harp melodies to your modern production. He says: 'Young artist, our ancestors' music shouldn't die. Let me teach you.' But your producer worries: 'Traditional instruments don't translate well to streaming platforms. It might sound too niche.' Your A&R rep is silent, waiting for your decision.",
+        conditions: { minFame: 25, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Embrace the fusion - add traditional kora to my sound",
+                outcome: {
+                    text: "The kora player adds beautiful, haunting melodies to three tracks. The fusion is stunning - ancient and modern coexisting perfectly. Critics praise your cultural authenticity, and music educators use your album in African studies courses. You've created something timeless while honoring tradition.",
+                    cash: 1000, fame: 40, wellBeing: 15, careerProgress: 15, hype: 45,
+                    lesson: {
+                        title: "Cultural Heritage as Differentiation",
+                        explanation: "Incorporating traditional instruments and cultural elements differentiates your music in a crowded market. It creates authentic cultural connections while offering something unique that pure Western production can't replicate.",
+                        realWorldExample: "Burna Boy's use of traditional African rhythms and instruments became his signature sound, helping him win a Grammy. Angelique Kidjo built an international career by fusing traditional Benin music with modern production.",
+                        tipForFuture: "Your cultural heritage is your competitive advantage. Artists worldwide chase 'exotic' sounds - you have authentic access to traditions others can only imitate.",
+                        conceptTaught: "cultural-authenticity"
+                    }
+                }
+            },
+            {
+                text: "Stick with modern production - stay commercially viable",
+                outcome: {
+                    text: "You politely decline the kora player's offer, sticking to conventional instrumentation. The album sounds professional and radio-ready but indistinguishable from countless other modern productions. It performs adequately but creates no lasting cultural impact or memorable signature sound.",
+                    cash: 2000, fame: 20, wellBeing: -5, careerProgress: 8, hype: 25,
+                    lesson: {
+                        title: "The Cost of Playing It Safe",
+                        explanation: "Avoiding cultural distinctiveness in favor of 'commercial viability' often leads to generic music that struggles to stand out. What seems safe can actually be the riskier choice in a saturated market.",
+                        realWorldExample: "Many African artists who abandoned traditional elements for generic Western sounds failed to achieve international success because they sounded like inferior versions of Western artists rather than authentic voices.",
+                        tipForFuture: "Commercial viability doesn't mean cultural erasure. The most commercially successful African artists often embrace their heritage most boldly.",
+                        conceptTaught: "market-differentiation"
+                    }
+                }
+            },
+            {
+                text: "Learn from him and incorporate elements subtly",
+                outcome: {
+                    text: "You spend a week learning kora techniques and traditional rhythmic patterns. You don't record him directly but incorporate what you learned into your composition approach. The album has subtle traditional influences that add depth without dominating. You've found balance between innovation and tradition.",
+                    cash: 1500, fame: 35, wellBeing: 20, careerProgress: 18, hype: 40,
+                    lesson: {
+                        title: "Cultural Knowledge as Creative Tool",
+                        explanation: "Learning traditional musical forms expands your creative vocabulary without requiring literal incorporation. Understanding your cultural musical heritage makes you a more sophisticated composer.",
+                        realWorldExample: "Jacob Collier studied numerous world music traditions, which influenced his compositions in subtle ways. He doesn't play traditional instruments but his music shows deep understanding of global musical concepts.",
+                        tipForFuture: "Study your cultural musical heritage even if you don't directly replicate it. The knowledge will inform your creativity in unexpected ways.",
+                        conceptTaught: "creative-development"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Cultural Appropriation Accusation",
+        description: "A popular European DJ sampled your traditional Igbo wedding song without permission or credit, and it's climbing international charts. They're making millions while your original version has 50,000 streams. Music blogs are calling you 'the inspiration' without mentioning theft. African fans are furious, demanding you speak out. Your lawyer says you could sue, but it'll cost $50,000 with no guarantee of winning. How do you respond to this cultural theft?",
+        conditions: { minFame: 35, minHype: 25 },
+        once: true,
+        choices: [
+            {
+                text: "Launch a public campaign calling out the theft",
+                outcome: {
+                    text: "You post a video explaining how the DJ stole your cultural heritage. The story goes viral! International media picks it up, the DJ faces massive backlash and eventually credits you and pays settlement. You become a voice against cultural appropriation, though the fight was exhausting and emotional.",
+                    cash: 80000, fame: 55, wellBeing: -15, careerProgress: 20, hype: 70,
+                    lesson: {
+                        title: "Public Accountability for Cultural Theft",
+                        explanation: "Social media has given African artists powerful tools to call out cultural appropriation. Public pressure can force accountability when legal systems fail to protect cultural intellectual property.",
+                        realWorldExample: "When Lion King used African music without proper credit, African artists publicly called out Disney. The backlash led to better practices. Similarly, Nigerian artists have successfully called out international DJs for uncredited sampling.",
+                        tipForFuture: "Document your cultural work publicly. When theft occurs, social media pressure can be more effective than expensive lawsuits in forcing acknowledgment and compensation.",
+                        conceptTaught: "cultural-rights"
+                    }
+                }
+            },
+            {
+                text: "Hire lawyers and sue for copyright infringement",
+                outcome: {
+                    text: "You spend $50,000 on international lawyers. The case drags on for two years. Eventually you win a settlement of $30,000 - less than your legal costs. The DJ's career continues largely unaffected. You've proven a point but at enormous personal and financial cost.",
+                    cash: -20000, fame: 25, wellBeing: -30, careerProgress: 5, hype: 15,
+                    lesson: {
+                        title: "The Legal System's Limitations",
+                        explanation: "International copyright law often fails to protect African artists adequately. Legal victories can be pyrrhic - costing more than they recover while draining energy from your creative work.",
+                        realWorldExample: "Many African artists have spent fortunes fighting appropriation cases in Western courts with minimal success. The legal systems weren't designed to protect traditional cultural knowledge.",
+                        tipForFuture: "Consider whether legal action serves your goals. Sometimes public pressure or creative responses work better than expensive lawsuits with uncertain outcomes.",
+                        conceptTaught: "legal-reality"
+                    }
+                }
+            },
+            {
+                text: "Release your own 'International Remix' to reclaim the narrative",
+                outcome: {
+                    text: "Instead of fighting, you release an epic international remix of your original song with major producers. You flood the market with your authentic version. Your remix outperforms theirs on African charts and gets picked up globally. You've turned theft into opportunity by flooding the market with the real thing.",
+                    cash: -5000, fame: 60, wellBeing: 10, careerProgress: 25, hype: 80,
+                    lesson: {
+                        title: "Creative Response to Appropriation",
+                        explanation: "Sometimes the best response to cultural theft is overwhelming the market with your authentic voice. Rather than fighting over who owns what, prove who does it better by out-creating and out-promoting the imitator.",
+                        realWorldExample: "When Western artists copy African sounds, successful African artists often respond by releasing their own polished versions that demonstrate the authentic source. This approach builds their career rather than getting stuck in legal battles.",
+                        tipForFuture: "Consider creative responses to theft. Reclaim the narrative by showing the world the authentic source performed at the highest level.",
+                        conceptTaught: "strategic-response"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Religious Music Crossover",
+        description: "You've been making secular Afrobeats, but a major gospel label offers you $100,000 to record a Christian album. Your mother, a pastor, is thrilled: 'Finally, use your gifts for the Lord!' But your secular fans love your party music and club anthems. Your manager warns: 'Gospel doesn't stream like Afrobeats. You'll lose your core audience.' Yet the gospel market in Africa is massive and loyal. This decision could redefine your entire brand.",
+        conditions: { minFame: 30, maxFame: 70 },
+        once: true,
+        choices: [
+            {
+                text: "Take the gospel deal - there's a massive untapped market",
+                outcome: {
+                    text: "You release a gospel album that sells massively in churches, crusades, and religious networks across Africa. You gain a completely new, older, more financially stable audience. But your club-going fans feel betrayed. Secular DJs stop playing your music. You've traded one audience for another.",
+                    cash: 100000, fame: 45, wellBeing: 15, careerProgress: 10, hype: -25,
+                    lesson: {
+                        title: "Audience Switching Risks",
+                        explanation: "Dramatically changing musical direction can gain new audiences while losing existing ones. Gospel music in Africa has strong commercial viability but appeals to fundamentally different listeners than secular music.",
+                        realWorldExample: "Some Nigerian artists successfully transitioned to gospel music, building new careers with church audiences. Others lost their secular fanbase without gaining equivalent gospel success, leaving them between markets.",
+                        tipForFuture: "Understand that genre switches aren't additions - they're replacements. Ensure the new audience is large and engaged enough to replace what you'll lose.",
+                        conceptTaught: "audience-management"
+                    }
+                }
+            },
+            {
+                text: "Stay secular - don't compromise your artistic identity",
+                outcome: {
+                    text: "You decline the gospel deal and continue making the music that feels authentic to you. Your existing fans remain loyal and your career continues its current trajectory. Your mother is disappointed but respects your decision. You've maintained artistic integrity, though you wonder about the path not taken.",
+                    cash: 0, fame: 25, wellBeing: 5, careerProgress: 8, hype: 30,
+                    lesson: {
+                        title: "Artistic Authenticity",
+                        explanation: "Making music that feels authentic to you creates more sustainable careers than chasing market opportunities that don't align with your identity. Audiences sense when artists are being genuine.",
+                        realWorldExample: "Many successful artists turned down lucrative opportunities that didn't align with their artistic vision, maintaining fanbase loyalty and long-term credibility over short-term financial gains.",
+                        tipForFuture: "Money is tempting, but artistic authenticity is your long-term asset. Fans support artists they believe are being genuine, not those obviously chasing trends or money.",
+                        conceptTaught: "brand-consistency"
+                    }
+                }
+            },
+            {
+                text: "Create a separate gospel alter-ego under a different name",
+                outcome: {
+                    text: "You negotiate to release the gospel album under a different artist name, keeping the audiences separate. You fulfill your mother's wishes and tap the gospel market while protecting your secular brand. Managing two identities is complex, but you're serving both markets without forcing them to overlap.",
+                    cash: 80000, fame: 35, wellBeing: 10, careerProgress: 15, hype: 20,
+                    lesson: {
+                        title: "Multiple Artist Personas",
+                        explanation: "Some artists successfully maintain multiple musical identities to serve different markets without confusing their audiences. This requires careful brand management but can access multiple revenue streams.",
+                        realWorldExample: "Several artists across genres have used alter-egos or side projects to explore different musical directions. This approach allows creative experimentation without alienating existing fanbases.",
+                        tipForFuture: "If you want to explore dramatically different musical territories, consider separate artist projects rather than forcing your existing audience to follow every creative direction.",
+                        conceptTaught: "brand-diversification"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Family Obligation vs Career",
+        description: "Your younger sister's university fees are due - $3,000. Your mother calls in tears: 'You're successful now. The family needs you.' You have $8,000 in savings for your next music video, and three months before your album release. In your culture, family success is communal, and helping family is non-negotiable. But your manager insists: 'If you don't invest in your career now, you won't be able to help anyone later.' The extended family is waiting to see what kind of person success has made you.",
+        conditions: { minFame: 25, minCash: 5000 },
+        once: true,
+        choices: [
+            {
+                text: "Pay the fees - family comes first, always",
+                outcome: {
+                    text: "You send the $3,000 immediately. Your sister cries with gratitude, your mother praises you publicly, and your extended family shares the story with pride. Your community loves you for staying humble. But you have to make a cheaper music video, and your album rollout suffers from limited promotional budget. Family loyalty costs career momentum.",
+                    cash: -3000, fame: 30, wellBeing: 15, careerProgress: -5, hype: 15,
+                    lesson: {
+                        title: "African Communal Success Philosophy",
+                        explanation: "In many African cultures, individual success is viewed as family success. This creates strong support networks but also financial pressures that Western artists rarely face. Managing these expectations is crucial for sustainable careers.",
+                        realWorldExample: "Many successful African artists struggle with extended family financial demands. Those who maintain boundaries while still supporting family strategically tend to have more sustainable careers than those who give unlimited support.",
+                        tipForFuture: "You can support family while maintaining career sustainability. Consider setting clear boundaries, creating family trusts, or establishing regular support rather than responding to every crisis.",
+                        conceptTaught: "financial-boundaries"
+                    }
+                }
+            },
+            {
+                text: "Invest in your career - you'll help more people later",
+                outcome: {
+                    text: "You explain that you need to invest in your career to be able to help family long-term. You don't send the money. Your sister has to delay university for a year. Your mother stops speaking to you. Family WhatsApp groups call you selfish and 'too Western.' The social cost is enormous, and the guilt weighs heavily on you.",
+                    cash: 0, fame: 25, wellBeing: -25, careerProgress: 10, hype: 30,
+                    lesson: {
+                        title: "The Cultural Cost of Boundaries",
+                        explanation: "Setting financial boundaries with family in communal cultures often results in severe social consequences. While financially rational, these decisions can damage relationships and mental health in ways Western career advice doesn't account for.",
+                        realWorldExample: "Some African artists who prioritized career over family obligations faced years of estrangement and community criticism, even after achieving success. The emotional toll can be significant regardless of financial outcomes.",
+                        tipForFuture: "Understand that Western 'hustle culture' advice often ignores African cultural realities. You'll need to find your own balance between career needs and family obligations.",
+                        conceptTaught: "cultural-context"
+                    }
+                }
+            },
+            {
+                text: "Find a middle ground - pay half now, negotiate extended payment",
+                outcome: {
+                    text: "You send $1,500 immediately and call the university to arrange a payment plan for the rest. You sacrifice a less expensive part of your budget (maybe fewer Instagram ads) to cover the second payment next month. Your family sees you tried to help, and your career doesn't suffer dramatically. It's not perfect for anyone, but it works.",
+                    cash: -1500, fame: 28, wellBeing: 5, careerProgress: 5, hype: 25,
+                    lesson: {
+                        title: "Practical Compromise in Family Obligations",
+                        explanation: "Creative solutions can often satisfy both family obligations and career needs. Payment plans, partial support, and budget reallocation can demonstrate family commitment while protecting career investments.",
+                        realWorldExample: "Successful African artists often develop systems for family support that don't derail their careers - monthly stipends instead of crisis payments, education funds instead of cash gifts, or co-investment opportunities that benefit both family and career.",
+                        tipForFuture: "Train your family to work with you on solutions rather than expecting instant full support. Structure support in ways that are sustainable for your career and helpful for them.",
+                        conceptTaught: "sustainable-support"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Language Barrier in Collaboration",
+        description: "A huge French artist wants to collaborate with you for the European market. You only speak English and Yoruba fluently. They want lyrics in French, which you don't speak. They offer a translator and suggest you phonetically sing French lyrics you don't understand. Your Nigerian fans wonder why you're singing in French when you rep Yoruba pride. Your international team sees this as your European breakthrough. You could learn some French, but the song needs to be recorded this week.",
+        conditions: { minFame: 40, maxFame: 85 },
+        once: true,
+        choices: [
+            {
+                text: "Phonetically sing French - fake it till you make it",
+                outcome: {
+                    text: "You record French lyrics phonetically without understanding them. The song becomes a European hit, but French speakers mock your terrible accent online. African fans call you a sellout singing languages you don't understand. The commercial success feels hollow because you can't even sing your own song with understanding.",
+                    cash: 25000, fame: 40, wellBeing: -15, careerProgress: 15, hype: 25,
+                    lesson: {
+                        title: "Authenticity vs Market Access",
+                        explanation: "Singing in languages you don't understand for market access can succeed commercially but damages artistic credibility. Audiences often sense when artists are being inauthentic, especially native speakers of the language being mimicked.",
+                        realWorldExample: "Several artists have attempted to record in languages they don't speak for market access. While some succeed commercially, many face ridicule from native speakers and lose respect from their original fanbase.",
+                        tipForFuture: "Consider whether linguistic authenticity matters for your brand. If your identity is built on cultural pride, singing languages you don't understand contradicts your brand message.",
+                        conceptTaught: "brand-integrity"
+                    }
+                }
+            },
+            {
+                text: "Sing in English and Yoruba - stay authentic to yourself",
+                outcome: {
+                    text: "You propose recording your verses in English and Yoruba while they sing in French - a true multilingual collaboration. They respect your position. The song becomes a celebration of linguistic diversity. It performs well in both markets while maintaining your authenticity. You've proven you don't need to abandon your identity for international success.",
+                    cash: 20000, fame: 50, wellBeing: 15, careerProgress: 20, hype: 45,
+                    lesson: {
+                        title: "Multilingual Collaboration Authenticity",
+                        explanation: "True international collaborations celebrate linguistic diversity rather than requiring cultural assimilation. Maintaining your linguistic identity often creates more interesting and authentic music than forcing yourself into unfamiliar languages.",
+                        realWorldExample: "Successful international collaborations like Beyoncé and Wizkid's 'Brown Skin Girl' or Major Lazer's work with African artists celebrate linguistic diversity rather than requiring everyone to sing in one language.",
+                        tipForFuture: "Propose authentic multilingual collaborations rather than abandoning your linguistic identity. Your native language is part of your unique value proposition.",
+                        conceptTaught: "multicultural-collaboration"
+                    }
+                }
+            },
+            {
+                text: "Learn basic French for this specific song - meet them halfway",
+                outcome: {
+                    text: "You spend the week intensely learning the French phrases you need for this song, working with a tutor. Your French is accented but sincere. French audiences appreciate the effort, your Nigerian fans respect that you learned rather than faked it, and you've gained a new skill. The collaboration feels like genuine cultural exchange.",
+                    cash: 22000, fame: 45, wellBeing: 5, careerProgress: 18, hype: 40,
+                    lesson: {
+                        title: "Cultural Exchange Through Learning",
+                        explanation: "Making genuine effort to learn elements of collaborators' cultures shows respect and creates authentic cross-cultural moments. Audiences appreciate when artists make sincere efforts even if execution is imperfect.",
+                        realWorldExample: "Artists who make genuine efforts to learn and understand the languages and cultures they're engaging with tend to build stronger international relationships and more respectful cross-cultural collaborations.",
+                        tipForFuture: "When entering new markets, invest time in learning cultural and linguistic basics. Sincerity matters more than perfection, and the learning process often enriches your artistry.",
+                        conceptTaught: "cultural-respect"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Generational Sound Debate",
+        description: "You're producing your new album when your father, a legendary highlife musician from the '70s, visits the studio. He listens and shakes his head: 'This electronic music has no soul. You've forgotten our musical heritage.' He challenges you to incorporate live horns, traditional percussion, and organic instrumentation. Your young producer argues the opposite: 'Old-school sounds won't connect with Gen Z. They want hard-hitting 808s and digital production.' Both have sold millions of records in their respective eras. Whose wisdom do you trust?",
+        conditions: { minFame: 30, projectRequired: true },
+        once: true,
+        choices: [
+            {
+                text: "Honor my father's tradition - add organic instrumentation",
+                outcome: {
+                    text: "You incorporate live horns, traditional drums, and organic elements. Your father personally contributes guitar parts. The album has warmth and depth that digital production can't replicate. Older audiences love it, music critics praise the sophistication, but Gen Z streaming numbers are lower than expected. You've created something timeless, but is it timely?",
+                    cash: 3000, fame: 35, wellBeing: 20, careerProgress: 15, hype: 20,
+                    lesson: {
+                        title: "Generational Musical Values",
+                        explanation: "Different generations value different musical qualities. Older listeners prioritize musicianship and organic sounds, while younger audiences often prefer digital production and contemporary sounds. Neither is 'wrong' - they're different aesthetic values.",
+                        realWorldExample: "Artists like Jon Batiste and Anderson .Paak successfully blend traditional musicianship with contemporary production, creating music that appeals across generations by respecting both values.",
+                        tipForFuture: "Don't view generational musical differences as conflicts. The richest music often comes from respectfully blending different generational perspectives.",
+                        conceptTaught: "musical-evolution"
+                    }
+                }
+            },
+            {
+                text: "Follow current trends - stick with modern production",
+                outcome: {
+                    text: "You stick with your young producer's vision - hard 808s, digital production, and contemporary sounds. The album streams well with Gen Z, gets added to youth playlists, and performs commercially. But your father is heartbroken, older music critics dismiss it as generic, and you feel disconnected from musical heritage.",
+                    cash: 8000, fame: 40, wellBeing: -10, careerProgress: 10, hype: 50,
+                    lesson: {
+                        title: "The Generational Disconnect Cost",
+                        explanation: "Fully embracing contemporary trends while abandoning traditional musicianship can succeed commercially but creates disconnection from musical heritage and older audiences who support long-term careers.",
+                        realWorldExample: "Some African artists who fully embraced Western digital production lost the distinctive cultural sound that made them special, becoming indistinguishable from global competitors.",
+                        tipForFuture: "Commercial success isn't just about today's streams. Long-term careers often require maintaining connections across generational divides.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Blend both approaches - create a generational fusion",
+                outcome: {
+                    text: "You challenge both your father and producer to collaborate. Live horns over 808s. Traditional percussion with digital effects. Your father's guitar weaving through modern production. The result is innovative - respecting tradition while pushing forward. Both generations find elements they love. You've created a bridge between past and future.",
+                    cash: 5000, fame: 55, wellBeing: 15, careerProgress: 25, hype: 45,
+                    lesson: {
+                        title: "Generational Musical Synthesis",
+                        explanation: "The most innovative music often comes from synthesizing generational perspectives rather than choosing one over the other. Blending traditional musicianship with contemporary production creates distinctive sounds that stand out.",
+                        realWorldExample: "Burna Boy's Grammy-winning 'Twice as Tall' successfully blended his grandfather's Fela-inspired horns and traditional percussion with modern Afrobeats production, creating music that appealed across generations and continents.",
+                        tipForFuture: "Don't see generational musical values as either/or choices. The most interesting music often comes from unexpected combinations of old and new.",
+                        conceptTaught: "creative-innovation"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Political Song Pressure",
+        description: "Protests have erupted across your country over corruption and police brutality. Your fans are begging you to release a protest song: 'You have the platform! Speak for us!' Opposition politicians offer to fund a music video if you make a political statement. But your manager warns: 'The government has shut down artists for less. We could lose radio play, government event bookings, and you might face harassment.' Your biggest sponsor is government-connected. Your conscience says speak out, but your career safety says stay silent.",
+        conditions: { minFame: 45, minHype: 35 },
+        once: true,
+        choices: [
+            {
+                text: "Release a bold protest song - use your platform for change",
+                outcome: {
+                    text: "You release a powerful protest song calling out corruption directly. Young people hail you as a hero, international media covers it, and the song goes viral. However, you're banned from state media, lose government contracts, and your sponsor drops you. Police harass you at airports. You've made a stand, but the professional consequences are severe.",
+                    cash: -15000, fame: 70, wellBeing: -20, careerProgress: 10, hype: 90,
+                    lesson: {
+                        title: "Political Art and Consequences",
+                        explanation: "Political music can create massive cultural impact and build powerful legacies, but in many African countries, it comes with real professional and personal risks. Artists must weigh their social responsibility against career and safety concerns.",
+                        realWorldExample: "Fela Kuti faced constant government harassment for political music. Recently, artists like Falz and Burna Boy faced various pressures after releasing politically charged music during protests, though international attention provided some protection.",
+                        tipForFuture: "If you choose political music, understand the real risks and have support systems ready. International attention can provide protection, and being prepared for consequences reduces their impact.",
+                        conceptTaught: "art-activism"
+                    }
+                }
+            },
+            {
+                text: "Stay silent - protect your career and safety",
+                outcome: {
+                    text: "You remain quiet, releasing only entertainment music. Your career continues smoothly, government bookings continue, and sponsors are happy. But fans accuse you of cowardice and selling out. Your social media is flooded with disappointment. You're financially secure but wonder if you've failed your generation's moment.",
+                    cash: 5000, fame: -15, wellBeing: -15, careerProgress: 5, hype: -30,
+                    lesson: {
+                        title: "The Cost of Silence",
+                        explanation: "Staying silent during important social moments protects your career but can damage your relationship with fans and your own sense of purpose. In the age of social media, silence itself is a political statement.",
+                        realWorldExample: "Several prominent African artists faced significant backlash for staying silent during major protests and social movements. Fans remembered their silence long after the immediate events passed.",
+                        tipForFuture: "Silence has costs too. If you choose safety over activism, understand that your audience may lose respect, affecting your long-term relationship with them.",
+                        conceptTaught: "artist-responsibility"
+                    }
+                }
+            },
+            {
+                text: "Make a subtle, metaphorical statement - speak carefully",
+                outcome: {
+                    text: "You release a song using metaphors and allegory to address the issues without direct accusations. Listeners understand the message, but you have plausible deniability. You walk the tightrope - showing solidarity without making yourself an obvious target. It's not the bold statement fans wanted, but it's a statement nonetheless.",
+                    cash: 2000, fame: 40, wellBeing: -5, careerProgress: 12, hype: 35,
+                    lesson: {
+                        title: "Strategic Political Expression",
+                        explanation: "Metaphorical political art can communicate messages while providing deniability and reducing risk. Throughout history, artists in oppressive contexts have used allegory and symbolism to speak truth while maintaining some safety.",
+                        realWorldExample: "Many African musicians during colonial and authoritarian periods used metaphorical lyrics to criticize power. Bob Marley's political songs often used biblical and metaphorical language that provided multiple interpretations.",
+                        tipForFuture: "If direct political statement is too risky, metaphorical art can still make meaningful contributions. Subtle messages can be powerful without making you an obvious target.",
+                        conceptTaught: "strategic-messaging"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Gen Z Dance Challenge",
+        description: "A dance challenge using your new song is exploding on TikTok, but Gen Z is creating choreography you never imagined - some of it sexually suggestive, some politically charged, some just weird. Your label is thrilled at the organic virality. But some dances completely misinterpret your song's meaning, and conservative family members are shocked by the sexual dances. Do you try to control how people use your music, or let the internet do its thing?",
+        conditions: { minFame: 30, minHype: 40 },
+        once: true,
+        choices: [
+            {
+                text: "Embrace it all - let the internet run wild with my music",
+                outcome: {
+                    text: "You publicly celebrate all the dance challenges, even reposting the wild ones. The song explodes to 50 million views across platforms. Your conservative family is mortified, and some fans say you've lost control of your image. But Gen Z claims you as their artist, and the virality is undeniable. You've traded respectability for relevance.",
+                    cash: 15000, fame: 65, wellBeing: -10, careerProgress: 15, hype: 85,
+                    lesson: {
+                        title: "Viral Music and Loss of Control",
+                        explanation: "Viral success on social platforms often means losing control of how your art is interpreted and used. Gen Z audiences create their own meanings and uses for music, which can conflict with artists' original intentions or personal values.",
+                        realWorldExample: "Many artists have watched their songs take on completely unintended meanings through TikTok challenges. Some embrace it, others try to fight it, but the platform's nature means artists can't control cultural interpretation.",
+                        tipForFuture: "Decide early whether you value viral success or message control more. You rarely get both with social media challenges. Viral success requires releasing control.",
+                        conceptTaught: "social-media-dynamics"
+                    }
+                }
+            },
+            {
+                text: "Try to guide the 'correct' interpretation of my song",
+                outcome: {
+                    text: "You post videos explaining your song's real meaning and creating your own 'official' dance that's more family-friendly. Gen Z mocks you for being controlling and out-of-touch. The organic virality dies as you try to manage it. Your attempt to maintain control killed the spontaneous energy. The song's momentum stalls.",
+                    cash: 3000, fame: 20, wellBeing: -20, careerProgress: 2, hype: -15,
+                    lesson: {
+                        title: "The Futility of Controlling Viral Moments",
+                        explanation: "Trying to control how the internet interprets and uses your music usually backfires. Social media audiences value authenticity and freedom, and attempts to manage organic movements often kill the momentum.",
+                        realWorldExample: "Artists who've tried to control TikTok interpretations of their music typically fail and get mocked. The platform's culture is about user creativity and freedom, not artist control.",
+                        tipForFuture: "Once music enters social media culture, you can influence but not control it. Fighting organic interpretations usually damages more than it helps.",
+                        conceptTaught: "digital-culture"
+                    }
+                }
+            },
+            {
+                text: "Engage playfully while setting subtle boundaries",
+                outcome: {
+                    text: "You join some dances yourself, show appreciation for creative interpretations, but casually promote more family-friendly versions when you engage. You're part of the fun without endorsing everything. Gen Z respects that you're not controlling, just participating. Your engagement keeps the momentum going while gently shaping the narrative.",
+                    cash: 12000, fame: 50, wellBeing: 5, careerProgress: 18, hype: 60,
+                    lesson: {
+                        title: "Participatory Influence in Social Media",
+                        explanation: "Rather than controlling social media use of your music, you can participate and gently influence by example. Being part of the conversation while modeling your preferred interpretations works better than trying to manage it.",
+                        realWorldExample: "Artists like Lizzo successfully engage with social media trends around their music by participating playfully while subtly highlighting versions that align with their values, without being controlling.",
+                        tipForFuture: "Lead by example rather than by command. Participate in trends you like, create content that models your values, but don't try to police how others engage.",
+                        conceptTaught: "community-engagement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Mental Health Crisis",
+        description: "You've been working non-stop - three albums in two years, constant touring, endless promotion. You're exhausted, anxious, and having panic attacks before shows. Your therapist says you need to take three months off completely. But you're at the peak of your career momentum. Your manager says: 'Three months off now could kill everything we've built. Your competitors won't rest.' Your family says 'push through it.' But you can barely get out of bed some mornings.",
+        conditions: { minFame: 50, maxWellBeing: 40, minCareerProgress: 40 },
+        once: true,
+        choices: [
+            {
+                text: "Take the mental health break - my health comes first",
+                outcome: {
+                    text: "You cancel all engagements and take three months off. Your team is furious. Fans worry. Competitors fill the space you left. When you return, rebuilt and healthy, you have to fight for relevance again. But you're alive, functioning, and grateful you chose yourself. Some momentum was lost, but you avoided complete breakdown.",
+                    cash: -30000, fame: -20, wellBeing: 50, careerProgress: -10, hype: -25,
+                    lesson: {
+                        title: "Mental Health as Career Foundation",
+                        explanation: "No career can be sustained without mental health. While breaks have costs, burnout can end careers permanently. Taking time to recover, while professionally costly, is often the only path to long-term sustainability.",
+                        realWorldExample: "Artists like Kid Cudi, Kendrick Lamar, and Billie Eilish have publicly taken mental health breaks. While these breaks affected momentum, they returned healthier and more creative, with sustained long-term careers.",
+                        tipForFuture: "Your mental health is the foundation of your career. Without it, everything else collapses. Protect it even when external pressures demand otherwise.",
+                        conceptTaught: "self-care"
+                    }
+                }
+            },
+            {
+                text: "Push through - I can rest when I'm established",
+                outcome: {
+                    text: "You ignore your therapist and keep grinding. Six weeks later, you have a complete breakdown on stage - you walk off mid-performance, crying uncontrollably. The video goes viral. You're forced to cancel everything anyway, but now with public trauma and professional damage. You needed the break then; now you need it even more desperately.",
+                    cash: -50000, fame: -35, wellBeing: -50, careerProgress: -25, hype: -40,
+                    lesson: {
+                        title: "The Inevitable Cost of Ignoring Mental Health",
+                        explanation: "Mental health issues don't disappear because you ignore them - they escalate until they force attention, usually in more damaging ways. Proactive care is less costly than crisis intervention.",
+                        realWorldExample: "Multiple artists have experienced very public mental health breakdowns after ignoring warning signs. These public crises are more career-damaging than strategic breaks would have been.",
+                        tipForFuture: "Mental health problems don't wait for convenient times. Addressing them proactively costs less than waiting for crisis to force your hand.",
+                        conceptTaught: "crisis-prevention"
+                    }
+                }
+            },
+            {
+                text: "Take a strategic partial break - reduce but don't stop completely",
+                outcome: {
+                    text: "You negotiate a middle path: cancel touring but continue light studio work. Do one interview per month, not five per week. See your therapist twice weekly. You maintain some presence while dramatically reducing pressure. It's not perfect rest, but it's manageable. You're healing while staying relevant.",
+                    cash: -10000, fame: -5, wellBeing: 25, careerProgress: 5, hype: 10,
+                    lesson: {
+                        title: "Sustainable Pace Adjustments",
+                        explanation: "Complete stops and unsustainable grinding aren't the only options. Significantly reducing workload while maintaining minimal presence can provide needed recovery while limiting professional damage.",
+                        realWorldExample: "Several artists have successfully reduced schedules without full disappearances - fewer shows, longer breaks between projects, selective media engagement. This allows recovery while maintaining career presence.",
+                        tipForFuture: "Consider whether you need to stop completely or just dramatically slow down. Sustainable reduced pace might provide recovery while keeping you relevant.",
+                        conceptTaught: "work-life-balance"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Intergenerational Collaboration Offer",
+        description: "A legendary African artist from your parents' generation - think someone like Angelique Kidjo, Youssou N'Dour, or Salif Keita level - wants to collaborate with you. They see you as the future and want to bridge generations. But they insist on recording in their traditional style, using only organic instruments, and singing partially in languages you don't speak fluently. Your Gen Z fans might not understand it. Your producer thinks it'll hurt your streaming numbers. But this is a once-in-a-lifetime honor from a living legend.",
+        conditions: { minFame: 40, maxFame: 80 },
+        once: true,
+        choices: [
+            {
+                text: "Accept the honor exactly as they propose it",
+                outcome: {
+                    text: "You record the song their way - traditional instrumentation, ancestral languages, no compromises. The collaboration is magical and deeply meaningful. You learn about musical traditions you never knew. Critics call it a masterpiece. But your Gen Z fans are confused, and streaming numbers are modest. You've created art for the ages, not the algorithms.",
+                    cash: 2000, fame: 45, wellBeing: 25, careerProgress: 20, hype: 15,
+                    lesson: {
+                        title: "Artistic Legacy vs Commercial Success",
+                        explanation: "Some collaborations are about artistic legacy and cultural preservation rather than commercial success. Working with legends creates historical documentation and artistic growth that transcends streaming metrics.",
+                        realWorldExample: "When young artists collaborate with African legends like Angelique Kidjo or Baaba Maal, they often create culturally significant work that doesn't top charts but builds artistic credibility and documents intergenerational knowledge transfer.",
+                        tipForFuture: "Not every decision should optimize for streams. Some career moves are about artistic development, legacy building, and cultural contribution that will matter long after streaming platforms are gone.",
+                        conceptTaught: "artistic-legacy"
+                    }
+                }
+            },
+            {
+                text: "Propose modernizing their approach for younger audiences",
+                outcome: {
+                    text: "You suggest blending their traditional approach with modern production and adding English verses for accessibility. They're disappointed and pull out of the collaboration entirely. 'I wanted someone who respected tradition, not someone trying to change it,' they say. You've lost the opportunity by asking them to compromise their artistic vision.",
+                    cash: 0, fame: -10, wellBeing: -15, careerProgress: -5, hype: 0,
+                    lesson: {
+                        title: "Respecting Elders' Artistic Vision",
+                        explanation: "When legends offer collaboration, asking them to change their approach shows disrespect. These artists have proven their value and vision. If you can't work within their framework, decline respectfully rather than trying to change them.",
+                        realWorldExample: "Several young artists have lost collaboration opportunities with legends by trying to modernize the elders' artistic approaches. Legends typically have artistic integrity and don't need to chase contemporary trends.",
+                        tipForFuture: "When working with established artists, especially cultural elders, enter their world rather than asking them to enter yours. You learn more by adapting than by trying to change them.",
+                        conceptTaught: "cultural-respect"
+                    }
+                }
+            },
+            {
+                text: "Do both versions - their traditional vision plus a remix for my audience",
+                outcome: {
+                    text: "You propose recording their traditional vision as the album version, then creating a separate 'Gen Z remix' for streaming. They appreciate that you're honoring their vision while also serving your audience. Both versions are released. The traditional version wins awards and critical acclaim, while the remix gets streams. Everyone wins.",
+                    cash: 5000, fame: 55, wellBeing: 20, careerProgress: 25, hype: 40,
+                    lesson: {
+                        title: "Multiple Versions for Multiple Audiences",
+                        explanation: "Creating different versions of songs allows you to honor artistic integrity while serving commercial needs. This approach respects all stakeholders - the legend's vision, your artistic development, and your audience's preferences.",
+                        realWorldExample: "Many successful collaborations between generations use this approach - an album version that respects artistic intent, plus remixes or alternate versions that serve contemporary audiences and commercial needs.",
+                        tipForFuture: "When facing artistic vision conflicts, consider whether multiple versions can satisfy different needs rather than forcing one compromise that satisfies nobody.",
+                        conceptTaught: "creative-solutions"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Stadium Show Catastrophe",
+        description: "You booked a 20,000-seat stadium for your biggest show ever. You've sold only 4,000 tickets with two weeks until the concert. The deposit is non-refundable ($50,000), and canceling will destroy your reputation and leave fans who bought tickets angry. Your promoter suggests 'papering the house' - giving away thousands of free tickets to fill seats and avoid embarrassment. Your accountant says you'll lose $80,000 total. This could be career-defining success or devastating failure. What do you do?",
+        conditions: { minFame: 50, minCash: 30000, minHype: 35 },
+        once: true,
+        choices: [
+            {
+                text: "Paper the house - fill it with free tickets to save face",
+                outcome: {
+                    text: "You give away 12,000 free tickets to make the venue look full. The show looks successful in photos, media coverage is positive, and paid attendees don't know the venue was mostly free. But you lose $85,000, and word slowly leaks that you couldn't actually sell tickets. Future promoters know you're not as popular as you seemed.",
+                    cash: -85000, fame: 20, wellBeing: -25, careerProgress: 5, hype: 15,
+                    lesson: {
+                        title: "The Cost of Fake Success",
+                        explanation: "Papering the house preserves short-term image but industry insiders always find out. The financial cost is real, and the deception damages long-term credibility with promoters, venues, and media who discover the truth.",
+                        realWorldExample: "Many artists have papered venues to create illusion of success. Industry professionals track actual ticket sales, and this practice often leads to difficulty booking future shows as promoters lose trust.",
+                        tipForFuture: "Honest failure often serves your career better than fabricated success. Industry respect comes from integrity, not from creating illusions that industry insiders will eventually see through.",
+                        conceptTaught: "career-honesty"
+                    }
+                }
+            },
+            {
+                text: "Downsize to a smaller venue and be honest",
+                outcome: {
+                    text: "You announce you're moving to a 5,000-capacity venue for 'a more intimate experience.' You lose the stadium deposit but sell out the smaller venue. The show is electric. Fans appreciate the intimate setting, and media respect your honest adjustment. You lost money but gained credibility. Sometimes smaller and real beats bigger and empty.",
+                    cash: -40000, fame: 30, wellBeing: 10, careerProgress: 15, hype: 35,
+                    lesson: {
+                        title: "Strategic Downsizing",
+                        explanation: "Adjusting to reality rather than maintaining false ambitions often yields better outcomes. A sold-out smaller venue creates better atmosphere, media coverage, and fan experience than a partially empty large venue.",
+                        realWorldExample: "Smart artists regularly adjust venue sizes based on actual demand. A sold-out club creates more buzz than a half-empty arena, even though the arena is physically larger.",
+                        tipForFuture: "Sold-out shows at your actual fan base size create more career value than struggling to fill oversized venues. Right-size your ambitions to your actual reach.",
+                        conceptTaught: "realistic-planning"
+                    }
+                }
+            },
+            {
+                text: "Aggressive last-minute marketing blitz to sell tickets",
+                outcome: {
+                    text: "You spend $30,000 on emergency marketing - radio ads, influencer promotions, social media blitz. You sell 6,000 more tickets, reaching 10,000 total. The show happens to a half-full stadium, which looks bad but isn't completely empty. You've lost $60,000 total, but you fulfilled your commitment and some fans had a great time. Lesson learned about overambitious booking.",
+                    cash: -60000, fame: 15, wellBeing: -15, careerProgress: 8, hype: 20,
+                    lesson: {
+                        title: "Expensive Lessons in Audience Sizing",
+                        explanation: "Sometimes you pay dearly to learn your actual market size. This expensive lesson will make you more careful about future bookings and more realistic about your current reach.",
+                        realWorldExample: "Many artists have had to learn the hard way that their perceived fame doesn't match their actual ticket-selling ability. These expensive lessons often lead to more sustainable touring strategies going forward.",
+                        tipForFuture: "Build venue size gradually. Book venues you're certain you can sell out, then scale up slowly. Underselling and upgrading is better than overselling and embarrassing yourself.",
+                        conceptTaught: "market-awareness"
+                    }
+                }
+            }
+        ]
+    }
 ];
 
 export { fallbackScenario };

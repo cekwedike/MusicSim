@@ -477,6 +477,56 @@ export const authServiceSupabase = {
       };
     }
   },
+
+  // Check if current user's email is verified
+  isEmailVerified: async (): Promise<boolean> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        return false;
+      }
+
+      // Check if user signed in with OAuth (Google) - they're auto-verified
+      const authProvider = user.app_metadata?.provider;
+      if (authProvider === 'google') {
+        return true;
+      }
+
+      // For email/password users, check email_confirmed_at
+      return !!user.email_confirmed_at;
+    } catch (error) {
+      console.error('[authService] Check email verified error:', error);
+      return false;
+    }
+  },
+
+  // Get email verification status (more detailed)
+  getEmailVerificationStatus: async (): Promise<{
+    isVerified: boolean;
+    isOAuthUser: boolean;
+    email?: string;
+  }> => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        return { isVerified: false, isOAuthUser: false };
+      }
+
+      const authProvider = user.app_metadata?.provider;
+      const isOAuthUser = authProvider !== 'email';
+
+      return {
+        isVerified: isOAuthUser || !!user.email_confirmed_at,
+        isOAuthUser,
+        email: user.email,
+      };
+    } catch (error) {
+      console.error('[authService] Get verification status error:', error);
+      return { isVerified: false, isOAuthUser: false };
+    }
+  },
 };
 
 export default authServiceSupabase;

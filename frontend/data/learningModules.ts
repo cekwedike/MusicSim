@@ -1414,9 +1414,9 @@ export const learningModules: LearningModule[] = [
           content: "Most African countries follow the Berne Convention, providing automatic copyright. Registration processes vary by country. ARIPO (African Regional Intellectual Property Organization) has 22 member states, mostly English-speaking. The Kampala Protocol for voluntary regional copyright registration was adopted but hasn't entered force yet.",
           examples: [
             "Ghana: Copyright Office under Ministry of Justice registration",
-            "Kenya: Kenya Copyright Board (KECOBO) registration system",
-            "South Africa: Companies and Intellectual Property Commission (CIPC)",
-            "Tanzania: Copyright Society of Tanzania (COSOTA) for collection",
+            "Kenya: Kenya Copyright Board (KECOBO) for registration and CMO licensing; KAMP, MCSK, PRiSK are licensed CMOs",
+            "South Africa: Companies and Intellectual Property Commission (CIPC) for IP registration; SAMRO for musical works royalty collection",
+            "Tanzania: Copyright Society of Tanzania (COSOTA) - designated CMO for collection",
             "Uganda: Uganda Registration Services Bureau (URSB)",
             "ARIPO members: Botswana, Ghana, Kenya, Malawi, Mozambique, Rwanda, Tanzania, Uganda, Zambia, Zimbabwe (and 12 others)"
           ],
@@ -1584,7 +1584,7 @@ export const learningModules: LearningModule[] = [
             "CMOs will collect from broadcasters, venues, streaming",
             "Separate registration from copyright ownership registration",
             "Regional CMOs may serve Rwandan artists through agreements",
-            "East African CMOs: KAMP (Kenya), COSOTA (Tanzania)",
+            "East African CMOs: Kenya (KAMP, MCSK, PRiSK), Tanzania (COSOTA)",
             "Monitor www.rdb.rw for Rwanda CMO announcements"
           ],
           tip: "While Rwanda establishes its CMO framework, consider registering with regional East African CMOs that may have reciprocal agreements."
@@ -1605,12 +1605,12 @@ export const learningModules: LearningModule[] = [
           heading: 'Copyright in Other African Countries',
           content: "Most African countries provide automatic copyright under Berne Convention but have national registration systems. East African Community (EAC) members - Rwanda, Kenya, Tanzania, Uganda, Burundi, South Sudan - are working toward harmonized IP frameworks. Each country currently maintains separate registration systems with varying procedures and fees.",
           examples: [
-            "Kenya: Register with Kenya Copyright Board (KECOBO)",
-            "Tanzania: Tanzania Copyright Society (COSOTA)",
+            "Kenya: Register with Kenya Copyright Board (KECOBO); CMOs include KAMP, MCSK, PRiSK",
+            "Tanzania: Copyright Society of Tanzania (COSOTA) - designated CMO",
             "Uganda: Uganda Registration Services Bureau (URSB)",
             "DRC: Ministry of Culture and Arts copyright office",
             "Burundi: Institut National de la Propriété Industrielle",
-            "South Africa: Companies and Intellectual Property Commission",
+            "South Africa: Companies and Intellectual Property Commission (CIPC); SAMRO for musical works",
             "Ethiopia: Ethiopian Intellectual Property Office"
           ],
           tip: "Focus registration efforts on countries where you generate significant income or anticipate disputes. Start with home country plus key markets."
@@ -1855,7 +1855,7 @@ The UK IPO doesn't register copyright, but you can:
 - Davido's streams in France trigger SACEM royalty collection
 
 **Practical Tips:**
-- Join your local CMO (NCC/COSON in Nigeria, KAMP in Rwanda) for EU royalty collection
+- Join your local CMO (NCC/COSON in Nigeria, RSAU in Rwanda, KAMP in Kenya) for EU royalty collection
 - Register with PRS for Music if targeting UK market specifically
 - France's SACEM has strong relationships with African CMOs
 - EU Digital Single Market rules help African artists license across Europe
@@ -1876,11 +1876,11 @@ CMOs collect royalties worldwide through reciprocal agreements. This is how Afri
 **How CMO Reciprocal Agreements Work:**
 
 **Example Flow:**
-1. You register your song with COSON (Nigeria) or KAMP (Rwanda)
+1. You register your song with COSON (Nigeria), RSAU (Rwanda), or KAMP (Kenya)
 2. Your song plays on radio in USA
 3. ASCAP (US CMO) collects the royalty
-4. ASCAP sends royalty to COSON/KAMP through reciprocal agreement
-5. COSON/KAMP pays you (minus their commission)
+4. ASCAP sends royalty to your CMO (COSON/RSAU/KAMP) through reciprocal agreement
+5. Your CMO pays you (minus their commission)
 
 **Major Global CMOs:**
 - **USA**: ASCAP, BMI, SESAC (performance), SoundExchange (digital)
@@ -2173,7 +2173,7 @@ Most African artists can't afford to register in multiple countries or pursue in
           "They cannot collect European royalties without European registration"
         ],
         correctIndex: 2,
-        explanation: "African artists collect international royalties through their local CMO (like COSON in Nigeria or KAMP in Rwanda), which has reciprocal agreements with CMOs worldwide (SACEM in France, PRS in UK, GEMA in Germany, etc.). When your song plays in France, SACEM collects and sends royalties to your local CMO, which pays you."
+        explanation: "African artists collect international royalties through their local CMO (like COSON in Nigeria, RSAU in Rwanda, or KAMP in Kenya), which has reciprocal agreements with CMOs worldwide (SACEM in France, PRS in UK, GEMA in Germany, etc.). When your song plays in France, SACEM collects and sends royalties to your local CMO, which pays you."
       },
       {
         question: "An African artist's song becomes a major hit in the USA. What registration strategy makes the most sense?",

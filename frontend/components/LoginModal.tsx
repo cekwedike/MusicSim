@@ -108,6 +108,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
         }
 
         // Use registerFromGuest if guest data is available, otherwise use regular register
+        let registrationSuccess = false;
         if (isGuestMode && guestStatistics) {
           // Capture all guest data including game saves from localStorage
           const gameSaves = localStorage.getItem('musicsim_saves');
@@ -115,17 +116,27 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             statistics: guestStatistics,
             saves: gameSaves ? JSON.parse(gameSaves) : null
           };
-          await registerFromGuest(username, email, password, guestData, profileImage);
-          toast.show('Account created with your progress saved!', 'success');
+          registrationSuccess = await registerFromGuest(username, email, password, guestData, profileImage);
         } else {
-          await register(username, email, password, profileImage);
-          toast.show('Account created. Signing you in...', 'success');
+          registrationSuccess = await register(username, email, password, profileImage);
         }
+
         setLoading(false);
-        setTimeout(() => {
-          onClose();
-          window.location.reload();
-        }, 700);
+
+        if (registrationSuccess) {
+          // User is logged in immediately (email confirmation disabled or OAuth)
+          toast.show('Account created successfully!', 'success');
+          setTimeout(() => {
+            onClose();
+            window.location.reload();
+          }, 700);
+        } else {
+          // Email confirmation required - user needs to verify before logging in
+          toast.show('Please check your email to verify your account before signing in.', 'info');
+          setTimeout(() => {
+            onClose();
+          }, 3000);
+        }
         return;
       }
 

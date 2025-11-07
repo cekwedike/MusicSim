@@ -7,6 +7,7 @@ export interface User {
   email: string;
   username: string;
   profileImage?: string;
+  emailVerified?: boolean;
   lastLogin?: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -62,11 +63,22 @@ export const authServiceSupabase = {
         throw new Error('Registration failed');
       }
 
-      // Get the session token
-      const { data: { session } } = await supabase.auth.getSession();
+      // Check if email confirmation is required
+      const session = authData.session;
+      const needsEmailConfirmation = !session && authData.user && !authData.user.email_confirmed_at;
+
+      if (needsEmailConfirmation) {
+        // Email confirmation required - user can't sign in yet
+        // But we don't throw an error, we return a success with a message
+        return {
+          success: true,
+          message: 'Please check your email to verify your account before signing in.',
+          data: undefined
+        };
+      }
 
       if (!session) {
-        throw new Error('No session created');
+        throw new Error('Registration failed - no session created');
       }
 
       // Sync user profile with backend
@@ -80,7 +92,7 @@ export const authServiceSupabase = {
 
       return {
         success: true,
-        message: 'Registration successful',
+        message: 'Registration successful! Please verify your email to unlock all features.',
         data: {
           token: session.access_token,
           user: {
@@ -88,6 +100,7 @@ export const authServiceSupabase = {
             email: authData.user.email!,
             username,
             profileImage: profileImage || undefined,
+            emailVerified: !!authData.user.email_confirmed_at,
           }
         }
       };

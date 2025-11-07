@@ -55,12 +55,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const profileImage = supabaseUser.user_metadata.profile_image ||
                           supabaseUser.user_metadata.avatar_url ||
                           supabaseUser.user_metadata.picture;
+      const emailVerified = !!supabaseUser.email_confirmed_at;
 
       // Get user profile from backend
       const profileResponse = await authServiceSupabase.getCurrentUser();
 
       if (profileResponse.success && profileResponse.data) {
-        setUser(profileResponse.data.user);
+        // Add email verification status from Supabase
+        setUser({
+          ...profileResponse.data.user,
+          emailVerified
+        });
       } else {
         // If no backend profile exists, create it with Supabase data
         const authProvider = supabaseUser.app_metadata.provider || 'google';
@@ -80,6 +85,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           email: supabaseUser.email!,
           username,
           profileImage,
+          emailVerified,
         });
       }
     } catch (error) {
@@ -89,12 +95,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const profileImage = supabaseUser.user_metadata.profile_image ||
                           supabaseUser.user_metadata.avatar_url ||
                           supabaseUser.user_metadata.picture;
+      const emailVerified = !!supabaseUser.email_confirmed_at;
 
       setUser({
         id: supabaseUser.id,
         email: supabaseUser.email!,
         username,
         profileImage,
+        emailVerified,
       });
     }
   }, []);
@@ -220,9 +228,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         profileImage
       });
 
-      if (response.success && response.data) {
-        // State will be updated by onAuthStateChange listener
-        return true;
+      if (response.success) {
+        if (response.data) {
+          // User is logged in immediately - state will be updated by onAuthStateChange listener
+          return true;
+        } else {
+          // Email confirmation required - user not logged in yet
+          setError(null); // Clear any errors
+          return false;
+        }
       } else {
         throw new Error(response.message || 'Registration failed');
       }

@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import type { GameStatistics, Difficulty } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import { loadStatistics } from '../services/statisticsService';
+import { supabase } from '../services/supabase';
 
 interface ProfilePanelProps {
 	isGuestMode: boolean;
@@ -34,6 +35,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	const [isEditingGuestName, setIsEditingGuestName] = useState(false);
 	const [editedGuestName, setEditedGuestName] = useState('');
 	const [isUploadingImage, setIsUploadingImage] = useState(false);
+	const [isResendingVerification, setIsResendingVerification] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const handleLogout = async () => {
@@ -207,6 +209,29 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		}
 	};
 
+	const handleResendVerification = async () => {
+		if (!user?.email) return;
+
+		setIsResendingVerification(true);
+		try {
+			const { error } = await supabase.auth.resend({
+				type: 'signup',
+				email: user.email
+			});
+
+			if (error) {
+				throw error;
+			}
+
+			alert('Verification email sent! Please check your inbox.');
+		} catch (error: any) {
+			console.error('Error resending verification email:', error);
+			alert(error.message || 'Failed to resend verification email. Please try again.');
+		} finally {
+			setIsResendingVerification(false);
+		}
+	};
+
 	const formatPlayTime = (minutes: number) => {
 		if (minutes < 60) return `${minutes}m`;
 		const hours = Math.floor(minutes / 60);
@@ -291,11 +316,33 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 								</div>
 							)}
 							<div className="text-xs text-violet-200/70 mt-0.5">{user.email}</div>
-							<div className="flex items-center gap-2 mt-1">
+							<div className="flex flex-wrap items-center gap-2 mt-1">
 								<span className="text-xs bg-violet-600/50 text-violet-200 px-2 py-0.5 rounded">
 									Signed In
 								</span>
+								{user.emailVerified === false && (
+									<span className="text-xs bg-yellow-600/50 text-yellow-200 px-2 py-0.5 rounded">
+										⚠ Email Not Verified
+									</span>
+								)}
+								{user.emailVerified === true && (
+									<span className="text-xs bg-green-600/50 text-green-200 px-2 py-0.5 rounded">
+										✓ Verified
+									</span>
+								)}
 							</div>
+							{user.emailVerified === false && (
+								<div className="mt-2 p-2 bg-yellow-600/10 border border-yellow-600/30 rounded text-xs text-yellow-200">
+									<p className="mb-1">Please verify your email to unlock all features.</p>
+									<button
+										onClick={handleResendVerification}
+										disabled={isResendingVerification}
+										className="text-yellow-300 hover:text-yellow-100 underline disabled:opacity-50"
+									>
+										{isResendingVerification ? 'Sending...' : 'Resend verification email'}
+									</button>
+								</div>
+							)}
 						</div>
 					</div>
 				) : (

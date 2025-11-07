@@ -43,7 +43,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       {children}
 
   {/* Toast container (top-right) */}
-  <div aria-live="polite" className="fixed top-6 right-6 z-60 flex flex-col gap-3 items-end">
+  <div aria-live="polite" className="fixed top-6 right-6 z-[70] flex flex-col gap-3 items-end">
         {toasts.map((t) => (
           <div key={t.id} className={`max-w-sm w-full px-4 py-3 rounded-lg shadow-lg border ${
             t.type === 'success' ? 'bg-green-600/95 border-green-700 text-white' :

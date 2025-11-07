@@ -26,7 +26,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
     const hasLesson = outcome.lesson;
 
     return (
-        <div className="outcome-modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 sm:p-6 z-50 animate-fade-in">
+        <div className="outcome-modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 sm:p-6 z-[60] animate-fade-in">
             <div className={`bg-gray-800 border border-gray-700 rounded-xl shadow-2xl p-5 md:p-6 lg:p-8 w-full ${hasLesson ? 'max-w-2xl' : 'max-w-md'} max-h-[90vh] overflow-y-auto`}>
                 <h3 className="text-lg md:text-2xl font-bold text-violet-300 mb-4">Outcome</h3>
                 <p className="text-gray-300 mb-6 leading-relaxed text-sm md:text-base">{outcome.text}</p>

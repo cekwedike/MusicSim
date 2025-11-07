@@ -61,11 +61,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const profileResponse = await authServiceSupabase.getCurrentUser();
 
       if (profileResponse.success && profileResponse.data) {
-        // Add email verification status from Supabase
-        setUser({
-          ...profileResponse.data.user,
-          emailVerified
-        });
+        const backendUser = profileResponse.data.user;
+
+        // Check if user signed in with OAuth and should get Google profile image
+        const authProvider = supabaseUser.app_metadata.provider;
+        const googleImageUrl = supabaseUser.user_metadata?.avatar_url || supabaseUser.user_metadata?.picture;
+
+        // If user signed in with Google and doesn't have a profile image yet, use Google image
+        if (authProvider === 'google' && googleImageUrl && !backendUser.profileImage) {
+          console.log('[AuthContext] Setting Google profile image for OAuth user');
+          try {
+            // Update profile with Google image
+            await authServiceSupabase.updateProfile({ profileImage: googleImageUrl });
+            // Update local state with Google image
+            setUser({
+              ...backendUser,
+              profileImage: googleImageUrl,
+              emailVerified
+            });
+          } catch (error) {
+            console.error('[AuthContext] Failed to set Google profile image:', error);
+            // Still set user even if image update fails
+            setUser({
+              ...backendUser,
+              emailVerified
+            });
+          }
+        } else {
+          // Add email verification status from Supabase
+          setUser({
+            ...backendUser,
+            emailVerified
+          });
+        }
       } else {
         // If no backend profile exists, create it with Supabase data
         const authProvider = supabaseUser.app_metadata.provider || 'google';

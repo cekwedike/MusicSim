@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import type { GameStatistics, Difficulty } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import { loadStatistics } from '../services/statisticsService';
-import { supabase } from '../services/supabase';
+import authServiceSupabase from '../services/authService.supabase';
 
 interface ProfilePanelProps {
 	isGuestMode: boolean;
@@ -126,22 +126,23 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			return;
 		}
 
-		if (editedUsername.trim().length < 3 || editedUsername.trim().length > 30) {
-			setUsernameError('Username must be between 3 and 30 characters');
+		if (editedUsername.trim().length < 3 || editedUsername.trim().length > 20) {
+			setUsernameError('Username must be between 3 and 20 characters');
 			return;
 		}
 
 		try {
-			const success = await updateProfile({ username: editedUsername.trim() });
-			if (!success) {
-				setUsernameError('Failed to update username. Please try again.');
+			const result = await authServiceSupabase.updateUsername(editedUsername.trim());
+			if (!result.success) {
+				setUsernameError(result.message || 'Failed to update username. Please try again.');
 				return;
 			}
 			setIsEditingUsername(false);
 			setUsernameError('');
+			// Profile will update via AuthContext
 		} catch (error: any) {
 			console.error('Error updating username:', error);
-			const errorMessage = error?.response?.data?.message || 'Failed to update username. Please try again.';
+			const errorMessage = error?.message || 'Failed to update username. Please try again.';
 			setUsernameError(errorMessage);
 		}
 	};
@@ -162,43 +163,27 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		const file = event.target.files?.[0];
 		if (!file) return;
 
-		// Validate file type
-		if (!file.type.startsWith('image/')) {
-			alert('Please select an image file');
-			return;
-		}
-
-		// Validate file size (max 2MB)
-		if (file.size > 2 * 1024 * 1024) {
-			alert('Image size must be less than 2MB');
-			return;
-		}
-
 		setIsUploadingImage(true);
 
 		try {
-			// Convert to base64
-			const reader = new FileReader();
-			reader.onload = async (e) => {
-				const base64 = e.target?.result as string;
+			const result = await authServiceSupabase.uploadProfileImage(file);
 
-				try {
-					const success = await updateProfile({ profileImage: base64 });
-					if (!success) {
-						alert('Failed to upload image. Please try again.');
-					}
-				} catch (error) {
-					console.error('Error uploading image:', error);
-					alert('Failed to upload image. Please try again.');
-				} finally {
-					setIsUploadingImage(false);
-				}
-			};
-			reader.readAsDataURL(file);
+			if (!result.success) {
+				alert(result.error || 'Failed to upload image. Please try again.');
+				return;
+			}
+
+			// Image uploaded successfully, profile will update via AuthContext
+			alert('Profile image updated successfully!');
 		} catch (error) {
-			console.error('Error reading file:', error);
-			alert('Failed to read image file');
+			console.error('Error uploading image:', error);
+			alert('Failed to upload image. Please try again.');
+		} finally {
 			setIsUploadingImage(false);
+			// Reset file input
+			if (fileInputRef.current) {
+				fileInputRef.current.value = '';
+			}
 		}
 	};
 
@@ -214,16 +199,14 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 		setIsResendingVerification(true);
 		try {
-			const { error } = await supabase.auth.resend({
-				type: 'signup',
-				email: user.email
-			});
+			const result = await authServiceSupabase.resendVerificationEmail();
 
-			if (error) {
-				throw error;
+			if (!result.success) {
+				alert(result.message || 'Failed to resend verification email. Please try again.');
+				return;
 			}
 
-			alert('Verification email sent! Please check your inbox.');
+			alert(result.message);
 		} catch (error: any) {
 			console.error('Error resending verification email:', error);
 			alert(error.message || 'Failed to resend verification email. Please try again.');
@@ -261,16 +244,26 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 				{isAuthenticated && user ? (
 					<div className="flex items-center gap-3">
 						<div
-							className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden ${!user.profileImage ? 'bg-gradient-to-br from-violet-500 to-purple-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:opacity-80' : 'opacity-50'}`}
+							className={`relative w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden ${!user.profileImage ? 'bg-gradient-to-br from-violet-500 to-purple-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:ring-2 hover:ring-violet-400 transition-all' : 'opacity-50'} group`}
 							onClick={handleImageClick}
 							title="Click to change profile image"
 						>
 							{isUploadingImage ? (
 								<div className="text-sm">⏳</div>
 							) : user.profileImage ? (
-								<img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+								<>
+									<img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+									<div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+										<span className="text-xs">📷 Change</span>
+									</div>
+								</>
 							) : (
-								user.username.charAt(0).toUpperCase()
+								<>
+									{user.username.charAt(0).toUpperCase()}
+									<div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+										<span className="text-xs">📷 Upload</span>
+									</div>
+								</>
 							)}
 						</div>
 						<div className="flex-1">

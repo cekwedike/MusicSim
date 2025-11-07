@@ -142,22 +142,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const initializeAuth = async () => {
       try {
         // Check for OAuth errors in URL (from Supabase OAuth callback)
+        // Check both query params (?error=...) and hash fragment (#error=...)
         const params = new URLSearchParams(window.location.search);
-        const errorParam = params.get('error');
-        const errorDescription = params.get('error_description');
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+        const errorParam = params.get('error') || hashParams.get('error');
+        const errorCode = params.get('error_code') || hashParams.get('error_code');
+        const errorDescription = params.get('error_description') || hashParams.get('error_description');
 
         if (errorParam) {
-          console.error('[AuthContext] OAuth error:', errorParam, errorDescription);
+          console.error('[AuthContext] Auth error:', errorParam, errorCode, errorDescription);
 
           // Clean up the URL by removing error parameters
           const cleanUrl = window.location.origin + window.location.pathname;
           window.history.replaceState({}, document.title, cleanUrl);
 
-          // Set user-friendly error message
+          // Set user-friendly error message based on error code
           let friendlyMessage = 'Authentication failed. Please try again.';
-          if (errorDescription) {
+
+          if (errorCode === 'otp_expired') {
+            friendlyMessage = 'Email verification link has expired. Please request a new one by signing up again.';
+          } else if (errorCode === 'access_denied') {
+            friendlyMessage = 'Email verification failed. The link may have expired or already been used.';
+          } else if (errorDescription) {
             const desc = decodeURIComponent(errorDescription);
-            if (desc.includes('exchange') || desc.includes('code')) {
+            if (desc.includes('Email link is invalid') || desc.includes('expired')) {
+              friendlyMessage = 'Email verification link has expired. Please sign up again to receive a new verification email.';
+            } else if (desc.includes('exchange') || desc.includes('code')) {
               friendlyMessage = 'Google sign-in failed. Please check your internet connection and try again.';
             }
           }

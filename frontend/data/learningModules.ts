@@ -1052,7 +1052,7 @@ export const learningModules: LearningModule[] = [
           tip: "Curate your social media carefully. Unfollow toxicity. You don't need to read every comment or prove anything to strangers."
         },
         {
-          heading: 'Warning Signs You're Heading for Burnout',
+          heading: 'Warning Signs You\'re Heading for Burnout',
           content: "Recognize warning signs early: persistent exhaustion, loss of creativity, irritability, physical symptoms (headaches, stomach issues), avoiding music, isolation, substance use increasing. These aren't weakness - they're your body and mind demanding attention.",
           examples: [
             "Can't write or create despite having studio time",
@@ -1541,7 +1541,7 @@ export const learningModules: LearningModule[] = [
       introduction: "Rwanda modernized its intellectual property laws in 2024 with Law No. 055/2024, creating a streamlined copyright system. As a Berne Convention member and ARIPO participant, Rwandan copyright is automatically recognized internationally. Registration is voluntary but provides strong legal evidence. Learn Rwanda's registration process and how it connects to broader African and international systems.",
       sections: [
         {
-          heading: 'Rwanda's 2024 Copyright Law',
+          heading: 'Rwanda\'s 2024 Copyright Law',
           content: "Law No. 055/2024 on Protection of Intellectual Property came into force on July 31, 2024, modernizing Rwanda's copyright framework. Article 283 clarifies that works are protected when original, whether registered or not. Registration remains voluntary but provides legal advantages. The law protects literary, artistic, scientific works, performances, phonograms, broadcasts, and computer programs.",
           examples: [
             "Copyright automatic from creation if work is original",
@@ -1701,6 +1701,511 @@ export const learningModules: LearningModule[] = [
         ],
         correctIndex: 1,
         explanation: "As a Berne Convention member, Rwanda's copyright protections are automatically recognized in all 181 member countries without additional registration, giving Rwandan artists immediate international protection from creation."
+      }
+    ]
+  },
+
+  // Global Copyright Registration Course
+  {
+    id: 'copyright-registration-global',
+    title: 'Global Copyright Registration: International Markets',
+    category: 'registration',
+    difficulty: 'advanced',
+    estimatedMinutes: 14,
+    prerequisites: ['copyright-rights'],
+    unlockRequirement: {
+      type: 'careerProgress',
+      value: 40,
+      message: 'Reach 40% career progress to unlock'
+    },
+    content: {
+      introduction: "Breaking into international markets requires understanding global copyright systems. This course covers registration in major markets (USA, UK, Europe), how the Berne Convention provides automatic protection, when registration is necessary, and how to collect royalties worldwide. Essential for African artists pursuing international careers.",
+
+      sections: [
+        {
+          title: 'Understanding International Copyright: The Berne Convention',
+          content: `
+The Berne Convention (1886) is the foundation of international copyright protection. It has **181 member countries** including virtually all major music markets.
+
+**Automatic International Protection:**
+Once you create an original work in a Berne Convention country, your copyright is **automatically recognized** in all 181 member countries without any registration. This means your song created in Nigeria is protected in USA, UK, France, Japan, Brazil, etc. immediately.
+
+**Key Berne Convention Principles:**
+- **Automatic Protection**: No registration required for protection to exist
+- **National Treatment**: Foreign authors get same rights as local authors
+- **Minimum Standards**: All countries must provide minimum 50 years protection (life + 50 years)
+- **Independence of Protection**: Rights in each country are independent
+
+**What This Means for African Artists:**
+Your music is protected internationally from the moment of creation. You don't need to register in every country for copyright to exist. However, registration may still be required for enforcement in some jurisdictions.
+
+**Examples:**
+- Burna Boy's songs are automatically protected in USA, UK, Europe without US registration
+- Wizkid's collaborations with Drake are protected in both Nigeria and Canada
+- Angelique Kidjo's catalog is protected in all 181 Berne Convention countries
+
+**Practical Tips:**
+- Document creation date with timestamped demos, emails, or cloud storage
+- Keep proof of authorship (voice notes, studio sessions, writing sessions)
+- Register in your home country first for local enforcement
+- Register in specific countries only when planning legal action there
+          `.trim(),
+          examples: [
+            "Berne Convention protects your work in 181 countries automatically",
+            "Nigerian-created music is protected in USA without US registration",
+            "Registration may still be required to sue for infringement in some countries",
+            "Document creation date for proof of first creation"
+          ]
+        },
+
+        {
+          title: 'US Copyright Registration: Accessing American Markets',
+          content: `
+The United States has the world's largest music market. While your work is automatically protected under Berne Convention, **US registration is required to sue for copyright infringement in US courts**.
+
+**US Copyright Office Registration Process:**
+
+**Online Registration (eCO System):**
+- Visit **copyright.gov** and create account
+- File Form PA (Performing Arts) for songs
+- File Form SR (Sound Recording) for recordings
+- **Cost**: $45-$65 USD per application (online)
+- **Processing time**: 3-10 months (standard), 5-7 business days (expedited for $800)
+
+**Required Information:**
+- Title of work
+- Author(s) and birth/death dates
+- Copyright claimant (owner)
+- Year of creation and publication
+- Nation of first publication
+- Copy of work (upload MP3 for sound recordings)
+
+**Why US Registration Matters:**
+- **Statutory damages**: $750-$30,000 per infringement, up to $150,000 if willful (only if registered within 3 months of publication or before infringement)
+- **Attorney's fees**: Can recover legal costs if registered before infringement
+- **Public record**: Official proof of ownership
+- **Required for lawsuits**: Must register before filing infringement lawsuit in US
+
+**Group Registration:**
+For efficiency, you can register multiple unpublished songs in a single application for $65 (up to 20 songs).
+
+**Examples:**
+- Tems registered her catalog in US before Drake collaboration for protection
+- African artists suing US streamers for unpaid royalties need US registration
+- Wizkid's team registers all major releases in US for enforcement rights
+
+**Practical Tips:**
+- Register before releasing music in US market
+- Use group registration for multiple songs to save money
+- Register within 3 months of release for maximum statutory damages
+- Keep all registration certificates safely
+          `.trim(),
+          examples: [
+            "US registration required to sue in US courts",
+            "$65 per application can cover up to 20 unpublished songs",
+            "Statutory damages up to $150,000 per work if willful infringement",
+            "Register within 3 months of release for full benefits"
+          ]
+        },
+
+        {
+          title: 'UK and European Copyright Systems',
+          content: `
+The United Kingdom and European Union have strong copyright protection with automatic rights but different enforcement approaches.
+
+**United Kingdom Copyright:**
+
+**Automatic Protection:**
+- No registration required or available
+- Copyright exists from creation
+- Duration: Life + 70 years
+- Covers UK, but EU rights now separate post-Brexit
+
+**UK Intellectual Property Office (IPO):**
+The UK IPO doesn't register copyright, but you can:
+- Deposit copies with National Archives
+- Use timestamped services (e.g., UK Copyright Service)
+- Register with collecting societies (PRS for Music)
+
+**PRS for Music (UK CMO):**
+- Register as member to collect performance royalties
+- **PRS**: Collects songwriter/publisher royalties
+- **PPL**: Collects recording royalties for performers
+- Combined they collect £1+ billion annually
+- Reciprocal agreements with CMOs worldwide
+
+**European Union Copyright:**
+
+**EU-Wide Protection:**
+- Copyright Directive harmonizes protection across EU
+- Duration: Life + 70 years (standard across EU)
+- Digital Single Market Directive (2019) improves cross-border licensing
+- No single EU registration - protection automatic in all member states
+
+**Key EU Markets for African Music:**
+- **France**: SACEM (powerful CMO with African presence)
+- **Germany**: GEMA (strict copyright enforcement)
+- **Netherlands**: BUMA/STEMRA (Afrobeats market growing)
+- **Belgium**: SABAM (African diaspora presence)
+
+**Examples:**
+- Wizkid's "Essence" collects royalties across UK/EU through PRS reciprocal agreements
+- Burna Boy's European tours generate performance royalties through local CMOs
+- Davido's streams in France trigger SACEM royalty collection
+
+**Practical Tips:**
+- Join your local CMO (NCC/COSON in Nigeria, KAMP in Rwanda) for EU royalty collection
+- Register with PRS for Music if targeting UK market specifically
+- France's SACEM has strong relationships with African CMOs
+- EU Digital Single Market rules help African artists license across Europe
+          `.trim(),
+          examples: [
+            "UK has no copyright registration system - protection is automatic",
+            "PRS for Music collects £1+ billion annually in UK royalties",
+            "France's SACEM has extensive African CMO relationships",
+            "EU copyright lasts life + 70 years across all member states"
+          ]
+        },
+
+        {
+          title: 'Collective Management Organizations (CMOs) and Global Royalty Collection',
+          content: `
+CMOs collect royalties worldwide through reciprocal agreements. This is how African artists collect international royalties without registering in every country.
+
+**How CMO Reciprocal Agreements Work:**
+
+**Example Flow:**
+1. You register your song with COSON (Nigeria) or KAMP (Rwanda)
+2. Your song plays on radio in USA
+3. ASCAP (US CMO) collects the royalty
+4. ASCAP sends royalty to COSON/KAMP through reciprocal agreement
+5. COSON/KAMP pays you (minus their commission)
+
+**Major Global CMOs:**
+- **USA**: ASCAP, BMI, SESAC (performance), SoundExchange (digital)
+- **UK**: PRS for Music, PPL
+- **France**: SACEM
+- **Germany**: GEMA
+- **Canada**: SOCAN
+- **Brazil**: ECAD
+- **Japan**: JASRAC
+- **India**: IPRS
+
+**Two Types of Rights Managed:**
+
+**Performance Rights (Songwriter/Publisher):**
+- Radio airplay, TV broadcasts, live performances, streaming
+- Collected by performance rights CMOs (ASCAP, PRS, SACEM, etc.)
+- You register your composition (song/melody/lyrics)
+
+**Neighboring Rights (Recording Rights):**
+- Sound recording (the actual recorded version)
+- Collected by recording rights CMOs (SoundExchange, PPL, etc.)
+- Both artists and labels have rights
+
+**Why CMOs Matter for African Artists:**
+Most African artists can't register individually in 181 countries. CMOs solve this by:
+- Monitoring use globally
+- Collecting royalties from foreign CMOs
+- Distributing payments to members
+- Handling licensing and enforcement
+
+**Examples:**
+- Wizkid doesn't register individually in USA - COSON collects US royalties through ASCAP/BMI agreements
+- Angélique Kidjo's performances in Japan trigger JASRAC royalties paid to her French CMO SACEM
+- Burna Boy's streaming in Europe generates royalties collected by local CMOs and paid through Nigerian CMO
+
+**Practical Tips:**
+- Register with your national CMO (COSON, KAMP, COSOTA, etc.)
+- Ensure CMO has reciprocal agreements with major markets
+- Register both composition and sound recording rights
+- Check CMO quarterly statements for international collections
+- Consider dual membership in multiple CMOs for better coverage
+          `.trim(),
+          examples: [
+            "COSON has reciprocal agreements with ASCAP, BMI, PRS, SACEM",
+            "You only register in your home country - CMOs handle international collection",
+            "Performance rights (composition) and neighboring rights (recording) are separate",
+            "CMOs charge 10-20% commission but handle global monitoring"
+          ]
+        },
+
+        {
+          title: 'When and Where to Register Internationally',
+          content: `
+Registration is automatic under Berne Convention, but strategic registration in specific countries makes enforcement easier.
+
+**When to Register in Foreign Countries:**
+
+**1. Before Major Release in That Market:**
+- Registering in US before US release gives maximum statutory damages
+- Protects against immediate infringement when you enter new market
+- Establishes public record of ownership before disputes arise
+
+**2. Before Filing Lawsuit:**
+- US requires registration before you can sue in US courts
+- China requires registration for more effective enforcement
+- Canada strongly recommends registration for court cases
+
+**3. High-Value Catalog Protection:**
+- Major hits that will generate significant revenue warrant registration
+- Catalog registration in multiple territories for legacy protection
+- Collaboration with major international artists may require proof
+
+**4. Distribution Deal Requirements:**
+- Major labels may require US registration as part of deal
+- Publishing agreements often include registration in key territories
+- Sync licensing deals (film/TV) may specify registration
+
+**Countries Where Registration Adds Value:**
+
+**High Priority:**
+- **USA**: Required for lawsuits, statutory damages (world's largest market)
+- **China**: Growing market, registration strengthens enforcement despite Berne membership
+- **Japan**: Registration not required but helps with licensing and enforcement
+
+**Lower Priority (Automatic Protection Sufficient):**
+- **UK, EU**: No registration system, automatic protection strong
+- **Canada**: Registration exists but automatic protection usually sufficient
+- **Brazil**: Berne Convention protection adequate
+- **Most other countries**: Registration rarely necessary
+
+**Cost-Benefit Analysis:**
+
+**When Registration Makes Sense:**
+- Songs with proven commercial success
+- Material being released by major international labels
+- Preparing for known licensing deals (film, advertising)
+- Evidence of infringement requiring lawsuit
+
+**When It's Not Worth It:**
+- Every song you create (too expensive)
+- Markets you're not actively pursuing
+- Songs with minimal commercial prospects
+- When you can't afford registration fees
+
+**Examples:**
+- Wizkid's "Essence" warranted US registration due to major US success
+- Burna Boy registers key singles in US but not entire catalog
+- Tems' Drake/Future features likely registered in US before release
+- Most African artists register only in US for major collaborations
+
+**Practical Tips:**
+- Start with home country registration (cheapest, easiest)
+- Register in US only for serious market entry or collaborations
+- Use group registration in US to reduce costs (20 songs/$65)
+- Focus budget on proven hits, not everything you create
+- Automatic Berne protection covers you even without registration
+          `.trim(),
+          examples: [
+            "Register in US before release if targeting American market seriously",
+            "Home country + US registration covers most enforcement needs",
+            "Berne Convention protection exists everywhere without registration",
+            "Registration costs $45-$800 per application - be strategic"
+          ]
+        },
+
+        {
+          title: 'International Enforcement and Protecting Your Rights Globally',
+          content: `
+International enforcement combines legal action, CMO enforcement, and digital rights management.
+
+**Enforcement Strategies for African Artists:**
+
+**1. CMO Enforcement (First Line of Defense):**
+- Your CMO monitors use and collects royalties through reciprocal agreements
+- Most efficient for ongoing uses (radio, streaming, performances)
+- Low cost - included in CMO membership
+- Works best for licensed uses where payment is due
+
+**2. Digital Platform Reporting:**
+- YouTube Content ID, Spotify URI conflicts, Apple Music rights management
+- Report unauthorized uses directly to platforms
+- Platforms remove infringing content or redirect royalties
+- Free and effective for digital infringement
+
+**3. Cease and Desist Letters:**
+- Formal legal demand to stop infringement
+- Often effective without lawsuit
+- Can be sent internationally
+- Establishes record of infringement notification
+
+**4. International Lawsuits (Last Resort):**
+- Expensive and complex
+- Requires registration in some countries (USA, China)
+- Consider cost vs. potential damages
+- Explore settlement before trial
+
+**WIPO (World Intellectual Property Organization):**
+- UN agency managing international IP treaties
+- WIPO Arbitration and Mediation Center handles disputes
+- Alternative to expensive national lawsuits
+- Mediation services available
+
+**Practical Enforcement Examples:**
+
+**Successful Cases:**
+- African artists using YouTube Content ID to block or monetize unauthorized uploads
+- COSON successfully recovering royalties from international streaming platforms
+- South African artists using cease and desist to stop unlicensed sampling
+
+**Challenges:**
+- Cross-border litigation is expensive (easily $50,000-$500,000 USD)
+- Legal systems vary significantly between countries
+- Language and jurisdictional barriers
+- Enforcement in countries with weak IP protection
+
+**Smart Enforcement Approach:**
+
+**Tier 1 - Free/Low Cost:**
+- CMO reciprocal agreements
+- Digital platform reporting (YouTube Content ID, etc.)
+- Social media exposure of infringement
+- Email cease and desist
+
+**Tier 2 - Moderate Cost:**
+- Lawyer-drafted cease and desist letters
+- WIPO mediation
+- Platform-specific dispute resolution
+
+**Tier 3 - High Cost:**
+- International arbitration
+- National court lawsuits
+- Multi-jurisdiction enforcement
+
+**Examples:**
+- Wizkid's team uses YouTube Content ID to capture revenue from unofficial uploads
+- African CMOs collectively negotiating better rates with Spotify, Apple Music
+- Artists going viral exposing sampling without credit/payment
+- Major artists can afford US litigation; smaller artists rely on CMOs and platforms
+
+**Practical Tips:**
+- Document all infringement with screenshots, URLs, timestamps
+- Start with lowest-cost enforcement (platform reporting, CMO)
+- Calculate potential recovery vs. legal costs before suing
+- Social media pressure often works faster than legal action
+- Join collective artist advocacy groups for stronger negotiating power
+- Use technology (Content ID, Shazam, etc.) to monitor use
+          `.trim(),
+          examples: [
+            "YouTube Content ID automatically blocks or monetizes unauthorized uploads",
+            "CMO enforcement costs nothing extra - included in membership",
+            "International lawsuits cost $50k-$500k - reserve for major infringement",
+            "Social media exposure can pressure infringers without legal costs"
+          ]
+        }
+      ],
+
+      keyTakeaways: [
+        "The Berne Convention provides automatic copyright protection in 181 countries without registration",
+        "US registration ($65) is required to sue for infringement in US courts and access statutory damages",
+        "CMO reciprocal agreements collect international royalties without needing to register in every country",
+        "UK and EU have automatic protection with no registration system - join PRS/SACEM through local CMO",
+        "Register strategically in key markets (especially USA) for major releases, not every song",
+        "International enforcement works best through CMOs, digital platforms, and collective action rather than lawsuits"
+      ],
+
+      culturalContext: `
+**For African Artists Accessing Global Markets:**
+
+**Advantages:**
+- Berne Convention means your work is already protected internationally
+- CMO reciprocal agreements let you collect worldwide through local membership
+- Digital platforms make enforcement easier than traditional legal action
+
+**Challenges:**
+- Registration costs (especially US) can be expensive relative to African income
+- Cross-border legal action is prohibitively expensive for most African artists
+- Language barriers and jurisdictional complexity
+- Western legal systems unfamiliar and intimidating
+
+**Strategic Approach:**
+- Register in home country first (cheapest, easiest enforcement locally)
+- Add US registration only for serious international releases or collaborations
+- Rely on CMO reciprocal agreements for routine royalty collection
+- Use digital tools (Content ID, streaming platform disputes) for enforcement
+- Build collective power through CMO membership and artist advocacy groups
+
+**Reality Check:**
+Most African artists can't afford to register in multiple countries or pursue international lawsuits. The good news: **you don't need to**. Berne Convention protection is automatic, CMOs handle international collection, and digital tools provide free enforcement. Focus budget on home country + US registration for major releases, let CMOs and platforms handle the rest.
+      `.trim(),
+
+      commonPitfalls: [
+        "Believing you must register in every country - Berne Convention covers you automatically",
+        "Paying for unnecessary international registrations when CMOs already collect there",
+        "Pursuing expensive international lawsuits instead of using CMOs or platform reporting",
+        "Not registering in US before major US release, losing statutory damages",
+        "Forgetting that protection exists even without registration - registration is for enforcement enhancement",
+        "Not joining your local CMO, missing international royalty collection"
+      ]
+    },
+
+    quiz: [
+      {
+        question: "What does the Berne Convention provide for African artists?",
+        options: [
+          "Registration services in all member countries",
+          "Automatic copyright protection in 181 countries without registration",
+          "Free legal representation for international disputes",
+          "Guaranteed royalty payments from all countries"
+        ],
+        correctIndex: 1,
+        explanation: "The Berne Convention provides automatic copyright protection in all 181 member countries from the moment of creation, without any registration required. Your work created in Nigeria is automatically protected in USA, UK, France, Japan, etc."
+      },
+      {
+        question: "Why would an African artist register their music with the US Copyright Office?",
+        options: [
+          "Copyright doesn't exist in USA without registration",
+          "To collect royalties from US streaming platforms",
+          "To sue for infringement in US courts and access statutory damages",
+          "Berne Convention doesn't apply to USA"
+        ],
+        correctIndex: 2,
+        explanation: "While your music is automatically protected in USA under Berne Convention, US registration ($65) is required to file an infringement lawsuit in US courts and access statutory damages of up to $150,000 per work. It's not required for copyright to exist, but necessary for enforcement."
+      },
+      {
+        question: "How do African artists collect royalties from plays in Europe without registering in each European country?",
+        options: [
+          "They must register individually in UK, France, Germany, etc.",
+          "Berne Convention automatically pays royalties to all artists",
+          "Their local CMO (COSON, KAMP, etc.) collects through reciprocal agreements with European CMOs",
+          "They cannot collect European royalties without European registration"
+        ],
+        correctIndex: 2,
+        explanation: "African artists collect international royalties through their local CMO (like COSON in Nigeria or KAMP in Rwanda), which has reciprocal agreements with CMOs worldwide (SACEM in France, PRS in UK, GEMA in Germany, etc.). When your song plays in France, SACEM collects and sends royalties to your local CMO, which pays you."
+      },
+      {
+        question: "An African artist's song becomes a major hit in the USA. What registration strategy makes the most sense?",
+        options: [
+          "Don't register anywhere - Berne Convention is enough",
+          "Register in USA before filing any infringement lawsuits, use CMO for royalty collection",
+          "Register in all 181 Berne Convention countries",
+          "Registration is unnecessary if you have a record deal"
+        ],
+        correctIndex: 1,
+        explanation: "Register in USA ($65) if you anticipate needing to sue for infringement or want access to statutory damages. For routine royalty collection from streaming, radio, etc., your local CMO handles this through reciprocal agreements without US registration. Register strategically for enforcement, rely on CMOs for collection."
+      },
+      {
+        question: "What is the most cost-effective way for an African artist to enforce their rights against unauthorized YouTube uploads of their music?",
+        options: [
+          "File lawsuits in each country where videos are uploaded",
+          "Register copyright in every country before taking action",
+          "Use YouTube Content ID to automatically block or monetize unauthorized uploads",
+          "Hire international lawyers to send cease and desist letters"
+        ],
+        correctIndex: 2,
+        explanation: "YouTube Content ID is free and automatically detects your music across all YouTube uploads worldwide, allowing you to block videos, monetize them, or track them. This is far more cost-effective than international lawsuits ($50k-$500k) and works across all countries simultaneously."
+      },
+      {
+        question: "Why don't UK and EU countries offer copyright registration systems?",
+        options: [
+          "European copyright law is too weak to support registration",
+          "Copyright protection is automatic from creation under UK/EU law - registration is unnecessary",
+          "Only USA requires copyright registration",
+          "Artists must register in their home country instead"
+        ],
+        correctIndex: 1,
+        explanation: "UK and EU provide automatic copyright protection from the moment of creation for life + 70 years. There is no registration system because registration is not required for copyright to exist or be enforced. This is consistent with Berne Convention principles - copyright is automatic, not dependent on formalities."
       }
     ]
   }

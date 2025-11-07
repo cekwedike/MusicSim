@@ -1710,6 +1710,7 @@ export const learningModules: LearningModule[] = [
     id: 'copyright-registration-global',
     title: 'Global Copyright Registration: International Markets',
     category: 'registration',
+    icon: '',
     difficulty: 'advanced',
     estimatedMinutes: 14,
     prerequisites: ['copyright-rights'],
@@ -1723,7 +1724,7 @@ export const learningModules: LearningModule[] = [
 
       sections: [
         {
-          title: 'Understanding International Copyright: The Berne Convention',
+          heading: 'Understanding International Copyright: The Berne Convention',
           content: `
 The Berne Convention (1886) is the foundation of international copyright protection. It has **181 member countries** including virtually all major music markets.
 
@@ -1759,7 +1760,7 @@ Your music is protected internationally from the moment of creation. You don't n
         },
 
         {
-          title: 'US Copyright Registration: Accessing American Markets',
+          heading: 'US Copyright Registration: Accessing American Markets',
           content: `
 The United States has the world's largest music market. While your work is automatically protected under Berne Convention, **US registration is required to sue for copyright infringement in US courts**.
 
@@ -1809,7 +1810,7 @@ For efficiency, you can register multiple unpublished songs in a single applicat
         },
 
         {
-          title: 'UK and European Copyright Systems',
+          heading: 'UK and European Copyright Systems',
           content: `
 The United Kingdom and European Union have strong copyright protection with automatic rights but different enforcement approaches.
 
@@ -1868,7 +1869,7 @@ The UK IPO doesn't register copyright, but you can:
         },
 
         {
-          title: 'Collective Management Organizations (CMOs) and Global Royalty Collection',
+          heading: 'Collective Management Organizations (CMOs) and Global Royalty Collection',
           content: `
 CMOs collect royalties worldwide through reciprocal agreements. This is how African artists collect international royalties without registering in every country.
 
@@ -1931,7 +1932,7 @@ Most African artists can't register individually in 181 countries. CMOs solve th
         },
 
         {
-          title: 'When and Where to Register Internationally',
+          heading: 'When and Where to Register Internationally',
           content: `
 Registration is automatic under Berne Convention, but strategic registration in specific countries makes enforcement easier.
 
@@ -2006,7 +2007,7 @@ Registration is automatic under Berne Convention, but strategic registration in 
         },
 
         {
-          title: 'International Enforcement and Protecting Your Rights Globally',
+          heading: 'International Enforcement and Protecting Your Rights Globally',
           content: `
 International enforcement combines legal action, CMO enforcement, and digital rights management.
 

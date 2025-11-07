@@ -207,7 +207,7 @@ export interface SaveSlot {
 export interface LearningModule {
   id: string;
   title: string;
-  category: 'contracts' | 'revenue' | 'rights' | 'marketing' | 'legal';
+  category: 'contracts' | 'revenue' | 'rights' | 'marketing' | 'legal' | 'culture' | 'business' | 'wellness' | 'collaboration' | 'registration';
   icon: string; // Icon name or emoji
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedMinutes: number;

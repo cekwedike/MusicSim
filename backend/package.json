@@ -9,7 +9,8 @@
     "test": "node server-test.js",
     "test:dev": "nodemon server-test.js",
     "db:init": "node scripts/initDatabase.js",
-    "db:reset": "node scripts/resetDatabase.js"
+    "db:reset": "node scripts/resetDatabase.js",
+    "migrate": "node migrations/migrate.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.79.0",

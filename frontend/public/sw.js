@@ -45,14 +45,26 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Don't cache POST, PUT, DELETE requests - only GET requests can be cached
+  if (request.method !== 'GET') {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // Don't cache external API requests (different origin)
+  if (url.origin !== location.origin) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
   // Handle API requests differently
-  if (url.origin === location.origin && url.pathname.startsWith('/api')) {
+  if (url.pathname.startsWith('/api')) {
     // Network first for API calls
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Cache successful responses
-          if (response.ok) {
+          // Cache successful GET responses only
+          if (response.ok && request.method === 'GET') {
             const responseClone = response.clone();
             caches.open(API_CACHE).then((cache) => {
               cache.put(request, responseClone);

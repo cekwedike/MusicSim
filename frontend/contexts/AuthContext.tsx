@@ -209,6 +209,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(session.access_token);
         await syncUserProfile(session.user);
         setError(null);
+
+        // Clean up URL hash after successful sign in (email verification, OAuth callback, etc.)
+        if (window.location.hash) {
+          const cleanUrl = window.location.origin + window.location.pathname + window.location.search;
+          window.history.replaceState({}, document.title, cleanUrl);
+        }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
         setToken(null);

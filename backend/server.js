@@ -128,8 +128,10 @@ const startServer = async () => {
     isDatabaseConnected = true;
 
     // Sync models (create tables if they don't exist)
-    await sequelize.sync({ alter: false }); // Set to true only during development
+    // Using alter: true will create tables and update existing ones without dropping data
+    await sequelize.sync({ alter: true });
     console.log('Database models synchronized.');
+    console.log('Tables created/updated: Users, PlayerStatistics, GameSaves, CareerHistory, LearningProgress');
 
     // Start listening
     server = app.listen(PORT, () => {

@@ -838,11 +838,14 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
   try {
     const { userId, email, username, profileImage, authProvider } = req.body;
 
+    console.log('[sync-profile] Request received:', { userId, email, username, authProvider });
+
     // Check if user already exists
     let user = await User.findByPk(userId || req.userId);
 
     if (user) {
       // Update existing user
+      console.log('[sync-profile] User exists, updating:', user.id);
       user.email = email || user.email;
       user.username = username || user.username;
       user.profileImage = profileImage || user.profileImage;
@@ -851,7 +854,7 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
 
       await user.save();
 
-      console.log(`User profile updated: ${user.username}`);
+      console.log(`[sync-profile] User profile updated: ${user.username} (${user.email})`);
 
       return res.json({
         success: true,
@@ -869,6 +872,8 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
     }
 
     // Create new user profile
+    console.log('[sync-profile] Creating new user with data:', { userId: userId || req.userId, email, username, authProvider });
+
     user = await User.create({
       id: userId || req.userId,
       email,
@@ -879,12 +884,15 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
       isActive: true
     });
 
+    console.log('[sync-profile] User created successfully:', user.id);
+
     // Create associated PlayerStatistics record
+    console.log('[sync-profile] Creating PlayerStatistics for user:', user.id);
     await PlayerStatistics.create({
       userId: user.id
     });
 
-    console.log(`New user profile created: ${user.username} (${user.email})`);
+    console.log(`[sync-profile] ✅ New user profile created: ${user.username} (${user.email})`);
 
     res.status(201).json({
       success: true,
@@ -900,7 +908,8 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.error('Error syncing profile:', error);
+    console.error('[sync-profile] ❌ Error syncing profile:', error.message);
+    console.error('[sync-profile] Error details:', error);
     next(error);
   }
 });

@@ -38,15 +38,15 @@ const CareerHistory = sequelize.define('CareerHistory', {
   },
   achievementsEarned: {
     type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: []
+    defaultValue: null
   },
   lessonsLearned: {
     type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: []
+    defaultValue: null
   },
   contractsSigned: {
     type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: []
+    defaultValue: null
   },
   peakCash: {
     type: DataTypes.INTEGER,

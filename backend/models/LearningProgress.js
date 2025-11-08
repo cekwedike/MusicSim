@@ -43,7 +43,7 @@ const LearningProgress = sequelize.define('LearningProgress', {
   },
   conceptsMastered: {
     type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: []
+    defaultValue: null
   },
   lastAccessed: {
     type: DataTypes.DATE,

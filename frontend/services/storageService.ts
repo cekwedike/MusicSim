@@ -1,7 +1,7 @@
 import type { GameState, SaveSlot, LogEntry } from '../types';
 import { toGameDate } from '../src/utils/dateUtils';
 import { gameService } from './gameService';
-import { authService } from './authService';
+import authServiceSupabase from './authService.supabase';
 
 const AUTOSAVE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
 
@@ -65,7 +65,8 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
 
   try {
     // Only save to backend if authenticated (not guest mode)
-    if (authService.isAuthenticated()) {
+    const isAuthenticated = await authServiceSupabase.isAuthenticated();
+    if (isAuthenticated) {
       await gameService.saveGame(slotId, state);
       console.log(`[storageService] Saved to backend: ${slotId}`);
     } else {
@@ -124,7 +125,8 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
 export const loadGame = async (slotId: string): Promise<GameState | null> => {
   try {
     // If authenticated, try loading from backend first
-    if (authService.isAuthenticated()) {
+    const isAuthenticated = await authServiceSupabase.isAuthenticated();
+    if (isAuthenticated) {
       try {
         const response = await gameService.loadGame(slotId);
         if (response.success) {
@@ -166,7 +168,8 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
 export const deleteSave = async (slotId: string): Promise<void> => {
   try {
     // Delete from backend if authenticated
-    if (authService.isAuthenticated()) {
+    const isAuthenticated = await authServiceSupabase.isAuthenticated();
+    if (isAuthenticated) {
       const saves = await gameService.getAllSaves();
       if (saves.success) {
         const save = saves.data.saves.find((s: any) => s.slotName === slotId);
@@ -255,7 +258,8 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 
   try {
     // Try to get saves from backend if authenticated
-    if (authService.isAuthenticated()) {
+    const isAuthenticated = await authServiceSupabase.isAuthenticated();
+    if (isAuthenticated) {
       console.log('[storageService] User authenticated, loading from backend...');
       try {
         const response = await gameService.getAllSaves();

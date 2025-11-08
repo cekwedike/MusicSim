@@ -257,19 +257,32 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
   const saveSlots: SaveSlot[] = [];
 
   try {
-    // Try to get saves from backend if authenticated
+    // Try to get saves from backend if authenticated (with 10s timeout)
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (isAuthenticated) {
       console.log('[storageService] User authenticated, loading from backend...');
       try {
-        const response = await gameService.getAllSaves();
+        // Race against a 10 second timeout
+        const response = await Promise.race([
+          gameService.getAllSaves(),
+          new Promise<any>((_, reject) =>
+            setTimeout(() => reject(new Error('Backend save load timeout')), 10000)
+          )
+        ]);
+
         if (response.success && response.data) {
           console.log('[storageService] Backend returned', response.data.saves.length, 'saves');
           // Convert backend saves to SaveSlot format
           const backendSlots = await Promise.all(
             response.data.saves.map(async (save: any) => {
               try {
-                const fullSaveResponse = await gameService.loadGame(save.slotName);
+                const fullSaveResponse = await Promise.race([
+                  gameService.loadGame(save.slotName),
+                  new Promise<any>((_, reject) =>
+                    setTimeout(() => reject(new Error('Timeout')), 5000)
+                  )
+                ]);
+
                 if (fullSaveResponse.success && fullSaveResponse.data) {
                   const gameState = fullSaveResponse.data.gameState;
                   const gd = toGameDate(new Date(gameState.currentDate), new Date(gameState.startDate));
@@ -295,7 +308,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
           console.log('[storageService] Added', saveSlots.length, 'backend saves');
         }
       } catch (error) {
-        console.warn('[storageService] Failed to get backend saves, falling back to localStorage:', error);
+        console.warn('[storageService] Backend save load timed out, using localStorage:', error);
       }
     } else {
       console.log('[storageService] Guest mode - loading from localStorage only');

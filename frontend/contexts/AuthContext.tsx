@@ -48,20 +48,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Sync user profile with backend
   const syncUserProfile = useCallback(async (supabaseUser: any) => {
-    try {
-      // Extract profile data from Supabase user
-      const username = supabaseUser.user_metadata.username || supabaseUser.user_metadata.name || supabaseUser.email!.split('@')[0];
-      // Google OAuth stores profile picture in avatar_url or picture
-      const profileImage = supabaseUser.user_metadata.profile_image ||
-                          supabaseUser.user_metadata.avatar_url ||
-                          supabaseUser.user_metadata.picture;
-      const emailVerified = !!supabaseUser.email_confirmed_at;
+    // Extract profile data from Supabase user first (always available)
+    const username = supabaseUser.user_metadata.username || supabaseUser.user_metadata.name || supabaseUser.email!.split('@')[0];
+    const profileImage = supabaseUser.user_metadata.profile_image ||
+                        supabaseUser.user_metadata.avatar_url ||
+                        supabaseUser.user_metadata.picture;
+    const emailVerified = !!supabaseUser.email_confirmed_at;
 
-      // Get user profile from backend
-      const profileResponse = await authServiceSupabase.getCurrentUser();
+    // Set user immediately with Supabase data (don't wait for backend)
+    setUser({
+      id: supabaseUser.id,
+      email: supabaseUser.email!,
+      username,
+      profileImage,
+      emailVerified,
+    });
+
+    // Try to sync with backend in background (non-blocking)
+    try {
+      // Get user profile from backend (with timeout)
+      const profileResponse = await Promise.race([
+        authServiceSupabase.getCurrentUser(),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Backend sync timeout')), 5000)
+        )
+      ]) as any;
 
       if (profileResponse.success && profileResponse.data) {
         const backendUser = profileResponse.data.user;
+
+        // Update user with backend data (keep emailVerified from Supabase)
+        setUser(prev => ({
+          ...backendUser,
+          emailVerified
+        }));
 
         // Check if user signed in with OAuth and should get Google profile image
         const authProvider = supabaseUser.app_metadata.provider;
@@ -71,67 +91,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (authProvider === 'google' && googleImageUrl && !backendUser.profileImage) {
           console.log('[AuthContext] Setting Google profile image for OAuth user');
           try {
-            // Update profile with Google image
-            await authServiceSupabase.updateProfile({ profileImage: googleImageUrl });
-            // Update local state with Google image
-            setUser({
-              ...backendUser,
-              profileImage: googleImageUrl,
-              emailVerified
-            });
+            // Update profile with Google image (background, don't wait)
+            authServiceSupabase.updateProfile({ profileImage: googleImageUrl }).then(() => {
+              setUser(prev => prev ? { ...prev, profileImage: googleImageUrl } : prev);
+            }).catch(console.error);
           } catch (error) {
             console.error('[AuthContext] Failed to set Google profile image:', error);
-            // Still set user even if image update fails
-            setUser({
-              ...backendUser,
-              emailVerified
-            });
           }
-        } else {
-          // Add email verification status from Supabase
-          setUser({
-            ...backendUser,
-            emailVerified
-          });
         }
       } else {
-        // If no backend profile exists, create it with Supabase data
+        // If no backend profile exists, create it with Supabase data (background)
         const authProvider = supabaseUser.app_metadata.provider || 'google';
 
-        // Sync this new user to backend
-        await authServiceSupabase.syncProfile({
+        // Sync this new user to backend (don't block UI)
+        authServiceSupabase.syncProfile({
           userId: supabaseUser.id,
           email: supabaseUser.email!,
           username,
           profileImage,
           authProvider
-        });
-
-        // Set user state
-        setUser({
-          id: supabaseUser.id,
-          email: supabaseUser.email!,
-          username,
-          profileImage,
-          emailVerified,
+        }).catch(err => {
+          console.warn('[AuthContext] Background profile sync failed:', err);
         });
       }
     } catch (error) {
-      console.error('Error syncing user profile:', error);
-      // Fallback to Supabase user data
-      const username = supabaseUser.user_metadata.username || supabaseUser.user_metadata.name || supabaseUser.email!.split('@')[0];
-      const profileImage = supabaseUser.user_metadata.profile_image ||
-                          supabaseUser.user_metadata.avatar_url ||
-                          supabaseUser.user_metadata.picture;
-      const emailVerified = !!supabaseUser.email_confirmed_at;
-
-      setUser({
-        id: supabaseUser.id,
-        email: supabaseUser.email!,
-        username,
-        profileImage,
-        emailVerified,
-      });
+      // Backend is slow/unavailable, but user is already set with Supabase data
+      console.warn('[AuthContext] Backend sync failed (using Supabase data):', error);
     }
   }, []);
 
@@ -342,20 +327,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Logout function
   const logout = useCallback(async () => {
-    setIsLoading(true);
+    // Clear state immediately for instant logout UX
+    setUser(null);
+    setToken(null);
+    setError(null);
+    setIsLoading(false);
 
-    try {
-      await authServiceSupabase.logout();
-      // State will be cleared by onAuthStateChange listener
-    } catch (error) {
-      console.warn('Logout error:', error);
-      // Force clear state even on error
-      setUser(null);
-      setToken(null);
-      setError(null);
-    } finally {
-      setIsLoading(false);
-    }
+    // Logout from Supabase in background (don't block UI)
+    authServiceSupabase.logout().catch(error => {
+      console.warn('Background logout error:', error);
+    });
   }, []);
 
   // Update profile function

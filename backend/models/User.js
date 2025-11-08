@@ -47,7 +47,7 @@ const User = sequelize.define('User', {
   },
   profileData: {
     type: DataTypes.JSONB,
-    defaultValue: {}
+    defaultValue: null
   },
   profileImage: {
     type: DataTypes.TEXT, // Store base64 image or URL

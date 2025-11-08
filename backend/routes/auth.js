@@ -324,8 +324,8 @@ router.post('/login', async (req, res, next) => {
  */
 router.get('/me', authMiddleware, async (req, res, next) => {
   try {
-    const user = await User.findByPk(req.userId, {
-      attributes: ['id', 'email', 'username', 'lastLogin', 'createdAt', 'isActive'],
+    let user = await User.findByPk(req.userId, {
+      attributes: ['id', 'email', 'username', 'lastLogin', 'createdAt', 'isActive', 'profileImage'],
       include: [
         {
           model: PlayerStatistics,
@@ -338,6 +338,54 @@ router.get('/me', authMiddleware, async (req, res, next) => {
         }
       ]
     });
+
+    // If user doesn't exist in DB but has valid Supabase token, create profile
+    if (!user && req.supabaseUser) {
+      console.log('[/auth/me] User authenticated but no profile found. Creating profile...');
+
+      // Extract profile data from Supabase user
+      const username = req.supabaseUser.user_metadata?.username ||
+                      req.supabaseUser.user_metadata?.name ||
+                      req.supabaseUser.email.split('@')[0];
+      const profileImage = req.supabaseUser.user_metadata?.profile_image ||
+                          req.supabaseUser.user_metadata?.avatar_url ||
+                          req.supabaseUser.user_metadata?.picture ||
+                          null;
+      const authProvider = req.supabaseUser.app_metadata?.provider || 'local';
+
+      // Create user profile
+      user = await User.create({
+        id: req.supabaseUser.id,
+        email: req.supabaseUser.email,
+        username,
+        profileImage,
+        authProvider,
+        lastLogin: new Date()
+      });
+
+      // Create associated player statistics
+      await PlayerStatistics.create({
+        userId: user.id
+      });
+
+      console.log(`[/auth/me] Profile created for user: ${username} (${user.email})`);
+
+      // Fetch user again with statistics
+      user = await User.findByPk(user.id, {
+        attributes: ['id', 'email', 'username', 'lastLogin', 'createdAt', 'isActive', 'profileImage'],
+        include: [
+          {
+            model: PlayerStatistics,
+            as: 'statistics',
+            attributes: [
+              'totalGamesPlayed', 'totalWeeksPlayed', 'longestCareerWeeks',
+              'totalAchievementsUnlocked', 'highestCash', 'highestFame',
+              'highestCareerProgress', 'preferredDifficulty', 'lastPlayedAt'
+            ]
+          }
+        ]
+      });
+    }
 
     if (!user) {
       return res.status(404).json({

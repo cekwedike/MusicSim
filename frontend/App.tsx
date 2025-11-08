@@ -39,7 +39,6 @@ import GameHistory from './components/GameHistory';
 import { useOnlineStatus } from './src/hooks/useOnlineStatus';
 import OfflineBanner from './src/components/OfflineBanner';
 import InstallBanner from './src/components/InstallBanner';
-import { EmailVerificationBanner } from './components/EmailVerificationBanner';
 import { useAudio } from './contexts/AudioContext';
 import Sidebar, { SidebarView } from './components/Sidebar';
 import ProfilePanel from './components/ProfilePanel';
@@ -2049,7 +2048,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             {/* PWA Components */}
             <OfflineBanner isOnline={isOnline} />
             <InstallBanner />
-            <EmailVerificationBanner />
             <Header
                 artistName={artistName || undefined}
                 difficulty={status === 'playing' ? state.difficulty : undefined}

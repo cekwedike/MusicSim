@@ -63,47 +63,44 @@ export const authServiceSupabase = {
         throw new Error('Registration failed');
       }
 
-      // Check if email confirmation is required
+      // Check if we have a session (user can login immediately)
       const session = authData.session;
-      const needsEmailConfirmation = !session && authData.user && !authData.user.email_confirmed_at;
 
-      if (needsEmailConfirmation) {
-        // Email confirmation required - user can't sign in yet
-        // But we don't throw an error, we return a success with a message
+      if (session) {
+        // User has session - email confirmation is DISABLED or auto-login enabled
+        // Sync user profile with backend
+        await api.post('/auth/sync-profile', {
+          userId: authData.user.id,
+          email: authData.user.email,
+          username,
+          profileImage: profileImage || null,
+          authProvider: 'local'
+        });
+
         return {
           success: true,
-          message: 'Please check your email to verify your account before signing in.',
+          message: 'Registration successful! Welcome to MusicSim.',
+          data: {
+            token: session.access_token,
+            user: {
+              id: authData.user.id,
+              email: authData.user.email!,
+              username,
+              profileImage: profileImage || undefined,
+              emailVerified: !!authData.user.email_confirmed_at,
+            }
+          }
+        };
+      } else {
+        // No session - email confirmation is REQUIRED
+        // User created in Supabase Auth but can't login until they verify
+        // Profile will be created when they verify via /auth/me endpoint
+        return {
+          success: true,
+          message: 'Registration successful! Please check your email to verify your account and login.',
           data: undefined
         };
       }
-
-      if (!session) {
-        throw new Error('Registration failed - no session created');
-      }
-
-      // Sync user profile with backend
-      await api.post('/auth/sync-profile', {
-        userId: authData.user.id,
-        email: authData.user.email,
-        username,
-        profileImage: profileImage || null,
-        authProvider: 'local'
-      });
-
-      return {
-        success: true,
-        message: 'Registration successful! Please verify your email to unlock all features.',
-        data: {
-          token: session.access_token,
-          user: {
-            id: authData.user.id,
-            email: authData.user.email!,
-            username,
-            profileImage: profileImage || undefined,
-            emailVerified: !!authData.user.email_confirmed_at,
-          }
-        }
-      };
     } catch (error: any) {
       console.error('[authService] Registration error:', error);
       throw error;

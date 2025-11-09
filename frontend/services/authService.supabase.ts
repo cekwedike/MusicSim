@@ -112,9 +112,32 @@ export const authServiceSupabase = {
     try {
       const { emailOrUsername, password } = credentials;
 
-      // Supabase only accepts email, so we use email directly
+      // Determine if input is email or username
+      const isEmail = emailOrUsername.includes('@');
+      let email = emailOrUsername;
+
+      // If username provided, look up the email from our database
+      if (!isEmail) {
+        try {
+          // Call backend to get email from username
+          const response = await api.post<{ success: boolean; data?: { email: string } }>('/auth/get-email-from-username', {
+            username: emailOrUsername
+          });
+
+          if (response.data.success && response.data.data?.email) {
+            email = response.data.data.email;
+          } else {
+            throw new Error('Username not found');
+          }
+        } catch (error: any) {
+          console.error('[authService] Failed to lookup username:', error);
+          throw new Error('Invalid username or password');
+        }
+      }
+
+      // Supabase only accepts email for login
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email: emailOrUsername,
+        email,
         password,
       });
 

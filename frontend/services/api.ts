@@ -34,9 +34,17 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Network error - user is offline
-    if (!error.response && error.message === 'Network Error') {
-      console.log('Offline mode - request queued');
+    // IMPORTANT: Only treat as "offline" if it's truly a network connectivity issue
+    // Check for specific offline indicators, not just absence of response
+    const isActuallyOffline = !error.response && (
+      error.code === 'ERR_NETWORK' ||
+      error.message === 'Network Error' ||
+      error.message.includes('Failed to fetch') ||
+      !navigator.onLine
+    );
+
+    if (isActuallyOffline) {
+      console.log('Offline mode detected - request queued');
       // Queue request for later sync
       queueOfflineRequest(error.config);
       return Promise.reject({
@@ -45,10 +53,22 @@ api.interceptors.response.use(
       });
     }
 
-    // Handle network errors
+    // Handle timeout errors (don't queue these)
+    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+      console.error('Request timeout:', error.message);
+      return Promise.reject({
+        timeout: true,
+        message: 'Request timed out. Please try again.'
+      });
+    }
+
+    // Handle CORS and other network errors (don't queue these)
     if (!error.response) {
-      console.error('Network error:', error.message);
-      throw new Error('Network error - please check your connection');
+      console.error('Network error (not offline):', error.message, error.code);
+      return Promise.reject({
+        networkError: true,
+        message: error.message || 'Network error - please check your connection'
+      });
     }
 
     // Handle authentication errors
@@ -65,7 +85,10 @@ api.interceptors.response.use(
     // Handle server errors
     if (error.response?.status >= 500) {
       console.error('Server error:', error.response.data);
-      throw new Error('Server error - please try again later');
+      return Promise.reject({
+        serverError: true,
+        message: 'Server error - please try again later'
+      });
     }
 
     // Return the error for handling by the calling code
@@ -75,15 +98,34 @@ api.interceptors.response.use(
 
 // Queue offline requests for background sync
 function queueOfflineRequest(config: any) {
-  const queue = JSON.parse(localStorage.getItem('offline_queue') || '[]');
-  queue.push({
-    url: config.url,
-    method: config.method,
-    data: config.data,
-    headers: config.headers,
-    timestamp: Date.now()
-  });
-  localStorage.setItem('offline_queue', JSON.stringify(queue));
+  try {
+    const queue = JSON.parse(localStorage.getItem('offline_queue') || '[]');
+
+    // Limit queue size to prevent localStorage quota issues
+    const MAX_QUEUE_SIZE = 50;
+    if (queue.length >= MAX_QUEUE_SIZE) {
+      console.warn('Offline queue full, removing oldest request');
+      queue.shift(); // Remove oldest request
+    }
+
+    queue.push({
+      url: config.url,
+      method: config.method,
+      data: config.data,
+      headers: config.headers,
+      timestamp: Date.now()
+    });
+
+    localStorage.setItem('offline_queue', JSON.stringify(queue));
+  } catch (error: any) {
+    // Handle quota exceeded or other localStorage errors
+    if (error.name === 'QuotaExceededError' || error.code === 22) {
+      console.error('LocalStorage quota exceeded. Clearing offline queue.');
+      localStorage.removeItem('offline_queue'); // Clear the queue to free up space
+    } else {
+      console.error('Error queuing offline request:', error);
+    }
+  }
 }
 
 // Process offline queue when connection is restored

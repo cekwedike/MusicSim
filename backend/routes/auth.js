@@ -231,6 +231,49 @@ router.post('/register', async (req, res, next) => {
  */
 
 /**
+ * @route   POST /api/auth/get-email-from-username
+ * @desc    Get email address from username (for Supabase login)
+ * @access  Public
+ */
+router.post('/get-email-from-username', async (req, res, next) => {
+  try {
+    const { username } = req.body;
+
+    if (!username) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username is required'
+      });
+    }
+
+    // Find user by username
+    const user = await User.findOne({
+      where: {
+        username: sanitizeInput(username),
+        isActive: true
+      },
+      attributes: ['email']
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Username not found'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        email: user.email
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * @route   POST /api/auth/login
  * @desc    Login user and return JWT token
  * @access  Public

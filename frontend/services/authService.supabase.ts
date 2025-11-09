@@ -258,19 +258,32 @@ export const authServiceSupabase = {
     }
   },
 
-  // Delete account
+  // Delete account (deletes both database and Supabase auth user)
   deleteAccount: async (): Promise<{ success: boolean; message: string }> => {
     try {
-      // Delete from backend first
-      await api.delete('/auth/account');
+      // Backend will delete both database user AND Supabase auth user
+      const response = await api.delete('/auth/account');
 
-      // Then sign out from Supabase
+      // Sign out locally after backend confirms deletion
       await supabase.auth.signOut();
 
-      return { success: true, message: 'Account deleted successfully' };
+      // Clear all local storage
+      localStorage.clear();
+
+      return {
+        success: true,
+        message: response.data?.message || 'Account deleted successfully'
+      };
     } catch (error: any) {
       console.error('[authService] Delete account error:', error);
-      return { success: false, message: error.message || 'Failed to delete account' };
+
+      // If backend fails but we want to clear local data anyway
+      const errorMessage = error?.response?.data?.message || error.message || 'Failed to delete account';
+
+      return {
+        success: false,
+        message: errorMessage
+      };
     }
   },
 

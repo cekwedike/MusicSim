@@ -10,6 +10,7 @@ const {
 } = require('../utils/validation');
 const { Op } = require('sequelize');
 const passport = require('../config/passport');
+const supabaseAdmin = require('../config/supabase');
 
 // Generate JWT token
 const generateToken = (userId) => {
@@ -728,7 +729,7 @@ router.post('/register-from-guest', async (req, res, next) => {
 
 /**
  * @route   DELETE /api/auth/account
- * @desc    Delete user account and all associated data
+ * @desc    Delete user account and all associated data (including Supabase auth)
  * @access  Private
  */
 router.delete('/account', authMiddleware, async (req, res, next) => {
@@ -748,15 +749,54 @@ router.delete('/account', authMiddleware, async (req, res, next) => {
     const username = user.username;
     const email = user.email;
 
-    // Delete the user (CASCADE will delete all associated data)
+    // Delete the user from database (CASCADE will delete all associated data: saves, stats, etc.)
     await user.destroy();
 
-    console.log(`User account deleted: ${username} (${email})`);
+    console.log(`User account deleted from database: ${username} (${email})`);
 
-    res.json({
-      success: true,
-      message: 'Account deleted successfully'
-    });
+    // Delete from Supabase Auth (using admin client with service role key)
+    try {
+      const { error: supabaseError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+
+      if (supabaseError) {
+        console.error(`Failed to delete Supabase auth user ${userId}:`, supabaseError);
+        // Don't fail the request - database is already deleted
+        return res.json({
+          success: true,
+          message: 'Account data deleted. Authentication user deletion failed - please contact support.',
+          data: {
+            userId,
+            deletedFromDatabase: true,
+            deletedFromAuth: false,
+            authError: supabaseError.message
+          }
+        });
+      }
+
+      console.log(`Supabase auth user deleted: ${userId}`);
+
+      res.json({
+        success: true,
+        message: 'Account completely deleted',
+        data: {
+          userId,
+          deletedFromDatabase: true,
+          deletedFromAuth: true
+        }
+      });
+    } catch (supabaseError) {
+      console.error('Error deleting Supabase auth user:', supabaseError);
+      // Database is deleted, but Supabase auth user might remain
+      res.json({
+        success: true,
+        message: 'Account data deleted. Authentication deletion encountered an error.',
+        data: {
+          userId,
+          deletedFromDatabase: true,
+          deletedFromAuth: false
+        }
+      });
+    }
   } catch (error) {
     console.error('Error deleting account:', error);
     next(error);

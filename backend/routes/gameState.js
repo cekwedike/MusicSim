@@ -304,7 +304,8 @@ router.get('/saves', async (req, res, next) => {
         'weeksPlayed',
         'createdAt',
         'updatedAt',
-        'lastPlayedAt'
+        'lastPlayedAt',
+        'gameState' // Include gameState to extract metadata
       ],
       order: [['updatedAt', 'DESC']],
       limit: parseInt(limit),
@@ -318,10 +319,42 @@ router.get('/saves', async (req, res, next) => {
       }
     });
 
+    // Extract only the metadata we need from gameState (don't send full gameState)
+    const savesWithMetadata = saves.map(save => {
+      const saveData = save.toJSON();
+      const gameState = saveData.gameState;
+
+      // Extract key metadata without sending the entire gameState
+      const metadata = {
+        id: saveData.id,
+        slotName: saveData.slotName,
+        artistName: saveData.artistName,
+        genre: saveData.genre,
+        difficulty: saveData.difficulty,
+        weeksPlayed: saveData.weeksPlayed,
+        createdAt: saveData.createdAt,
+        updatedAt: saveData.updatedAt,
+        lastPlayedAt: saveData.lastPlayedAt,
+        // Extract just the stats and date from gameState
+        currentDate: gameState?.currentDate,
+        startDate: gameState?.startDate,
+        playerStats: gameState?.playerStats || {
+          cash: 0,
+          fame: 0,
+          health: 100,
+          stress: 0,
+          creativity: 50,
+          technique: 50
+        }
+      };
+
+      return metadata;
+    });
+
     res.json({
       success: true,
       data: {
-        saves,
+        saves: savesWithMetadata,
         pagination: {
           total: totalCount,
           limit: parseInt(limit),

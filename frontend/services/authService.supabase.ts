@@ -41,7 +41,7 @@ export const authServiceSupabase = {
   // Register with email and password
   register: async (data: RegisterData): Promise<AuthResponse> => {
     try {
-      const { email, password, username, profileImage } = data;
+      const { email, password, username, profileImage, displayName } = data;
 
       // Sign up with Supabase
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -50,6 +50,7 @@ export const authServiceSupabase = {
         options: {
           data: {
             username,
+            display_name: displayName || username, // Store in Supabase metadata
             profile_image: profileImage || null,
           }
         }
@@ -73,6 +74,7 @@ export const authServiceSupabase = {
           userId: authData.user.id,
           email: authData.user.email,
           username,
+          displayName: displayName || username,
           profileImage: profileImage || null,
           authProvider: 'local'
         });
@@ -86,6 +88,7 @@ export const authServiceSupabase = {
               id: authData.user.id,
               email: authData.user.email!,
               username,
+              displayName: displayName || username,
               profileImage: profileImage || undefined,
               emailVerified: !!authData.user.email_confirmed_at,
             }
@@ -260,13 +263,14 @@ export const authServiceSupabase = {
   },
 
   // Update profile
-  updateProfile: async (data: { username?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
+  updateProfile: async (data: { username?: string; displayName?: string; profileImage?: string }): Promise<ApiResponse<{ user: User }>> => {
     try {
       // Update Supabase user metadata
-      if (data.username || data.profileImage) {
+      if (data.username || data.displayName || data.profileImage) {
         await supabase.auth.updateUser({
           data: {
             username: data.username,
+            display_name: data.displayName,
             profile_image: data.profileImage,
           }
         });

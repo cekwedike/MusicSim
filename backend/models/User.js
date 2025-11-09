@@ -24,6 +24,13 @@ const User = sequelize.define('User', {
       len: [3, 30]
     }
   },
+  displayName: {
+    type: DataTypes.STRING(100),
+    allowNull: true, // Optional - defaults to username if not provided
+    validate: {
+      len: [1, 100]
+    }
+  },
   password: {
     type: DataTypes.STRING,
     allowNull: true // Allow null for OAuth users
@@ -78,8 +85,8 @@ User.prototype.validatePassword = async function(password) {
 
 // Instance method to get safe user data (without password)
 User.prototype.toSafeObject = function() {
-  const { id, email, username, lastLogin, isActive, createdAt, updatedAt, profileImage } = this;
-  return { id, email, username, lastLogin, isActive, createdAt, updatedAt, profileImage };
+  const { id, email, username, displayName, lastLogin, isActive, createdAt, updatedAt, profileImage } = this;
+  return { id, email, username, displayName, lastLogin, isActive, createdAt, updatedAt, profileImage };
 };
 
 module.exports = User;

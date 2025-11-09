@@ -115,7 +115,7 @@ const generateToken = (userId) => {
  */
 router.post('/register', async (req, res, next) => {
   try {
-    const { email, username, password, profileImage } = req.body;
+    const { email, username, password, profileImage, displayName } = req.body;
 
     // Validate input data
     const validation = validateRegistrationData({ email, username, password });
@@ -130,6 +130,7 @@ router.post('/register', async (req, res, next) => {
     // Sanitize inputs
     const sanitizedEmail = sanitizeInput(email).toLowerCase();
     const sanitizedUsername = sanitizeInput(username);
+    const sanitizedDisplayName = displayName ? sanitizeInput(displayName) : sanitizedUsername;
 
     // Check if user already exists
     const existingUser = await User.findOne({
@@ -162,6 +163,7 @@ router.post('/register', async (req, res, next) => {
     const user = await User.create({
       email: sanitizedEmail,
       username: sanitizedUsername,
+      displayName: sanitizedDisplayName,
       password: password,
       profileImage: profileImage || null
     });
@@ -186,6 +188,7 @@ router.post('/register', async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
+          displayName: user.displayName,
           profileImage: user.profileImage,
           createdAt: user.createdAt
         }
@@ -342,6 +345,7 @@ router.post('/login', async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
+          displayName: user.displayName,
           profileImage: user.profileImage,
           lastLogin: user.lastLogin
         }
@@ -369,7 +373,7 @@ router.post('/login', async (req, res, next) => {
 router.get('/me', authMiddleware, async (req, res, next) => {
   try {
     let user = await User.findByPk(req.userId, {
-      attributes: ['id', 'email', 'username', 'lastLogin', 'createdAt', 'isActive', 'profileImage'],
+      attributes: ['id', 'email', 'username', 'displayName', 'lastLogin', 'createdAt', 'isActive', 'profileImage'],
       include: [
         {
           model: PlayerStatistics,
@@ -391,6 +395,10 @@ router.get('/me', authMiddleware, async (req, res, next) => {
       const username = req.supabaseUser.user_metadata?.username ||
                       req.supabaseUser.user_metadata?.name ||
                       req.supabaseUser.email.split('@')[0];
+      const displayName = req.supabaseUser.user_metadata?.display_name ||
+                         req.supabaseUser.user_metadata?.full_name ||
+                         req.supabaseUser.user_metadata?.name ||
+                         username; // Default to username if no display name
       const profileImage = req.supabaseUser.user_metadata?.profile_image ||
                           req.supabaseUser.user_metadata?.avatar_url ||
                           req.supabaseUser.user_metadata?.picture ||
@@ -402,6 +410,7 @@ router.get('/me', authMiddleware, async (req, res, next) => {
         id: req.supabaseUser.id,
         email: req.supabaseUser.email,
         username,
+        displayName,
         profileImage,
         authProvider,
         lastLogin: new Date()
@@ -416,7 +425,7 @@ router.get('/me', authMiddleware, async (req, res, next) => {
 
       // Fetch user again with statistics
       user = await User.findByPk(user.id, {
-        attributes: ['id', 'email', 'username', 'lastLogin', 'createdAt', 'isActive', 'profileImage'],
+        attributes: ['id', 'email', 'username', 'displayName', 'lastLogin', 'createdAt', 'isActive', 'profileImage'],
         include: [
           {
             model: PlayerStatistics,
@@ -498,7 +507,7 @@ router.post('/verify', authMiddleware, (req, res) => {
  */
 router.patch('/profile', authMiddleware, async (req, res, next) => {
   try {
-    const { username, profileImage } = req.body;
+    const { username, displayName, profileImage } = req.body;
     const userId = req.userId;
 
     const user = await User.findByPk(userId);
@@ -543,6 +552,20 @@ router.patch('/profile', authMiddleware, async (req, res, next) => {
       user.username = sanitizedUsername;
     }
 
+    // Handle displayName update
+    if (displayName !== undefined) {
+      // Validate displayName length
+      if (displayName.length < 1 || displayName.length > 100) {
+        return res.status(400).json({
+          success: false,
+          message: 'Display name must be between 1 and 100 characters',
+          field: 'displayName'
+        });
+      }
+
+      user.displayName = sanitizeInput(displayName);
+    }
+
     // Update other fields if provided
     if (profileImage !== undefined) {
       user.profileImage = profileImage;
@@ -560,6 +583,7 @@ router.patch('/profile', authMiddleware, async (req, res, next) => {
           id: user.id,
           email: user.email,
           username: user.username,
+          displayName: user.displayName,
           profileImage: user.profileImage,
           lastLogin: user.lastLogin
         }
@@ -653,7 +677,7 @@ router.post('/refresh', authMiddleware, (req, res) => {
  */
 router.post('/register-from-guest', async (req, res, next) => {
   try {
-    const { email, username, password, guestData, profileImage } = req.body;
+    const { email, username, password, guestData, profileImage, displayName } = req.body;
 
     // Validate input data
     const validation = validateRegistrationData({ email, username, password });
@@ -668,6 +692,7 @@ router.post('/register-from-guest', async (req, res, next) => {
     // Sanitize inputs
     const sanitizedEmail = sanitizeInput(email).toLowerCase();
     const sanitizedUsername = sanitizeInput(username);
+    const sanitizedDisplayName = displayName ? sanitizeInput(displayName) : sanitizedUsername;
 
     // Check if user already exists
     const existingUser = await User.findOne({
@@ -700,6 +725,7 @@ router.post('/register-from-guest', async (req, res, next) => {
     const user = await User.create({
       email: sanitizedEmail,
       username: sanitizedUsername,
+      displayName: sanitizedDisplayName,
       password: password,
       profileImage: profileImage || null
     });
@@ -967,9 +993,9 @@ router.get('/google/callback', (req, res, next) => {
  */
 router.post('/sync-profile', authMiddleware, async (req, res, next) => {
   try {
-    const { userId, email, username, profileImage, authProvider } = req.body;
+    const { userId, email, username, displayName, profileImage, authProvider } = req.body;
 
-    console.log('[sync-profile] Request received:', { userId, email, username, authProvider });
+    console.log('[sync-profile] Request received:', { userId, email, username, displayName, authProvider });
 
     // Check if user already exists
     let user = await User.findByPk(userId || req.userId);
@@ -979,6 +1005,7 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
       console.log('[sync-profile] User exists, updating:', user.id);
       user.email = email || user.email;
       user.username = username || user.username;
+      user.displayName = displayName || user.displayName || user.username;
       user.profileImage = profileImage || user.profileImage;
       user.authProvider = authProvider || user.authProvider;
       user.lastLogin = new Date();
@@ -1003,12 +1030,13 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
     }
 
     // Create new user profile
-    console.log('[sync-profile] Creating new user with data:', { userId: userId || req.userId, email, username, authProvider });
+    console.log('[sync-profile] Creating new user with data:', { userId: userId || req.userId, email, username, displayName, authProvider });
 
     user = await User.create({
       id: userId || req.userId,
       email,
       username,
+      displayName: displayName || username,
       profileImage,
       authProvider: authProvider || 'local',
       lastLogin: new Date(),

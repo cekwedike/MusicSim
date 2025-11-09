@@ -8,12 +8,12 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
-  register: (username: string, email: string, password: string, profileImage?: string) => Promise<boolean>;
-  registerFromGuest: (username: string, email: string, password: string, guestData?: any, profileImage?: string) => Promise<boolean>;
+  register: (username: string, email: string, password: string, displayName?: string, profileImage?: string) => Promise<boolean>;
+  registerFromGuest: (username: string, email: string, password: string, guestData?: any, displayName?: string, profileImage?: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<{ success: boolean; message: string }>;
-  updateProfile: (data: { username?: string; profileImage?: string }) => Promise<boolean>;
+  updateProfile: (data: { username?: string; displayName?: string; profileImage?: string }) => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
   clearError: () => void;
   error: string | null;
@@ -246,7 +246,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Register function
-  const register = useCallback(async (username: string, email: string, password: string, profileImage?: string): Promise<boolean> => {
+  const register = useCallback(async (username: string, email: string, password: string, displayName?: string, profileImage?: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
@@ -255,6 +255,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         username,
         email,
         password,
+        displayName,
         profileImage
       });
 
@@ -280,7 +281,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Register from guest function
-  const registerFromGuest = useCallback(async (username: string, email: string, password: string, guestData?: any, profileImage?: string): Promise<boolean> => {
+  const registerFromGuest = useCallback(async (username: string, email: string, password: string, guestData?: any, displayName?: string, profileImage?: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
@@ -289,6 +290,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         username,
         email,
         password,
+        displayName,
         profileImage,
         guestData
       });
@@ -340,7 +342,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   // Update profile function
-  const updateProfile = useCallback(async (data: { username?: string; profileImage?: string }): Promise<boolean> => {
+  const updateProfile = useCallback(async (data: { username?: string; displayName?: string; profileImage?: string }): Promise<boolean> => {
     setIsLoading(true);
 
     try {

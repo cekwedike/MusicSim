@@ -4,6 +4,7 @@ import { gameService } from './gameService';
 import authServiceSupabase from './authService.supabase';
 
 const AUTOSAVE_EXPIRATION_MS = 30 * 60 * 1000; // 30 minutes (only for 'auto' slot)
+const MAX_SAVE_SLOTS = 5; // Maximum number of manual save slots allowed per user
 
 /**
  * Serialize GameState for storage (convert Dates to ISO strings)
@@ -51,10 +52,48 @@ const isAutosaveExpired = (timestamp: number): boolean => {
 };
 
 /**
+ * Check if user can create a new save slot
+ */
+export const canCreateNewSave = async (): Promise<{ canSave: boolean; reason?: string }> => {
+  const saves = loadLocalSaves();
+  const manualSaves = Object.keys(saves).filter(key => key !== 'auto');
+
+  if (manualSaves.length >= MAX_SAVE_SLOTS) {
+    return {
+      canSave: false,
+      reason: `Maximum of ${MAX_SAVE_SLOTS} save slots reached. Please delete an existing save to create a new one.`
+    };
+  }
+
+  return { canSave: true };
+};
+
+/**
+ * Get count of manual save slots
+ */
+export const getManualSaveCount = (): number => {
+  const saves = loadLocalSaves();
+  return Object.keys(saves).filter(key => key !== 'auto').length;
+};
+
+/**
  * Save game with timestamp
  */
 export const saveGame = async (state: GameState, slotId: string): Promise<void> => {
   console.log('[storageService] saveGame called with slotId:', slotId);
+
+  // Check slot limit for manual saves (not for autosave or overwriting existing saves)
+  if (slotId !== 'auto') {
+    const saves = loadLocalSaves();
+    const isNewSave = !saves[slotId];
+
+    if (isNewSave) {
+      const { canSave, reason } = await canCreateNewSave();
+      if (!canSave) {
+        throw new Error(reason);
+      }
+    }
+  }
 
   const serializedState = serializeGameState(state);
   const saveData: SaveData = {

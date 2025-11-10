@@ -51,13 +51,37 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.get('/api/health', (req, res) => {
-  res.json({ 
+app.get('/api/health', async (req, res) => {
+  const health = {
     success: true,
     message: 'MusicSim Backend is running!',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
-  });
+    environment: process.env.NODE_ENV || 'development',
+    database: {
+      connected: isDatabaseConnected,
+      url: process.env.DATABASE_URL ? 'Set ✓' : 'Not set ✗'
+    }
+  };
+
+  // Test database connection
+  if (isDatabaseConnected) {
+    try {
+      await sequelize.authenticate();
+      health.database.status = 'Connected and responsive';
+
+      // Try to count users to verify tables exist
+      const { User } = require('./models');
+      const userCount = await User.count();
+      health.database.tablesAccessible = true;
+      health.database.userCount = userCount;
+    } catch (error) {
+      health.database.status = 'Connected but error accessing tables';
+      health.database.error = error.message;
+      health.database.tablesAccessible = false;
+    }
+  }
+
+  res.json(health);
 });
 
 // Swagger Documentation

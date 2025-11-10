@@ -16,10 +16,6 @@ const PlayerStatistics = sequelize.define('PlayerStatistics', {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
-  longestCareerWeeks: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
   gamesLostToDebt: {
     type: DataTypes.INTEGER,
     defaultValue: 0
@@ -65,34 +61,6 @@ const PlayerStatistics = sequelize.define('PlayerStatistics', {
     defaultValue: 0
   },
   
-  // Performance Records
-  highestCash: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  highestFame: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  highestCareerProgress: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  
-  // Difficulty Statistics
-  beginnerGamesPlayed: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  realisticGamesPlayed: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  hardcoreGamesPlayed: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  
   // Session Tracking
   totalPlayTimeMinutes: {
     type: DataTypes.INTEGER,
@@ -102,10 +70,7 @@ const PlayerStatistics = sequelize.define('PlayerStatistics', {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
-  lastPlayedAt: {
-    type: DataTypes.DATE
-  },
-  
+
   // Preferences and Settings
   preferredDifficulty: {
     type: DataTypes.ENUM('beginner', 'realistic', 'hardcore'),
@@ -157,20 +122,14 @@ PlayerStatistics.prototype.getSuccessRate = function() {
 PlayerStatistics.prototype.getSummary = function() {
   const playerLevel = this.getPlayerLevel();
   const successRate = this.getSuccessRate();
-  
+
   return {
     level: playerLevel,
     totalGames: this.totalGamesPlayed,
     totalWeeks: this.totalWeeksPlayed,
     successRate,
     achievements: this.totalAchievementsUnlocked,
-    modulesCompleted: this.totalModulesCompleted,
-    recordStats: {
-      highestCash: this.highestCash,
-      highestFame: this.highestFame,
-      highestCareerProgress: this.highestCareerProgress,
-      longestCareer: this.longestCareerWeeks
-    }
+    modulesCompleted: this.totalModulesCompleted
   };
 };
 
@@ -185,8 +144,7 @@ PlayerStatistics.updateAfterGame = async function(userId, gameData) {
   // Update game statistics
   stats.totalGamesPlayed += 1;
   stats.totalWeeksPlayed += gameData.weeksPlayed;
-  stats.longestCareerWeeks = Math.max(stats.longestCareerWeeks, gameData.weeksPlayed);
-  
+
   // Update based on outcome
   switch (gameData.outcome) {
     case 'debt':
@@ -202,28 +160,6 @@ PlayerStatistics.updateAfterGame = async function(userId, gameData) {
       stats.careersCompleted += 1;
       break;
   }
-  
-  // Update difficulty statistics
-  switch (gameData.difficulty) {
-    case 'beginner':
-      stats.beginnerGamesPlayed += 1;
-      break;
-    case 'realistic':
-      stats.realisticGamesPlayed += 1;
-      break;
-    case 'hardcore':
-      stats.hardcoreGamesPlayed += 1;
-      break;
-  }
-  
-  // Update records
-  if (gameData.finalStats) {
-    stats.highestCash = Math.max(stats.highestCash, gameData.finalStats.cash || 0);
-    stats.highestFame = Math.max(stats.highestFame, gameData.finalStats.fame || 0);
-    stats.highestCareerProgress = Math.max(stats.highestCareerProgress, gameData.finalStats.careerProgress || 0);
-  }
-  
-  stats.lastPlayedAt = new Date();
   
   await stats.save();
   return stats;

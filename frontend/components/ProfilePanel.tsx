@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import type { GameStatistics, Difficulty } from '../types';
 import ConfirmDialog from './ConfirmDialog';
+import AlertDialog from './AlertDialog';
 import { loadStatistics } from '../services/statisticsService';
 import authServiceSupabase from '../services/authService.supabase';
 
@@ -26,6 +27,12 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 }) => {
 	const { user, isAuthenticated, logout, deleteAccount, updateProfile } = useAuth();
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+	const [alertDialog, setAlertDialog] = useState<{ isOpen: boolean; title: string; message: string; type: 'success' | 'error' | 'warning' | 'info' }>({
+		isOpen: false,
+		title: '',
+		message: '',
+		type: 'info'
+	});
 	const [isEditingUsername, setIsEditingUsername] = useState(false);
 	const [editedUsername, setEditedUsername] = useState('');
 	const [usernameError, setUsernameError] = useState('');
@@ -35,8 +42,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	const [isEditingGuestName, setIsEditingGuestName] = useState(false);
 	const [editedGuestName, setEditedGuestName] = useState('');
 	const [isUploadingImage, setIsUploadingImage] = useState(false);
-	const [isResendingVerification, setIsResendingVerification] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const showAlert = (title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+		setAlertDialog({ isOpen: true, title, message, type });
+	};
 
 	const handleLogout = async () => {
 		console.log('[ProfilePanel] Logging out...');
@@ -89,7 +99,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		} catch (error) {
 			console.error('[ProfilePanel] Error deleting profile:', error);
 			setShowDeleteDialog(false);
-			alert('Failed to delete account. Please try again.');
+			showAlert('Error', 'Failed to delete account. Please try again.', 'error');
 		}
 	};
 
@@ -100,7 +110,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 	const handleSaveGuestName = () => {
 		if (!editedGuestName.trim()) {
-			alert('Name cannot be empty');
+			showAlert('Invalid Name', 'Name cannot be empty', 'warning');
 			return;
 		}
 
@@ -132,14 +142,17 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		}
 
 		try {
-			const result = await authServiceSupabase.updateUsername(editedUsername.trim());
-			if (!result.success) {
-				setUsernameError(result.message || 'Failed to update username. Please try again.');
+			// Use updateProfile from AuthContext for instant optimistic updates
+			const success = await updateProfile({ username: editedUsername.trim() });
+
+			if (!success) {
+				setUsernameError('Failed to update username. Please try again.');
 				return;
 			}
+
 			setIsEditingUsername(false);
 			setUsernameError('');
-			// Profile will update via AuthContext
+			console.log('[ProfilePanel] Username updated successfully');
 		} catch (error: any) {
 			console.error('Error updating username:', error);
 			const errorMessage = error?.message || 'Failed to update username. Please try again.';
@@ -169,15 +182,15 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			const result = await authServiceSupabase.uploadProfileImage(file);
 
 			if (!result.success) {
-				alert(result.error || 'Failed to upload image. Please try again.');
+				showAlert('Upload Failed', result.error || 'Failed to upload image. Please try again.', 'error');
 				return;
 			}
 
 			// Image uploaded successfully, profile will update via AuthContext
-			alert('Profile image updated successfully!');
+			showAlert('Success!', 'Profile image updated successfully!', 'success');
 		} catch (error) {
 			console.error('Error uploading image:', error);
-			alert('Failed to upload image. Please try again.');
+			showAlert('Upload Failed', 'Failed to upload image. Please try again.', 'error');
 		} finally {
 			setIsUploadingImage(false);
 			// Reset file input
@@ -194,26 +207,6 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		}
 	};
 
-	const handleResendVerification = async () => {
-		if (!user?.email) return;
-
-		setIsResendingVerification(true);
-		try {
-			const result = await authServiceSupabase.resendVerificationEmail();
-
-			if (!result.success) {
-				alert(result.message || 'Failed to resend verification email. Please try again.');
-				return;
-			}
-
-			alert(result.message);
-		} catch (error: any) {
-			console.error('Error resending verification email:', error);
-			alert(error.message || 'Failed to resend verification email. Please try again.');
-		} finally {
-			setIsResendingVerification(false);
-		}
-	};
 
 	const formatPlayTime = (minutes: number) => {
 		if (minutes < 60) return `${minutes}m`;
@@ -313,29 +306,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 								<span className="text-xs bg-violet-600/50 text-violet-200 px-2 py-0.5 rounded">
 									Signed In
 								</span>
-								{user.emailVerified === false && (
-									<span className="text-xs bg-yellow-600/50 text-yellow-200 px-2 py-0.5 rounded">
-										⚠ Email Not Verified
-									</span>
-								)}
-								{user.emailVerified === true && (
-									<span className="text-xs bg-green-600/50 text-green-200 px-2 py-0.5 rounded">
-										✓ Verified
-									</span>
-								)}
 							</div>
-							{user.emailVerified === false && (
-								<div className="mt-2 p-2 bg-yellow-600/10 border border-yellow-600/30 rounded text-xs text-yellow-200">
-									<p className="mb-1">Please verify your email to unlock all features.</p>
-									<button
-										onClick={handleResendVerification}
-										disabled={isResendingVerification}
-										className="text-yellow-300 hover:text-yellow-100 underline disabled:opacity-50"
-									>
-										{isResendingVerification ? 'Sending...' : 'Resend verification email'}
-									</button>
-								</div>
-							)}
 						</div>
 					</div>
 				) : (
@@ -546,6 +517,15 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 				type="danger"
 				onConfirm={handleDeleteProfile}
 				onCancel={() => setShowDeleteDialog(false)}
+			/>
+
+			{/* Alert Dialog */}
+			<AlertDialog
+				isOpen={alertDialog.isOpen}
+				title={alertDialog.title}
+				message={alertDialog.message}
+				type={alertDialog.type}
+				onClose={() => setAlertDialog({ ...alertDialog, isOpen: false })}
 			/>
 		</div>
 	);

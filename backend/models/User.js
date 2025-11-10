@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const bcrypt = require('bcrypt');
 
 const User = sequelize.define('User', {
   id: {
@@ -31,13 +30,9 @@ const User = sequelize.define('User', {
       len: [1, 100]
     }
   },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: true // Allow null for OAuth users
-  },
   authProvider: {
     type: DataTypes.STRING,
-    defaultValue: 'local', // 'local' or 'google'
+    defaultValue: 'google', // Only OAuth supported now
     allowNull: false
   },
   googleId: {
@@ -61,29 +56,10 @@ const User = sequelize.define('User', {
     allowNull: true
   }
 }, {
-  timestamps: true,
-  hooks: {
-    beforeCreate: async (user) => {
-      if (user.password) {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
-      }
-    },
-    beforeUpdate: async (user) => {
-      if (user.changed('password')) {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
-      }
-    }
-  }
+  timestamps: true
 });
 
-// Instance method to validate password
-User.prototype.validatePassword = async function(password) {
-  return bcrypt.compare(password, this.password);
-};
-
-// Instance method to get safe user data (without password)
+// Instance method to get safe user data
 User.prototype.toSafeObject = function() {
   const { id, email, username, displayName, lastLogin, isActive, createdAt, updatedAt, profileImage } = this;
   return { id, email, username, displayName, lastLogin, isActive, createdAt, updatedAt, profileImage };

@@ -7,9 +7,6 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (username: string, email: string, password: string, displayName?: string, profileImage?: string) => Promise<boolean>;
-  registerFromGuest: (username: string, email: string, password: string, guestData?: any, displayName?: string, profileImage?: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<{ success: boolean; message: string }>;
@@ -208,8 +205,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(session.access_token);
       } else if (event === 'USER_UPDATED' && session) {
         await syncUserProfile(session.user);
-      } else if (event === 'PASSWORD_RECOVERY') {
-        console.log('[AuthContext] Password recovery initiated');
       }
     });
 
@@ -218,97 +213,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       subscription.unsubscribe();
     };
   }, [syncUserProfile]);
-
-  // Login function
-  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await authServiceSupabase.login({
-        emailOrUsername: email,
-        password
-      });
-
-      if (response.success && response.data) {
-        // State will be updated by onAuthStateChange listener
-        return true;
-      } else {
-        throw new Error(response.message || 'Login failed');
-      }
-    } catch (err: any) {
-      const message = err?.message || 'Login failed';
-      setError(message);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Register function
-  const register = useCallback(async (username: string, email: string, password: string, displayName?: string, profileImage?: string): Promise<boolean> => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await authServiceSupabase.register({
-        username,
-        email,
-        password,
-        displayName,
-        profileImage
-      });
-
-      if (response.success) {
-        if (response.data) {
-          // User is logged in immediately - state will be updated by onAuthStateChange listener
-          return true;
-        } else {
-          // Email confirmation required - user not logged in yet
-          setError(null); // Clear any errors
-          return false;
-        }
-      } else {
-        throw new Error(response.message || 'Registration failed');
-      }
-    } catch (err: any) {
-      const message = err?.message || 'Registration failed';
-      setError(message);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Register from guest function
-  const registerFromGuest = useCallback(async (username: string, email: string, password: string, guestData?: any, displayName?: string, profileImage?: string): Promise<boolean> => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await authServiceSupabase.registerFromGuest({
-        username,
-        email,
-        password,
-        displayName,
-        profileImage,
-        guestData
-      });
-
-      if (response.success && response.data) {
-        // State will be updated by onAuthStateChange listener
-        return true;
-      } else {
-        throw new Error(response.message || 'Registration failed');
-      }
-    } catch (err: any) {
-      const message = err?.message || 'Registration failed';
-      setError(message);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
   // Sign in with Google
   const signInWithGoogle = useCallback(async () => {
@@ -406,9 +310,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     token,
     isLoading,
     isAuthenticated,
-    login,
-    register,
-    registerFromGuest,
     signInWithGoogle,
     logout,
     deleteAccount,

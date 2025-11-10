@@ -5,12 +5,13 @@ import { AudioProvider } from './contexts/AudioContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LoginModal } from './components/LoginModal';
 import LandingPage from './components/LandingPage';
-import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, HiredStaff, StaffTemplate, ContractDuration, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry } from './types';
+import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, HiredStaff, StaffTemplate, ContractDuration, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry, SaveSlot } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
-import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave } from './services/storageService';
+import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots } from './services/storageService';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
+import { getGenreLabel } from './constants/genres';
 import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
 import { projects as allProjects } from './data/projects';
@@ -1338,18 +1339,38 @@ const getPredictedOutcome = (outcome: any): string => {
 const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState) => void }> = ({ onStart, onContinue }) => {
     const [autosaveExists, setAutosaveExists] = useState(false);
     const [autosaveAge, setAutosaveAge] = useState<number | null>(null);
+    const [saveSlots, setSaveSlots] = useState<SaveSlot[]>([]);
+    const [loadingSaves, setLoadingSaves] = useState(true);
 
     useEffect(() => {
         const checkAutosave = () => {
             setAutosaveExists(hasValidAutosave());
             setAutosaveAge(getAutosaveAge());
         };
-        
+
         checkAutosave();
-        
+
         // Update every 10 seconds
         const interval = setInterval(checkAutosave, 10000);
         return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const loadSaves = async () => {
+            setLoadingSaves(true);
+            try {
+                const slots = await getAllSaveSlots();
+                // Filter out autosave from the list
+                setSaveSlots(slots.filter(slot => slot.id !== 'auto'));
+            } catch (error) {
+                console.error('Failed to load save slots:', error);
+                setSaveSlots([]);
+            } finally {
+                setLoadingSaves(false);
+            }
+        };
+
+        loadSaves();
     }, []);
 
     const handleContinue = async () => {
@@ -1361,12 +1382,21 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
         }
     };
 
+    const handleLoadSave = async (slotId: string) => {
+        const save = await loadGame(slotId);
+        if (save) {
+            onContinue(save);
+        } else {
+            alert('Failed to load save');
+        }
+    };
+
     return (
         <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">Welcome to MusicSim</h2>
             <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
 
-            <div className="space-y-4 w-full max-w-sm">
+            <div className="space-y-4 w-full max-w-2xl">
                 {autosaveExists && (
                     <button
                         onClick={handleContinue}
@@ -1381,13 +1411,51 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                         )}
                     </button>
                 )}
-                
+
+                {/* Existing Save Slots */}
+                {!loadingSaves && saveSlots.length > 0 && (
+                    <div className="mt-6">
+                        <h3 className="text-lg font-semibold text-gray-300 mb-3">Your Careers ({saveSlots.length}/5)</h3>
+                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                            {saveSlots.map((slot) => (
+                                <button
+                                    key={slot.id}
+                                    onClick={() => handleLoadSave(slot.id)}
+                                    className="w-full bg-gray-800 border border-gray-700 hover:border-violet-500 text-left p-4 rounded-lg transition-all hover:scale-[1.02]"
+                                >
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <div className="font-bold text-violet-300">{slot.artistName}</div>
+                                            <div className="text-sm text-gray-400">{getGenreLabel(slot.genre)}</div>
+                                            <div className="text-xs text-gray-500 mt-1">
+                                                Year {slot.date.year}, Week {slot.date.week} - {slot.careerProgress}% complete
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-xs text-gray-500">
+                                                {new Date(slot.timestamp).toLocaleDateString()}
+                                            </div>
+                                            <div className="text-sm text-green-400 font-mono">${slot.stats.cash.toLocaleString()}</div>
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 <button
                     onClick={onStart}
                     className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300"
                 >
                     Start New Career
                 </button>
+
+                {saveSlots.length >= 5 && (
+                    <p className="text-yellow-400 text-sm mt-2">
+                        Maximum save slots reached. Delete a career to create a new one.
+                    </p>
+                )}
             </div>
         </div>
     );

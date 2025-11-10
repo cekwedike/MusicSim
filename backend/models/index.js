@@ -4,8 +4,6 @@ const GameSave = require('./GameSave');
 const LearningProgress = require('./LearningProgress');
 const CareerHistory = require('./CareerHistory');
 const PlayerStatistics = require('./PlayerStatistics');
-const Achievement = require('./Achievement');
-const UserAchievement = require('./UserAchievement');
 
 // Define relationships
 
@@ -53,28 +51,6 @@ PlayerStatistics.belongsTo(User, {
   as: 'user'
 });
 
-// User -> UserAchievement (One to Many)
-User.hasMany(UserAchievement, {
-  foreignKey: 'userId',
-  as: 'achievements',
-  onDelete: 'CASCADE'
-});
-UserAchievement.belongsTo(User, {
-  foreignKey: 'userId',
-  as: 'user'
-});
-
-// Achievement -> UserAchievement (One to Many)
-Achievement.hasMany(UserAchievement, {
-  foreignKey: 'achievementId',
-  as: 'unlocks',
-  onDelete: 'CASCADE'
-});
-UserAchievement.belongsTo(Achievement, {
-  foreignKey: 'achievementId',
-  as: 'achievement'
-});
-
 // Export all models and sequelize instance
 module.exports = {
   sequelize,
@@ -82,9 +58,7 @@ module.exports = {
   GameSave,
   LearningProgress,
   CareerHistory,
-  PlayerStatistics,
-  Achievement,
-  UserAchievement
+  PlayerStatistics
 };
 
 // Export individual models for easier importing
@@ -93,7 +67,5 @@ module.exports.models = {
   GameSave,
   LearningProgress,
   CareerHistory,
-  PlayerStatistics,
-  Achievement,
-  UserAchievement
+  PlayerStatistics
 };

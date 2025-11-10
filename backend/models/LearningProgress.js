@@ -34,10 +34,6 @@ const LearningProgress = sequelize.define('LearningProgress', {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
-  timeSpentMinutes: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
   completedAt: {
     type: DataTypes.DATE
   },

@@ -7,11 +7,6 @@ const CareerHistory = sequelize.define('CareerHistory', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  gameId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
   artistName: {
     type: DataTypes.STRING,
     allowNull: false
@@ -31,14 +26,6 @@ const CareerHistory = sequelize.define('CareerHistory', {
   outcome: {
     type: DataTypes.ENUM('debt', 'burnout', 'abandoned', 'completed'),
     allowNull: false
-  },
-  finalStats: {
-    type: DataTypes.JSONB,
-    allowNull: false
-  },
-  achievementsEarned: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    defaultValue: null
   },
   lessonsLearned: {
     type: DataTypes.ARRAY(DataTypes.STRING),
@@ -63,14 +50,6 @@ const CareerHistory = sequelize.define('CareerHistory', {
   peakCareerProgress: {
     type: DataTypes.INTEGER,
     defaultValue: 0
-  },
-  historicalData: {
-    type: DataTypes.JSONB,
-    defaultValue: null
-  },
-  majorEvents: {
-    type: DataTypes.JSONB,
-    defaultValue: null
   },
   sessionDurationMinutes: {
     type: DataTypes.INTEGER,

@@ -12,9 +12,8 @@ async function runMigration() {
 
     // List of migrations to run in order
     const migrations = [
-      '004_optimize_schema_remove_redundancies.sql',
-      '005_create_achievements_system.sql',
-      '006_add_performance_indexes.sql'
+      '007_remove_additional_redundancies.sql',
+      '008_remove_achievements_tables.sql'
     ];
 
     for (const migrationFileName of migrations) {
@@ -70,11 +69,12 @@ async function runMigration() {
     console.log('✅ ALL MIGRATIONS COMPLETED SUCCESSFULLY!');
     console.log('='.repeat(60));
     console.log('\nChanges applied:');
-    console.log('  • Removed redundant fields from PlayerStatistics');
-    console.log('  • Removed unused User.profileData field');
-    console.log('  • Created Achievements and UserAchievements tables');
-    console.log('  • Added 11 starter achievements');
-    console.log('  • Added performance indexes for faster queries');
+    console.log('  • Removed ALL redundant fields from PlayerStatistics');
+    console.log('  • Removed redundant/vague fields from CareerHistories');
+    console.log('  • Removed per-module time tracking from LearningProgresses');
+    console.log('  • Removed Achievements/UserAchievements tables');
+    console.log('  • Achievements now managed in code (constants/achievements.js)');
+    console.log('\nDatabase is now fully optimized with zero redundancies!');
     console.log('\n');
 
     process.exit(0);

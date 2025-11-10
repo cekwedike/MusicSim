@@ -51,16 +51,6 @@ const PlayerStatistics = sequelize.define('PlayerStatistics', {
     defaultValue: 0
   },
   
-  // Achievement Statistics
-  totalAchievementsUnlocked: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  rareAchievementsUnlocked: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  
   // Session Tracking
   totalPlayTimeMinutes: {
     type: DataTypes.INTEGER,
@@ -78,16 +68,6 @@ const PlayerStatistics = sequelize.define('PlayerStatistics', {
   },
   favoriteGenre: {
     type: DataTypes.STRING
-  },
-  
-  // Additional Tracking
-  totalDecisionsMade: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
-  },
-  contractsSigned: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0
   }
 }, {
   timestamps: true,

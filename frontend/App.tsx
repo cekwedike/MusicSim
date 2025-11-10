@@ -2261,7 +2261,8 @@ const UserProfile: React.FC<{ onOpenLoginModal: () => void }> = ({ onOpenLoginMo
 const AuthenticatedApp: React.FC = () => {
     const { user, isAuthenticated, isLoading, logout } = useAuth();
     const [guestMode, setGuestMode] = useState(false);
-    const [showLanding, setShowLanding] = useState(true);
+    // Start with landing hidden if user is already authenticated (persistent login)
+    const [showLanding, setShowLanding] = useState(!isAuthenticated);
 
     // Hide landing page once user is authenticated or playing as guest.
     // Delay hiding the landing page briefly when the user authenticates so

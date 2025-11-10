@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { Difficulty } from '../types';
 import { difficultySettings, getDifficultyIcon } from '../data/difficultySettings';
 import { useAuth } from '../contexts/AuthContext';
+import { MUSIC_GENRES } from '../constants/genres';
 
 interface ArtistSetupProps {
     onSubmit: (name: string, genre: string, difficulty: Difficulty) => void;
@@ -101,15 +102,20 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                     </div>
                     <div>
                         <label htmlFor="artist-genre" className="block text-left text-gray-300 font-medium mb-2">Genre</label>
-                        <input
+                        <select
                             id="artist-genre"
-                            type="text"
                             value={genre}
                             onChange={(e) => setGenre(e.target.value)}
-                            placeholder="e.g., Psychedelic Rock"
                             className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500 transition"
                             required
-                        />
+                        >
+                            <option value="">Select a genre...</option>
+                            {MUSIC_GENRES.map((g) => (
+                                <option key={g.value} value={g.value}>
+                                    {g.label} ({g.region})
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 

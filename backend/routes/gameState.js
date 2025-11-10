@@ -100,6 +100,9 @@ router.post('/save', async (req, res, next) => {
       save.weeksPlayed = weeksPlayed;
       save.isActive = true;
       save.lastPlayedAt = new Date();
+      save.currentDate = gameState.currentDate ? new Date(gameState.currentDate) : new Date();
+      save.startDate = gameState.startDate ? new Date(gameState.startDate) : new Date();
+      save.playerStats = gameState.playerStats || null;
       await save.save();
     } else {
       // Create new save
@@ -112,7 +115,10 @@ router.post('/save', async (req, res, next) => {
         difficulty: gameState.difficulty || 'realistic',
         weeksPlayed: weeksPlayed,
         isActive: true,
-        lastPlayedAt: new Date()
+        lastPlayedAt: new Date(),
+        currentDate: gameState.currentDate ? new Date(gameState.currentDate) : new Date(),
+        startDate: gameState.startDate ? new Date(gameState.startDate) : new Date(),
+        playerStats: gameState.playerStats || null
       });
     }
 

@@ -41,6 +41,18 @@ const GameSave = sequelize.define('GameSave', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
+  currentDate: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  startDate: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  playerStats: {
+    type: DataTypes.JSONB,
+    allowNull: true
+  },
   saveVersion: {
     type: DataTypes.STRING,
     defaultValue: '1.0.0'
@@ -51,7 +63,8 @@ const GameSave = sequelize.define('GameSave', {
     { fields: ['userId'] },
     { fields: ['isActive'] },
     { fields: ['difficulty'] },
-    { fields: ['lastPlayedAt'] }
+    { fields: ['lastPlayedAt'] },
+    { fields: ['currentDate'] }
   ]
 });
 

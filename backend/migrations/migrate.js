@@ -13,7 +13,8 @@ async function runMigration() {
     // List of migrations to run in order
     const migrations = [
       '007_remove_additional_redundancies.sql',
-      '008_remove_achievements_tables.sql'
+      '008_remove_achievements_tables.sql',
+      '009_add_gamesave_metadata_fields.sql'
     ];
 
     for (const migrationFileName of migrations) {
@@ -74,7 +75,8 @@ async function runMigration() {
     console.log('  • Removed per-module time tracking from LearningProgresses');
     console.log('  • Removed Achievements/UserAchievements tables');
     console.log('  • Achievements now managed in code (constants/achievements.js)');
-    console.log('\nDatabase is now fully optimized with zero redundancies!');
+    console.log('  • Added metadata fields to GameSaves (lastPlayedAt, currentDate, startDate, playerStats)');
+    console.log('\nDatabase is now fully optimized and ready!');
     console.log('\n');
 
     process.exit(0);

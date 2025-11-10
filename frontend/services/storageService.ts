@@ -3,7 +3,7 @@ import { toGameDate } from '../src/utils/dateUtils';
 import { gameService } from './gameService';
 import authServiceSupabase from './authService.supabase';
 
-const AUTOSAVE_EXPIRATION_MS = 10 * 60 * 1000; // 10 minutes
+const AUTOSAVE_EXPIRATION_MS = 30 * 60 * 1000; // 30 minutes (only for 'auto' slot)
 
 /**
  * Serialize GameState for storage (convert Dates to ISO strings)
@@ -150,7 +150,7 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
     return null;
   }
 
-  // Check if this is an autosave and if it's expired
+  // IMPORTANT: Only autosave ('auto' slot) expires. Manual saves NEVER expire!
   if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
     console.log(`Autosave expired (${Math.round((Date.now() - saveData.timestamp) / 60000)} minutes old). Deleting...`);
     await deleteSave(slotId);

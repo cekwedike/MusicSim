@@ -11,7 +11,7 @@ async function runMigration() {
     console.log('Database connection established.');
 
     // Read the SQL migration file
-    const migrationFile = path.join(__dirname, '001_remove_displayName.sql');
+    const migrationFile = path.join(__dirname, '003_remove_password_oauth_only.sql');
     const sql = fs.readFileSync(migrationFile, 'utf8');
 
     // Remove comments and split by semicolon
@@ -44,7 +44,8 @@ async function runMigration() {
     }
 
     console.log('\n✅ Migration completed successfully!');
-    console.log('The displayName column has been removed from the Users table.');
+    console.log('The password column has been removed from the Users table.');
+    console.log('Authentication is now OAuth-only (Google).');
 
     process.exit(0);
   } catch (error) {

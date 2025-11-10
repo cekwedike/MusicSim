@@ -112,7 +112,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                             <option value="">Select a genre...</option>
                             {MUSIC_GENRES.map((g) => (
                                 <option key={g.value} value={g.value}>
-                                    {g.label} ({g.region})
+                                    {g.label}
                                 </option>
                             ))}
                         </select>

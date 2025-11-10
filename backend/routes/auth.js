@@ -425,6 +425,8 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
   try {
     const { username } = req.body;
 
+    console.log('[update-username] Request from user:', req.userId, 'New username:', username);
+
     if (!username || username.length < 3 || username.length > 20) {
       return res.status(400).json({
         success: false,
@@ -456,19 +458,43 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
       });
     }
 
-    const user = await User.findByPk(req.userId);
+    let user = await User.findByPk(req.userId);
 
-    if (!user) {
+    // If user doesn't exist yet (OAuth user not synced), create profile on the fly
+    if (!user && req.supabaseUser) {
+      console.log('[update-username] Creating profile for OAuth user:', req.userId);
+
+      const authProvider = req.supabaseUser.app_metadata?.provider || 'google';
+
+      user = await User.create({
+        id: req.userId,
+        email: req.supabaseUser.email,
+        username: sanitizedUsername,
+        displayName: sanitizedUsername,
+        authProvider,
+        lastLogin: new Date(),
+        isActive: true,
+        profileImage: req.supabaseUser.user_metadata?.avatar_url || req.supabaseUser.user_metadata?.picture
+      });
+
+      // Create associated PlayerStatistics
+      await PlayerStatistics.create({
+        userId: user.id
+      });
+
+      console.log('[update-username] Profile created successfully');
+    } else if (!user) {
       return res.status(404).json({
         success: false,
         message: 'User not found'
       });
+    } else {
+      // Update existing user's username
+      user.username = sanitizedUsername;
+      await user.save();
     }
 
-    user.username = sanitizedUsername;
-    await user.save();
-
-    console.log(`Username updated for user ${req.userId}: ${sanitizedUsername}`);
+    console.log(`[update-username] Username updated for user ${req.userId}: ${sanitizedUsername}`);
 
     res.json({
       success: true,
@@ -478,7 +504,7 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
       }
     });
   } catch (error) {
-    console.error('Error updating username:', error);
+    console.error('[update-username] Error:', error);
     next(error);
   }
 });

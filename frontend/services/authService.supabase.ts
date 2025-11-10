@@ -56,9 +56,12 @@ export const authServiceSupabase = {
   logout: async (): Promise<void> => {
     try {
       await supabase.auth.signOut();
-      localStorage.clear();
+      // Only clear Supabase auth data, not guest data
+      localStorage.removeItem('musicsim_auth');
     } catch (error) {
       console.error('[authService] Logout error:', error);
+      // Even if signOut fails, try to clear local auth data
+      localStorage.removeItem('musicsim_auth');
       throw error;
     }
   },

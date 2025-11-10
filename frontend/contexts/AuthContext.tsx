@@ -233,16 +233,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Logout function
   const logout = useCallback(async () => {
-    // Clear state immediately for instant logout UX
-    setUser(null);
-    setToken(null);
-    setError(null);
-    setIsLoading(false);
+    try {
+      // Clear state immediately for instant logout UX
+      setUser(null);
+      setToken(null);
+      setError(null);
+      setIsLoading(false);
 
-    // Logout from Supabase in background (don't block UI)
-    authServiceSupabase.logout().catch(error => {
-      console.warn('Background logout error:', error);
-    });
+      // Clean URL hash that might be left over
+      if (window.location.hash) {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+
+      // Logout from Supabase (this triggers SIGNED_OUT event)
+      await authServiceSupabase.logout();
+
+      console.log('[AuthContext] Logout completed successfully');
+    } catch (error) {
+      console.warn('Logout error:', error);
+      // Even if logout fails, clear local state
+      setUser(null);
+      setToken(null);
+      setError(null);
+      setIsLoading(false);
+    }
   }, []);
 
   // Update profile function
@@ -250,11 +265,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(true);
 
     try {
+      // Optimistically update user state immediately for instant UI feedback
+      if (user) {
+        setUser({
+          ...user,
+          ...(data.username && { username: data.username }),
+          ...(data.displayName && { displayName: data.displayName }),
+          ...(data.profileImage !== undefined && { profileImage: data.profileImage })
+        });
+      }
+
       const response = await authServiceSupabase.updateProfile(data);
 
       if (response.success && response.data) {
-        // Update user state with new data
+        // Confirm update with backend data
         setUser(response.data.user);
+        console.log('[AuthContext] Profile updated successfully');
         return true;
       } else {
         throw new Error(response.message || 'Failed to update profile');
@@ -263,11 +289,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error('[AuthContext] Update profile failed:', error);
       const message = (error as any)?.message || 'Failed to update profile';
       setError(message);
+
+      // Revert optimistic update on failure by refetching current user
+      try {
+        const currentUserResponse = await authServiceSupabase.getCurrentUser();
+        if (currentUserResponse.success && currentUserResponse.data) {
+          setUser(currentUserResponse.data.user);
+        }
+      } catch (revertError) {
+        console.warn('[AuthContext] Failed to revert profile update:', revertError);
+      }
+
       return false;
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user]);
 
   // Delete account function
   const deleteAccount = useCallback(async (): Promise<{ success: boolean; message: string }> => {

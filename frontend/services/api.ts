@@ -73,7 +73,18 @@ api.interceptors.response.use(
 
     // Handle authentication errors
     if (error.response?.status === 401) {
+      console.error('Authentication error (401):', error.config?.url, error.response?.data);
+
+      // Don't auto-sign out if the error message indicates the token is valid but user profile is missing
+      const errorMessage = error.response?.data?.message?.toLowerCase() || '';
+      if (errorMessage.includes('user not found') || errorMessage.includes('profile')) {
+        console.warn('User profile not found - may need to sync profile');
+        // Let the calling code handle this specific case
+        return Promise.reject(error);
+      }
+
       // Token expired or invalid - sign out from Supabase
+      console.log('Token invalid - signing out');
       supabase.auth.signOut().catch(console.error);
 
       // Only redirect if we're not already on the login page

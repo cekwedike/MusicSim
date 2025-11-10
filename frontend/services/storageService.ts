@@ -336,7 +336,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                   technique: 50
                 },
                 timestamp: new Date(save.lastPlayedAt).getTime(),
-                careerProgress: Math.min(Math.round((save.weeksPlayed / 260) * 100), 100)
+                careerProgress: Math.min(Math.round((save.weeksPlayed / 240) * 100), 100) // 240 weeks = 5 years * 48 weeks/year
               };
             } catch (error) {
               console.warn(`[storageService] Failed to process save ${save.slotName}:`, error);
@@ -427,11 +427,13 @@ export function isStorageAvailable(): boolean {
 
 /**
  * Calculates career progress as a percentage
+ * Game uses 48 weeks/year (12 months × 4 weeks/month)
  */
 function calculateCareerProgress(state: GameState): number {
-  const maxWeeks = 260; // 5 years * 52 weeks
+  const maxWeeks = 240; // 5 years * 48 weeks/year
   const gd = toGameDate(state.currentDate, state.startDate);
-  const currentWeeks = (gd.year - 1) * 52 + gd.week;
+  // Calculate total weeks: (years - 1) * 48 + (months - 1) * 4 + week
+  const currentWeeks = (gd.year - 1) * 48 + (gd.month - 1) * 4 + gd.week;
   return Math.min(Math.round((currentWeeks / maxWeeks) * 100), 100);
 }
 

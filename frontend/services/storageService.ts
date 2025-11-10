@@ -454,5 +454,7 @@ export default {
   getAllSaveSlots,
   autoSave,
   isStorageAvailable,
-  formatSaveDate
+  formatSaveDate,
+  canCreateNewSave,
+  getManualSaveCount
 };

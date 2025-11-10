@@ -4,11 +4,15 @@ const path = require('path');
 
 async function runMigration() {
   try {
+    console.log('========================================');
     console.log('Starting database migrations...');
+    console.log('========================================');
+    console.log('Database URL:', process.env.DATABASE_URL ? 'Set ✓' : 'Not set ✗');
+    console.log('Environment:', process.env.NODE_ENV || 'development');
 
     // Test database connection
     await sequelize.authenticate();
-    console.log('Database connection established.\n');
+    console.log('✓ Database connection established.\n');
 
     // List of migrations to run in order
     const migrations = [
@@ -58,6 +62,7 @@ async function runMigration() {
           if (error.message.includes('does not exist') || error.message.includes('already exists')) {
             console.log('⚠ Skipped (already applied)');
           } else {
+            console.error('✗ Error executing statement:', error.message);
             throw error;
           }
         }
@@ -77,14 +82,28 @@ async function runMigration() {
     console.log('  • Achievements now managed in code (constants/achievements.js)');
     console.log('  • Added metadata fields to GameSaves (lastPlayedAt, currentDate, startDate, playerStats)');
     console.log('\nDatabase is now fully optimized and ready!');
-    console.log('\n');
+    console.log('========================================\n');
 
-    process.exit(0);
+    // Only exit if this is the main module (not imported)
+    if (require.main === module) {
+      process.exit(0);
+    }
   } catch (error) {
     console.error('\n❌ Migration failed:', error.message);
-    console.error(error);
-    process.exit(1);
+    console.error('Full error:', error);
+
+    // Only exit if this is the main module (not imported)
+    if (require.main === module) {
+      process.exit(1);
+    } else {
+      throw error; // Re-throw if imported so the parent can handle it
+    }
   }
 }
 
-runMigration();
+// Only run if this is the main module
+if (require.main === module) {
+  runMigration();
+}
+
+module.exports = runMigration;

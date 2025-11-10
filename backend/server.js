@@ -136,11 +136,9 @@ const startServer = async () => {
     console.log('Database connection established successfully.');
     isDatabaseConnected = true;
 
-    // Sync models (create tables if they don't exist)
-    // Using alter: true will create tables and update existing ones without dropping data
-    await sequelize.sync({ alter: true });
-    console.log('Database models synchronized.');
-    console.log('Tables created/updated: Users, PlayerStatistics, GameSaves, CareerHistory, LearningProgress');
+    // NOTE: Schema changes are now handled by migrations (npm run migrate)
+    // We no longer use sequelize.sync() to avoid conflicts with migration-managed schema
+    console.log('Database ready. Schema is managed by migrations.');
 
     // Start listening
     server = app.listen(PORT, () => {

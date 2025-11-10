@@ -312,7 +312,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 				) : (
 					<div className="flex items-center gap-3">
 						<div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-2xl">
-						🎮
+							🎮
 						</div>
 						<div className="flex-1">
 							{isEditingGuestName ? (

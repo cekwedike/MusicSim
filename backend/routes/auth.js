@@ -215,6 +215,32 @@ router.delete('/account', authMiddleware, async (req, res, next) => {
     const username = user.username;
     const email = user.email;
 
+    // Attempt to delete profile images stored in Supabase Storage (bucket: 'profile-images')
+    try {
+      const bucketName = 'profile-images';
+      console.log(`Attempting to remove storage objects for user: ${userId} from bucket: ${bucketName}`);
+
+      // List files under the user's folder (e.g., `${userId}/`)
+      const { data: listData, error: listError } = await supabaseAdmin.storage.from(bucketName).list(userId, { limit: 100 });
+
+      if (listError) {
+        console.error(`Failed to list storage objects for user ${userId}:`, listError);
+      } else if (listData && listData.length > 0) {
+        const paths = listData.map(f => `${userId}/${f.name}`);
+        const { data: removedData, error: removeError } = await supabaseAdmin.storage.from(bucketName).remove(paths);
+
+        if (removeError) {
+          console.error(`Failed to remove some storage objects for user ${userId}:`, removeError);
+        } else {
+          console.log(`Removed storage objects for user ${userId}:`, paths);
+        }
+      } else {
+        console.log(`No storage objects found for user ${userId} in bucket ${bucketName}`);
+      }
+    } catch (storageErr) {
+      console.error('Error while attempting to delete storage objects:', storageErr);
+    }
+
     // Delete the user from database (CASCADE will delete all associated data: saves, stats, etc.)
     await user.destroy();
 

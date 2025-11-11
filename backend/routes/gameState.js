@@ -382,10 +382,9 @@ router.get('/saves', async (req, res, next) => {
         playerStats: gameState?.playerStats || {
           cash: 0,
           fame: 0,
-          health: 100,
-          stress: 0,
-          creativity: 50,
-          technique: 50
+          wellBeing: 50,
+          careerProgress: 0,
+          hype: 0
         }
       };
 

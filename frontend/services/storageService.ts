@@ -298,6 +298,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
   try {
     // Try to get saves from backend if authenticated (with 5s timeout - faster!)
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
+    console.log('[storageService] Authentication status:', isAuthenticated);
     if (isAuthenticated) {
       console.log('[storageService] User authenticated, loading from backend...');
       try {
@@ -321,6 +322,13 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
               const startDate = save.startDate ? new Date(save.startDate) : new Date();
               const gd = toGameDate(currentDate, startDate);
 
+              console.log(`[storageService] Processing backend save ${save.slotName}:`, {
+                weeksPlayed: save.weeksPlayed,
+                currentDate: save.currentDate,
+                startDate: save.startDate,
+                gameDate: gd
+              });
+
               return {
                 id: save.slotName,
                 artistName: save.artistName,
@@ -330,10 +338,9 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                 stats: save.playerStats || {
                   cash: 0,
                   fame: 0,
-                  health: 100,
-                  stress: 0,
-                  creativity: 50,
-                  technique: 50
+                  wellBeing: 50,
+                  careerProgress: 0,
+                  hype: 0
                 },
                 timestamp: new Date(save.lastPlayedAt).getTime(),
                 careerProgress: Math.min(Math.round((save.weeksPlayed / 240) * 100), 100) // 240 weeks = 5 years * 48 weeks/year

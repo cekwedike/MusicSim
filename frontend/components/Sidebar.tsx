@@ -131,14 +131,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         {/* Icon Bar and Expanded Panel Container */}
         <div className="flex flex-row flex-1 overflow-hidden">
         {/* Compact Sidebar with Icons + Labels on mobile, Icon-only on desktop */}
-        <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 lg:w-16 flex flex-col py-4 gap-2 shadow-xl overflow-y-auto">
+        <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-40 sm:w-44 lg:w-16 flex flex-col py-4 gap-2 shadow-xl overflow-y-auto">
         {buttons.map((button) => (
           <button
             key={button.id}
             onClick={() => handleButtonClick(button.id)}
             className={`
-              relative px-3 py-2 lg:p-3 rounded-lg transition-all duration-200 group
-              flex lg:justify-center items-center gap-2 lg:gap-0
+              relative px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group
+              flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0
               ${activeView === button.id
                 ? 'bg-violet-600 text-white'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700'
@@ -152,7 +152,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
             </div>
 
             {/* Label text - visible on mobile, hidden on desktop */}
-            <span className="lg:hidden text-sm font-medium whitespace-nowrap">
+            <span className="lg:hidden text-xs sm:text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
               {button.label}
             </span>
 
@@ -182,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="px-3 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-gray-700 flex lg:justify-center items-center gap-2 lg:gap-0"
+          className="px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-gray-700 flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0"
           aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
         >
@@ -191,7 +191,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
           </div>
 
           {/* Label text - visible on mobile, hidden on desktop */}
-          <span className="lg:hidden text-sm font-medium whitespace-nowrap">
+          <span className="lg:hidden text-xs sm:text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
             {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
           </span>
 

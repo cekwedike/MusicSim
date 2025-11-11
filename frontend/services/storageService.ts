@@ -446,7 +446,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         currentDate: state.currentDate,
         stats: state.playerStats,
         timestamp: saveData.timestamp,
-        careerProgress: calculateCareerProgress(state)
+        careerProgress: state.playerStats.careerProgress // Use actual career progress stat, not time-based calculation
       });
     }
 
@@ -487,10 +487,11 @@ export function isStorageAvailable(): boolean {
 }
 
 /**
- * Calculates career progress as a percentage
+ * Calculates time-based progress as a percentage (how far through the 5-year simulation)
  * Game uses 48 weeks/year (12 months × 4 weeks/month)
+ * NOTE: This is different from career progress stat - this shows time elapsed
  */
-function calculateCareerProgress(state: GameState): number {
+function calculateTimeProgress(state: GameState): number {
   const maxWeeks = 240; // 5 years * 48 weeks/year
   const gd = toGameDate(state.currentDate, state.startDate);
   // Calculate total weeks: (years - 1) * 48 + (months - 1) * 4 + week

@@ -1510,7 +1510,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         {/* Progress bar */}
                                         <div className="space-y-1">
                                             <div className="flex justify-between text-xs">
-                                                <span className="text-gray-500">Progress</span>
+                                                <span className="text-gray-500">Career Progress</span>
                                                 <span className="text-violet-300 font-medium">{slot.careerProgress}%</span>
                                             </div>
                                             <div className="w-full bg-gray-700 rounded-full h-1.5">

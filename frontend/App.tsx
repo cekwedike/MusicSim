@@ -2196,7 +2196,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
 
-            <div className={`flex-grow w-full max-w-4xl mx-auto px-4 sm:px-5 py-4 sm:py-4 flex flex-col transition-all duration-300 ${artistName ? 'lg:pr-20 lg:mr-4' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[30rem]' : ''}`}>
+            <div className={`flex-grow w-full max-w-[1400px] mx-auto px-4 sm:px-5 py-4 sm:py-4 flex flex-col transition-all duration-300 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[30rem]' : ''}`}>
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}

@@ -1789,6 +1789,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         }
     }, [status, state.currentDate, state.startDate, audioManager]);
 
+    // Generate scenario when loaded game has no current scenario
+    useEffect(() => {
+        if (status === 'playing' && !currentScenario && state.artistName) {
+            console.log('[App] Game loaded but no current scenario - generating new scenario');
+            fetchNextScenario(state);
+        }
+    }, [status, currentScenario, state, fetchNextScenario]);
+
     // Track previous stats to detect changes and play appropriate sounds
     const prevStatsRef = useRef(playerStats);
     const isInitialRenderRef = useRef(true);
@@ -2279,7 +2287,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             case 'loading':
                 return <div className="flex-grow flex items-center justify-center"><Loader text="Setting the stage..." /></div>;
             case 'playing':
-                if (!currentScenario) return <div className="flex-grow flex items-center justify-center"><Loader text="Loading..." /></div>;
+                if (!currentScenario) return <div className="flex-grow flex items-center justify-center"><Loader text="Preparing your next scenario..." /></div>;
                 return <ScenarioCard scenario={currentScenario} onChoiceSelect={handleChoiceSelect} disabled={!!lastOutcome} difficulty={state.difficulty} />;
             default:
                 return null;

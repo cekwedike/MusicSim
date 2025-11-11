@@ -16,7 +16,7 @@ See the complete gameplay experience, from artist setup to career management and
 - **Career Management**: Guide your artist through weeks, months, and years of industry challenges
 - **Strategic Decision Making**: Navigate complex scenarios with meaningful consequences
 - **Three Difficulty Levels**: Easy, Realistic, and Hard modes with different starting conditions
-- **Dynamic Scenarios**: AI-powered scenario generation using Google Gemini
+- **Dynamic Scenarios**: Rich scenario bank with diverse industry challenges
 - **Achievement System**: Unlock achievements based on career milestones and decisions
 
 ### Analytics & Progress
@@ -126,7 +126,6 @@ Create environment files for API keys and configuration:
 
 **Frontend** (`.env.local`):
 ```env
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
 VITE_API_URL=http://localhost:3001
 ```
 
@@ -289,7 +288,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- **Google Gemini**: AI-powered scenario generation
 - **React**: Frontend framework
 - **Vite**: Lightning-fast development server
 - **Node.js**: Backend runtime

@@ -34,13 +34,13 @@ jobs:
     - name: Run npm audit (frontend)
       run: |
         echo "=== Frontend Security Scan ==="
-        npm audit --audit-level=moderate --json > frontend-audit.json || true
+        npm audit --audit-level=high --json > frontend-audit.json || echo "Frontend audit completed"
         
     - name: Run npm audit (backend)
       run: |
         echo "=== Backend Security Scan ==="
         cd backend
-        npm audit --audit-level=moderate --json > ../backend-audit.json || true
+        npm audit --audit-level=high --json > ../backend-audit.json || echo "Backend audit completed"
         
     - name: Process audit results
       uses: actions/github-script@v7

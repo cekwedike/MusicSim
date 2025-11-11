@@ -29,6 +29,18 @@ export default defineConfig(({ mode }) => {
       },
       server: {
         port: 5173
+      },
+      test: {
+        globals: true,
+        environment: 'happy-dom',
+        setupFiles: [],
+        include: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
+        exclude: ['node_modules', 'dist', 'backend'],
+        coverage: {
+          provider: 'v8',
+          reporter: ['text', 'json', 'html'],
+          exclude: ['node_modules/', 'dist/', 'backend/']
+        }
       }
     };
 });

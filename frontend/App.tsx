@@ -1415,27 +1415,131 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                 {/* Existing Save Slots */}
                 {!loadingSaves && saveSlots.length > 0 && (
                     <div className="mt-6">
-                        <h3 className="text-lg font-semibold text-gray-300 mb-3">Your Careers ({saveSlots.length}/5)</h3>
-                        <div className="space-y-2 max-h-64 overflow-y-auto">
+                        <h3 className="text-lg font-semibold text-gray-300 mb-4 flex items-center justify-between">
+                            <span>Your Careers ({saveSlots.length}/5)</span>
+                            <div className="hidden sm:flex text-xs text-gray-500 gap-4">
+                                <span>Click to continue</span>
+                            </div>
+                        </h3>
+                        
+                        {/* Desktop/Tablet Grid Layout */}
+                        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-80 overflow-y-auto">
                             {saveSlots.map((slot) => (
                                 <button
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
-                                    className="w-full bg-gray-800 border border-gray-700 hover:border-violet-500 text-left p-4 rounded-lg transition-all hover:scale-[1.02]"
+                                    className="bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-violet-500/10 group"
                                 >
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <div className="font-bold text-violet-300">{slot.artistName}</div>
-                                            <div className="text-sm text-gray-400">{getGenreLabel(slot.genre)}</div>
-                                            <div className="text-xs text-gray-500 mt-1">
-                                                Year {slot.date.year}, Week {slot.date.week} - {slot.careerProgress}% complete
+                                    <div className="space-y-3">
+                                        {/* Header with artist name and genre */}
+                                        <div className="flex items-center justify-between">
+                                            <div className="min-w-0 flex-1">
+                                                <div className="font-bold text-violet-300 truncate group-hover:text-violet-200 transition-colors">
+                                                    {slot.artistName}
+                                                </div>
+                                                <div className="text-sm text-gray-400 capitalize">
+                                                    {getGenreLabel(slot.genre)}
+                                                </div>
+                                            </div>
+                                            <div className="flex-shrink-0 w-2 h-2 bg-violet-500 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                                        </div>
+                                        
+                                        {/* Progress bar */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between text-xs">
+                                                <span className="text-gray-500">Progress</span>
+                                                <span className="text-violet-300 font-medium">{slot.careerProgress}%</span>
+                                            </div>
+                                            <div className="w-full bg-gray-700 rounded-full h-1.5">
+                                                <div 
+                                                    className="bg-gradient-to-r from-violet-500 to-fuchsia-500 h-1.5 rounded-full transition-all duration-300"
+                                                    style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
+                                                ></div>
                                             </div>
                                         </div>
-                                        <div className="text-right">
+                                        
+                                        {/* Stats row */}
+                                        <div className="grid grid-cols-2 gap-2 text-xs">
+                                            <div className="bg-gray-900/50 rounded-lg p-2">
+                                                <div className="text-gray-500 mb-0.5">Cash</div>
+                                                <div className="text-green-400 font-mono font-semibold">${slot.stats.cash.toLocaleString()}</div>
+                                            </div>
+                                            <div className="bg-gray-900/50 rounded-lg p-2">
+                                                <div className="text-gray-500 mb-0.5">Fame</div>
+                                                <div className="text-yellow-400 font-semibold">{Math.round(slot.stats.fame)}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Date info */}
+                                        <div className="flex justify-between items-center pt-1">
                                             <div className="text-xs text-gray-500">
+                                                Year {slot.date.year}, Week {slot.date.week}
+                                            </div>
+                                            <div className="text-xs text-gray-400">
                                                 {new Date(slot.timestamp).toLocaleDateString()}
                                             </div>
-                                            <div className="text-sm text-green-400 font-mono">${slot.stats.cash.toLocaleString()}</div>
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Mobile List Layout */}
+                        <div className="md:hidden space-y-3 max-h-64 overflow-y-auto">
+                            {saveSlots.map((slot) => (
+                                <button
+                                    key={slot.id}
+                                    onClick={() => handleLoadSave(slot.id)}
+                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 active:scale-[0.98] group"
+                                >
+                                    <div className="space-y-3">
+                                        {/* Header */}
+                                        <div className="flex justify-between items-start">
+                                            <div className="min-w-0 flex-1">
+                                                <div className="font-bold text-violet-300 group-hover:text-violet-200 transition-colors">
+                                                    {slot.artistName}
+                                                </div>
+                                                <div className="text-sm text-gray-400 capitalize">
+                                                    {getGenreLabel(slot.genre)}
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col items-end text-xs text-gray-500">
+                                                <div>Y{slot.date.year} W{slot.date.week}</div>
+                                                <div>{new Date(slot.timestamp).toLocaleDateString()}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Progress bar */}
+                                        <div className="space-y-1">
+                                            <div className="flex justify-between text-xs">
+                                                <span className="text-gray-500">Career Progress</span>
+                                                <span className="text-violet-300 font-medium">{slot.careerProgress}%</span>
+                                            </div>
+                                            <div className="w-full bg-gray-700 rounded-full h-2">
+                                                <div 
+                                                    className="bg-gradient-to-r from-violet-500 to-fuchsia-500 h-2 rounded-full transition-all duration-300"
+                                                    style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Stats */}
+                                        <div className="flex justify-between items-center">
+                                            <div className="flex gap-4 text-sm">
+                                                <div>
+                                                    <span className="text-gray-500">Cash: </span>
+                                                    <span className="text-green-400 font-mono font-semibold">${slot.stats.cash.toLocaleString()}</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-gray-500">Fame: </span>
+                                                    <span className="text-yellow-400 font-semibold">{Math.round(slot.stats.fame)}</span>
+                                                </div>
+                                            </div>
+                                            <div className="text-violet-400 opacity-60 group-hover:opacity-100 transition-opacity">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
                                 </button>

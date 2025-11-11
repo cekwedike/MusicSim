@@ -1,30 +1,30 @@
-<!-- MusicSim Icon 512x512 - Full detail version -->
+<!-- MusicSim Icon - Artistic Design combining musical notes, waveform, and business growth -->
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <!-- Gradient definitions for depth and artistic effect -->
-    <linearGradient id="primaryGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#c084fc;stop-opacity:1" />
     </linearGradient>
     
-    <linearGradient id="accentGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
     </linearGradient>
     
-    <linearGradient id="backgroundGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
     </linearGradient>
     
     <!-- Drop shadow filter -->
-    <filter id="dropShadow512" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
       <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
     </filter>
     
     <!-- Glow effect -->
-    <filter id="glow512">
+    <filter id="glow">
       <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
       <feMerge> 
         <feMergeNode in="coloredBlur"/>
@@ -34,10 +34,10 @@
   </defs>
   
   <!-- Background circle with gradient -->
-  <circle cx="256" cy="256" r="240" fill="url(#backgroundGradient512)" filter="url(#dropShadow512)"/>
+  <circle cx="256" cy="256" r="240" fill="url(#backgroundGradient)" filter="url(#dropShadow)"/>
   
   <!-- Outer ring with subtle gradient -->
-  <circle cx="256" cy="256" r="240" fill="none" stroke="url(#primaryGradient512)" stroke-width="8" opacity="0.6"/>
+  <circle cx="256" cy="256" r="240" fill="none" stroke="url(#primaryGradient)" stroke-width="8" opacity="0.6"/>
   
   <!-- Musical staff lines (simplified, artistic) -->
   <g opacity="0.3" stroke="#8b5cf6" stroke-width="2" fill="none">
@@ -50,12 +50,12 @@
   
   <!-- Treble clef (stylized, modern) -->
   <path d="M140 200 C140 160, 180 160, 180 200 C180 240, 140 240, 140 280 C140 320, 180 320, 180 280 C180 260, 160 260, 160 240 C160 220, 180 220, 180 240" 
-        fill="url(#primaryGradient512)" 
-        filter="url(#glow512)"
+        fill="url(#primaryGradient)" 
+        filter="url(#glow)"
         stroke="none"/>
   
   <!-- Musical notes floating upward -->
-  <g fill="url(#accentGradient512)" filter="url(#glow512)">
+  <g fill="url(#accentGradient)" filter="url(#glow)">
     <!-- Eighth note 1 -->
     <ellipse cx="280" cy="240" rx="12" ry="8" transform="rotate(-20 280 240)"/>
     <rect x="288" y="200" width="3" height="40" rx="1.5"/>
@@ -72,14 +72,14 @@
   </g>
   
   <!-- Sound wave visualization (business growth metaphor) -->
-  <g stroke="url(#primaryGradient512)" stroke-width="3" fill="none" opacity="0.8">
-    <path d="M120 320 Q150 300, 180 320 T240 320 T300 310 T360 300 T420 290" filter="url(#glow512)"/>
+  <g stroke="url(#primaryGradient)" stroke-width="3" fill="none" opacity="0.8">
+    <path d="M120 320 Q150 300, 180 320 T240 320 T300 310 T360 300 T420 290" filter="url(#glow)"/>
     <path d="M120 340 Q150 325, 180 340 T240 340 T300 335 T360 330 T420 325" opacity="0.6"/>
     <path d="M120 360 Q150 350, 180 360 T240 360 T300 355 T360 350 T420 345" opacity="0.4"/>
   </g>
   
   <!-- Ascending bar chart (business success) -->
-  <g fill="url(#accentGradient512)" opacity="0.7">
+  <g fill="url(#accentGradient)" opacity="0.7">
     <rect x="140" y="380" width="20" height="40" rx="2"/>
     <rect x="170" y="370" width="20" height="50" rx="2"/>
     <rect x="200" y="355" width="20" height="65" rx="2"/>
@@ -89,12 +89,12 @@
   
   <!-- Central logo element - stylized "M" for MusicSim -->
   <path d="M200 120 L200 180 L230 140 L260 180 L260 120 M190 120 L270 120" 
-        stroke="url(#primaryGradient512)" 
+        stroke="url(#primaryGradient)" 
         stroke-width="8" 
         fill="none" 
         stroke-linecap="round" 
         stroke-linejoin="round"
-        filter="url(#glow512)"/>
+        filter="url(#glow)"/>
   
   <!-- Sparkle effects around the logo -->
   <g fill="#fbbf24" opacity="0.8">

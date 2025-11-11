@@ -17,6 +17,7 @@ const careerHistoryRoutes = require('./routes/careerHistory');
 const learningRoutes = require('./routes/learning');
 const lessonsRoutes = require('./routes/lessons');
 const analyticsRoutes = require('./routes/analytics');
+const migrateRoutes = require('./routes/migrate');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -43,6 +44,9 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Serve static files from public directory
+app.use(express.static('public'));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -134,6 +138,9 @@ app.use('/api/lessons', lessonsRoutes);
 
 // Analytics routes
 app.use('/api/analytics', analyticsRoutes);
+
+// Migration routes (admin)
+app.use('/api/migrate', migrateRoutes);
 
 // 404 handler for unmatched routes
 app.use((req, res) => {

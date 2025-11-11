@@ -23,13 +23,13 @@ const colorClasses = {
 
 const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, maxValue = 100, isDate = false }) => {
     const classes = colorClasses[color];
-    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50"
-                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50";
+    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50"
+                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50";
 
     return (
         <div className={containerClass}>
-            <div className="flex items-center space-x-1 sm:space-x-2 mb-1 sm:mb-2">
-                <div className={`${classes.text} w-4 h-4 sm:w-5 sm:h-5`}>{icon}</div>
+            <div className="flex items-center space-x-2 sm:space-x-2 mb-1 sm:mb-2">
+                <div className={`${classes.text} w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0`}>{icon}</div>
                 <span className="font-bold text-gray-300 text-xs sm:text-sm md:text-base">{label}</span>
             </div>
             {label === 'Cash' ? (
@@ -89,7 +89,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
     const displayDate = currentDate ? formatDate(currentDate) : `Y${date.year} M${date.month} W${date.week}`;
 
     return (
-        <div className="mb-3 md:mb-4 mt-2">
+        <div className="mb-3 md:mb-4 mt-4 sm:mt-5">
             {/* Mobile: Collapsible view */}
             <div className="lg:hidden bg-gray-800 rounded-lg border border-gray-700">
                 {isMobileCollapsed ? (
@@ -118,7 +118,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                                 <ChevronUp className="w-4 h-4" />
                             </button>
                         </div>
-                        <div className="player-stats grid grid-cols-2 gap-2">
+                        <div className="player-stats grid grid-cols-2 gap-2.5">
                             <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
                             <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
                             <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />

@@ -112,7 +112,8 @@ router.get('/overview', async (req, res, next) => {
         gamesLostToBurnout: user.statistics?.gamesLostToBurnout || 0
       },
       achievements: {
-        totalUnlocked: user.statistics?.totalAchievementsUnlocked || 0
+        careersCompleted: user.statistics?.careersCompleted || 0,
+        careersAbandoned: user.statistics?.careersAbandoned || 0
       },
       insights: {
         learningToPerformanceCorrelation: correlationStrength,

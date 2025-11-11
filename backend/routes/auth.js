@@ -28,9 +28,11 @@ router.get('/me', authMiddleware, async (req, res, next) => {
           model: PlayerStatistics,
           as: 'statistics',
           attributes: [
-            'totalGamesPlayed', 'totalWeeksPlayed', 'longestCareerWeeks',
-            'totalAchievementsUnlocked', 'highestCash', 'highestFame',
-            'highestCareerProgress', 'preferredDifficulty', 'lastPlayedAt'
+            'totalGamesPlayed', 'totalWeeksPlayed', 'gamesLostToDebt',
+            'gamesLostToBurnout', 'careersAbandoned', 'careersCompleted',
+            'totalLessonsViewed', 'totalModulesCompleted', 'averageQuizScore',
+            'totalStudyTimeMinutes', 'totalPlayTimeMinutes', 'averageSessionDuration',
+            'preferredDifficulty', 'favoriteGenre'
           ]
         }
       ]
@@ -383,11 +385,12 @@ router.post('/sync-guest-data', authMiddleware, async (req, res, next) => {
 
       stats.totalGamesPlayed = (stats.totalGamesPlayed || 0) + (guestStats.totalGamesPlayed || 0);
       stats.totalWeeksPlayed = (stats.totalWeeksPlayed || 0) + (guestStats.totalWeeksPlayed || 0);
-      stats.longestCareerWeeks = Math.max(stats.longestCareerWeeks || 0, guestStats.longestCareerWeeks || 0);
-      stats.totalAchievementsUnlocked = (stats.totalAchievementsUnlocked || 0) + (guestStats.totalAchievementsUnlocked || 0);
-      stats.highestCash = Math.max(stats.highestCash || 0, guestStats.highestCash || 0);
-      stats.highestFame = Math.max(stats.highestFame || 0, guestStats.highestFame || 0);
-      stats.highestCareerProgress = Math.max(stats.highestCareerProgress || 0, guestStats.highestCareerProgress || 0);
+      stats.gamesLostToDebt = (stats.gamesLostToDebt || 0) + (guestStats.gamesLostToDebt || 0);
+      stats.gamesLostToBurnout = (stats.gamesLostToBurnout || 0) + (guestStats.gamesLostToBurnout || 0);
+      stats.careersAbandoned = (stats.careersAbandoned || 0) + (guestStats.careersAbandoned || 0);
+      stats.careersCompleted = (stats.careersCompleted || 0) + (guestStats.careersCompleted || 0);
+      stats.totalLessonsViewed = (stats.totalLessonsViewed || 0) + (guestStats.totalLessonsViewed || 0);
+      stats.totalModulesCompleted = (stats.totalModulesCompleted || 0) + (guestStats.totalModulesCompleted || 0);
 
       await stats.save();
     }

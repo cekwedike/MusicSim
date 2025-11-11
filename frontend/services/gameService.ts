@@ -1,6 +1,11 @@
 import api from './api';
 import type { GameState } from '../types';
-import type { ApiResponse } from './authService';
+
+export type ApiResponse<T> = {
+  success: boolean;
+  data: T;
+  error?: string;
+};
 
 export interface GameSave {
   id: string;

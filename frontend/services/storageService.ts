@@ -160,45 +160,99 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
 
 /**
  * Load game and check expiration for autosave
+ * Optimized to try localStorage first for better performance
  */
 export const loadGame = async (slotId: string): Promise<GameState | null> => {
+  console.log(`[loadGame] Starting load for slot: ${slotId}`);
+  
+  // OPTIMIZATION: Try localStorage first for faster loading
+  // This prevents the blank screen issue by loading local data immediately
+  const saves = loadLocalSaves();
+  const localSaveData = saves[slotId];
+  
+  // Check if we have local data and it's valid
+  if (localSaveData) {
+    // IMPORTANT: Only autosave ('auto' slot) expires. Manual saves NEVER expire!
+    if (slotId === 'auto' && isAutosaveExpired(localSaveData.timestamp)) {
+      console.log(`[loadGame] Local autosave expired (${Math.round((Date.now() - localSaveData.timestamp) / 60000)} minutes old). Deleting...`);
+      await deleteSave(slotId);
+      return null;
+    }
+    
+    const localAge = Math.round((Date.now() - localSaveData.timestamp) / 60000);
+    console.log(`[loadGame] Found local save: ${slotId} (${localAge} minutes old)`);
+    
+    // Return local data immediately for better UX
+    const localGameState = deserializeGameState(localSaveData.state);
+    
+    // ASYNC: Try to sync with backend in background (don't block UI)
+    if (slotId !== 'auto') { // Skip backend sync for autosave to keep it fast
+      syncWithBackendAsync(slotId, localSaveData);
+    }
+    
+    return localGameState;
+  }
+  
+  // If no local data, try backend as fallback
   try {
-    // If authenticated, try loading from backend first
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (isAuthenticated) {
-      try {
-        const response = await gameService.loadGame(slotId);
-        if (response.success) {
-          console.log(`Loaded from backend: ${slotId}`);
-          return deserializeGameState(response.data.gameState);
-        }
-      } catch (error) {
-        console.error('Load from backend failed, trying localStorage:', error);
+      console.log(`[loadGame] No local save found, trying backend for: ${slotId}`);
+      const response = await gameService.loadGame(slotId);
+      if (response.success) {
+        console.log(`[loadGame] Loaded from backend: ${slotId}`);
+        const gameState = deserializeGameState(response.data.gameState);
+        
+        // Cache to localStorage for future fast access
+        const saveData: SaveData = {
+          state: response.data.gameState,
+          timestamp: new Date(response.data.lastPlayedAt).getTime(),
+          version: '1.0'
+        };
+        saves[slotId] = saveData;
+        localStorage.setItem('musicsim_saves', JSON.stringify(saves));
+        console.log(`[loadGame] Cached backend save to localStorage: ${slotId}`);
+        
+        return gameState;
       }
     }
   } catch (error) {
-    console.error('Backend load error:', error);
+    console.error(`[loadGame] Backend load failed for ${slotId}:`, error);
   }
   
-  // Fallback to localStorage
-  const saves = loadLocalSaves();
-  const saveData = saves[slotId];
-  
-  if (!saveData) {
-    console.log(`No save found: ${slotId}`);
-    return null;
-  }
+  console.log(`[loadGame] No save found: ${slotId}`);
+  return null;
+};
 
-  // IMPORTANT: Only autosave ('auto' slot) expires. Manual saves NEVER expire!
-  if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
-    console.log(`Autosave expired (${Math.round((Date.now() - saveData.timestamp) / 60000)} minutes old). Deleting...`);
-    await deleteSave(slotId);
-    return null;
+/**
+ * Background sync with backend (non-blocking)
+ */
+const syncWithBackendAsync = async (slotId: string, localSaveData: SaveData) => {
+  try {
+    const isAuthenticated = await authServiceSupabase.isAuthenticated();
+    if (!isAuthenticated) return;
+    
+    const response = await gameService.loadGame(slotId);
+    if (response.success) {
+      const backendTimestamp = new Date(response.data.lastPlayedAt).getTime();
+      const localTimestamp = localSaveData.timestamp;
+      
+      // If backend has newer data, update local storage
+      if (backendTimestamp > localTimestamp) {
+        console.log(`[syncWithBackendAsync] Backend has newer save for ${slotId}, updating local cache`);
+        const saves = loadLocalSaves();
+        saves[slotId] = {
+          state: response.data.gameState,
+          timestamp: backendTimestamp,
+          version: '1.0'
+        };
+        localStorage.setItem('musicsim_saves', JSON.stringify(saves));
+      }
+    }
+  } catch (error) {
+    console.log(`[syncWithBackendAsync] Background sync failed for ${slotId}:`, error);
+    // Fail silently - this is just background optimization
   }
-
-  const age = Math.round((Date.now() - saveData.timestamp) / 60000);
-  console.log(`Loaded from localStorage: ${slotId} (${age} minutes old)`);
-  return deserializeGameState(saveData.state);
 };
 
 /**

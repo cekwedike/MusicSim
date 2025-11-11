@@ -1341,6 +1341,8 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
     const [autosaveAge, setAutosaveAge] = useState<number | null>(null);
     const [saveSlots, setSaveSlots] = useState<SaveSlot[]>([]);
     const [loadingSaves, setLoadingSaves] = useState(true);
+    const [loadingSlotId, setLoadingSlotId] = useState<string | null>(null);
+    const [loadingError, setLoadingError] = useState<string | null>(null);
 
     useEffect(() => {
         const checkAutosave = () => {
@@ -1374,20 +1376,47 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
     }, []);
 
     const handleContinue = async () => {
-        const save = await loadGame('auto');
-        if (save) {
-            onContinue(save);
-        } else {
-            alert('Autosave has expired or does not exist');
+        if (loadingSlotId) return; // Prevent double-clicking
+        
+        setLoadingSlotId('auto');
+        setLoadingError(null);
+        
+        try {
+            const save = await loadGame('auto');
+            if (save) {
+                onContinue(save);
+            } else {
+                setLoadingError('Autosave has expired or does not exist');
+            }
+        } catch (error) {
+            console.error('Failed to load autosave:', error);
+            setLoadingError('Failed to load autosave');
+        } finally {
+            setLoadingSlotId(null);
         }
     };
 
     const handleLoadSave = async (slotId: string) => {
-        const save = await loadGame(slotId);
-        if (save) {
-            onContinue(save);
-        } else {
-            alert('Failed to load save');
+        if (loadingSlotId) return; // Prevent double-clicking
+        
+        setLoadingSlotId(slotId);
+        setLoadingError(null);
+        
+        try {
+            console.log(`Loading save: ${slotId}`);
+            const save = await loadGame(slotId);
+            if (save) {
+                console.log(`Successfully loaded: ${slotId}`);
+                onContinue(save);
+            } else {
+                console.error(`Failed to load save: ${slotId} - No save data returned`);
+                setLoadingError('Failed to load save - save data may be corrupted');
+            }
+        } catch (error) {
+            console.error(`Failed to load save: ${slotId}`, error);
+            setLoadingError(`Failed to load save: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        } finally {
+            setLoadingSlotId(null);
         }
     };
 
@@ -1397,17 +1426,40 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
             <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
 
             <div className="space-y-4 w-full max-w-2xl">
+                {/* Error Display */}
+                {loadingError && (
+                    <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-4 mb-4">
+                        <p className="text-red-400 text-sm">{loadingError}</p>
+                        <button 
+                            onClick={() => setLoadingError(null)}
+                            className="text-red-300 hover:text-red-200 text-xs mt-2 underline"
+                        >
+                            Dismiss
+                        </button>
+                    </div>
+                )}
+
                 {autosaveExists && (
                     <button
                         onClick={handleContinue}
-                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-lg hover:scale-105 transition-transform text-lg shadow-lg"
+                        disabled={loadingSlotId === 'auto'}
+                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-lg hover:scale-105 transition-transform text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative"
                     >
-                        Continue Game
-                        {autosaveAge !== null && (
-                            <span className="block text-sm mt-1 opacity-75">
-                                Last saved {autosaveAge} {autosaveAge === 1 ? 'minute' : 'minutes'} ago
-                                {autosaveAge >= 8 && ' (expires soon!)'}
-                            </span>
+                        {loadingSlotId === 'auto' ? (
+                            <div className="flex items-center justify-center gap-3">
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                <span>Loading...</span>
+                            </div>
+                        ) : (
+                            <>
+                                Continue Game
+                                {autosaveAge !== null && (
+                                    <span className="block text-sm mt-1 opacity-75">
+                                        Last saved {autosaveAge} {autosaveAge === 1 ? 'minute' : 'minutes'} ago
+                                        {autosaveAge >= 8 && ' (expires soon!)'}
+                                    </span>
+                                )}
+                            </>
                         )}
                     </button>
                 )}
@@ -1428,8 +1480,19 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                 <button
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
-                                    className="bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-violet-500/10 group"
+                                    disabled={loadingSlotId === slot.id}
+                                    className="bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-violet-500/10 group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                 >
+                                    {/* Loading Overlay */}
+                                    {loadingSlotId === slot.id && (
+                                        <div className="absolute inset-0 bg-gray-900/80 rounded-xl flex items-center justify-center">
+                                            <div className="flex items-center gap-2 text-violet-300">
+                                                <div className="w-4 h-4 border-2 border-violet-300 border-t-transparent rounded-full animate-spin"></div>
+                                                <span className="text-sm font-medium">Loading...</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
                                     <div className="space-y-3">
                                         {/* Header with artist name and genre */}
                                         <div className="flex items-center justify-between">
@@ -1490,8 +1553,19 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                 <button
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
-                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 active:scale-[0.98] group"
+                                    disabled={loadingSlotId === slot.id}
+                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                 >
+                                    {/* Loading Overlay */}
+                                    {loadingSlotId === slot.id && (
+                                        <div className="absolute inset-0 bg-gray-900/80 rounded-xl flex items-center justify-center">
+                                            <div className="flex items-center gap-2 text-violet-300">
+                                                <div className="w-4 h-4 border-2 border-violet-300 border-t-transparent rounded-full animate-spin"></div>
+                                                <span className="text-sm font-medium">Loading...</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    
                                     <div className="space-y-3">
                                         {/* Header */}
                                         <div className="flex justify-between items-start">

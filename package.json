@@ -11,10 +11,17 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "test:ci": "vitest run --coverage",
+    "lint": "echo \"Lint script not configured yet\"",
+    "lint:fix": "echo \"Lint fix script not configured yet\"",
     "start": "concurrently --kill-others --prefix-colors \"cyan,magenta\" --prefix \"{name}\" \"npm run preview\" \"npm run start:backend\"",
     "start:backend": "cd backend && npm start",
     "install:all": "npm install && npm run install:backend",
-    "install:backend": "cd backend && npm install"
+    "install:backend": "cd backend && npm install",
+    "ci:test": "npm ci && cd backend && npm ci && cd .. && npm run test:ci && cd backend && npm test",
+    "security:audit": "npm audit && cd backend && npm audit",
+    "deps:check": "npm outdated && cd backend && npm outdated",
+    "clean": "rimraf dist && rimraf backend/node_modules/.cache"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",
@@ -34,6 +41,7 @@
   "devDependencies": {
     "@types/node": "^24.6.2",
     "concurrently": "^9.2.1",
+    "rimraf": "^6.0.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.8",
     "vitest": "^3.2.4"

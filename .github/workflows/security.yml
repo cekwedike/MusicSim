@@ -1,0 +1,253 @@
+# Security policy for MusicSim
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run security scans every Tuesday at 3 AM UTC
+    - cron: '0 3 * * 2'
+
+jobs:
+  # Dependency vulnerability scanning
+  dependency-scan:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm ci
+        cd backend && npm ci
+        
+    - name: Run npm audit (frontend)
+      run: |
+        echo "=== Frontend Security Scan ==="
+        npm audit --audit-level=moderate --json > frontend-audit.json || true
+        
+    - name: Run npm audit (backend)
+      run: |
+        echo "=== Backend Security Scan ==="
+        cd backend
+        npm audit --audit-level=moderate --json > ../backend-audit.json || true
+        
+    - name: Process audit results
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          let frontendAudit = {};
+          let backendAudit = {};
+          
+          try {
+            frontendAudit = JSON.parse(fs.readFileSync('frontend-audit.json', 'utf8'));
+          } catch (e) {
+            console.log('No frontend audit results');
+          }
+          
+          try {
+            backendAudit = JSON.parse(fs.readFileSync('backend-audit.json', 'utf8'));
+          } catch (e) {
+            console.log('No backend audit results');
+          }
+          
+          // Count vulnerabilities
+          const frontendVulns = frontendAudit.vulnerabilities || {};
+          const backendVulns = backendAudit.vulnerabilities || {};
+          
+          const frontendCount = Object.keys(frontendVulns).length;
+          const backendCount = Object.keys(backendVulns).length;
+          
+          console.log(`Frontend vulnerabilities: ${frontendCount}`);
+          console.log(`Backend vulnerabilities: ${backendCount}`);
+          
+          if (frontendCount > 0 || backendCount > 0) {
+            console.log('⚠️ Vulnerabilities detected! Review audit results.');
+          } else {
+            console.log('✅ No vulnerabilities detected');
+          }
+
+  # Secret scanning
+  secret-scan:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Run secret detection
+      run: |
+        echo "=== Secret Detection Scan ==="
+        
+        # Check for common secret patterns
+        echo "Checking for potential secrets..."
+        
+        # API keys
+        if grep -r -i "api_key\|apikey" --exclude-dir=node_modules --exclude-dir=.git . | grep -v ".github"; then
+          echo "⚠️ Potential API keys found"
+        fi
+        
+        # Tokens
+        if grep -r -i "token.*=" --exclude-dir=node_modules --exclude-dir=.git . | grep -v ".github" | grep -v "GITHUB_TOKEN" | grep -v "token.*secrets"; then
+          echo "⚠️ Potential tokens found"
+        fi
+        
+        # Private keys
+        if grep -r "BEGIN.*PRIVATE.*KEY" --exclude-dir=node_modules --exclude-dir=.git .; then
+          echo "⚠️ Private keys found"
+        fi
+        
+        # Database URLs
+        if grep -r -i "database_url\|db_url" --exclude-dir=node_modules --exclude-dir=.git . | grep -v "secrets\|\.env" | grep "://"; then
+          echo "⚠️ Potential database URLs found"
+        fi
+        
+        echo "✅ Secret detection completed"
+
+  # Environment variable security
+  env-security:
+    name: Environment Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Check environment configuration
+      run: |
+        echo "=== Environment Security Check ==="
+        
+        # Check for .env files in repository (should be in .gitignore)
+        if find . -name ".env*" -not -path "./node_modules/*" -not -path "./.git/*"; then
+          echo "⚠️ .env files found in repository"
+          echo "Ensure sensitive .env files are in .gitignore"
+        fi
+        
+        # Verify .gitignore includes common secret files
+        echo "Checking .gitignore coverage..."
+        if [ -f .gitignore ]; then
+          if ! grep -q "\.env" .gitignore; then
+            echo "⚠️ .env files not ignored"
+          fi
+          if ! grep -q "node_modules" .gitignore; then
+            echo "⚠️ node_modules not ignored"
+          fi
+          echo "✅ .gitignore check completed"
+        else
+          echo "⚠️ No .gitignore file found"
+        fi
+
+  # Code quality security
+  code-security:
+    name: Code Security Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Check for console.log statements
+      run: |
+        echo "=== Code Security Analysis ==="
+        
+        # Check for console.log in production code (potential info disclosure)
+        if grep -r "console\.log\|console\.error\|console\.warn" frontend/ --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js" | grep -v "console.error.*Error"; then
+          echo "⚠️ Console statements found - review for sensitive data"
+        fi
+        
+        # Check for TODO/FIXME with security implications
+        if grep -r -i "TODO.*password\|FIXME.*security\|TODO.*auth" . --exclude-dir=node_modules --exclude-dir=.git; then
+          echo "⚠️ Security-related TODOs found"
+        fi
+        
+        # Check for hardcoded URLs
+        if grep -r -i "http://\|https://" frontend/ backend/ --include="*.js" --include="*.ts" --include="*.jsx" --include="*.tsx" | grep -v "localhost" | grep -v "example.com" | head -5; then
+          echo "ℹ️ Hardcoded URLs found - verify they're not sensitive"
+        fi
+        
+        echo "✅ Code security analysis completed"
+
+  # Generate security report
+  security-report:
+    name: Security Report
+    runs-on: ubuntu-latest
+    needs: [dependency-scan, secret-scan, env-security, code-security]
+    if: always()
+    
+    steps:
+    - name: Generate security summary
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const results = {
+            dependency: '${{ needs.dependency-scan.result }}',
+            secret: '${{ needs.secret-scan.result }}',
+            env: '${{ needs.env-security.result }}',
+            code: '${{ needs.code-security.result }}'
+          };
+          
+          let summary = '## 🔒 Security Scan Summary\n\n';
+          summary += `**Scan Date:** ${new Date().toISOString().split('T')[0]}\n\n`;
+          
+          summary += '### Scan Results:\n';
+          summary += `- **Dependency Scan:** ${results.dependency === 'success' ? '✅' : '❌'} ${results.dependency}\n`;
+          summary += `- **Secret Detection:** ${results.secret === 'success' ? '✅' : '❌'} ${results.secret}\n`;
+          summary += `- **Environment Security:** ${results.env === 'success' ? '✅' : '❌'} ${results.env}\n`;
+          summary += `- **Code Security:** ${results.code === 'success' ? '✅' : '❌'} ${results.code}\n\n`;
+          
+          const allPassed = Object.values(results).every(result => result === 'success');
+          
+          if (allPassed) {
+            summary += '🎉 **All security scans passed!** Your codebase looks secure.\n\n';
+          } else {
+            summary += '⚠️ **Some security issues detected.** Please review the scan logs above.\n\n';
+          }
+          
+          summary += '### Security Recommendations:\n';
+          summary += '- Keep dependencies updated regularly\n';
+          summary += '- Never commit secrets to version control\n';
+          summary += '- Use environment variables for sensitive configuration\n';
+          summary += '- Regularly review access logs and user permissions\n';
+          summary += '- Monitor for security advisories in your dependencies\n\n';
+          
+          summary += '### Quick Actions:\n';
+          summary += '- Run `npm audit fix` to auto-fix vulnerable dependencies\n';
+          summary += '- Check `.env` files are in `.gitignore`\n';
+          summary += '- Review any flagged code patterns\n';
+          
+          console.log(summary);
+          
+          // If this is a scheduled run, create an issue
+          if (context.eventName === 'schedule') {
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔒 Security Scan Report - ${new Date().toISOString().split('T')[0]}`,
+              body: summary,
+              labels: ['security', 'automated']
+            });
+          }

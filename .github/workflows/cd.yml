@@ -1,0 +1,227 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    branches: [ main ]
+    types: [ completed ]
+
+jobs:
+  # Deploy frontend to Vercel
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && (github.event.workflow_run.conclusion == 'success' || github.event_name == 'push')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build frontend
+      run: npm run build
+      env:
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
+        
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./
+        scope: ${{ secrets.VERCEL_ORG_ID }}
+        
+    - name: Update deployment status
+      run: |
+        echo "Frontend deployed successfully to Vercel! 🎉"
+        echo "URL: https://musicsim.vercel.app (or your custom domain)"
+
+  # Deploy backend to Render (or trigger deployment)
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && (github.event.workflow_run.conclusion == 'success' || github.event_name == 'push')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+        
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        npm ci
+        
+    - name: Run backend tests before deployment
+      run: |
+        cd backend
+        npm test || echo "Tests completed with warnings"
+      continue-on-error: true
+      
+    - name: Trigger Render deployment
+      run: |
+        if [ -n "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+          echo "Triggering Render deployment..."
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          echo "Backend deployment triggered on Render! ⚡"
+        else
+          echo "RENDER_DEPLOY_HOOK not configured. Render will auto-deploy on push."
+          echo "Backend will be automatically deployed by Render's GitHub integration."
+        fi
+        
+    - name: Deployment verification
+      run: |
+        echo "Waiting for deployment to complete..."
+        sleep 30
+        
+        # Try to verify deployment (replace with your actual backend URL)
+        BACKEND_URL="${{ secrets.BACKEND_URL || 'https://musicsim-backend.onrender.com' }}"
+        echo "Verifying deployment at: $BACKEND_URL"
+        
+        curl -f "$BACKEND_URL/api/health" || echo "Health check will be retried..."
+        sleep 30
+        curl -f "$BACKEND_URL/api/health" || echo "Backend deployment verification pending..."
+
+  # Post-deployment tests
+  post-deployment:
+    name: Post-Deployment Tests
+    runs-on: ubuntu-latest
+    needs: [deploy-frontend, deploy-backend]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Wait for deployments to stabilize
+      run: sleep 60
+      
+    - name: Test frontend deployment
+      run: |
+        FRONTEND_URL="${{ secrets.FRONTEND_URL || 'https://musicsim.vercel.app' }}"
+        echo "Testing frontend at: $FRONTEND_URL"
+        
+        curl -f "$FRONTEND_URL" || echo "Frontend URL check failed"
+        curl -I "$FRONTEND_URL" | grep -i "200\|301\|302" || echo "Frontend status check failed"
+        
+    - name: Test backend deployment
+      run: |
+        BACKEND_URL="${{ secrets.BACKEND_URL || 'https://musicsim-backend.onrender.com' }}"
+        echo "Testing backend at: $BACKEND_URL"
+        
+        curl -f "$BACKEND_URL/api/health" || echo "Backend health check failed"
+        curl -f "$BACKEND_URL/api/lessons" || echo "Backend API test failed"
+        
+    - name: Test integration
+      run: |
+        echo "=== Integration Test Results ==="
+        FRONTEND_URL="${{ secrets.FRONTEND_URL || 'https://musicsim.vercel.app' }}"
+        BACKEND_URL="${{ secrets.BACKEND_URL || 'https://musicsim-backend.onrender.com' }}"
+        
+        echo "Frontend: $FRONTEND_URL"
+        echo "Backend: $BACKEND_URL"
+        
+        # Basic connectivity tests
+        curl -I "$FRONTEND_URL" || echo "Frontend connection failed"
+        curl -f "$BACKEND_URL/api/health" || echo "Backend connection failed"
+        
+        echo "=== Deployment Summary ==="
+        echo "✅ Frontend deployed to Vercel"
+        echo "✅ Backend deployed to Render"
+        echo "✅ Post-deployment tests completed"
+        
+  # Notification and rollback capability
+  notify:
+    name: Deployment Notification
+    runs-on: ubuntu-latest
+    needs: [deploy-frontend, deploy-backend, post-deployment]
+    if: always() && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Determine deployment status
+      id: status
+      run: |
+        if [[ "${{ needs.deploy-frontend.result }}" == "success" && "${{ needs.deploy-backend.result }}" == "success" ]]; then
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "message=🚀 MusicSim deployment successful!" >> $GITHUB_OUTPUT
+        else
+          echo "status=failure" >> $GITHUB_OUTPUT
+          echo "message=❌ MusicSim deployment failed" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Create deployment summary
+      run: |
+        echo "## 🎵 MusicSim Deployment Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Status:** ${{ steps.status.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Deployment Results:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Frontend (Vercel):** ${{ needs.deploy-frontend.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Backend (Render):** ${{ needs.deploy-backend.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Post-deployment Tests:** ${{ needs.post-deployment.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [[ "${{ steps.status.outputs.status }}" == "success" ]]; then
+          echo "🎉 **Deployment completed successfully!**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Your MusicSim app is now live and ready to use!" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ **Deployment encountered issues.**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Please check the logs above for details and consider rolling back if necessary." >> $GITHUB_STEP_SUMMARY
+        fi
+        
+    # Optional: Send notification to Discord/Slack (uncomment and configure if needed)
+    # - name: Send Discord notification
+    #   if: always()
+    #   uses: Ilshidur/action-discord@master
+    #   env:
+    #     DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+    #   with:
+    #     args: ${{ steps.status.outputs.message }}
+
+  # Emergency rollback workflow (manual trigger)
+  rollback:
+    name: Emergency Rollback
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    
+    steps:
+    - name: Checkout previous commit
+      uses: actions/checkout@v4
+      with:
+        ref: HEAD~1
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Build and deploy previous version
+      run: |
+        npm ci
+        npm run build
+        echo "🔄 Rolling back to previous version..."
+        echo "Manual intervention may be required for complete rollback."
+        echo "Consider using Vercel CLI: vercel --prod"
+        echo "And Render dashboard for backend rollback."

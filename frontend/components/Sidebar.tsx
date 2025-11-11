@@ -218,7 +218,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         className={`
           bg-gray-800/98 backdrop-blur-md border-l border-gray-700
           transition-all duration-300 ease-in-out
-          ${isExpanded && activeView ? 'flex-1 lg:w-[28rem]' : 'w-0'}
+          ${isExpanded && activeView ? 'w-80 sm:w-96 lg:w-[28rem]' : 'w-0'}
           overflow-hidden shadow-2xl
         `}
         style={{ willChange: 'width' }}

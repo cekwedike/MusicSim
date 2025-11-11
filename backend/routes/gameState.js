@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { GameSave, User } = require('../models');
+const { GameSave, User, PlayerStatistics } = require('../models');
 const authMiddleware = require('../middleware/auth');
 const { Op } = require('sequelize');
 
@@ -51,6 +51,41 @@ router.post('/save', async (req, res, next) => {
         success: false,
         message: 'Game state is required'
       });
+    }
+
+    // Ensure user profile exists (for OAuth users)
+    let user = await User.findByPk(req.userId);
+    if (!user && req.supabaseUser) {
+      console.log('[/game/save] Creating profile for OAuth user:', req.userId);
+
+      const username = req.supabaseUser.user_metadata?.username ||
+                      req.supabaseUser.user_metadata?.name ||
+                      req.supabaseUser.email.split('@')[0];
+      const displayName = req.supabaseUser.user_metadata?.display_name ||
+                         req.supabaseUser.user_metadata?.full_name ||
+                         username;
+      const profileImage = req.supabaseUser.user_metadata?.profile_image ||
+                          req.supabaseUser.user_metadata?.avatar_url ||
+                          req.supabaseUser.user_metadata?.picture;
+      const authProvider = req.supabaseUser.app_metadata?.provider || 'google';
+
+      user = await User.create({
+        id: req.userId,
+        email: req.supabaseUser.email,
+        username,
+        displayName,
+        profileImage,
+        authProvider,
+        lastLogin: new Date(),
+        isActive: true
+      });
+
+      // Create associated PlayerStatistics
+      await PlayerStatistics.create({
+        userId: user.id
+      });
+
+      console.log('[/game/save] Profile created for OAuth user:', username);
     }
 
     // Validate game state structure

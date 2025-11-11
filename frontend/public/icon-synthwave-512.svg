@@ -1,0 +1,130 @@
+<!-- MusicSim Retro Synthwave Icon 512x512 -->
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Retro synthwave gradients -->
+    <linearGradient id="retro-sunset" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b"/>
+      <stop offset="30%" style="stop-color:#ff8e53"/>
+      <stop offset="70%" style="stop-color:#ff6b9d"/>
+      <stop offset="100%" style="stop-color:#c44569"/>
+    </linearGradient>
+    
+    <linearGradient id="retro-neon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d2ff"/>
+      <stop offset="100%" style="stop-color:#3a7bd5"/>
+    </linearGradient>
+    
+    <linearGradient id="retro-grid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff00ff"/>
+      <stop offset="100%" style="stop-color:#00ffff"/>
+    </linearGradient>
+    
+    <radialGradient id="retro-bg" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#2c1810"/>
+      <stop offset="70%" style="stop-color:#1a0f0a"/>
+      <stop offset="100%" style="stop-color:#0f0505"/>
+    </radialGradient>
+    
+    <!-- Retro glow -->
+    <filter id="retro-glow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Synthwave background -->
+  <circle cx="256" cy="256" r="240" fill="url(#retro-bg)"/>
+  
+  <!-- Retro grid lines (perspective) -->
+  <g stroke="url(#retro-grid)" stroke-width="2" fill="none" opacity="0.4">
+    <!-- Horizontal grid lines -->
+    <line x1="50" y1="350" x2="462" y2="350"/>
+    <line x1="60" y1="370" x2="452" y2="370"/>
+    <line x1="70" y1="390" x2="442" y2="390"/>
+    <line x1="80" y1="410" x2="432" y2="410"/>
+    <line x1="90" y1="430" x2="422" y2="430"/>
+    
+    <!-- Vertical grid lines (perspective) -->
+    <line x1="150" y1="350" x2="100" y2="450"/>
+    <line x1="200" y1="350" x2="150" y2="450"/>
+    <line x1="256" y1="350" x2="206" y2="450"/>
+    <line x1="312" y1="350" x2="362" y2="450"/>
+    <line x1="362" y1="350" x2="412" y2="450"/>
+  </g>
+  
+  <!-- Retro sun/moon -->
+  <circle cx="256" cy="120" r="60" fill="url(#retro-sunset)" filter="url(#retro-glow)"/>
+  <g stroke="url(#retro-sunset)" stroke-width="3" fill="none" opacity="0.8">
+    <circle cx="256" cy="120" r="40"/>
+    <circle cx="256" cy="120" r="50"/>
+    <circle cx="256" cy="120" r="70"/>
+  </g>
+  
+  <!-- 80s style equalizer forming "M" -->
+  <g fill="url(#retro-neon)" filter="url(#retro-glow)">
+    <!-- Left bar stack -->
+    <rect x="180" y="200" width="16" height="80" rx="8"/>
+    <rect x="180" y="190" width="16" height="10" rx="8" opacity="0.8"/>
+    <rect x="180" y="280" width="16" height="20" rx="8" opacity="0.6"/>
+    
+    <!-- Left diagonal -->
+    <rect x="210" y="220" width="16" height="60" rx="8"/>
+    <rect x="210" y="210" width="16" height="10" rx="8" opacity="0.8"/>
+    
+    <!-- Center peak -->
+    <rect x="240" y="180" width="16" height="100" rx="8"/>
+    <rect x="240" y="170" width="16" height="10" rx="8" opacity="0.9"/>
+    <rect x="240" y="280" width="16" height="20" rx="8" opacity="0.7"/>
+    
+    <!-- Right diagonal -->
+    <rect x="270" y="220" width="16" height="60" rx="8"/>
+    <rect x="270" y="210" width="16" height="10" rx="8" opacity="0.8"/>
+    
+    <!-- Right bar stack -->
+    <rect x="300" y="200" width="16" height="80" rx="8"/>
+    <rect x="300" y="190" width="16" height="10" rx="8" opacity="0.8"/>
+    <rect x="300" y="280" width="16" height="20" rx="8" opacity="0.6"/>
+  </g>
+  
+  <!-- Retro digital display numbers -->
+  <g fill="url(#retro-grid)" opacity="0.8" font-family="monospace" font-size="24" font-weight="bold">
+    <text x="350" y="200">88.8</text>
+    <text x="350" y="225">FM</text>
+  </g>
+  
+  <!-- Chrome-style currency symbols -->
+  <g fill="url(#retro-sunset)" filter="url(#retro-glow)" opacity="0.9">
+    <text x="120" y="200" font-family="Impact, sans-serif" font-size="28" font-weight="bold">$</text>
+    <text x="140" y="220" font-family="Impact, sans-serif" font-size="20">€</text>
+    <text x="155" y="185" font-family="Impact, sans-serif" font-size="24">¥</text>
+  </g>
+  
+  <!-- VHS-style scan lines -->
+  <g stroke="#00ffff" stroke-width="1" opacity="0.1">
+    <line x1="0" y1="100" x2="512" y2="100"/>
+    <line x1="0" y1="150" x2="512" y2="150"/>
+    <line x1="0" y1="200" x2="512" y2="200"/>
+    <line x1="0" y1="250" x2="512" y2="250"/>
+    <line x1="0" y1="300" x2="512" y2="300"/>
+  </g>
+  
+  <!-- Retro play button -->
+  <polygon points="400,260 400,300 440,280" 
+           fill="url(#retro-neon)" 
+           filter="url(#retro-glow)"
+           opacity="0.9"/>
+  
+  <!-- Digital particles -->
+  <g fill="url(#retro-grid)" opacity="0.6">
+    <rect x="100" y="300" width="4" height="4" transform="rotate(45 102 302)"/>
+    <rect x="120" y="320" width="3" height="3" transform="rotate(45 121.5 321.5)"/>
+    <rect x="380" y="180" width="4" height="4" transform="rotate(45 382 182)"/>
+    <rect x="400" y="160" width="3" height="3" transform="rotate(45 401.5 161.5)"/>
+  </g>
+  
+  <!-- Neon outline -->
+  <circle cx="256" cy="256" r="235" fill="none" stroke="url(#retro-neon)" stroke-width="4" filter="url(#retro-glow)" opacity="0.7"/>
+</svg>

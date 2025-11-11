@@ -1,31 +1,32 @@
-<!-- MusicSim Icon 512x512 - Full detail version -->
+<!-- MusicSim Icon 512x512 - Modern Geometric Style -->
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Gradient definitions for depth and artistic effect -->
-    <linearGradient id="primaryGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#c084fc;stop-opacity:1" />
+    <!-- Modern gradient scheme -->
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff006e;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#8338ec;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#3a86ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06ffa5;stop-opacity:1" />
     </linearGradient>
     
-    <linearGradient id="accentGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffbe0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fb8500;stop-opacity:1" />
     </linearGradient>
     
-    <linearGradient id="backgroundGradient512" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
-    </linearGradient>
+    <radialGradient id="backgroundGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0d1b2a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </radialGradient>
     
-    <!-- Drop shadow filter -->
-    <filter id="dropShadow512" x="-50%" y="-50%" width="200%" height="200%">
-      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    <!-- Glitch effect filter -->
+    <filter id="glitch">
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 0.8 0 0 0  0 0 0.8 0 0  0 0 0 1 0"/>
     </filter>
     
-    <!-- Glow effect -->
-    <filter id="glow512">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+    <!-- Neon glow -->
+    <filter id="neonGlow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
       <feMerge> 
         <feMergeNode in="coloredBlur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -33,75 +34,97 @@
     </filter>
   </defs>
   
-  <!-- Background circle with gradient -->
-  <circle cx="256" cy="256" r="240" fill="url(#backgroundGradient512)" filter="url(#dropShadow512)"/>
+  <!-- Background with subtle radial gradient -->
+  <circle cx="256" cy="256" r="240" fill="url(#backgroundGrad)"/>
   
-  <!-- Outer ring with subtle gradient -->
-  <circle cx="256" cy="256" r="240" fill="none" stroke="url(#primaryGradient512)" stroke-width="8" opacity="0.6"/>
+  <!-- Vinyl record design -->
+  <circle cx="256" cy="256" r="220" fill="#1a1a1a" opacity="0.9"/>
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#neonGradient)" stroke-width="2" opacity="0.6"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="url(#neonGradient)" stroke-width="1" opacity="0.4"/>
+  <circle cx="256" cy="256" r="100" fill="none" stroke="url(#neonGradient)" stroke-width="1" opacity="0.3"/>
   
-  <!-- Musical staff lines (simplified, artistic) -->
-  <g opacity="0.3" stroke="#8b5cf6" stroke-width="2" fill="none">
-    <line x1="100" y1="180" x2="412" y2="180"/>
-    <line x1="100" y1="200" x2="412" y2="200"/>
-    <line x1="100" y1="220" x2="412" y2="220"/>
-    <line x1="100" y1="240" x2="412" y2="240"/>
-    <line x1="100" y1="260" x2="412" y2="260"/>
-  </g>
+  <!-- Center hole -->
+  <circle cx="256" cy="256" r="30" fill="#000"/>
+  <circle cx="256" cy="256" r="25" fill="url(#neonGradient)"/>
   
-  <!-- Treble clef (stylized, modern) -->
-  <path d="M140 200 C140 160, 180 160, 180 200 C180 240, 140 240, 140 280 C140 320, 180 320, 180 280 C180 260, 160 260, 160 240 C160 220, 180 220, 180 240" 
-        fill="url(#primaryGradient512)" 
-        filter="url(#glow512)"
-        stroke="none"/>
-  
-  <!-- Musical notes floating upward -->
-  <g fill="url(#accentGradient512)" filter="url(#glow512)">
-    <!-- Eighth note 1 -->
-    <ellipse cx="280" cy="240" rx="12" ry="8" transform="rotate(-20 280 240)"/>
-    <rect x="288" y="200" width="3" height="40" rx="1.5"/>
-    <path d="M291 200 Q300 195 305 190 Q300 195 291 205 Z"/>
+  <!-- Equalizer bars forming the "M" -->
+  <g fill="url(#neonGradient)" filter="url(#neonGlow)">
+    <!-- Left side of M -->
+    <rect x="160" y="180" width="12" height="120" rx="6"/>
+    <rect x="160" y="160" width="12" height="20" rx="6" opacity="0.8"/>
     
-    <!-- Eighth note 2 -->
-    <ellipse cx="320" cy="220" rx="10" ry="6" transform="rotate(-15 320 220)"/>
-    <rect x="326" y="185" width="3" height="35" rx="1.5"/>
-    <path d="M329 185 Q336 181 340 177 Q336 181 329 190 Z"/>
+    <!-- Left diagonal -->
+    <rect x="180" y="200" width="12" height="80" rx="6"/>
+    <rect x="180" y="185" width="12" height="15" rx="6" opacity="0.8"/>
     
-    <!-- Quarter note -->
-    <ellipse cx="350" cy="200" rx="8" ry="6" transform="rotate(-10 350 200)"/>
-    <rect x="355" y="170" width="3" height="30" rx="1.5"/>
+    <!-- Center peak -->
+    <rect x="200" y="160" width="12" height="120" rx="6"/>
+    <rect x="200" y="140" width="12" height="20" rx="6" opacity="0.9"/>
+    <rect x="200" y="280" width="12" height="20" rx="6" opacity="0.7"/>
+    
+    <!-- Right diagonal -->
+    <rect x="220" y="200" width="12" height="80" rx="6"/>
+    <rect x="220" y="185" width="12" height="15" rx="6" opacity="0.8"/>
+    
+    <!-- Right side of M -->
+    <rect x="240" y="180" width="12" height="120" rx="6"/>
+    <rect x="240" y="160" width="12" height="20" rx="6" opacity="0.8"/>
   </g>
   
-  <!-- Sound wave visualization (business growth metaphor) -->
-  <g stroke="url(#primaryGradient512)" stroke-width="3" fill="none" opacity="0.8">
-    <path d="M120 320 Q150 300, 180 320 T240 320 T300 310 T360 300 T420 290" filter="url(#glow512)"/>
-    <path d="M120 340 Q150 325, 180 340 T240 340 T300 335 T360 330 T420 325" opacity="0.6"/>
-    <path d="M120 360 Q150 350, 180 360 T240 360 T300 355 T360 350 T420 345" opacity="0.4"/>
+  <!-- Additional equalizer bars for rhythm -->
+  <g fill="url(#goldGradient)" opacity="0.7">
+    <rect x="120" y="220" width="8" height="60" rx="4"/>
+    <rect x="132" y="240" width="8" height="40" rx="4"/>
+    <rect x="144" y="200" width="8" height="80" rx="4"/>
+    
+    <rect x="268" y="210" width="8" height="70" rx="4"/>
+    <rect x="280" y="230" width="8" height="50" rx="4"/>
+    <rect x="292" y="190" width="8" height="90" rx="4"/>
   </g>
   
-  <!-- Ascending bar chart (business success) -->
-  <g fill="url(#accentGradient512)" opacity="0.7">
-    <rect x="140" y="380" width="20" height="40" rx="2"/>
-    <rect x="170" y="370" width="20" height="50" rx="2"/>
-    <rect x="200" y="355" width="20" height="65" rx="2"/>
-    <rect x="230" y="340" width="20" height="80" rx="2"/>
-    <rect x="260" y="325" width="20" height="95" rx="2"/>
+  <!-- Frequency spectrum visualization -->
+  <g fill="url(#neonGradient)" opacity="0.4">
+    <rect x="80" y="350" width="4" height="30"/>
+    <rect x="88" y="340" width="4" height="40"/>
+    <rect x="96" y="330" width="4" height="50"/>
+    <rect x="104" y="345" width="4" height="35"/>
+    <rect x="112" y="335" width="4" height="45"/>
+    
+    <rect x="396" y="350" width="4" height="30"/>
+    <rect x="404" y="340" width="4" height="40"/>
+    <rect x="412" y="330" width="4" height="50"/>
+    <rect x="420" y="345" width="4" height="35"/>
+    <rect x="428" y="335" width="4" height="45"/>
   </g>
   
-  <!-- Central logo element - stylized "M" for MusicSim -->
-  <path d="M200 120 L200 180 L230 140 L260 180 L260 120 M190 120 L270 120" 
-        stroke="url(#primaryGradient512)" 
-        stroke-width="8" 
+  <!-- Currency symbols (business element) -->
+  <g fill="url(#goldGradient)" opacity="0.8" filter="url(#neonGlow)">
+    <text x="340" y="180" font-family="Arial, sans-serif" font-size="24" font-weight="bold">$</text>
+    <text x="360" y="200" font-family="Arial, sans-serif" font-size="18">€</text>
+    <text x="375" y="165" font-family="Arial, sans-serif" font-size="20">¥</text>
+  </g>
+  
+  <!-- Waveform pattern -->
+  <path d="M 80 320 Q 120 300 160 320 T 240 320 T 320 310 T 400 320 T 440 315" 
+        stroke="url(#neonGradient)" 
+        stroke-width="3" 
         fill="none" 
-        stroke-linecap="round" 
-        stroke-linejoin="round"
-        filter="url(#glow512)"/>
+        opacity="0.6"
+        filter="url(#neonGlow)"/>
   
-  <!-- Sparkle effects around the logo -->
-  <g fill="#fbbf24" opacity="0.8">
-    <path d="M320 130 L325 140 L330 130 L325 120 Z"/>
-    <path d="M180 140 L184 148 L188 140 L184 132 Z"/>
-    <circle cx="350" cy="160" r="2"/>
-    <circle cx="160" cy="120" r="3"/>
-    <path d="M380 180 L383 186 L386 180 L383 174 Z"/>
+  <!-- Play button triangle -->
+  <polygon points="320,220 320,260 350,240" 
+           fill="url(#goldGradient)" 
+           opacity="0.9"
+           filter="url(#neonGlow)"/>
+  
+  <!-- Digital dots/pixels for modern feel -->
+  <g fill="url(#neonGradient)" opacity="0.3">
+    <circle cx="150" cy="120" r="3"/>
+    <circle cx="170" cy="110" r="2"/>
+    <circle cx="190" cy="105" r="3"/>
+    <circle cx="350" cy="115" r="2"/>
+    <circle cx="370" cy="125" r="3"/>
+    <circle cx="390" cy="108" r="2"/>
   </g>
 </svg>

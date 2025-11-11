@@ -76,7 +76,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
               </button>
             </div>
 
-            <div className={`space-y-2 overflow-y-auto ${isExpanded ? 'max-h-96' : 'max-h-48'}`}>
+            <div className={`space-y-2 overflow-y-auto ${isExpanded ? 'max-h-48 sm:max-h-64 md:max-h-96' : 'max-h-32 sm:max-h-48'}`}>
               {sortedLogs.length === 0 ? (
                 <div className="text-gray-500 text-center py-6 text-sm">
                   No history yet. Start making decisions!

@@ -1475,7 +1475,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                         </h3>
                         
                         {/* Desktop/Tablet Grid Layout */}
-                        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">`
+                        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {saveSlots.map((slot) => (
                                 <button
                                     key={slot.id}

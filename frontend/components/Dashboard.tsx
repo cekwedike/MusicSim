@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { PlayerStats, Project, GameDate } from '../types';
 import { CashIcon, FameIcon, WellBeingIcon, CalendarIcon, HypeIcon } from './icons/Icons';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface StatDisplayProps {
     icon: React.ReactNode;
@@ -75,6 +76,8 @@ const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
 
 
 const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date }> = ({ stats, project, date, currentDate }) => {
+    const [isMobileCollapsed, setIsMobileCollapsed] = useState(true);
+
     const formatDate = (date: Date): string => {
         return date.toLocaleDateString('en-GB', {
             day: 'numeric',
@@ -87,14 +90,54 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
 
     return (
         <div className="mb-3 md:mb-4 mt-2">
-            {/* Mobile: 2 columns, Tablet: 3 columns, Desktop: 5 columns */}
-            <div className="player-stats grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3 lg:gap-4">
-                <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
-                <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
-                <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
-                <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
-                {/* Date spans full width on mobile */}
-                <div className="col-span-2 md:col-span-1">
+            {/* Mobile: Collapsible view */}
+            <div className="lg:hidden bg-gray-800 rounded-lg border border-gray-700">
+                {isMobileCollapsed ? (
+                    <button
+                        onClick={() => setIsMobileCollapsed(false)}
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-700/50 transition-colors rounded-lg"
+                    >
+                        <div className="flex items-center gap-2">
+                            <CashIcon />
+                            <span className="text-sm font-bold text-white">Stats</span>
+                            <span className="text-xs text-green-400">${stats.cash.toLocaleString()}</span>
+                            <span className="text-xs text-gray-400">|</span>
+                            <span className="text-xs text-yellow-400">Fame: {stats.fame}</span>
+                        </div>
+                        <ChevronDown className="w-4 h-4 text-violet-400" />
+                    </button>
+                ) : (
+                    <div className="p-3">
+                        <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm font-bold text-white">Player Stats</span>
+                            <button
+                                onClick={() => setIsMobileCollapsed(true)}
+                                className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-xs font-medium transition-colors"
+                            >
+                                <span>Hide</span>
+                                <ChevronUp className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <div className="player-stats grid grid-cols-2 gap-2">
+                            <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
+                            <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
+                            <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
+                            <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
+                            <div className="col-span-2">
+                                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Desktop: Always visible */}
+            <div className="hidden lg:block">
+                <div className="player-stats grid grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
+                    <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
+                    <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
+                    <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
+                    <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
                     <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
                 </div>
             </div>

@@ -119,46 +119,26 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         />
       )}
 
-      {/* Sidebar - Hidden on mobile unless opened, always visible on desktop */}
+      {/* Sidebar - Compact width on mobile, always visible on desktop */}
       <div
         id="mobile-sidebar"
         className={`
           fixed right-0 top-16 bottom-0 z-50 flex flex-col
-          w-full lg:w-auto
           transition-transform duration-300 ease-in-out
           ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
         `}
       >
-        {/* Mobile Header Info (only visible on mobile when sidebar is open) */}
-        {artistName && (
-          <div className="lg:hidden bg-gray-800/98 border-b border-gray-700 p-3 w-full flex flex-col items-center gap-2">
-            <h1 className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              MusicSim
-            </h1>
-            <div className="flex flex-col items-center gap-1 w-full">
-              <p className="text-yellow-400 text-xs font-semibold tracking-wider text-center">Artist: {artistName}</p>
-              {difficulty && (
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-bold ${getDifficultyColor(difficulty)} bg-gray-800/50 border border-current whitespace-nowrap`}
-                  title={`Playing on ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} difficulty`}
-                >
-                  {getDifficultyIcon(difficulty)} {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* Icon Bar and Expanded Panel Container */}
         <div className="flex flex-row flex-1 overflow-hidden">
-        {/* Icon Bar */}
-        <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-16 flex flex-col items-center py-4 gap-3 shadow-xl overflow-y-auto">
+        {/* Compact Sidebar with Icons + Labels on mobile, Icon-only on desktop */}
+        <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 lg:w-16 flex flex-col py-4 gap-2 shadow-xl overflow-y-auto">
         {buttons.map((button) => (
           <button
             key={button.id}
             onClick={() => handleButtonClick(button.id)}
             className={`
-              relative p-3 rounded-lg transition-all duration-200 group
+              relative px-3 py-2 lg:p-3 rounded-lg transition-all duration-200 group
+              flex lg:justify-center items-center gap-2 lg:gap-0
               ${activeView === button.id
                 ? 'bg-violet-600 text-white'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700'
@@ -167,19 +147,24 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
             aria-label={button.ariaLabel}
             title={button.label}
           >
-            <div className="w-6 h-6 flex items-center justify-center">
+            <div className="w-5 h-5 lg:w-6 lg:h-6 flex items-center justify-center flex-shrink-0">
               {button.icon}
             </div>
 
+            {/* Label text - visible on mobile, hidden on desktop */}
+            <span className="lg:hidden text-sm font-medium whitespace-nowrap">
+              {button.label}
+            </span>
+
             {/* Badge for unseen achievements */}
             {button.badge && (
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="absolute top-1 right-1 lg:-top-1 lg:-right-1 flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
               </span>
             )}
 
-            {/* Hover tooltip - hidden on mobile */}
+            {/* Hover tooltip - hidden on mobile, visible on desktop hover */}
             <div className="
               hidden lg:block
               absolute left-[-8px] top-1/2 -translate-y-1/2 -translate-x-full
@@ -197,15 +182,20 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-gray-700"
+          className="px-3 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-gray-700 flex lg:justify-center items-center gap-2 lg:gap-0"
           aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
         >
-          <div className="w-6 h-6 flex items-center justify-center">
+          <div className="w-5 h-5 lg:w-6 lg:h-6 flex items-center justify-center flex-shrink-0">
             {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </div>
 
-          {/* Hover tooltip - hidden on mobile */}
+          {/* Label text - visible on mobile, hidden on desktop */}
+          <span className="lg:hidden text-sm font-medium whitespace-nowrap">
+            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          </span>
+
+          {/* Hover tooltip - hidden on mobile, visible on desktop */}
           <div className="
             hidden lg:block
             absolute left-[-8px] top-1/2 -translate-y-1/2 -translate-x-full

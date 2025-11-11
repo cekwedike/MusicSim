@@ -48,6 +48,63 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
 
       <div className="space-y-3 sm:space-y-4">
         {activeTab === 'current' && renderCurrentTab()}
+
+        {activeTab === 'alltime' && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+                <div className="text-xs text-gray-400 mb-1">Total Careers</div>
+                <div className="text-xl sm:text-2xl font-bold text-violet-400">{stats.totalGamesPlayed}</div>
+              </div>
+              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+                <div className="text-xs text-gray-400 mb-1">Total Weeks</div>
+                <div className="text-xl sm:text-2xl font-bold text-green-400">{stats.totalWeeksPlayed}</div>
+              </div>
+              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+                <div className="text-xs text-gray-400 mb-1">Peak Cash</div>
+                <div className="text-lg sm:text-xl font-bold text-green-400">${stats.highestCash.toLocaleString()}</div>
+              </div>
+              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+                <div className="text-xs text-gray-400 mb-1">Peak Fame</div>
+                <div className="text-xl sm:text-2xl font-bold text-yellow-400">{stats.highestFameReached}</div>
+              </div>
+              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+                <div className="text-xs text-gray-400 mb-1">Achievements</div>
+                <div className="text-xl sm:text-2xl font-bold text-purple-400">{stats.achievementsUnlocked}</div>
+              </div>
+              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+                <div className="text-xs text-gray-400 mb-1">Projects</div>
+                <div className="text-xl sm:text-2xl font-bold text-blue-400">{stats.projectsReleased}</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'patterns' && (
+          <div className="space-y-4">
+            <div className="bg-gray-700/30 p-3 sm:p-4 rounded-lg border border-gray-600">
+              <h4 className="font-semibold text-sm sm:text-base text-white mb-3">Decision Patterns</h4>
+              <div className="space-y-2 text-xs sm:text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Total Decisions</span>
+                  <span className="text-white font-semibold">{stats.totalDecisionsMade}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Contracts Signed</span>
+                  <span className="text-white font-semibold">{stats.contractsSigned}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Projects Released</span>
+                  <span className="text-white font-semibold">{stats.projectsReleased}</span>
+                </div>
+              </div>
+            </div>
+            <div className="text-center text-gray-400 text-sm py-4">
+              <p>More detailed pattern analysis coming soon!</p>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'history' && (
           <div className="space-y-2 sm:space-y-3">
             {careers.length === 0 ? (

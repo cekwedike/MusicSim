@@ -93,17 +93,17 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
-      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-2xl w-full max-w-5xl max-h-[95vh] overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-[70] p-2 sm:p-4 animate-fadeIn">
+      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-lg sm:rounded-2xl w-full max-w-5xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20 flex flex-col">
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 p-6">
+        <div className="relative bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 p-4 sm:p-6 flex-shrink-0">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
           <div className="relative z-10">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-start gap-4 flex-1">
-                <span className="text-4xl md:text-5xl filter drop-shadow-lg">{module.icon}</span>
-                <div className="flex-1">
-                  <h2 className="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">{module.title}</h2>
+            <div className="flex justify-between items-start mb-2 sm:mb-4">
+              <div className="flex items-start gap-2 sm:gap-4 flex-1 min-w-0">
+                <span className="text-2xl sm:text-4xl md:text-5xl filter drop-shadow-lg flex-shrink-0">{module.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2 leading-tight">{module.title}</h2>
                   <div className="flex flex-wrap items-center gap-2 text-purple-200 text-sm">
                     <div className="flex items-center gap-1">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -144,7 +144,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
         </div>
 
         {/* Content Area */}
-        <div className="p-6 overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(95vh - 240px)' }}>
+        <div className="p-3 sm:p-6 overflow-y-auto custom-scrollbar flex-1">
           {!showQuiz && !showQuizResults && (
             <div className={`animate-${sectionDirection === 'forward' ? 'slideInRight' : 'slideInLeft'}`} key={currentSection}>
               {/* Introduction (only show on first section) */}

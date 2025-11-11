@@ -90,17 +90,18 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
       <div className="flex gap-2 mb-3 sm:mb-4 border-b border-gray-700 pb-2">
         <button
           onClick={() => setActiveTab('achievements')}
-          className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-t text-sm sm:text-base font-semibold transition-colors ${
+          className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-t text-xs sm:text-base font-semibold transition-colors ${
             activeTab === 'achievements'
               ? 'bg-violet-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
         >
-          Achievements
+          <span className="hidden xs:inline">Achievements</span>
+          <span className="xs:hidden">Achieve</span>
         </button>
         <button
           onClick={() => setActiveTab('staff')}
-          className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-t text-sm sm:text-base font-semibold transition-colors ${
+          className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-t text-xs sm:text-base font-semibold transition-colors ${
             activeTab === 'staff'
               ? 'bg-violet-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'

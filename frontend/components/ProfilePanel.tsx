@@ -233,11 +233,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			/>
 
 			{/* Account Header */}
-			<div className="bg-gradient-to-br from-violet-600/20 to-purple-600/20 border border-violet-600/30 rounded-lg p-4 mb-4">
+			<div className="bg-gradient-to-br from-violet-600/20 to-purple-600/20 border border-violet-600/30 rounded-lg p-3 sm:p-4 mb-4">
 				{isAuthenticated && user ? (
-					<div className="flex items-center gap-3">
+					<div className="flex items-center gap-2 sm:gap-3">
 						<div
-							className={`relative w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white shadow-lg overflow-hidden ${!user.profileImage ? 'bg-gradient-to-br from-violet-500 to-purple-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:ring-2 hover:ring-violet-400 transition-all' : 'opacity-50'} group`}
+							className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold text-white shadow-lg overflow-hidden flex-shrink-0 ${!user.profileImage ? 'bg-gradient-to-br from-violet-500 to-purple-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:ring-2 hover:ring-violet-400 transition-all' : 'opacity-50'} group`}
 							onClick={handleImageClick}
 							title="Click to change profile image"
 						>
@@ -291,17 +291,17 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 								</div>
 							) : (
 								<div className="flex items-center gap-2">
-									<div className="font-bold text-lg text-white">{user.username}</div>
+									<div className="font-bold text-base sm:text-lg text-white truncate">{user.username}</div>
 									<button
 										onClick={handleStartEditUsername}
-										className="text-violet-300 hover:text-violet-200 text-xs"
+										className="text-violet-300 hover:text-violet-200 text-xs flex-shrink-0"
 										title="Edit username"
 									>
 										✏️
 									</button>
 								</div>
 							)}
-							<div className="text-xs text-violet-200/70 mt-0.5">{user.email}</div>
+							<div className="text-xs text-violet-200/70 mt-0.5 truncate">{user.email}</div>
 							<div className="flex flex-wrap items-center gap-2 mt-1">
 								<span className="text-xs bg-violet-600/50 text-violet-200 px-2 py-0.5 rounded">
 									Signed In
@@ -310,8 +310,8 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 						</div>
 					</div>
 				) : (
-					<div className="flex items-center gap-3">
-						<div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center text-2xl">
+					<div className="flex items-center gap-2 sm:gap-3">
+						<div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-700 rounded-full flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
 							🎮
 						</div>
 						<div className="flex-1">

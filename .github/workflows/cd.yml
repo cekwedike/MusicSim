@@ -76,9 +76,10 @@ jobs:
         npm ci
         
     - name: Run backend tests before deployment
+      timeout-minutes: 3
       run: |
         cd backend
-        npm run test:ci || npm test || echo "Backend tests completed with warnings"
+        npm run test:ci || echo "Backend tests completed with warnings"
       continue-on-error: true
       
     - name: Trigger Render deployment

@@ -7,74 +7,41 @@ interface StatDisplayProps {
     icon: React.ReactNode;
     label: string;
     value: number | string;
-    color: 'cash' | 'fame' | 'wellbeing' | 'career' | 'hype';
+    color: 'green' | 'yellow' | 'sky' | 'violet' | 'pink';
     maxValue?: number;
     isDate?: boolean;
 }
 
 const colorClasses = {
-    cash: { 
-        text: 'text-status-cash', 
-        bg: 'bg-status-cash/10', 
-        border: 'border-status-cash/30',
-        gradient: 'from-status-cash to-green-400' 
-    },
-    fame: { 
-        text: 'text-status-fame', 
-        bg: 'bg-status-fame/10', 
-        border: 'border-status-fame/30',
-        gradient: 'from-status-fame to-yellow-400' 
-    },
-    wellbeing: { 
-        text: 'text-status-wellbeing', 
-        bg: 'bg-status-wellbeing/10', 
-        border: 'border-status-wellbeing/30',
-        gradient: 'from-status-wellbeing to-blue-400' 
-    },
-    career: { 
-        text: 'text-status-career', 
-        bg: 'bg-status-career/10', 
-        border: 'border-status-career/30',
-        gradient: 'from-status-career to-pink-400' 
-    },
-    hype: { 
-        text: 'text-status-hype', 
-        bg: 'bg-status-hype/10', 
-        border: 'border-status-hype/30',
-        gradient: 'from-status-hype to-status-hype/80' 
-    },
+    green: { text: 'text-green-400', from: 'from-green-500', to: 'to-green-400' },
+    yellow: { text: 'text-yellow-400', from: 'from-yellow-500', to: 'to-yellow-400' },
+    sky: { text: 'text-sky-400', from: 'from-sky-500', to: 'to-sky-400' },
+    violet: { text: 'text-violet-400', from: 'from-violet-500', to: 'to-violet-400' },
+    pink: { text: 'text-pink-400', from: 'from-pink-500', to: 'to-pink-400' },
 };
 
 
 const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, maxValue = 100, isDate = false }) => {
     const classes = colorClasses[color];
-    const baseClasses = "card-elevated transition-all duration-200 hover:scale-[1.02]";
-    const containerClass = isDate 
-        ? `${baseClasses} date-display` 
-        : `${baseClasses} ${classes.bg} ${classes.border}`;
+    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50"
+                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50";
 
     return (
         <div className={containerClass}>
-            <div className="flex items-center space-x-2 mb-2">
+            <div className="flex items-center space-x-2 sm:space-x-2 mb-1 sm:mb-2">
                 <div className={`${classes.text} w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0`}>{icon}</div>
-                <span className="font-semibold text-secondary text-xs sm:text-sm md:text-base">{label}</span>
+                <span className="font-bold text-gray-300 text-xs sm:text-sm md:text-base">{label}</span>
             </div>
             {label === 'Cash' ? (
-                 <p className={`text-xs sm:text-lg md:text-xl lg:text-2xl font-bold text-right ${classes.text} break-all`}>
-                     ${Number(value).toLocaleString()}
-                 </p>
+                 <p className={`text-xs sm:text-lg md:text-xl lg:text-2xl font-bold text-right ${classes.text} break-all`}>${Number(value).toLocaleString()}</p>
             ) : isDate ? (
-                 <p className={`text-xs sm:text-base md:text-lg lg:text-xl font-bold text-right ${classes.text} break-words`}>
-                     {value}
-                 </p>
+                 <p className={`text-xs sm:text-base md:text-lg lg:text-xl font-bold text-right ${classes.text} break-words`}>{value}</p>
             ) : (
                 <div>
-                    <p className={`text-xs sm:text-lg md:text-xl lg:text-2xl font-bold text-right ${classes.text}`}>
-                        {value}/{maxValue}
-                    </p>
-                    <div className="w-full bg-secondary rounded-full h-1.5 sm:h-2.5 mt-2 overflow-hidden">
+                    <p className={`text-xs sm:text-lg md:text-xl lg:text-2xl font-bold text-right ${classes.text}`}>{value}/{maxValue}</p>
+                    <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-2.5 mt-1 overflow-hidden">
                         <div
-                            className={`bg-gradient-to-r ${classes.gradient} h-full rounded-full transition-all duration-500 ease-out`}
+                            className={`bg-gradient-to-r ${classes.from} ${classes.to} h-1.5 sm:h-2.5 rounded-full transition-all duration-500 ease-out`}
                             style={{ width: `${Math.max(0, Math.min(100, (Number(value) / maxValue) * 100))}%` }}
                         ></div>
                     </div>
@@ -90,23 +57,19 @@ const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
     const progressPercentage = (project.progress / project.requiredProgress) * 100;
 
     return (
-        <div className="current-project mt-3 card">
-            <h3 className="text-sm sm:text-lg font-bold text-status-career mb-2">
-                Current Project: {project.name}
-            </h3>
+        <div className="current-project mt-3 bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-4 shadow-lg border border-gray-700/50">
+            <h3 className="text-sm sm:text-lg font-bold text-violet-300 mb-1 sm:mb-2">Current Project: {project.name}</h3>
             <div className="flex items-center gap-2 sm:gap-4">
-                <div className="w-full bg-secondary rounded-full h-3 sm:h-4 overflow-hidden">
+                <div className="w-full bg-gray-700 rounded-full h-3 sm:h-4 overflow-hidden">
                     <div
-                        className="bg-gradient-to-r from-brand-primary to-brand-secondary h-full rounded-full transition-all duration-500 ease-out"
+                        className="bg-gradient-to-r from-violet-500 to-rose-500 h-3 sm:h-4 rounded-full transition-all duration-500 ease-out text-right"
                         style={{ width: `${progressPercentage}%`}}
                     >
                     </div>
                 </div>
-                <span className="font-bold text-primary text-xs sm:text-base">
-                    {Math.floor(progressPercentage)}%
-                </span>
+                <span className="font-bold text-gray-200 text-xs sm:text-base">{Math.floor(progressPercentage)}%</span>
             </div>
-            <p className="text-xs sm:text-sm text-muted mt-1">Quality: {project.quality}</p>
+            <p className="text-xs sm:text-sm text-gray-400 mt-1">Quality: {project.quality}</p>
         </div>
     );
 };
@@ -128,40 +91,40 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
     return (
         <div className="mb-3 md:mb-4 mt-4 sm:mt-5">
             {/* Mobile: Collapsible view */}
-            <div className="lg:hidden bg-secondary rounded-lg border border-default">
+            <div className="lg:hidden bg-gray-800 rounded-lg border border-gray-700">
                 {isMobileCollapsed ? (
                     <button
                         onClick={() => setIsMobileCollapsed(false)}
-                        className="btn-ghost w-full justify-between p-3 rounded-lg"
+                        className="w-full flex items-center justify-between p-3 hover:bg-gray-700/50 transition-colors rounded-lg"
                     >
                         <div className="flex items-center gap-2">
                             <CashIcon />
-                            <span className="text-sm font-bold text-primary">Stats</span>
-                            <span className="text-xs text-status-cash">${stats.cash.toLocaleString()}</span>
-                            <span className="text-xs text-muted">|</span>
-                            <span className="text-xs text-status-fame">Fame: {stats.fame}</span>
+                            <span className="text-sm font-bold text-white">Stats</span>
+                            <span className="text-xs text-green-400">${stats.cash.toLocaleString()}</span>
+                            <span className="text-xs text-gray-400">|</span>
+                            <span className="text-xs text-yellow-400">Fame: {stats.fame}</span>
                         </div>
-                        <ChevronDown className="w-4 h-4 text-brand-primary" />
+                        <ChevronDown className="w-4 h-4 text-violet-400" />
                     </button>
                 ) : (
                     <div className="p-3">
                         <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm font-bold text-primary">Player Stats</span>
+                            <span className="text-sm font-bold text-white">Player Stats</span>
                             <button
                                 onClick={() => setIsMobileCollapsed(true)}
-                                className="flex items-center gap-1 text-brand-primary hover:text-brand-secondary text-xs font-medium transition-colors"
+                                className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-xs font-medium transition-colors"
                             >
                                 <span>Hide</span>
                                 <ChevronUp className="w-4 h-4" />
                             </button>
                         </div>
                         <div className="player-stats grid grid-cols-2 gap-2.5">
-                            <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="cash" />
-                            <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="fame" />
-                            <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="wellbeing" />
-                            <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="hype" />
+                            <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
+                            <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
+                            <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
+                            <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
                             <div className="col-span-2">
-                                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="career" isDate={true} />
+                                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
                             </div>
                         </div>
                     </div>
@@ -171,11 +134,11 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
             {/* Desktop: Always visible */}
             <div className="hidden lg:block">
                 <div className="player-stats grid grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
-                    <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="cash" />
-                    <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="fame" />
-                    <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="wellbeing" />
-                    <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="hype" />
-                    <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="career" isDate={true} />
+                    <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
+                    <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
+                    <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
+                    <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
+                    <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
                 </div>
             </div>
         </div>

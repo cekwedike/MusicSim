@@ -37,7 +37,7 @@ const UnlockNotification: React.FC<UnlockNotificationProps> = ({
       }`}
       onClick={handleClose}
     >
-      <div className="bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 rounded-xl shadow-2xl shadow-purple-500/50 border-2 border-white/20 overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-200">
+      <div className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 rounded-xl shadow-2xl shadow-red-500/50 border-2 border-white/20 overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-200">
         {/* Animated shimmer effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
 
@@ -72,7 +72,7 @@ const UnlockNotification: React.FC<UnlockNotificationProps> = ({
                   </svg>
                 </button>
               </div>
-              <p className="text-purple-100 text-sm leading-relaxed">
+              <p className="text-red-100 text-sm leading-relaxed">
                 {description}
               </p>
 

@@ -26,7 +26,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
     <div className="space-y-4 sm:space-y-6">
       <div className="text-center">
         <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Career Duration</h3>
-        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">{currentDuration}</p>
+        <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">{currentDuration}</p>
         <p className="text-gray-400 text-xs sm:text-sm">Week {gd.week}, Month {gd.month}, Year {gd.year}</p>
       </div>
 
@@ -40,10 +40,10 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
   return (
     <div className="text-gray-300">
       <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-        <button onClick={() => setActiveTab('current')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'current' ? 'bg-violet-600 text-white' : 'bg-gray-700 text-gray-300'}`}>Current</button>
-        <button onClick={() => setActiveTab('alltime')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'alltime' ? 'bg-violet-600 text-white' : 'bg-gray-700 text-gray-300'}`}>All-time</button>
-        <button onClick={() => setActiveTab('history')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'history' ? 'bg-violet-600 text-white' : 'bg-gray-700 text-gray-300'}`}>History</button>
-        <button onClick={() => setActiveTab('patterns')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'patterns' ? 'bg-violet-600 text-white' : 'bg-gray-700 text-gray-300'}`}>Patterns</button>
+        <button onClick={() => setActiveTab('current')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'current' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>Current</button>
+        <button onClick={() => setActiveTab('alltime')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'alltime' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>All-time</button>
+        <button onClick={() => setActiveTab('history')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'history' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>History</button>
+        <button onClick={() => setActiveTab('patterns')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'patterns' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>Patterns</button>
       </div>
 
       <div className="space-y-3 sm:space-y-4">
@@ -54,7 +54,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Total Careers</div>
-                <div className="text-xl sm:text-2xl font-bold text-violet-400">{stats.totalGamesPlayed}</div>
+                <div className="text-xl sm:text-2xl font-bold text-red-400">{stats.totalGamesPlayed}</div>
               </div>
               <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Total Weeks</div>
@@ -70,7 +70,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
               </div>
               <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Achievements</div>
-                <div className="text-xl sm:text-2xl font-bold text-purple-400">{stats.achievementsUnlocked}</div>
+                <div className="text-xl sm:text-2xl font-bold text-red-400">{stats.achievementsUnlocked}</div>
               </div>
               <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Projects</div>

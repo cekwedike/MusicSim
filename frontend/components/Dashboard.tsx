@@ -7,7 +7,7 @@ interface StatDisplayProps {
     icon: React.ReactNode;
     label: string;
     value: number | string;
-    color: 'green' | 'yellow' | 'sky' | 'violet' | 'pink';
+    color: 'green' | 'yellow' | 'sky' | 'red' | 'pink';
     maxValue?: number;
     isDate?: boolean;
 }
@@ -16,7 +16,7 @@ const colorClasses = {
     green: { text: 'text-green-400', from: 'from-green-500', to: 'to-green-400' },
     yellow: { text: 'text-yellow-400', from: 'from-yellow-500', to: 'to-yellow-400' },
     sky: { text: 'text-sky-400', from: 'from-sky-500', to: 'to-sky-400' },
-    violet: { text: 'text-violet-400', from: 'from-violet-500', to: 'to-violet-400' },
+    red: { text: 'text-red-400', from: 'from-red-500', to: 'to-red-400' },
     pink: { text: 'text-pink-400', from: 'from-pink-500', to: 'to-pink-400' },
 };
 
@@ -58,11 +58,11 @@ const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
 
     return (
         <div className="current-project mt-3 bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-4 shadow-lg border border-gray-700/50">
-            <h3 className="text-sm sm:text-lg font-bold text-violet-300 mb-1 sm:mb-2">Current Project: {project.name}</h3>
+            <h3 className="text-sm sm:text-lg font-bold text-red-300 mb-1 sm:mb-2">Current Project: {project.name}</h3>
             <div className="flex items-center gap-2 sm:gap-4">
                 <div className="w-full bg-gray-700 rounded-full h-3 sm:h-4 overflow-hidden">
                     <div
-                        className="bg-gradient-to-r from-violet-500 to-rose-500 h-3 sm:h-4 rounded-full transition-all duration-500 ease-out text-right"
+                        className="bg-gradient-to-r from-red-500 to-rose-500 h-3 sm:h-4 rounded-full transition-all duration-500 ease-out text-right"
                         style={{ width: `${progressPercentage}%`}}
                     >
                     </div>
@@ -104,7 +104,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                             <span className="text-xs text-gray-400">|</span>
                             <span className="text-xs text-yellow-400">Fame: {stats.fame}</span>
                         </div>
-                        <ChevronDown className="w-4 h-4 text-violet-400" />
+                        <ChevronDown className="w-4 h-4 text-red-400" />
                     </button>
                 ) : (
                     <div className="p-3">
@@ -112,7 +112,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                             <span className="text-sm font-bold text-white">Player Stats</span>
                             <button
                                 onClick={() => setIsMobileCollapsed(true)}
-                                className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-xs font-medium transition-colors"
+                                className="flex items-center gap-1 text-red-400 hover:text-red-300 text-xs font-medium transition-colors"
                             >
                                 <span>Hide</span>
                                 <ChevronUp className="w-4 h-4" />
@@ -124,7 +124,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                             <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
                             <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
                             <div className="col-span-2">
-                                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
+                                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="red" isDate={true} />
                             </div>
                         </div>
                     </div>
@@ -138,7 +138,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                     <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
                     <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
                     <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
-                    <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="violet" isDate={true} />
+                    <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="red" isDate={true} />
                 </div>
             </div>
         </div>

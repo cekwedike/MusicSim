@@ -12,8 +12,9 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
 
   // Calculate player level and XP
-  const totalXP = playerKnowledge.completedModules.length * 100 +
-                  Object.values(playerKnowledge.moduleScores).reduce((sum: number, score) => sum + score, 0);
+  const moduleScoreValues = Object.values(playerKnowledge.moduleScores) as number[];
+  const totalScoreXP = moduleScoreValues.reduce((sum: number, score: number) => sum + (Number(score) || 0), 0);
+  const totalXP = playerKnowledge.completedModules.length * 100 + totalScoreXP;
   const playerLevel = Math.floor(totalXP / 300) + 1;
   const levelProgress = ((totalXP % 300) / 300) * 100;
 
@@ -114,7 +115,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
           </div>
           <div className="flex-1">
             <div className="text-white font-semibold text-sm">Level {playerLevel}</div>
-            <div className="text-purple-300 text-xs">{totalXP} Total XP</div>
+            <div className="text-red-300 text-xs">{totalXP} Total XP</div>
           </div>
         </div>
         <div className="w-full bg-red-900/50 rounded-full h-2 overflow-hidden">
@@ -127,11 +128,11 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
 
       {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-2">
-        <div className="bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30 rounded-lg p-2.5 text-center transform hover:scale-105 transition-transform duration-200">
-          <div className="text-xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+        <div className="bg-gradient-to-br from-red-500/20 to-red-600/20 border border-red-500/30 rounded-lg p-2.5 text-center transform hover:scale-105 transition-transform duration-200">
+          <div className="text-xl font-bold bg-gradient-to-r from-red-400 to-red-500 bg-clip-text text-transparent">
             {playerKnowledge.completedModules.length}
           </div>
-          <div className="text-purple-200 text-xs">Done</div>
+          <div className="text-red-200 text-xs">Done</div>
         </div>
         <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2.5 text-center transform hover:scale-105 transition-transform duration-200">
           <div className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
@@ -169,7 +170,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
                   : 'border-gray-700 bg-gray-800/30 opacity-60'
                 }
                 ${isCompleted ? 'ring-2 ring-green-500/40' : ''}
-                ${isExpanded ? 'shadow-lg shadow-purple-500/20' : ''}
+                ${isExpanded ? 'shadow-lg shadow-red-500/20' : ''}
               `}
             >
               {/* Main Content */}
@@ -233,11 +234,11 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
                 {/* Expand Indicator or Lock Message */}
                 {isUnlocked ? (
                   <div className="flex items-center justify-between">
-                    <span className="text-purple-400 text-xs font-medium">
+                    <span className="text-red-400 text-xs font-medium">
                       {isCompleted ? 'Review' : 'Start'}
                     </span>
                     <svg
-                      className={`w-4 h-4 text-purple-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                      className={`w-4 h-4 text-red-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -261,13 +262,13 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
 
                   {module.prerequisites && module.prerequisites.length > 0 && (
                     <div>
-                      <h5 className="text-xs font-semibold text-purple-300 mb-1">Prerequisites:</h5>
+                      <h5 className="text-xs font-semibold text-red-300 mb-1">Prerequisites:</h5>
                       <div className="space-y-0.5">
                         {module.prerequisites.map(prereq => {
                           const prereqModule = learningModules.find(m => m.id === prereq);
                           return (
                             <div key={prereq} className="text-xs text-gray-400 flex items-center gap-1">
-                              <svg className="w-2.5 h-2.5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                              <svg className="w-2.5 h-2.5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                               </svg>
                               {prereqModule?.title || prereq}
@@ -298,9 +299,9 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
       </div>
 
       {/* Bottom Info */}
-      <div className="bg-gradient-to-br from-violet-600/10 to-purple-600/10 border border-violet-500/30 rounded-lg p-3 mt-4">
+      <div className="bg-gradient-to-br from-red-600/10 to-red-700/10 border border-red-500/30 rounded-lg p-3 mt-4">
         <h3 className="text-white font-bold text-xs mb-1">Why Learn?</h3>
-        <p className="text-purple-200 text-xs leading-relaxed">
+        <p className="text-red-200 text-xs leading-relaxed">
           Knowledge is power. Understanding the business side helps you make better decisions and build a sustainable career.
         </p>
       </div>

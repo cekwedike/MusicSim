@@ -233,11 +233,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			/>
 
 			{/* Account Header */}
-			<div className="bg-gradient-to-br from-violet-600/20 to-purple-600/20 border border-violet-600/30 rounded-lg p-3 sm:p-4 mb-4">
+			<div className="bg-gradient-to-br from-red-600/20 to-red-700/20 border border-red-600/30 rounded-lg p-3 sm:p-4 mb-4">
 				{isAuthenticated && user ? (
 					<div className="flex items-center gap-2 sm:gap-3">
 						<div
-							className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold text-white shadow-lg overflow-hidden flex-shrink-0 ${!user.profileImage ? 'bg-gradient-to-br from-violet-500 to-purple-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:ring-2 hover:ring-violet-400 transition-all' : 'opacity-50'} group`}
+							className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold text-white shadow-lg overflow-hidden flex-shrink-0 ${!user.profileImage ? 'bg-gradient-to-br from-red-500 to-red-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:ring-2 hover:ring-red-400 transition-all' : 'opacity-50'} group`}
 							onClick={handleImageClick}
 							title="Click to change profile image"
 						>
@@ -294,16 +294,16 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 									<div className="font-bold text-base sm:text-lg text-white truncate">{user.username}</div>
 									<button
 										onClick={handleStartEditUsername}
-										className="text-violet-300 hover:text-violet-200 text-xs flex-shrink-0"
+										className="text-red-300 hover:text-red-200 text-xs flex-shrink-0"
 										title="Edit username"
 									>
 										✏️
 									</button>
 								</div>
 							)}
-							<div className="text-xs text-violet-200/70 mt-0.5 truncate">{user.email}</div>
+							<div className="text-xs text-red-200/70 mt-0.5 truncate">{user.email}</div>
 							<div className="flex flex-wrap items-center gap-2 mt-1">
-								<span className="text-xs bg-violet-600/50 text-violet-200 px-2 py-0.5 rounded">
+								<span className="text-xs bg-red-600/50 text-red-200 px-2 py-0.5 rounded">
 									Signed In
 								</span>
 							</div>
@@ -391,7 +391,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					<div className="grid grid-cols-2 gap-3">
 						<div className="bg-gray-800/50 rounded-lg p-3">
 							<div className="text-xs text-gray-400 mb-1">Total Careers</div>
-							<div className="text-xl font-bold text-violet-400">{statistics.totalGamesPlayed}</div>
+							<div className="text-xl font-bold text-red-400">{statistics.totalGamesPlayed}</div>
 						</div>
 						<div className="bg-gray-800/50 rounded-lg p-3">
 							<div className="text-xs text-gray-400 mb-1">Total Weeks</div>
@@ -433,7 +433,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 						{statistics.longestCareerWeeks > 0 && (
 							<div className="flex justify-between items-center">
 								<span className="text-gray-400">Longest Career</span>
-								<span className="font-semibold text-violet-400">{statistics.longestCareerWeeks} weeks</span>
+								<span className="font-semibold text-red-400">{statistics.longestCareerWeeks} weeks</span>
 							</div>
 						)}
 						{statistics.totalCashEarned > 0 && (
@@ -455,7 +455,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					<div className="space-y-2 text-sm">
 						<div className="flex justify-between items-center">
 							<span className="text-gray-400">Modules Completed</span>
-							<span className="font-semibold text-violet-400">{statistics.modulesCompleted}</span>
+							<span className="font-semibold text-red-400">{statistics.modulesCompleted}</span>
 						</div>
 						<div className="flex justify-between items-center">
 							<span className="text-gray-400">Average Quiz Score</span>
@@ -475,7 +475,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					<>
 						<button
 							onClick={handleOpenAuthModal}
-							className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-lg"
+							className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-lg"
 						>
 							<span></span>
 							Register / Login

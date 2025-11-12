@@ -59,7 +59,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
       {/* Career Duration */}
       <div className="text-center">
         <h3 className="text-lg font-semibold text-white mb-2">Career Duration</h3>
-        <p className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <p className="text-2xl font-bold bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
           {currentDuration}
         </p>
           <p className="text-gray-400 text-sm">Week {gd.week}, Month {gd.month}, Year {gd.year}</p>
@@ -113,7 +113,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
         <div className="space-y-2 max-h-32 overflow-y-auto">
           {state.logs && state.logs.length > 0 ? (
             state.logs.slice(-5).reverse().map((log, index) => (
-              <div key={index} className="text-sm text-gray-300 border-l-2 border-purple-500 pl-3">
+              <div key={index} className="text-sm text-gray-300 border-l-2 border-red-500 pl-3">
                 <p className="text-gray-400 text-xs">{new Date(log.timestamp).toLocaleDateString('en-GB')}</p>
                 <p>{log.message}</p>
               </div>
@@ -125,7 +125,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
       </div>
 
       {/* Progress Summary */}
-      <div className="text-center bg-gradient-to-r from-purple-600/20 to-pink-600/20 p-4 rounded-lg border border-purple-500/30">
+      <div className="text-center bg-gradient-to-r from-red-600/20 to-pink-600/20 p-4 rounded-lg border border-red-500/30">
         <p className="text-white font-semibold">Keep going - this career continues until debt or burnout!</p>
         <p className="text-gray-300 text-sm mt-1">{state.lessonsViewed.length} lessons learned so far</p>
       </div>
@@ -169,8 +169,8 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
         <p className="text-sm text-gray-400">Highest Cash Ever</p>
       </div>
 
-      <div className="bg-purple-500/20 p-4 rounded-lg border border-purple-500/50">
-        <p className="text-xl font-bold text-purple-300">{stats.highestFameReached}</p>
+      <div className="bg-red-500/20 p-4 rounded-lg border border-red-500/50">
+        <p className="text-xl font-bold text-red-300">{stats.highestFameReached}</p>
         <p className="text-sm text-gray-400">Highest Fame Ever</p>
       </div>
 
@@ -240,7 +240,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
                 </div>
                 <div>
                   <p className="text-xs text-gray-400">Peak Fame</p>
-                  <p className="text-sm font-medium text-purple-300">{career.peakFame}</p>
+                  <p className="text-sm font-medium text-red-300">{career.peakFame}</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-400">Achievements</p>
@@ -352,7 +352,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
             <p className="text-yellow-300">You're an achievement hunter with {achievementProgress}% completion!</p>
           )}
           {stats.totalGamesPlayed >= 10 && (
-            <p className="text-purple-300">Experienced player with {stats.totalGamesPlayed} careers completed!</p>
+            <p className="text-red-300">Experienced player with {stats.totalGamesPlayed} careers completed!</p>
           )}
         </div>
       </div>
@@ -364,7 +364,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
       <div className="bg-gray-800 rounded-xl border border-gray-700 max-w-4xl w-full mx-4 max-h-[85vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="p-6 border-b border-gray-700">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
             Career Statistics
           </h1>
         </div>
@@ -377,7 +377,7 @@ export const StatisticsModal: React.FC<StatisticsModalProps> = ({ state, onClose
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-6 py-4 text-sm font-medium whitespace-nowrap transition-colors ${
                 activeTab === tab.id
-                  ? 'text-purple-400 border-b-2 border-purple-400 bg-gray-700/30'
+                  ? 'text-red-400 border-b-2 border-red-400 bg-gray-700/30'
                   : 'text-gray-400 hover:text-gray-300'
               }`}
             >

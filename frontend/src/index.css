@@ -450,9 +450,9 @@ html.light * {
 
 /* Fix any gradient issues */
 html.light .bg-gradient-to-r {
-  /* Gradients stay vibrant: ensure gradients use the light theme violet accents by default */
-  --tw-gradient-from: var(--light-violet-50);
-  --tw-gradient-to: var(--light-violet-300);
+  /* Gradients stay vibrant: ensure gradients use the light theme red accents by default */
+  --tw-gradient-from: var(--light-red-50);
+  --tw-gradient-to: var(--light-red-300);
   background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
 }
 
@@ -672,7 +672,7 @@ html.light .border-gray-600 {
   border-color: #d1d5db !important;
 }
 
-html.light .focus\:ring-violet-500:focus {
+html.light .focus\:ring-red-500:focus {
   --tw-ring-color: #dc2626 !important;
 }
 
@@ -860,7 +860,7 @@ html.light .text-gray-400.hover\:text-white:hover {
 }
 
 /* Login Modal Title */
-html.light .text-violet-300 {
+html.light .text-red-300 {
   color: #dc2626 !important;
 }
 

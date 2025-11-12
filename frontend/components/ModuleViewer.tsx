@@ -93,10 +93,10 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-[70] p-2 sm:p-4 animate-fadeIn">
-      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-lg sm:rounded-2xl w-full max-w-5xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20 flex flex-col">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-red-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-[70] p-2 sm:p-4 animate-fadeIn">
+      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-lg sm:rounded-2xl w-full max-w-5xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-red-500/30 shadow-2xl shadow-red-500/20 flex flex-col">
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 p-4 sm:p-6 flex-shrink-0">
+        <div className="relative bg-gradient-to-r from-red-600 via-red-700 to-red-800 p-4 sm:p-6 flex-shrink-0">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-2 sm:mb-4">

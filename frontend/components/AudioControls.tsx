@@ -139,7 +139,7 @@ const AudioControls: React.FC = () => {
               step="0.01"
               value={audioState.musicVolume}
               onChange={handleMusicVolumeChange}
-              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-violet"
+              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-red"
               disabled={audioState.isMusicMuted}
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -174,7 +174,7 @@ const AudioControls: React.FC = () => {
               step="0.01"
               value={audioState.sfxVolume}
               onChange={handleSfxVolumeChange}
-              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-violet"
+              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-red"
               disabled={audioState.isSfxMuted}
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -207,7 +207,7 @@ const AudioControls: React.FC = () => {
       )}
 
       <style>{`
-        .slider-violet::-webkit-slider-thumb {
+        .slider-red::-webkit-slider-thumb {
           appearance: none;
           width: 16px;
           height: 16px;
@@ -216,7 +216,7 @@ const AudioControls: React.FC = () => {
           cursor: pointer;
         }
 
-        .slider-violet::-moz-range-thumb {
+        .slider-red::-moz-range-thumb {
           width: 16px;
           height: 16px;
           border-radius: 50%;
@@ -225,12 +225,12 @@ const AudioControls: React.FC = () => {
           border: none;
         }
 
-        .slider-violet:disabled {
+        .slider-red:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
 
-        .slider-violet::-webkit-slider-track {
+        .slider-red::-webkit-slider-track {
           background: linear-gradient(to right,
             rgb(139, 92, 246) 0%,
             rgb(139, 92, 246) var(--value, 50)%,

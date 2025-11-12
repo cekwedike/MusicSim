@@ -28,7 +28,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
     return (
         <div className="outcome-modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-3 sm:p-6 z-[60] animate-fade-in">
             <div className={`bg-gray-800 border border-gray-700 rounded-xl shadow-2xl p-4 sm:p-5 md:p-6 lg:p-8 w-full ${hasLesson ? 'max-w-2xl' : 'max-w-md'} max-h-[85vh] sm:max-h-[90vh] overflow-y-auto`}>
-                <h3 className="text-base sm:text-lg md:text-2xl font-bold text-violet-300 mb-3 sm:mb-4">Outcome</h3>
+                <h3 className="text-base sm:text-lg md:text-2xl font-bold text-red-300 mb-3 sm:mb-4">Outcome</h3>
                 <p className="text-gray-300 mb-4 sm:mb-6 leading-relaxed text-sm md:text-base">{outcome.text}</p>
 
                 {/* Outcome voiceover player (play/replay) */}
@@ -50,7 +50,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
 
                 {/* Educational Lesson Section */}
                 {hasLesson && (
-                    <div className="bg-gradient-to-r from-blue-900 to-purple-900 rounded-lg p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 border border-blue-700">
+                    <div className="bg-gradient-to-r from-blue-900 to-red-900 rounded-lg p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 border border-blue-700">
                         <div className="flex items-center gap-2 mb-2 sm:mb-3">
                             <h4 className="text-sm sm:text-base md:text-xl font-bold text-blue-200">{outcome.lesson.title}</h4>
                         </div>
@@ -88,7 +88,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
                                     <p className="text-blue-300 text-xs mb-1">
                                         Learn more about this concept:
                                     </p>
-                                    <span className="inline-block bg-purple-700 text-purple-200 px-2 sm:px-3 py-1 rounded-full text-xs font-medium">
+                                    <span className="inline-block bg-red-700 text-red-200 px-2 sm:px-3 py-1 rounded-full text-xs font-medium">
                                         {outcome.lesson.conceptTaught}
                                     </span>
                                 </div>
@@ -99,7 +99,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
                 
                 <button
                     onClick={onClose}
-                    className="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 sm:py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-violet-400 text-base sm:text-base min-h-[48px]"
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 sm:py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-400 text-base sm:text-base min-h-[48px]"
                 >
                     Continue
                 </button>

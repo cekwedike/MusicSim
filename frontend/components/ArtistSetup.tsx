@@ -31,7 +31,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
 
     return (
         <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-violet-300 mb-4">Create Your Artist</h2>
+            <h2 className="text-3xl font-bold text-red-300 mb-4">Create Your Artist</h2>
             <p className="text-gray-400 mb-8">Define your musical identity and choose your challenge level.</p>
             
             <form onSubmit={handleSubmit} className="w-full space-y-8">
@@ -49,13 +49,13 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                                     onClick={() => setDifficulty(diffKey)}
                                     className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                                         isSelected 
-                                            ? 'border-violet-500 bg-violet-500/10' 
+                                            ? 'border-red-500 bg-red-500/10' 
                                             : 'border-gray-600 bg-gray-800/50 hover:border-gray-500'
                                     }`}
                                 >
                                     <div className="text-center">
                                         <div className="text-4xl mb-2">{getDifficultyIcon(diffKey)}</div>
-                                        <h4 className={`text-lg font-bold mb-2 ${isSelected ? 'text-violet-300' : 'text-gray-300'}`}>
+                                        <h4 className={`text-lg font-bold mb-2 ${isSelected ? 'text-red-300' : 'text-gray-300'}`}>
                                             {settings.name}
                                         </h4>
                                         <p className="text-sm text-gray-400 mb-3 line-clamp-3">
@@ -80,7 +80,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                         <label htmlFor="artist-name" className="block text-left text-gray-300 font-medium mb-2">
                             Artist / Band Name
                             {isAuthenticated && (
-                                <span className="text-xs text-violet-400 ml-2">(Using your account name)</span>
+                                <span className="text-xs text-red-400 ml-2">(Using your account name)</span>
                             )}
                         </label>
                         <input
@@ -121,7 +121,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
 
                 <button
                     type="submit"
-                    className="w-full max-w-md mx-auto bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full max-w-md mx-auto bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={!name.trim() || !genre.trim()}
                 >
                     Begin Journey ({difficultySettings[difficulty].name})

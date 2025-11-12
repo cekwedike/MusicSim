@@ -55,7 +55,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
         <div className="p-6 border-b border-gray-700">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-rose-400 bg-clip-text text-transparent">
                 {label.name}
               </h1>
               <div className="flex items-center gap-3 mt-2">
@@ -76,15 +76,15 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
         <div className="p-6 space-y-8">
           {/* The Pitch */}
           <section>
-            <h2 className="text-xl font-bold text-violet-300 mb-4">Their Offer</h2>
-            <blockquote className="bg-gray-700/50 border-l-4 border-violet-500 pl-6 py-4 italic text-gray-300 leading-relaxed">
+            <h2 className="text-xl font-bold text-red-300 mb-4">Their Offer</h2>
+            <blockquote className="bg-gray-700/50 border-l-4 border-red-500 pl-6 py-4 italic text-gray-300 leading-relaxed">
               "{label.description}"
             </blockquote>
           </section>
 
           {/* Financial Terms */}
           <section>
-            <h2 className="text-xl font-bold text-violet-300 mb-4">The Money</h2>
+            <h2 className="text-xl font-bold text-red-300 mb-4">The Money</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center gap-2 mb-2">
@@ -150,7 +150,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
           {/* Deal Structure */}
           <section>
-            <h2 className="text-xl font-bold text-violet-300 mb-4">Contract Terms</h2>
+            <h2 className="text-xl font-bold text-red-300 mb-4">Contract Terms</h2>
             <div className="space-y-4">
               <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
                 <div className="flex items-center justify-between mb-2">
@@ -159,7 +159,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                 </div>
                 <div className="w-full bg-gray-600 rounded-full h-2 mb-2">
                   <div 
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full"
+                    className="bg-gradient-to-r from-red-500 to-rose-500 h-2 rounded-full"
                     style={{ width: `${label.terms.creativeControl}%` }}
                   ></div>
                 </div>
@@ -210,7 +210,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
           {/* Analysis */}
           <section>
-            <h2 className="text-xl font-bold text-violet-300 mb-4">Deal Analysis</h2>
+            <h2 className="text-xl font-bold text-red-300 mb-4">Deal Analysis</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Green Flags */}
               <div>
@@ -268,7 +268,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                 <h3 className="text-lg font-semibold text-white">Earnings Calculator</h3>
                 <button 
                   onClick={() => setShowCalculator(!showCalculator)}
-                  className="text-violet-400 hover:text-violet-300 text-sm"
+                  className="text-red-400 hover:text-red-300 text-sm"
                 >
                   {showCalculator ? 'Hide' : 'Show'} Calculator
                 </button>
@@ -321,7 +321,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
           <section className="flex flex-col gap-4">
             <button
               onClick={onSign}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all duration-200"
+              className="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all duration-200"
             >
               Sign This Contract
             </button>

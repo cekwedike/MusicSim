@@ -3,7 +3,7 @@ import type { Difficulty } from '../types';
 import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 import { getAutosaveAge } from '../services/storageService';
 import { Menu } from 'lucide-react';
-import { ThemeToggle } from './ThemeToggle';
+// import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
     artistName?: string;
@@ -74,31 +74,6 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                     )}
                 </div>
             )}
-
-            {/* Mobile Menu Button & Theme Toggle */}
-            <div className="absolute top-3 sm:top-4 right-2 sm:right-4 flex items-center gap-2">
-                {/* Theme toggle - always visible */}
-                <div className="hidden sm:block">
-                    <ThemeToggle size="sm" variant="switch" showLabel={false} />
-                </div>
-                
-                {/* Mobile menu button - only visible when needed */}
-                {showMenuButton && (
-                    <button
-                        id="mobile-menu-button"
-                        onClick={onMenuClick}
-                        className="lg:hidden p-2 rounded-lg bg-secondary border border-default hover:bg-tertiary transition-colors z-10"
-                        aria-label="Toggle menu"
-                    >
-                        <Menu className="w-5 h-5 text-secondary" />
-                    </button>
-                )}
-                
-                {/* Mobile theme toggle - inside menu button area for mobile */}
-                <div className="sm:hidden">
-                    <ThemeToggle size="sm" variant="switch" showLabel={false} />
-                </div>
-            </div>
         </header>
     );
 };

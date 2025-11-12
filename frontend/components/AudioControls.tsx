@@ -99,8 +99,8 @@ const AudioControls: React.FC = () => {
         onClick={handleToggle}
         className={`p-2 rounded-full transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center
           ${isOpen
-            ? 'bg-violet-600 text-white'
-            : 'bg-gray-700/50 text-gray-300 hover:bg-violet-600 hover:text-white'
+            ? 'bg-red-600 text-white'
+            : 'bg-gray-700/50 text-gray-300 hover:bg-red-600 hover:text-white'
           }`}
         aria-label="Audio Controls"
         title="Audio Settings"
@@ -110,8 +110,8 @@ const AudioControls: React.FC = () => {
 
       {/* Audio Controls Popup */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-gray-800 border border-violet-500/30 rounded-lg shadow-xl z-[60] p-4 animate-fade-in max-w-[calc(100vw-2rem)]">
-          <h3 className="text-violet-300 font-bold text-lg mb-4 flex items-center gap-2">
+        <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-gray-800 border border-red-500/30 rounded-lg shadow-xl z-[60] p-4 animate-fade-in max-w-[calc(100vw-2rem)]">
+          <h3 className="text-red-300 font-bold text-lg mb-4 flex items-center gap-2">
             <MusicNoteIcon />
             Audio Settings
           </h3>
@@ -125,7 +125,7 @@ const AudioControls: React.FC = () => {
                 className={`p-1.5 rounded transition-colors ${
                   audioState.isMusicMuted
                     ? 'text-red-400 hover:text-red-300'
-                    : 'text-violet-400 hover:text-violet-300'
+                    : 'text-red-400 hover:text-red-300'
                 }`}
                 aria-label={audioState.isMusicMuted ? 'Unmute Music' : 'Mute Music'}
               >
@@ -144,7 +144,7 @@ const AudioControls: React.FC = () => {
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>0%</span>
-              <span className="text-violet-400 font-medium">
+              <span className="text-red-400 font-medium">
                 {Math.round(audioState.musicVolume * 100)}%
               </span>
               <span>100%</span>
@@ -160,7 +160,7 @@ const AudioControls: React.FC = () => {
                 className={`p-1.5 rounded transition-colors ${
                   audioState.isSfxMuted
                     ? 'text-red-400 hover:text-red-300'
-                    : 'text-violet-400 hover:text-violet-300'
+                    : 'text-red-400 hover:text-red-300'
                 }`}
                 aria-label={audioState.isSfxMuted ? 'Unmute SFX' : 'Mute SFX'}
               >
@@ -179,7 +179,7 @@ const AudioControls: React.FC = () => {
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>0%</span>
-              <span className="text-violet-400 font-medium">
+              <span className="text-red-400 font-medium">
                 {Math.round(audioState.sfxVolume * 100)}%
               </span>
               <span>100%</span>
@@ -189,7 +189,7 @@ const AudioControls: React.FC = () => {
           {/* Test Sound Button */}
           <button
             onClick={() => playSound('buttonClick')}
-            className="w-full mt-2 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors"
+            className="w-full mt-2 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
             disabled={audioState.isSfxMuted}
           >
             Test Sound
@@ -199,7 +199,7 @@ const AudioControls: React.FC = () => {
           {audioState.currentTrack && (
             <div className="mt-4 pt-4 border-t border-gray-700">
               <p className="text-xs text-gray-400">
-                Now Playing: <span className="text-violet-400 font-medium capitalize">{audioState.currentTrack}</span>
+                Now Playing: <span className="text-red-400 font-medium capitalize">{audioState.currentTrack}</span>
               </p>
             </div>
           )}

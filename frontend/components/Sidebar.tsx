@@ -140,7 +140,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
               relative px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group
               flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0
               ${activeView === button.id
-                ? 'bg-violet-600 text-white'
+                ? 'bg-red-600 text-white'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700'
               }
             `}
@@ -226,7 +226,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         {activeView && isExpanded && (
           <div className="w-full h-full flex flex-col p-4 animate-fade-in">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-violet-300">
+              <h2 className="text-xl font-bold text-red-300">
                 {buttons.find(b => b.id === activeView)?.label}
               </h2>
               <button

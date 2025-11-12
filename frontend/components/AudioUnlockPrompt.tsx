@@ -11,8 +11,8 @@ const AudioUnlockPrompt: React.FC<AudioUnlockPromptProps> = ({ onUnlock, onSkip 
     <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-gray-800/95 border border-gray-700 rounded-lg shadow-2xl max-w-md w-full p-6 animate-slide-up">
         <div className="flex items-center gap-4 mb-4">
-          <div className="p-3 bg-violet-600/20 rounded-full">
-            <Volume2 className="w-8 h-8 text-violet-400" />
+          <div className="p-3 bg-red-600/20 rounded-full">
+            <Volume2 className="w-8 h-8 text-red-400" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Enable Audio?</h2>
@@ -22,15 +22,15 @@ const AudioUnlockPrompt: React.FC<AudioUnlockPromptProps> = ({ onUnlock, onSkip 
 
         <div className="space-y-3 mb-6">
           <div className="flex items-start gap-2 text-sm text-gray-300">
-            <span className="text-violet-400">•</span>
+            <span className="text-red-400">•</span>
             <p>Background music to set the mood</p>
           </div>
           <div className="flex items-start gap-2 text-sm text-gray-300">
-            <span className="text-violet-400">•</span>
+            <span className="text-red-400">•</span>
             <p>Sound effects for actions and achievements</p>
           </div>
           <div className="flex items-start gap-2 text-sm text-gray-300">
-            <span className="text-violet-400">•</span>
+            <span className="text-red-400">•</span>
             <p>You can adjust or mute audio anytime in settings</p>
           </div>
         </div>
@@ -38,7 +38,7 @@ const AudioUnlockPrompt: React.FC<AudioUnlockPromptProps> = ({ onUnlock, onSkip 
         <div className="flex gap-3">
           <button
             onClick={onUnlock}
-            className="flex-1 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg font-semibold transition-colors shadow-lg hover:shadow-violet-500/50"
+            className="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors shadow-lg hover:shadow-red-500/50"
           >
             Enable Audio
           </button>

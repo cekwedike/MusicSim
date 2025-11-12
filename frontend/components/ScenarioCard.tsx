@@ -61,7 +61,7 @@ const ChoiceButton: React.FC<{
         <button
             onClick={onClick}
             disabled={disabled}
-            className="w-full text-left p-3 sm:p-4 bg-gray-700 hover:bg-violet-600 border border-gray-600 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] sm:hover:scale-105 focus:outline-none focus:ring-2 focus:ring-violet-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative min-h-[44px] sm:min-h-[56px]"
+            className="w-full text-left p-3 sm:p-4 bg-gray-700 hover:bg-red-600 border border-gray-600 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] sm:hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative min-h-[44px] sm:min-h-[56px]"
         >
             <p className="font-semibold pr-8 sm:pr-8 text-sm sm:text-base leading-relaxed">{choice.text}</p>
             {hint && (
@@ -87,7 +87,7 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, d
 
     return (
         <div className="scenario-card bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-3 sm:p-6 md:p-8 w-full max-w-2xl animate-fade-in">
-            <h2 className="text-base sm:text-2xl md:text-3xl font-bold text-violet-300 mb-2 sm:mb-4 leading-tight">{scenario.title}</h2>
+            <h2 className="text-base sm:text-2xl md:text-3xl font-bold text-red-300 mb-2 sm:mb-4 leading-tight">{scenario.title}</h2>
             {/* Scenario voice-over player (if provided) */}
             {scenario.audioFile && showAudio && (
                 <div className="mb-3 sm:mb-5">

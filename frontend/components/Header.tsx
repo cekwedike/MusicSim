@@ -3,7 +3,7 @@ import type { Difficulty } from '../types';
 import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 import { getAutosaveAge } from '../services/storageService';
 import { Menu } from 'lucide-react';
-// import { ThemeToggle } from './ThemeToggle';
+import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
     artistName?: string;

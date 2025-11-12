@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Music, BookOpen, Trophy, Play, Users, TrendingUp, Award, Headphones, Mic } from 'lucide-react';
 import { LoginModal } from './LoginModal';
+import { ThemeToggle } from './ThemeToggle';
 
 interface LandingPageProps {
   onPlayAsGuest: () => void;
@@ -22,6 +23,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
+      {/* Theme Toggle Button - Fixed position */}
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient orbs */}

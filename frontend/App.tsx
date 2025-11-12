@@ -1422,7 +1422,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
     return (
         <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">Welcome to MusicSim</h2>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary mb-4">Welcome to MusicSim</h2>
             <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
 
             <div className="space-y-4 w-full max-w-2xl">
@@ -1481,13 +1481,13 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
                                     disabled={loadingSlotId === slot.id}
-                                    className="bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-violet-500/10 group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
+                                    className="card hover:border-brand-primary hover:bg-overlay/80 text-left p-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-theme-lg hover:shadow-brand-primary/10 group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                 >
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
-                                        <div className="absolute inset-0 bg-gray-900/80 rounded-xl flex items-center justify-center">
-                                            <div className="flex items-center gap-2 text-violet-300">
-                                                <div className="w-4 h-4 border-2 border-violet-300 border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="absolute inset-0 bg-background/80 rounded-xl flex items-center justify-center">
+                                            <div className="flex items-center gap-2 text-brand-primary">
+                                                <div className="w-4 h-4 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
                                                 <span className="text-sm font-medium">Loading...</span>
                                             </div>
                                         </div>

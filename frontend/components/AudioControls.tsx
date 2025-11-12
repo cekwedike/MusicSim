@@ -99,8 +99,8 @@ const AudioControls: React.FC = () => {
         onClick={handleToggle}
         className={`p-2 rounded-full transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center
           ${isOpen
-            ? 'bg-violet-600 text-white'
-            : 'bg-gray-700/50 text-gray-300 hover:bg-violet-600 hover:text-white'
+            ? 'bg-brand-primary text-white'
+            : 'bg-overlay/50 text-secondary hover:bg-brand-primary hover:text-white'
           }`}
         aria-label="Audio Controls"
         title="Audio Settings"
@@ -110,8 +110,8 @@ const AudioControls: React.FC = () => {
 
       {/* Audio Controls Popup */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-gray-800 border border-violet-500/30 rounded-lg shadow-xl z-[60] p-4 animate-fade-in max-w-[calc(100vw-2rem)]">
-          <h3 className="text-violet-300 font-bold text-lg mb-4 flex items-center gap-2">
+        <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-background border border-brand-primary/30 rounded-lg shadow-xl z-[60] p-4 animate-fade-in max-w-[calc(100vw-2rem)]">
+          <h3 className="text-brand-primary font-bold text-lg mb-4 flex items-center gap-2">
             <MusicNoteIcon />
             Audio Settings
           </h3>
@@ -119,13 +119,13 @@ const AudioControls: React.FC = () => {
           {/* Music Controls */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
-              <label className="text-gray-300 text-sm font-medium">Music</label>
+              <label className="text-primary text-sm font-medium">Music</label>
               <button
                 onClick={handleMusicMuteToggle}
                 className={`p-1.5 rounded transition-colors ${
                   audioState.isMusicMuted
-                    ? 'text-red-400 hover:text-red-300'
-                    : 'text-violet-400 hover:text-violet-300'
+                    ? 'text-status-error hover:text-status-error/80'
+                    : 'text-brand-primary hover:text-brand-primary/80'
                 }`}
                 aria-label={audioState.isMusicMuted ? 'Unmute Music' : 'Mute Music'}
               >
@@ -139,12 +139,12 @@ const AudioControls: React.FC = () => {
               step="0.01"
               value={audioState.musicVolume}
               onChange={handleMusicVolumeChange}
-              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-violet"
+              className="w-full h-2 bg-overlay rounded-lg appearance-none cursor-pointer slider-primary"
               disabled={audioState.isMusicMuted}
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-disabled mt-1">
               <span>0%</span>
-              <span className="text-violet-400 font-medium">
+              <span className="text-brand-primary font-medium">
                 {Math.round(audioState.musicVolume * 100)}%
               </span>
               <span>100%</span>
@@ -154,13 +154,13 @@ const AudioControls: React.FC = () => {
           {/* SFX Controls */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <label className="text-gray-300 text-sm font-medium">Sound Effects</label>
+              <label className="text-primary text-sm font-medium">Sound Effects</label>
               <button
                 onClick={handleSfxMuteToggle}
                 className={`p-1.5 rounded transition-colors ${
                   audioState.isSfxMuted
-                    ? 'text-red-400 hover:text-red-300'
-                    : 'text-violet-400 hover:text-violet-300'
+                    ? 'text-status-error hover:text-status-error/80'
+                    : 'text-brand-primary hover:text-brand-primary/80'
                 }`}
                 aria-label={audioState.isSfxMuted ? 'Unmute SFX' : 'Mute SFX'}
               >
@@ -174,12 +174,12 @@ const AudioControls: React.FC = () => {
               step="0.01"
               value={audioState.sfxVolume}
               onChange={handleSfxVolumeChange}
-              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-violet"
+              className="w-full h-2 bg-overlay rounded-lg appearance-none cursor-pointer slider-primary"
               disabled={audioState.isSfxMuted}
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-disabled mt-1">
               <span>0%</span>
-              <span className="text-violet-400 font-medium">
+              <span className="text-brand-primary font-medium">
                 {Math.round(audioState.sfxVolume * 100)}%
               </span>
               <span>100%</span>
@@ -189,7 +189,7 @@ const AudioControls: React.FC = () => {
           {/* Test Sound Button */}
           <button
             onClick={() => playSound('buttonClick')}
-            className="w-full mt-2 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors"
+            className="btn-primary w-full mt-2 py-2 text-sm font-medium"
             disabled={audioState.isSfxMuted}
           >
             Test Sound
@@ -197,9 +197,9 @@ const AudioControls: React.FC = () => {
 
           {/* Current Track Info */}
           {audioState.currentTrack && (
-            <div className="mt-4 pt-4 border-t border-gray-700">
-              <p className="text-xs text-gray-400">
-                Now Playing: <span className="text-violet-400 font-medium capitalize">{audioState.currentTrack}</span>
+            <div className="mt-4 pt-4 border-t border-input">
+              <p className="text-xs text-secondary">
+                Now Playing: <span className="text-brand-primary font-medium capitalize">{audioState.currentTrack}</span>
               </p>
             </div>
           )}
@@ -207,35 +207,35 @@ const AudioControls: React.FC = () => {
       )}
 
       <style>{`
-        .slider-violet::-webkit-slider-thumb {
+        .slider-primary::-webkit-slider-thumb {
           appearance: none;
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: rgb(139, 92, 246);
+          background: var(--color-brand-primary);
           cursor: pointer;
         }
 
-        .slider-violet::-moz-range-thumb {
+        .slider-primary::-moz-range-thumb {
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: rgb(139, 92, 246);
+          background: var(--color-brand-primary);
           cursor: pointer;
           border: none;
         }
 
-        .slider-violet:disabled {
+        .slider-primary:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
 
-        .slider-violet::-webkit-slider-track {
+        .slider-primary::-webkit-slider-track {
           background: linear-gradient(to right,
-            rgb(139, 92, 246) 0%,
-            rgb(139, 92, 246) var(--value, 50)%,
-            rgb(55, 65, 81) var(--value, 50)%,
-            rgb(55, 65, 81) 100%
+            var(--color-brand-primary) 0%,
+            var(--color-brand-primary) var(--value, 50)%,
+            var(--color-overlay) var(--value, 50)%,
+            var(--color-overlay) 100%
           );
         }
       `}</style>

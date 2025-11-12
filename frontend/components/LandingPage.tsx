@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Music, BookOpen, Trophy, Play, Users, TrendingUp, Award, Headphones, Mic } from 'lucide-react';
 import { LoginModal } from './LoginModal';
+import { ThemeToggle } from './ThemeToggle';
 
 interface LandingPageProps {
   onPlayAsGuest: () => void;
@@ -21,16 +22,21 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black relative overflow-hidden">
-      {/* Animated background elements */}
+    <div className="min-h-screen bg-primary relative overflow-hidden">
+      {/* Theme toggle in top right */}
+      <div className="absolute top-6 right-6 z-50">
+        <ThemeToggle size="md" variant="button" showLabel={false} />
+      </div>
+
+      {/* Animated background elements - updated for new color system */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient orbs */}
-        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-violet-500 to-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-80 h-80 bg-gradient-to-r from-fuchsia-500 to-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-brand-primary to-brand-secondary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-80 h-80 bg-gradient-to-r from-brand-highlight to-brand-accent rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-gradient-to-r from-status-wellbeing to-status-hype rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
         {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,107,53,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,107,53,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
       </div>
 
       {/* Hero Section */}
@@ -40,23 +46,23 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           {/* Hero */}
           <div className="pt-20 pb-16 text-center lg:pt-32">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-4 py-2 mb-8">
-              <Headphones className="w-4 h-4 text-violet-400" />
-              <span className="text-violet-300 text-sm font-medium">Interactive Music Business Learning</span>
+            <div className="inline-flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/20 rounded-full px-4 py-2 mb-8">
+              <Headphones className="w-4 h-4 text-brand-primary" />
+              <span className="text-brand-primary text-sm font-medium">Interactive Music Business Learning</span>
             </div>
 
             {/* Main headline */}
             <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black mb-6">
-              <span className="bg-gradient-to-r from-white via-violet-200 to-fuchsia-200 bg-clip-text text-transparent drop-shadow-lg">
+              <span className="text-gradient drop-shadow-lg">
                 MusicSim
               </span>
             </h1>
 
-            <p className="text-2xl sm:text-3xl lg:text-4xl text-gray-300 font-bold mb-4 tracking-wide">
+            <p className="text-2xl sm:text-3xl lg:text-4xl text-secondary font-bold mb-4 tracking-wide">
               Master the Music Business
             </p>
 
-            <p className="text-lg sm:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12">
+            <p className="text-lg sm:text-xl text-muted max-w-3xl mx-auto leading-relaxed mb-12">
               Navigate the complex world of music industry through immersive scenarios. Build your career,
               make strategic decisions, and learn what it takes to succeed in today's music landscape.
             </p>
@@ -65,7 +71,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg mx-auto mb-16">
               <button
                 onClick={handleShowRegister}
-                className="group w-full sm:w-auto bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+                className="btn-primary group w-full sm:w-auto hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
               >
                 <Play className="w-5 h-5" />
                 Start Your Journey
@@ -73,7 +79,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
               <button
                 onClick={handleShowLogin}
-                className="group w-full sm:w-auto bg-gray-800/80 backdrop-blur-sm border-2 border-violet-400/50 hover:border-violet-400 text-violet-200 hover:text-white font-bold py-4 px-8 rounded-xl hover:bg-gray-700/80 transition-all duration-300 flex items-center justify-center gap-2"
+                className="btn-secondary group w-full sm:w-auto text-brand-primary hover:text-primary transition-all duration-300 flex items-center justify-center gap-2"
               >
                 <Users className="w-5 h-5" />
                 Login
@@ -84,7 +90,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <div className="mb-20">
               <button
                 onClick={onPlayAsGuest}
-                className="text-gray-400 hover:text-violet-300 font-medium underline-offset-4 hover:underline transition-colors"
+                className="text-muted hover:text-brand-primary font-medium underline-offset-4 hover:underline transition-colors"
               >
                 Try as Guest →
               </button>
@@ -94,23 +100,23 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {/* Feature 1 */}
-            <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-violet-500/50 rounded-2xl p-8 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl shadow-lg group-hover:shadow-violet-500/25 transition-all duration-300">
+            <div className="group card hover:border-brand-primary/50 hover:bg-overlay/50 transition-all duration-300 hover:scale-105">
+              <div className="mb-6 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-primary to-brand-secondary rounded-2xl shadow-theme-lg group-hover:shadow-brand-primary/25 transition-all duration-300">
                 <Music className="w-8 h-8 text-white" strokeWidth={2} />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Realistic Industry Simulation</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <h3 className="text-2xl font-bold text-primary mb-4">Realistic Industry Simulation</h3>
+              <p className="text-secondary leading-relaxed">
                 Experience authentic music industry challenges with scenarios based on real-world situations, market dynamics, and industry relationships.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-fuchsia-500/50 rounded-2xl p-8 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-fuchsia-500 to-pink-600 rounded-2xl shadow-lg group-hover:shadow-fuchsia-500/25 transition-all duration-300">
+            <div className="group card hover:border-brand-primary/50 hover:bg-overlay/50 transition-all duration-300 hover:scale-105">
+              <div className="mb-6 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-status-fame to-status-fame/80 rounded-2xl shadow-theme-lg group-hover:shadow-status-fame/25 transition-all duration-300">
                 <TrendingUp className="w-8 h-8 text-white" strokeWidth={2} />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Strategic Decision Making</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <h3 className="text-2xl font-bold text-primary mb-4">Strategic Decision Making</h3>
+              <p className="text-secondary leading-relaxed">
                 Learn to balance artistry with business acumen. Every choice impacts your career trajectory, finances, and industry relationships.
               </p>
             </div>
@@ -140,27 +146,27 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-violet-500/20 rounded-xl mb-4">
-                  <BookOpen className="w-6 h-6 text-violet-400" />
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-primary/20 rounded-xl mb-4">
+                  <BookOpen className="w-6 h-6 text-brand-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Industry Education</h3>
-                <p className="text-gray-400">Learn real business concepts through gameplay</p>
+                <h3 className="text-lg font-semibold text-primary mb-2">Industry Education</h3>
+                <p className="text-secondary">Learn real business concepts through gameplay</p>
               </div>
 
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-fuchsia-500/20 rounded-xl mb-4">
-                  <Mic className="w-6 h-6 text-fuchsia-400" />
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-status-fame/20 rounded-xl mb-4">
+                  <Mic className="w-6 h-6 text-status-fame" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Career Building</h3>
-                <p className="text-gray-400">Start from zero and build your empire</p>
+                <h3 className="text-lg font-semibold text-primary mb-2">Career Building</h3>
+                <p className="text-secondary">Start from zero and build your empire</p>
               </div>
 
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-cyan-500/20 rounded-xl mb-4">
-                  <Trophy className="w-6 h-6 text-cyan-400" />
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-status-wellbeing/20 rounded-xl mb-4">
+                  <Trophy className="w-6 h-6 text-status-wellbeing" />
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Achievement System</h3>
-                <p className="text-gray-400">Track progress and unlock milestones</p>
+                <h3 className="text-lg font-semibold text-primary mb-2">Achievement System</h3>
+                <p className="text-secondary">Track progress and unlock milestones</p>
               </div>
             </div>
           </div>

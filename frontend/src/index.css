@@ -224,7 +224,7 @@ html.light .hover\:text-white:hover {
 }
 
 html.light .hover\:text-gray-300:hover {
-  color: var(--light-text-primary) !important;
+  color: #1f2937 !important;
 }
 
 /* ========================================
@@ -458,12 +458,14 @@ html.light .bg-gradient-to-r {
 
 /* Additional component overrides */
 html.light .bg-gray-900\/50 {
-  background-color: rgba(249, 250, 251, 0.8) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 html.light .bg-gray-800\/60 {
-  background-color: rgba(255, 255, 255, 0.9) !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
   border-color: var(--light-border-primary) !important;
+  color: #1f2937 !important;
 }
 
 /* Sky/Blue colors for staff cards */
@@ -488,16 +490,20 @@ html.light .border-sky-500\/20 {
 html.light .bg-gray-800\/95 {
   background-color: rgba(255, 255, 255, 0.98) !important;
   border-color: var(--light-border-secondary) !important;
+  color: #1f2937 !important;
 }
 
 /* Buttons and interactive elements */
 html.light button:not(.bg-red-600):not([class*="bg-"]) {
   background-color: var(--light-bg-tertiary) !important;
-  color: var(--light-text-primary) !important;
+  color: #1f2937 !important;
+  border: 1px solid var(--light-border-secondary) !important;
 }
 
 html.light button:not(.bg-red-600):not([class*="bg-"]):hover {
   background-color: var(--light-bg-quaternary) !important;
+  border-color: var(--light-border-primary) !important;
+  color: #111827 !important;
 }
 
 /* Ensure all text is readable */
@@ -552,13 +558,13 @@ html.light .text-red-300 {
 }
 
 html.light .text-gray-300 {
-  color: #374151 !important;
+  color: #1f2937 !important;
   font-weight: 600 !important;
 }
 
 html.light .text-gray-400 {
-  color: #6b7280 !important;
-  font-weight: 500 !important;
+  color: #374151 !important;
+  font-weight: 600 !important;
 }
 
 html.light .text-gray-500 {
@@ -603,7 +609,7 @@ html.light .text-red-200 {
 }
 
 html.light .hover\:text-white:hover {
-  color: #b91c1c !important;
+  color: #1f2937 !important;
 }
 
 /* Guest Button Fix */
@@ -1221,11 +1227,13 @@ html.light button:focus {
 
 /* Improve Visual Hierarchy */
 html.light .text-sm {
-  color: #6b7280 !important;
+  color: #374151 !important;
+  font-weight: 600 !important;
 }
 
 html.light .text-xs {
-  color: #9ca3af !important;
+  color: #4b5563 !important;
+  font-weight: 600 !important;
 }
 
 /* ========================================
@@ -1234,13 +1242,13 @@ html.light .text-xs {
 
 /* All Gray Text Colors Enhanced for Light Mode */
 html.light .text-gray-300 {
-  color: #111827 !important;  /* Nearly black for better readability */
+  color: #1f2937 !important;  /* Dark slate for better readability */
   font-weight: 600 !important;
 }
 
 html.light .text-gray-400 {
   color: #374151 !important;  /* Dark gray for secondary text */
-  font-weight: 500 !important;
+  font-weight: 600 !important;
 }
 
 html.light .text-gray-500 {
@@ -1300,17 +1308,17 @@ html.light .text-xs.text-gray-500 {
 
 html.light .text-xs.text-gray-400 {
   color: #374151 !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
 }
 
 html.light .text-sm.text-gray-400 {
   color: #374151 !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
 }
 
 html.light .text-sm.text-gray-500 {
   color: #4b5563 !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
 }
 
 /* Footer and Loading Text */

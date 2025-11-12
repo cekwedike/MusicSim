@@ -87,6 +87,6 @@ console.log('Features:');
 console.log('- Musical treble clef and notes');
 console.log('- Sound wave visualization');
 console.log('- Business growth bar charts');
-console.log('- Purple gradient color scheme');
+console.log('- Dark red/maroon gradient color scheme');
 console.log('- Sparkle effects');
 console.log('- Optimized for all screen sizes');

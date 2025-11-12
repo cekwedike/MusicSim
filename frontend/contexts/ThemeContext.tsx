@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { darkTheme, lightTheme, generateCSSVariables, type ThemeMode, type Theme } from '../constants/colors';
+
+type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
-  theme: ThemeMode;
-  themeColors: Theme;
+  theme: Theme;
   toggleTheme: () => void;
-  setTheme: (theme: ThemeMode) => void;
+  setTheme: (theme: Theme) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -23,61 +23,30 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<ThemeMode>('dark');
+  const [theme, setThemeState] = useState<Theme>('dark');
 
-  // Apply CSS variables to document root
-  const applyCSSVariables = (themeColors: Theme) => {
-    const cssVariables = generateCSSVariables(themeColors);
-    
-    // Create or update style element
-    let styleElement = document.getElementById('theme-variables');
-    if (!styleElement) {
-      styleElement = document.createElement('style');
-      styleElement.id = 'theme-variables';
-      document.head.appendChild(styleElement);
-    }
-    
-    styleElement.textContent = `:root {\n${cssVariables}\n}`;
-  };
-
-  // Load theme from localStorage and apply on mount
+  // Load theme from localStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('musicsim_theme') as ThemeMode | null;
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-    
-    setThemeState(initialTheme);
-    document.documentElement.classList.toggle('light', initialTheme === 'light');
-    document.documentElement.classList.toggle('dark', initialTheme === 'dark');
-    
-    // Apply CSS variables
-    const themeColors = initialTheme === 'dark' ? darkTheme : lightTheme;
-    applyCSSVariables(themeColors);
+    const savedTheme = localStorage.getItem('musicsim_theme') as Theme | null;
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      setThemeState(savedTheme);
+      document.documentElement.classList.toggle('light', savedTheme === 'light');
+    }
   }, []);
 
-  const setTheme = (newTheme: ThemeMode) => {
+  const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem('musicsim_theme', newTheme);
-    
-    // Update document classes
     document.documentElement.classList.toggle('light', newTheme === 'light');
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    
-    // Apply new CSS variables
-    const themeColors = newTheme === 'dark' ? darkTheme : lightTheme;
-    applyCSSVariables(themeColors);
   };
 
   const toggleTheme = () => {
-    const newTheme: ThemeMode = theme === 'dark' ? 'light' : 'dark';
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
   };
 
-  const themeColors = theme === 'dark' ? darkTheme : lightTheme;
-
   const value: ThemeContextType = {
     theme,
-    themeColors,
     toggleTheme,
     setTheme,
   };

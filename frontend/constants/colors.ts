@@ -65,7 +65,7 @@ export const darkTheme = {
     fame: '#F59E0B',          // Golden for fame
     wellbeing: '#3B82F6',     // Blue for wellbeing
     career: '#E14ECA',        // Pink for career progress
-    hype: '#8B5CF6',          // Purple for hype
+    hype: '#8B2635',          // Dark red/maroon for hype
   },
 };
 
@@ -129,7 +129,7 @@ export const lightTheme = {
     fame: '#D97706',          // Darker golden
     wellbeing: '#2563EB',     // Darker blue
     career: '#C026D3',        // Darker pink
-    hype: '#7C3AED',          // Darker purple
+    hype: '#721C24',          // Darker red/maroon
   },
 };
 

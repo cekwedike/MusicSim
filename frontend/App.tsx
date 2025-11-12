@@ -1422,7 +1422,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
     return (
         <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary mb-4">Welcome to MusicSim</h2>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500 mb-4">Welcome to MusicSim</h2>
             <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
 
             <div className="space-y-4 w-full max-w-2xl">
@@ -1481,13 +1481,13 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
                                     disabled={loadingSlotId === slot.id}
-                                    className="card hover:border-brand-primary hover:bg-overlay/80 text-left p-4 transition-all duration-200 hover:scale-[1.02] hover:shadow-theme-lg hover:shadow-brand-primary/10 group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
+                                    className="bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-red-500/10 group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                 >
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
-                                        <div className="absolute inset-0 bg-background/80 rounded-xl flex items-center justify-center">
-                                            <div className="flex items-center gap-2 text-brand-primary">
-                                                <div className="w-4 h-4 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="absolute inset-0 bg-gray-900/80 rounded-xl flex items-center justify-center">
+                                            <div className="flex items-center gap-2 text-red-300">
+                                                <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
                                                 <span className="text-sm font-medium">Loading...</span>
                                             </div>
                                         </div>
@@ -1497,25 +1497,25 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         {/* Header with artist name and genre */}
                                         <div className="flex items-center justify-between">
                                             <div className="min-w-0 flex-1">
-                                                <div className="font-bold text-violet-300 truncate group-hover:text-violet-200 transition-colors">
+                                                <div className="font-bold text-red-300 truncate group-hover:text-red-200 transition-colors">
                                                     {slot.artistName}
                                                 </div>
                                                 <div className="text-sm text-gray-400 capitalize">
                                                     {getGenreLabel(slot.genre)}
                                                 </div>
                                             </div>
-                                            <div className="flex-shrink-0 w-2 h-2 bg-violet-500 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                                            <div className="flex-shrink-0 w-2 h-2 bg-red-700 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
                                         </div>
                                         
                                         {/* Progress bar */}
                                         <div className="space-y-1">
                                             <div className="flex justify-between text-xs">
                                                 <span className="text-gray-500">Career Progress</span>
-                                                <span className="text-violet-300 font-medium">{slot.careerProgress}%</span>
+                                                <span className="text-red-300 font-medium">{slot.careerProgress}%</span>
                                             </div>
                                             <div className="w-full bg-gray-700 rounded-full h-1.5">
                                                 <div 
-                                                    className="bg-gradient-to-r from-violet-500 to-fuchsia-500 h-1.5 rounded-full transition-all duration-300"
+                                                    className="bg-gradient-to-r from-red-700 to-rose-500 h-1.5 rounded-full transition-all duration-300"
                                                     style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
                                                 ></div>
                                             </div>
@@ -1559,8 +1559,8 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
                                         <div className="absolute inset-0 bg-gray-900/80 rounded-xl flex items-center justify-center">
-                                            <div className="flex items-center gap-2 text-violet-300">
-                                                <div className="w-4 h-4 border-2 border-violet-300 border-t-transparent rounded-full animate-spin"></div>
+                                            <div className="flex items-center gap-2 text-red-300">
+                                                <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
                                                 <span className="text-sm font-medium">Loading...</span>
                                             </div>
                                         </div>
@@ -1570,7 +1570,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         {/* Header */}
                                         <div className="flex justify-between items-start">
                                             <div className="min-w-0 flex-1">
-                                                <div className="font-bold text-violet-300 group-hover:text-violet-200 transition-colors">
+                                                <div className="font-bold text-red-300 group-hover:text-red-200 transition-colors">
                                                     {slot.artistName}
                                                 </div>
                                                 <div className="text-sm text-gray-400 capitalize">
@@ -1587,11 +1587,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         <div className="space-y-1">
                                             <div className="flex justify-between text-xs">
                                                 <span className="text-gray-500">Career Progress</span>
-                                                <span className="text-violet-300 font-medium">{slot.careerProgress}%</span>
+                                                <span className="text-red-300 font-medium">{slot.careerProgress}%</span>
                                             </div>
                                             <div className="w-full bg-gray-700 rounded-full h-2">
                                                 <div 
-                                                    className="bg-gradient-to-r from-violet-500 to-fuchsia-500 h-2 rounded-full transition-all duration-300"
+                                                    className="bg-gradient-to-r from-red-700 to-rose-500 h-2 rounded-full transition-all duration-300"
                                                     style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
                                                 ></div>
                                             </div>
@@ -1609,7 +1609,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                                     <span className="text-yellow-400 font-semibold">{Math.round(slot.stats.fame)}</span>
                                                 </div>
                                             </div>
-                                            <div className="text-violet-400 opacity-60 group-hover:opacity-100 transition-opacity">
+                                            <div className="text-red-400 opacity-60 group-hover:opacity-100 transition-opacity">
                                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                 </svg>
@@ -1624,7 +1624,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
                 <button
                     onClick={onStart}
-                    className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300"
+                    className="w-full bg-gradient-to-r from-red-700 to-rose-500 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300"
                 >
                     Start New Career
                 </button>
@@ -1659,11 +1659,11 @@ const GameScreen: React.FC<{ onStart: () => void, title: string, message: string
                 </div>
             )}
 
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-500 mb-4">{title}</h2>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-rose-500 mb-4">{title}</h2>
             <p className="text-gray-300 max-w-md mb-8">{message}</p>
             <button
                 onClick={onStart}
-                className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300"
+                className="bg-gradient-to-r from-red-700 to-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300"
             >
                 {buttonText}
             </button>
@@ -2579,7 +2579,7 @@ const AuthenticatedApp: React.FC = () => {
                 <div className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
                     <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <h1 className="text-xl font-bold text-violet-300">MusicSim</h1>
+                            <h1 className="text-xl font-bold text-red-300">MusicSim</h1>
                             {guestMode && (
                                 <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded border border-yellow-500/30">
                                     Guest Mode

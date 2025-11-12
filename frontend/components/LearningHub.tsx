@@ -48,9 +48,9 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
       case 'revenue':
         return 'from-green-500 to-teal-600';
       case 'rights':
-        return 'from-brand-primary to-brand-secondary';
+        return 'from-purple-500 to-indigo-600';
       case 'marketing':
-        return 'from-brand-secondary to-status-fame';
+        return 'from-pink-500 to-fuchsia-600';
       case 'legal':
         return 'from-red-500 to-orange-600';
       default:
@@ -148,11 +148,11 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="bg-gradient-to-br from-background via-background to-overlay rounded-xl sm:rounded-2xl w-full max-w-7xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-brand-primary/30 shadow-2xl shadow-brand-primary/20 flex flex-col">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4 animate-fadeIn">
+      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-xl sm:rounded-2xl w-full max-w-7xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20 flex flex-col">
 
         {/* Header Section */}
-        <div className="relative bg-gradient-to-r from-brand-primary via-brand-primary to-brand-secondary p-4 sm:p-5 md:p-6 lg:p-8 flex-shrink-0">
+        <div className="relative bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 p-4 sm:p-5 md:p-6 lg:p-8 flex-shrink-0">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start gap-3 sm:gap-4 mb-4 sm:mb-5 md:mb-6">

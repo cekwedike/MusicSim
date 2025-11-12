@@ -50,26 +50,26 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
         {isMobileCollapsed ? (
           <button
             onClick={() => setIsMobileCollapsed(false)}
-            className="w-full flex items-center justify-between p-3 hover:bg-overlay/50 transition-colors rounded-lg"
+            className="w-full flex items-center justify-between p-3 hover:bg-gray-700/50 transition-colors rounded-lg"
           >
             <div className="flex items-center gap-2">
-              <History className="w-4 h-4 text-brand-primary" />
-              <span className="text-sm font-bold text-primary">History</span>
-              <span className="text-xs text-secondary">({logs.length})</span>
+              <History className="w-4 h-4 text-violet-400" />
+              <span className="text-sm font-bold text-white">History</span>
+              <span className="text-xs text-gray-400">({logs.length})</span>
             </div>
-            <ChevronDown className="w-4 h-4 text-brand-primary" />
+            <ChevronDown className="w-4 h-4 text-violet-400" />
           </button>
         ) : (
           <div className="p-2 sm:p-3">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <History className="w-4 h-4 text-brand-primary" />
-                <h3 className="text-sm font-bold text-primary">History</h3>
-                <span className="text-xs text-secondary">({logs.length})</span>
+                <History className="w-4 h-4 text-violet-400" />
+                <h3 className="text-sm font-bold text-white">History</h3>
+                <span className="text-xs text-gray-400">({logs.length})</span>
               </div>
               <button
                 onClick={() => setIsMobileCollapsed(true)}
-                className="flex items-center gap-1 text-brand-primary hover:text-brand-primary/80 text-xs font-medium transition-colors"
+                className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-xs font-medium transition-colors"
               >
                 <span>Hide</span>
                 <ChevronUp className="w-4 h-4" />
@@ -78,7 +78,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
 
             <div className={`space-y-2 overflow-y-auto ${isExpanded ? 'max-h-48 sm:max-h-64 md:max-h-96' : 'max-h-32 sm:max-h-48'}`}>
               {sortedLogs.length === 0 ? (
-                <div className="text-disabled text-center py-6 text-sm">
+                <div className="text-gray-500 text-center py-6 text-sm">
                   No history yet. Start making decisions!
                 </div>
               ) : (
@@ -102,7 +102,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
               <div className="mt-2 text-center">
                 <button
                   onClick={() => setIsExpanded(true)}
-                  className="text-brand-primary hover:text-brand-primary/80 text-xs font-medium transition-colors"
+                  className="text-violet-400 hover:text-violet-300 text-xs font-medium transition-colors"
                 >
                   + {logs.length - showCount} more events
                 </button>
@@ -116,15 +116,15 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
       <div className="hidden lg:block p-2 sm:p-3 md:p-4">
       <div className="flex items-center justify-between mb-3 md:mb-4">
         <div className="flex items-center gap-1 sm:gap-2">
-          <History className="w-4 h-4 sm:w-5 sm:h-5 text-brand-primary" />
-          <h3 className="text-base sm:text-lg font-bold text-primary">History</h3>
-          <span className="text-xs sm:text-sm text-secondary">({logs.length})</span>
+          <History className="w-4 h-4 sm:w-5 sm:h-5 text-violet-400" />
+          <h3 className="text-base sm:text-lg font-bold text-white">History</h3>
+          <span className="text-xs sm:text-sm text-gray-400">({logs.length})</span>
         </div>
 
         {logs.length > showCount && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-1 text-brand-primary hover:text-brand-primary/80 text-xs sm:text-sm font-medium transition-colors"
+            className="flex items-center gap-1 text-violet-400 hover:text-violet-300 text-xs sm:text-sm font-medium transition-colors"
           >
             {isExpanded ? (
               <>
@@ -175,7 +175,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
         <div className="mt-2 sm:mt-3 text-center">
           <button
             onClick={() => setIsExpanded(true)}
-            className="text-brand-primary hover:text-brand-primary/80 text-xs sm:text-sm font-medium transition-colors"
+            className="text-violet-400 hover:text-violet-300 text-xs sm:text-sm font-medium transition-colors"
           >
             + {logs.length - showCount} more events
           </button>

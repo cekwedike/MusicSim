@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useEffect, useState, useRef } from 'react';
+import React, { useReducer, useCallback, useEffect, useState, useRef, Suspense, lazy } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { AudioProvider } from './contexts/AudioContext';
@@ -24,11 +24,13 @@ import ScenarioCard from './components/ScenarioCard';
 import OutcomeModal from './components/OutcomeModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
-import LearningHub from './components/LearningHub';
 import AudioUnlockPrompt from './components/AudioUnlockPrompt';
-import LearningPanel from './components/LearningPanel';
-import ModuleViewer from './components/ModuleViewer';
-import { ContractViewer } from './components/ContractViewer';
+
+// Lazy load heavy components that aren't always needed
+const LearningHub = lazy(() => import('./components/LearningHub'));
+const LearningPanel = lazy(() => import('./components/LearningPanel'));
+const ModuleViewer = lazy(() => import('./components/ModuleViewer'));
+const ContractViewer = lazy(() => import('./components/ContractViewer'));
 import ManagementPanel from './components/ManagementPanel';
 import StatisticsPanel from './components/StatisticsPanel';
 import SidebarAudioSettings from './components/SidebarAudioSettings';
@@ -2365,11 +2367,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     )}
 
                     {activeSidebarView === 'learning' && (
-                        <LearningPanel
-                            onOpenModule={handleOpenModule}
-                            playerKnowledge={state.playerKnowledge}
-                            gameState={state}
-                        />
+                        <Suspense fallback={<Loader text="Loading learning panel..." />}>
+                            <LearningPanel
+                                onOpenModule={handleOpenModule}
+                                playerKnowledge={state.playerKnowledge}
+                                gameState={state}
+                            />
+                        </Suspense>
                     )}
 
                     {activeSidebarView === 'statistics' && (
@@ -2394,20 +2398,28 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             </div>
 
             {lastOutcome && <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />}
-            {modal === 'learning' && <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} gameState={state} />}
+            {modal === 'learning' && (
+                <Suspense fallback={<Loader text="Loading learning hub..." />}>
+                    <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} gameState={state} />
+                </Suspense>
+            )}
             {modal === 'moduleViewer' && state.currentModule && (
-                <ModuleViewer 
-                    module={state.currentModule} 
-                    onComplete={handleCompleteModule}
-                    onClose={handleCloseModule}
-                />
+                <Suspense fallback={<Loader text="Loading module..." />}>
+                    <ModuleViewer 
+                        module={state.currentModule} 
+                        onComplete={handleCompleteModule}
+                        onClose={handleCloseModule}
+                    />
+                </Suspense>
             )}
             {modal === 'contract' && state.currentLabelOffer && (
-                <ContractViewer 
-                    label={state.currentLabelOffer}
-                    onSign={handleSignContract}
-                    onDecline={handleDeclineContract}
-                />
+                <Suspense fallback={<Loader text="Loading contract..." />}>
+                    <ContractViewer 
+                        label={state.currentLabelOffer}
+                        onSign={handleSignContract}
+                        onDecline={handleDeclineContract}
+                    />
+                </Suspense>
             )}
             {/* Management, Save/Load and Statistics are now available in the Sidebar panels. */}
 

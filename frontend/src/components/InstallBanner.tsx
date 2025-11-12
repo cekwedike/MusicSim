@@ -152,19 +152,19 @@ const InstallBanner: React.FC = () => {
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
       `}</style>
 
-      <div className="musicsim-install-slide flex items-center justify-between bg-[#1f2937] border border-gray-700 shadow-lg rounded-xl p-3 md:p-4">
+      <div className="musicsim-install-slide flex items-center justify-between bg-gray-800 dark:bg-gray-800 light:bg-white light:border-gray-300 border border-gray-700 shadow-lg rounded-xl p-3 md:p-4">
         <div className="flex items-center gap-3 md:gap-4">
           <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-red-600 rounded-lg flex items-center justify-center">
             <Download className="w-6 h-6 text-white" />
           </div>
 
           <div className="hidden sm:block">
-            <div className="text-white font-semibold text-sm md:text-base">Install MusicSim</div>
-            <div className="text-gray-300 text-xs md:text-sm">Take Your Music Journey With You. Play Anytime, Anywhere.</div>
+            <div className="text-white dark:text-white light:text-gray-900 font-semibold text-sm md:text-base">Install MusicSim</div>
+            <div className="text-gray-300 dark:text-gray-300 light:text-gray-600 text-xs md:text-sm">Take Your Music Journey With You. Play Anytime, Anywhere.</div>
           </div>
 
           <div className="block sm:hidden">
-            <div className="text-white font-semibold text-sm">Install MusicSim</div>
+            <div className="text-white dark:text-white light:text-gray-900 font-semibold text-sm">Install MusicSim</div>
           </div>
         </div>
 
@@ -180,7 +180,7 @@ const InstallBanner: React.FC = () => {
 
           <button
             onClick={handleClose}
-            className="ml-2 p-2 rounded-full text-gray-300 hover:text-white hover:bg-gray-700"
+            className="ml-2 p-2 rounded-full text-gray-300 dark:text-gray-300 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 light:hover:bg-gray-100"
             aria-label="Close install banner"
           >
             <X className="w-4 h-4" />

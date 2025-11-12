@@ -23,11 +23,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
-      {/* Theme Toggle Button - Fixed position */}
-      <div className="absolute top-4 right-4 z-20">
-        <ThemeToggle />
-      </div>
-
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient orbs */}
@@ -68,7 +63,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg mx-auto mb-16">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-lg mx-auto mb-8">
               <button
                 onClick={handleShowRegister}
                 className="group w-full sm:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
@@ -86,13 +81,18 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               </button>
             </div>
 
+            {/* Theme Toggle */}
+            <div className="flex justify-center mb-6">
+              <ThemeToggle />
+            </div>
+
             {/* Guest play option */}
             <div className="mb-20">
               <button
                 onClick={onPlayAsGuest}
-                className="text-gray-400 hover:text-red-300 font-medium underline-offset-4 hover:underline transition-colors"
+                className="bg-gray-800/60 backdrop-blur-sm border border-gray-600/50 hover:border-gray-500 text-gray-300 hover:text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:bg-gray-700/60 flex items-center justify-center gap-2 mx-auto"
               >
-                Try as Guest →
+                <span>Try as Guest</span>
               </button>
             </div>
           </div>

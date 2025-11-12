@@ -1554,7 +1554,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
                                     disabled={loadingSlotId === slot.id}
-                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-violet-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
+                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                 >
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
@@ -1659,7 +1659,7 @@ const GameScreen: React.FC<{ onStart: () => void, title: string, message: string
                 </div>
             )}
 
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-rose-500 mb-4">{title}</h2>
+            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500 mb-4">{title}</h2>
             <p className="text-gray-300 max-w-md mb-8">{message}</p>
             <button
                 onClick={onStart}

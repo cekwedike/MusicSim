@@ -325,7 +325,7 @@ html.light .bg-blue-600\/20 {
   background-color: rgba(59, 130, 246, 0.1) !important;
 }
 
-html.light .bg-maroon-600\/20 {
+html.light .bg-red-600\/20 {
   background-color: rgba(168, 85, 95, 0.1) !important;
 }
 
@@ -355,13 +355,13 @@ html.light .border-maroon-600\/50 {
 }
 
 /* Maroon accent buttons - keep vibrant */
-html.light .bg-maroon-600 {
+html.light .bg-red-600 {
   background-color: var(--light-maroon-600) !important;
   color: white !important;
   box-shadow: var(--light-shadow-md);
 }
 
-html.light .bg-maroon-600:hover,
+html.light .bg-red-600:hover,
 html.light .hover\:bg-maroon-700:hover {
   background-color: var(--light-maroon-700) !important;
   box-shadow: var(--light-shadow-lg);
@@ -491,12 +491,12 @@ html.light .bg-gray-800\/95 {
 }
 
 /* Buttons and interactive elements */
-html.light button:not(.bg-maroon-600):not([class*="bg-"]) {
+html.light button:not(.bg-red-600):not([class*="bg-"]) {
   background-color: var(--light-bg-tertiary) !important;
   color: var(--light-text-primary) !important;
 }
 
-html.light button:not(.bg-maroon-600):not([class*="bg-"]):hover {
+html.light button:not(.bg-red-600):not([class*="bg-"]):hover {
   background-color: var(--light-bg-quaternary) !important;
 }
 

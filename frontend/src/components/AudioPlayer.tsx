@@ -175,7 +175,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <button
         onClick={togglePlay}
         disabled={isMuted}
-        className="flex items-center gap-2 px-3 py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors shadow-md hover:shadow-lg"
+        className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors shadow-md hover:shadow-lg"
         aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
       >
         {isPlaying ? (
@@ -204,10 +204,10 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       {/* Playing animation */}
       {isPlaying && (
         <div className="flex items-center gap-1">
-          <span className="w-1 h-3 bg-violet-500 rounded-full animate-pulse"></span>
-          <span className="w-1 h-4 bg-violet-500 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></span>
-          <span className="w-1 h-3 bg-violet-500 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></span>
-          <span className="w-1 h-4 bg-violet-500 rounded-full animate-pulse" style={{ animationDelay: '450ms' }}></span>
+          <span className="w-1 h-3 bg-red-500 rounded-full animate-pulse"></span>
+          <span className="w-1 h-4 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '150ms' }}></span>
+          <span className="w-1 h-3 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '300ms' }}></span>
+          <span className="w-1 h-4 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '450ms' }}></span>
         </div>
       )}
 

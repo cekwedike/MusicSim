@@ -48,9 +48,9 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
       case 'revenue':
         return 'from-green-500 to-teal-600';
       case 'rights':
-        return 'from-purple-500 to-indigo-600';
+        return 'from-red-500 to-indigo-600';
       case 'marketing':
-        return 'from-pink-500 to-fuchsia-600';
+        return 'from-rose-500 to-rose-600';
       case 'legal':
         return 'from-red-500 to-orange-600';
       default:
@@ -148,11 +148,11 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4 animate-fadeIn">
-      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-xl sm:rounded-2xl w-full max-w-7xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-purple-500/30 shadow-2xl shadow-purple-500/20 flex flex-col">
+    <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-red-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4 animate-fadeIn">
+      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-xl sm:rounded-2xl w-full max-w-7xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-red-500/30 shadow-2xl shadow-red-500/20 flex flex-col">
 
         {/* Header Section */}
-        <div className="relative bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 p-4 sm:p-5 md:p-6 lg:p-8 flex-shrink-0">
+        <div className="relative bg-gradient-to-r from-red-600 via-red-600 to-rose-600 p-4 sm:p-5 md:p-6 lg:p-8 flex-shrink-0">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start gap-3 sm:gap-4 mb-4 sm:mb-5 md:mb-6">
@@ -160,13 +160,13 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                 <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2 tracking-tight">
                   Music Business Academy
                 </h2>
-                <p className="text-purple-100 text-xs sm:text-sm md:text-base">
+                <p className="text-red-100 text-xs sm:text-sm md:text-base">
                   Master the business side of music through interactive learning
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="text-purple-200 hover:text-white transition-all duration-200 hover:rotate-90 text-2xl sm:text-3xl min-w-[40px] sm:min-w-[44px] min-h-[40px] sm:min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-full flex-shrink-0"
+                className="text-red-200 hover:text-white transition-all duration-200 hover:rotate-90 text-2xl sm:text-3xl min-w-[40px] sm:min-w-[44px] min-h-[40px] sm:min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-full flex-shrink-0"
                 aria-label="Close"
               >
                 ×
@@ -184,15 +184,15 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                     </div>
                     <div>
                       <div className="text-white font-semibold text-sm sm:text-base md:text-lg">Level {playerLevel}</div>
-                      <div className="text-purple-200 text-xs">{xpToNextLevel} XP to next level</div>
+                      <div className="text-red-200 text-xs">{xpToNextLevel} XP to next level</div>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-300">{totalXP}</div>
-                    <div className="text-purple-200 text-xs">Total XP</div>
+                    <div className="text-red-200 text-xs">Total XP</div>
                   </div>
                 </div>
-                <div className="w-full bg-purple-900/50 rounded-full h-3 overflow-hidden">
+                <div className="w-full bg-red-900/50 rounded-full h-3 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full transition-all duration-500 shadow-lg shadow-yellow-500/50"
                     style={{ width: `${levelProgress}%` }}
@@ -204,16 +204,16 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
               <div className="bg-white/10 backdrop-blur-md rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/20">
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center">
                   <div className="transform hover:scale-110 transition-transform duration-200">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">
+                    <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-400 to-purple-400 bg-clip-text text-transparent">
                       {playerKnowledge.completedModules.length}
                     </div>
-                    <div className="text-purple-200 text-xs mt-1">Completed</div>
+                    <div className="text-red-200 text-xs mt-1">Completed</div>
                   </div>
                   <div className="transform hover:scale-110 transition-transform duration-200">
                     <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                       {playerKnowledge.conceptsMastered.length}
                     </div>
-                    <div className="text-purple-200 text-xs mt-1">Concepts</div>
+                    <div className="text-red-200 text-xs mt-1">Concepts</div>
                   </div>
                   <div className="transform hover:scale-110 transition-transform duration-200">
                     <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
@@ -222,7 +222,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                         Math.max(Object.keys(playerKnowledge.moduleScores).length, 1)
                       )}%
                     </div>
-                    <div className="text-purple-200 text-xs mt-1">Avg Score</div>
+                    <div className="text-red-200 text-xs mt-1">Avg Score</div>
                   </div>
                 </div>
               </div>
@@ -272,7 +272,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                     <div
                       className={`absolute inset-0 backface-hidden rounded-xl border-2 overflow-hidden shadow-xl transition-all duration-300 ${
                         isUnlocked
-                          ? `bg-gradient-to-br ${getCategoryColor(module.category)} border-transparent hover:shadow-2xl hover:shadow-purple-500/30`
+                          ? `bg-gradient-to-br ${getCategoryColor(module.category)} border-transparent hover:shadow-2xl hover:shadow-red-500/30`
                           : 'bg-gradient-to-br from-gray-700 to-gray-800 border-gray-600 opacity-60'
                       } ${isCompleted ? 'ring-4 ring-green-400/50' : ''}`}
                     >
@@ -383,26 +383,26 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                     <div
                       className={`absolute inset-0 backface-hidden rotate-y-180 rounded-xl border-2 overflow-hidden shadow-xl ${
                         isUnlocked
-                          ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 border-purple-500/50'
+                          ? 'bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 border-red-500/50'
                           : 'bg-gradient-to-br from-gray-700 to-gray-800 border-gray-600'
                       }`}
                     >
                       <div className="h-full p-3 sm:p-4 md:p-6 overflow-y-auto">
                         <div className="text-white">
-                          <h4 className="font-bold text-base sm:text-lg mb-2 sm:mb-3 text-purple-300">Module Overview</h4>
+                          <h4 className="font-bold text-base sm:text-lg mb-2 sm:mb-3 text-red-300">Module Overview</h4>
                           <p className="text-xs sm:text-sm text-gray-300 mb-3 sm:mb-4 leading-relaxed">
                             {module.content.introduction}
                           </p>
 
                           {module.prerequisites && module.prerequisites.length > 0 && (
                             <div className="mb-3 sm:mb-4">
-                              <h5 className="font-semibold text-xs sm:text-sm text-purple-300 mb-2">Prerequisites:</h5>
+                              <h5 className="font-semibold text-xs sm:text-sm text-red-300 mb-2">Prerequisites:</h5>
                               <div className="space-y-1">
                                 {module.prerequisites.map(prereq => {
                                   const prereqModule = learningModules.find(m => m.id === prereq);
                                   return (
                                     <div key={prereq} className="text-xs text-gray-400 flex items-center gap-2">
-                                      <svg className="w-3 h-3 text-purple-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                      <svg className="w-3 h-3 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                       </svg>
                                       {prereqModule?.title || prereq}
@@ -414,7 +414,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                           )}
 
                           <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-700">
-                            <h5 className="font-semibold text-xs sm:text-sm text-purple-300 mb-2">What you'll learn:</h5>
+                            <h5 className="font-semibold text-xs sm:text-sm text-red-300 mb-2">What you'll learn:</h5>
                             <ul className="space-y-1.5 sm:space-y-2">
                               {module.content.keyTakeaways.slice(0, 3).map((takeaway, idx) => (
                                 <li key={idx} className="text-xs text-gray-300 flex items-start gap-2">
@@ -432,7 +432,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                               e.stopPropagation();
                               toggleCardFlip(module.id);
                             }}
-                            className="mt-4 sm:mt-5 md:mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 text-sm sm:text-base"
+                            className="mt-4 sm:mt-5 md:mt-6 w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 sm:py-2.5 px-3 sm:px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 text-sm sm:text-base"
                           >
                             <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -450,18 +450,18 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
         </div>
 
         {/* Bottom Info Section */}
-        <div className="bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-fuchsia-600/20 border-t border-purple-500/30 p-3 sm:p-4 md:p-6 flex-shrink-0">
+        <div className="bg-gradient-to-r from-red-600/20 via-red-600/20 to-rose-600/20 border-t border-red-500/30 p-3 sm:p-4 md:p-6 flex-shrink-0">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             <div className="flex-1 text-center sm:text-left">
               <h3 className="text-white font-bold mb-1 text-sm md:text-base">Why Learn Music Business?</h3>
-              <p className="text-purple-200 text-xs md:text-sm leading-relaxed">
+              <p className="text-red-200 text-xs md:text-sm leading-relaxed">
                 Knowledge is power in the music industry. Understanding contracts, rights, and revenue streams
                 helps you make better decisions, avoid predatory deals, and build a sustainable career.
               </p>
             </div>
             <button
               onClick={onClose}
-              className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold px-6 md:px-8 py-2.5 sm:py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap min-w-[100px] sm:min-w-[120px] text-sm sm:text-base"
+              className="bg-gradient-to-r from-red-600 to-red-600 hover:from-red-700 hover:to-purple-700 text-white font-semibold px-6 md:px-8 py-2.5 sm:py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap min-w-[100px] sm:min-w-[120px] text-sm sm:text-base"
             >
               Close
             </button>

@@ -154,7 +154,7 @@ const InstallBanner: React.FC = () => {
 
       <div className="musicsim-install-slide flex items-center justify-between bg-[#1f2937] border border-gray-700 shadow-lg rounded-xl p-3 md:p-4">
         <div className="flex items-center gap-3 md:gap-4">
-          <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-violet-600 rounded-lg flex items-center justify-center">
+          <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-red-600 rounded-lg flex items-center justify-center">
             <Download className="w-6 h-6 text-white" />
           </div>
 
@@ -171,7 +171,7 @@ const InstallBanner: React.FC = () => {
         <div className="ml-4 flex items-center gap-3">
           <button
             onClick={handleInstall}
-            className="flex items-center gap-3 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform"
+            className="flex items-center gap-3 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform"
             aria-label="Install MusicSim"
           >
             <span className="hidden sm:inline">Install</span>

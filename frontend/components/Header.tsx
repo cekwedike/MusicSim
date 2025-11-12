@@ -38,7 +38,25 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
 
     return (
         <header className="py-4 px-4 sm:px-4 md:px-6 lg:px-8 text-center border-b border-default/50 relative bg-primary/95 backdrop-blur-sm">
-            {/* Hide title on mobile (< lg) */}
+            {/* Mobile Menu Button */}
+            {showMenuButton && (
+                <button
+                    onClick={onMenuClick}
+                    className="absolute top-3 sm:top-4 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-gray-800/60 hover:bg-gray-700/70 border border-gray-600/50 hover:border-gray-500 text-gray-300 hover:text-white transition-all duration-200 z-10"
+                    aria-label="Open menu"
+                >
+                    <Menu className="w-5 h-5" />
+                </button>
+            )}
+
+            {/* Mobile Header - Show on small screens */}
+            <div className="lg:hidden flex items-center justify-center">
+                <h1 className="text-lg sm:text-xl font-bold text-gradient">
+                    MusicSim
+                </h1>
+            </div>
+
+            {/* Desktop Header - Show on large screens */}
             <h1 className="hidden lg:block text-xl sm:text-2xl md:text-3xl font-bold text-gradient">
                 MusicSim
             </h1>

@@ -1493,3 +1493,30 @@ html.light .text-gradient {
   background-clip: text !important;
   color: transparent !important;
 }
+
+/* Mobile Menu Button Light Theme */
+html.light .bg-gray-800\/60 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #d1d5db !important;
+  color: #374151 !important;
+}
+
+html.light .hover\:bg-gray-700\/70:hover {
+  background-color: rgba(249, 250, 251, 1) !important;
+}
+
+html.light .border-gray-600\/50 {
+  border-color: rgba(209, 213, 219, 0.5) !important;
+}
+
+html.light .hover\:border-gray-500:hover {
+  border-color: #9ca3af !important;
+}
+
+html.light .text-gray-300 {
+  color: #374151 !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: #1f2937 !important;
+}

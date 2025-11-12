@@ -5,9 +5,15 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1f2937",
-  "theme_color": "#8B2635",
+  "theme_color": "#dc2626",
   "orientation": "portrait-primary",
   "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/icon-32.svg",
       "sizes": "32x32",
@@ -39,12 +45,5 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "games", "entertainment"],
-  "screenshots": [
-    {
-      "src": "/screenshot-1.png",
-      "sizes": "1280x720",
-      "type": "image/png"
-    }
-  ]
+  "categories": ["education", "games", "entertainment"]
 }

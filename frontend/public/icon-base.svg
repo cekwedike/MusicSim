@@ -3,9 +3,9 @@
   <defs>
     <!-- Gradient definitions for depth and artistic effect -->
     <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#a855f7;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#c084fc;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#dc2626;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8B2635;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e11d48;stop-opacity:1" />
     </linearGradient>
     
     <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -23,7 +23,7 @@
       <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
     </filter>
     
-    <!-- Glow effect -->
+    <!-- Red glow effect -->
     <filter id="glow">
       <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
       <feMerge> 
@@ -40,7 +40,7 @@
   <circle cx="256" cy="256" r="240" fill="none" stroke="url(#primaryGradient)" stroke-width="8" opacity="0.6"/>
   
   <!-- Musical staff lines (simplified, artistic) -->
-  <g opacity="0.3" stroke="#8b5cf6" stroke-width="2" fill="none">
+  <g opacity="0.3" stroke="#dc2626" stroke-width="2" fill="none">
     <line x1="100" y1="180" x2="412" y2="180"/>
     <line x1="100" y1="200" x2="412" y2="200"/>
     <line x1="100" y1="220" x2="412" y2="220"/>

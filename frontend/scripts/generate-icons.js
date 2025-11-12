@@ -13,8 +13,8 @@ function drawNoteIcon(size) {
   const img = PImage.make(size, size);
   const ctx = img.getContext('2d');
 
-  // background violet circle
-  ctx.fillStyle = '#8b5cf6';
+  // background red circle
+  ctx.fillStyle = '#dc2626';
   ctx.beginPath();
   ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
   ctx.closePath();

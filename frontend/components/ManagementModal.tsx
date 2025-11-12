@@ -25,13 +25,13 @@ const ManagementModal: React.FC<ManagementModalProps> = ({ achievements, events,
                     <div className="flex justify-around">
                          <button 
                             onClick={() => setActiveTab('achievements')}
-                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'achievements' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
+                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'achievements' ? 'text-red-300 border-b-2 border-red-400' : 'text-gray-400 hover:text-white'}`}
                          >
                             <TrophyIcon /> <span className="hidden sm:inline">Achievements</span><span className="sm:hidden">Achieve</span>
                         </button>
                          <button 
                             onClick={() => setActiveTab('staff')}
-                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'staff' ? 'text-violet-300 border-b-2 border-violet-400' : 'text-gray-400 hover:text-white'}`}
+                            className={`flex-1 text-center py-2 font-bold flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm ${activeTab === 'staff' ? 'text-red-300 border-b-2 border-red-400' : 'text-gray-400 hover:text-white'}`}
                          >
                             <BriefcaseIcon /> <span className="hidden sm:inline">Staff</span>
                         </button>
@@ -78,7 +78,7 @@ const ManagementModal: React.FC<ManagementModalProps> = ({ achievements, events,
                  <div className="p-4 border-t border-gray-700 mt-auto">
                     <button
                         onClick={onClose}
-                        className="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-400"
                     >
                         Close
                     </button>

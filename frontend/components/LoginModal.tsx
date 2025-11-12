@@ -40,7 +40,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           x
         </button>
 
-        <h2 className="text-3xl font-bold text-violet-300 mb-2 text-center">
+        <h2 className="text-3xl font-bold text-red-300 mb-2 text-center">
           Welcome to MusicSim
         </h2>
         <p className="text-gray-400 text-center mb-8">

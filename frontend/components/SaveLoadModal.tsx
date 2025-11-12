@@ -123,7 +123,7 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
             <h3 className="text-lg font-semibold text-white">Save Current Game</h3>
             <button
               onClick={() => setShowSaveInput(!showSaveInput)}
-              className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded transition-colors"
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors"
               disabled={loading}
             >
               {showSaveInput ? 'Cancel' : 'New Save'}
@@ -137,7 +137,7 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
                 value={newSaveName}
                 onChange={(e) => setNewSaveName(e.target.value)}
                 placeholder="Enter save name..."
-                className="flex-1 bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded focus:outline-none focus:border-violet-500"
+                className="flex-1 bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded focus:outline-none focus:border-red-500"
                 maxLength={50}
                 onKeyPress={(e) => e.key === 'Enter' && handleSaveGame()}
               />
@@ -158,7 +158,7 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
           
           {loading ? (
             <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-violet-500"></div>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
               <p className="text-gray-400 mt-2">Loading...</p>
             </div>
           ) : saveSlots.length === 0 ? (

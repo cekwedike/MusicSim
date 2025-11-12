@@ -18,7 +18,7 @@ const getTierColor = (tier: string) => {
   switch (tier) {
     case 'entry': return 'text-gray-400 border-gray-500/30 bg-gray-500/10';
     case 'professional': return 'text-blue-400 border-blue-500/30 bg-blue-500/10';
-    case 'expert': return 'text-purple-400 border-purple-500/30 bg-purple-500/10';
+    case 'expert': return 'text-red-400 border-red-500/30 bg-red-500/10';
     case 'elite': return 'text-yellow-400 border-yellow-500/30 bg-yellow-500/10';
     default: return 'text-gray-400 border-gray-500/30 bg-gray-500/10';
   }
@@ -28,7 +28,7 @@ const getTierBadge = (tier: string) => {
   switch (tier) {
     case 'entry': return 'bg-gray-600 text-white';
     case 'professional': return 'bg-blue-600 text-white';
-    case 'expert': return 'bg-purple-600 text-white';
+    case 'expert': return 'bg-red-600 text-white';
     case 'elite': return 'bg-yellow-600 text-black';
     default: return 'bg-gray-600 text-white';
   }
@@ -92,7 +92,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
           onClick={() => setActiveTab('achievements')}
           className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-t text-xs sm:text-base font-semibold transition-colors ${
             activeTab === 'achievements'
-              ? 'bg-violet-600 text-white'
+              ? 'bg-red-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
         >
@@ -103,7 +103,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
           onClick={() => setActiveTab('staff')}
           className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-t text-xs sm:text-base font-semibold transition-colors ${
             activeTab === 'staff'
-              ? 'bg-violet-600 text-white'
+              ? 'bg-red-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
         >
@@ -391,7 +391,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                         onClick={() => handleSetDuration(template.id, 6)}
                                         className={`flex-1 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors ${
                                           selectedDuration === 6
-                                            ? 'bg-violet-600 text-white'
+                                            ? 'bg-red-600 text-white'
                                             : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                                         }`}
                                       >
@@ -402,7 +402,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                         onClick={() => handleSetDuration(template.id, 12)}
                                         className={`flex-1 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors ${
                                           selectedDuration === 12
-                                            ? 'bg-violet-600 text-white'
+                                            ? 'bg-red-600 text-white'
                                             : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                                         }`}
                                       >

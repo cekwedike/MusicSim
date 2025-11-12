@@ -47,7 +47,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
             {/* Main headline */}
             <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black mb-6">
-              <span className="bg-gradient-to-r from-white via-violet-200 to-rose-200 bg-clip-text text-transparent drop-shadow-lg">
+              <span className="bg-gradient-to-r from-white via-red-200 to-rose-200 bg-clip-text text-transparent drop-shadow-lg">
                 MusicSim
               </span>
             </h1>
@@ -95,7 +95,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {/* Feature 1 */}
             <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-red-500/50 rounded-2xl p-8 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-lg group-hover:shadow-violet-500/25 transition-all duration-300">
+              <div className="mb-6 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-lg group-hover:shadow-red-500/25 transition-all duration-300">
                 <Music className="w-8 h-8 text-white" strokeWidth={2} />
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">Realistic Industry Simulation</h3>
@@ -105,7 +105,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             </div>
 
             {/* Feature 2 */}
-            <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-fuchsia-500/50 rounded-2xl p-8 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105">
+            <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-rose-500/50 rounded-2xl p-8 hover:bg-gray-800/50 transition-all duration-300 hover:scale-105">
               <div className="mb-6 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl shadow-lg group-hover:shadow-fuchsia-500/25 transition-all duration-300">
                 <TrendingUp className="w-8 h-8 text-white" strokeWidth={2} />
               </div>

@@ -37,7 +37,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
       case 'revenue':
         return 'bg-green-500';
       case 'rights':
-        return 'bg-purple-500';
+        return 'bg-red-500';
       case 'marketing':
         return 'bg-pink-500';
       case 'legal':
@@ -100,14 +100,14 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
   return (
     <div className="h-full overflow-y-auto -mx-4 px-4 space-y-4">
       {/* Header */}
-      <div className="sticky top-0 bg-gray-800/95 backdrop-blur-md -mx-4 px-4 py-3 border-b border-purple-500/30 z-10">
+      <div className="sticky top-0 bg-gray-800/95 backdrop-blur-md -mx-4 px-4 py-3 border-b border-red-500/30 z-10">
         <p className="text-gray-300 text-xs leading-relaxed">
           Master the business side of music through interactive learning
         </p>
       </div>
 
       {/* Level & Progress */}
-      <div className="bg-gradient-to-br from-purple-600/20 to-violet-600/20 border border-purple-500/30 rounded-lg p-3 space-y-3">
+      <div className="bg-gradient-to-br from-red-600/20 to-red-600/20 border border-red-500/30 rounded-lg p-3 space-y-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
             {playerLevel}
@@ -117,7 +117,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
             <div className="text-purple-300 text-xs">{totalXP} Total XP</div>
           </div>
         </div>
-        <div className="w-full bg-purple-900/50 rounded-full h-2 overflow-hidden">
+        <div className="w-full bg-red-900/50 rounded-full h-2 overflow-hidden">
           <div
             className="bg-gradient-to-r from-yellow-400 to-orange-500 h-2 rounded-full transition-all duration-500 shadow-sm shadow-yellow-500/50"
             style={{ width: `${levelProgress}%` }}
@@ -165,7 +165,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
               className={`
                 relative border rounded-lg overflow-hidden transition-all duration-300
                 ${isUnlocked
-                  ? 'border-purple-500/30 bg-gradient-to-br from-gray-700/50 to-gray-800/50 hover:border-purple-500/60 cursor-pointer'
+                  ? 'border-red-500/30 bg-gradient-to-br from-gray-700/50 to-gray-800/50 hover:border-red-500/60 cursor-pointer'
                   : 'border-gray-700 bg-gray-800/30 opacity-60'
                 }
                 ${isCompleted ? 'ring-2 ring-green-500/40' : ''}
@@ -254,7 +254,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
 
               {/* Expanded Content */}
               {isExpanded && isUnlocked && (
-                <div className="border-t border-purple-500/30 bg-gradient-to-br from-purple-900/20 to-violet-900/20 p-3 space-y-3 animate-slideDown">
+                <div className="border-t border-red-500/30 bg-gradient-to-br from-red-900/20 to-red-900/20 p-3 space-y-3 animate-slideDown">
                   <p className="text-xs text-gray-300 leading-relaxed">
                     {module.content.introduction.substring(0, 150)}...
                   </p>
@@ -283,7 +283,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
                       e.stopPropagation();
                       onOpenModule(module);
                     }}
-                    className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
+                    className="w-full bg-gradient-to-r from-red-600 to-red-600 hover:from-red-700 hover:to-red-700 text-white font-semibold py-2 px-3 rounded-lg transition-all duration-200 text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-105"
                   >
                     {isCompleted ? 'Review Module' : 'Start Learning'}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

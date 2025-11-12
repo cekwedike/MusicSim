@@ -204,7 +204,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
               <div className="bg-white/10 backdrop-blur-md rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/20">
                 <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center">
                   <div className="transform hover:scale-110 transition-transform duration-200">
-                    <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-400 to-purple-400 bg-clip-text text-transparent">
+                    <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-400 to-red-400 bg-clip-text text-transparent">
                       {playerKnowledge.completedModules.length}
                     </div>
                     <div className="text-red-200 text-xs mt-1">Completed</div>
@@ -232,7 +232,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
 
         {/* Drag Instruction */}
         <div className="px-3 sm:px-4 md:px-6 pt-3 sm:pt-4 pb-2 flex-shrink-0">
-          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-2 sm:p-3">
+          <div className="bg-gradient-to-r from-blue-500/10 to-red-500/10 border border-blue-500/30 rounded-lg p-2 sm:p-3">
             <p className="text-xs sm:text-sm text-blue-200 text-center">
               <span className="font-semibold">Tip:</span> <span className="hidden sm:inline">Drag and drop course cards to organize them by priority. Tap cards to flip and reveal details.</span><span className="sm:hidden">Tap cards to flip and see details.</span>
             </p>
@@ -461,7 +461,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
             </div>
             <button
               onClick={onClose}
-              className="bg-gradient-to-r from-red-600 to-red-600 hover:from-red-700 hover:to-purple-700 text-white font-semibold px-6 md:px-8 py-2.5 sm:py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap min-w-[100px] sm:min-w-[120px] text-sm sm:text-base"
+              className="bg-gradient-to-r from-red-600 to-red-600 hover:from-red-700 hover:to-red-700 text-white font-semibold px-6 md:px-8 py-2.5 sm:py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap min-w-[100px] sm:min-w-[120px] text-sm sm:text-base"
             >
               Close
             </button>

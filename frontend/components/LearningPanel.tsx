@@ -134,11 +134,17 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
           </div>
           <div className="text-red-200 text-xs">Done</div>
         </div>
-        <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2.5 text-center transform hover:scale-105 transition-transform duration-200">
+        <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2.5 text-center transform hover:scale-105 transition-transform duration-200 group relative">
           <div className="text-xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
             {playerKnowledge.conceptsMastered.length}
           </div>
-          <div className="text-green-200 text-xs">Skills</div>
+          <div className="text-green-200 text-xs">Business Skills</div>
+          
+          {/* Tooltip */}
+          <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600">
+            Business concepts mastered
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-3 border-transparent border-t-gray-900"></div>
+          </div>
         </div>
         <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-lg p-2.5 text-center transform hover:scale-105 transition-transform duration-200">
           <div className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">

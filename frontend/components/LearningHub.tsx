@@ -209,11 +209,17 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                     </div>
                     <div className="text-red-200 text-xs mt-1">Completed</div>
                   </div>
-                  <div className="transform hover:scale-110 transition-transform duration-200">
+                  <div className="transform hover:scale-110 transition-transform duration-200 group relative">
                     <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                       {playerKnowledge.conceptsMastered.length}
                     </div>
-                    <div className="text-red-200 text-xs mt-1">Concepts</div>
+                    <div className="text-red-200 text-xs mt-1">Business Skills</div>
+                    
+                    {/* Tooltip */}
+                    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600">
+                      Concepts mastered from completed courses
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                    </div>
                   </div>
                   <div className="transform hover:scale-110 transition-transform duration-200">
                     <div className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
@@ -240,8 +246,8 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
         </div>
 
         {/* Course Cards Grid */}
-        <div className="p-3 sm:p-4 md:p-6 overflow-y-auto flex-1">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        <div className="p-3 sm:p-4 md:p-6 overflow-y-auto flex-1 custom-scrollbar">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
             {orderedModules.map((module, index) => {
               const isUnlocked = isModuleUnlocked(module);
               const isCompleted = isModuleCompleted(module.id);
@@ -260,7 +266,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                   onMouseEnter={() => setHoveredCard(module.id)}
                   onMouseLeave={() => setHoveredCard(null)}
                   className="perspective-1000"
-                  style={{ minHeight: '320px' }}
+                  style={{ minHeight: '360px' }}
                 >
                   <div
                     className={`relative w-full h-full transition-all duration-500 transform-style-3d cursor-pointer ${
@@ -362,15 +368,15 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
 
                         {/* Unlock Requirement */}
                         {!isUnlocked && module.unlockRequirement && (
-                          <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/20">
-                            <div className="bg-red-900/40 border border-red-500/30 rounded-lg p-2 sm:p-3">
+                          <div className="mt-auto pt-3 sm:pt-4 border-t border-white/20">
+                            <div className="bg-red-900/50 border border-red-500/40 rounded-lg p-3">
                               <div className="flex items-start gap-2">
-                                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <svg className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                                 </svg>
                                 <div className="flex-1">
-                                  <h4 className="text-red-300 font-semibold text-xs mb-1">Unlock Requirement</h4>
-                                  <p className="text-red-200 text-xs leading-relaxed">{module.unlockRequirement.message}</p>
+                                  <h4 className="text-red-200 font-semibold text-xs sm:text-sm mb-1">Unlock Requirement</h4>
+                                  <p className="text-red-100 text-xs sm:text-sm leading-relaxed">{module.unlockRequirement.message}</p>
                                 </div>
                               </div>
                             </div>
@@ -527,21 +533,21 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
 
         /* Scrollbar Styling */
         .overflow-y-auto::-webkit-scrollbar {
-          width: 8px;
+          width: 6px;
         }
 
         .overflow-y-auto::-webkit-scrollbar-track {
-          background: rgba(0, 0, 0, 0.2);
-          border-radius: 4px;
+          background: rgba(75, 85, 99, 0.3);
+          border-radius: 3px;
         }
 
         .overflow-y-auto::-webkit-scrollbar-thumb {
-          background: rgba(168, 85, 247, 0.5);
-          border-radius: 4px;
+          background: rgba(239, 68, 68, 0.6);
+          border-radius: 3px;
         }
 
         .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-          background: rgba(168, 85, 247, 0.7);
+          background: rgba(239, 68, 68, 0.8);
         }
       `}</style>
     </div>

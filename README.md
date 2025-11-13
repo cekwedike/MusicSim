@@ -66,7 +66,11 @@ MusicSim/
 │   │   ├── AchievementsModal.tsx # Achievement system
 │   │   ├── SaveLoadModal.tsx # Save/load management
 │   │   ├── LearningHub.tsx # Educational content
-│   │   └── LoginModal.tsx # Authentication UI
+│   │   ├── LoginModal.tsx # Authentication UI
+│   │   ├── Header.tsx     # Main navigation header
+│   │   ├── Sidebar.tsx    # Navigation sidebar
+│   │   ├── AudioControls.tsx # Background music system
+│   │   └── TutorialOverlay.tsx # Game tutorial system
 │   ├── services/          # API integration & game logic
 │   │   ├── api.ts         # Axios configuration
 │   │   ├── authService.ts # Authentication API
@@ -78,8 +82,19 @@ MusicSim/
 │   │   ├── achievements.ts # Achievement definitions
 │   │   ├── difficultySettings.ts # Game balance
 │   │   └── learningModules.ts # Educational content
-│   └── contexts/          # React context providers
-│       └── AuthContext.tsx # Global authentication state
+│   ├── contexts/          # React context providers
+│   │   ├── AuthContext.tsx # Global authentication state
+│   │   ├── AudioContext.tsx # Background music control
+│   │   ├── ThemeContext.tsx # UI theme management
+│   │   └── ToastContext.tsx # Notification system
+│   ├── constants/         # Application constants
+│   │   └── genres.ts      # Music genre definitions
+│   ├── hooks/             # Custom React hooks
+│   ├── types/             # TypeScript type definitions
+│   ├── scripts/           # Build and utility scripts
+│   ├── public/            # Static assets and audio files
+│   │   └── audio/         # Background music tracks
+│   └── src/               # Additional source files
 ├── backend/               # Express.js + PostgreSQL
 │   ├── routes/            # API endpoint definitions
 │   │   ├── auth.js        # User authentication
@@ -87,20 +102,42 @@ MusicSim/
 │   │   ├── careerHistory.js # Career tracking
 │   │   ├── learning.js    # Learning progress
 │   │   ├── lessons.js     # Lesson engagement
-│   │   └── analytics.js   # User analytics
+│   │   ├── analytics.js   # User analytics
+│   │   └── migrate.js     # Database migration endpoints
 │   ├── models/            # Database schemas (Sequelize)
 │   │   ├── User.js        # User accounts
 │   │   ├── GameSave.js    # Game state storage
 │   │   ├── CareerHistory.js # Career records
-│   │   └── LearningProgress.js # Educational tracking
+│   │   ├── LearningProgress.js # Educational tracking
+│   │   ├── PlayerStatistics.js # Player analytics
+│   │   └── index.js       # Model exports and associations
 │   ├── middleware/        # Express middleware
 │   │   ├── auth.js        # JWT authentication
 │   │   └── errorHandler.js # Error management
-│   └── config/            # Configuration files
-│       ├── database.js    # Database connection
-│       └── swagger.js     # API documentation
-└── docs/                  # Documentation
-    └── DEV_SETUP.md       # Development setup guide
+│   ├── config/            # Configuration files
+│   │   ├── database.js    # Database connection (Sequelize)
+│   │   ├── supabase.js    # Supabase configuration
+│   │   └── swagger.js     # API documentation
+│   ├── migrations/        # Database migration scripts
+│   │   ├── migrate.js     # Migration runner
+│   │   └── *.sql          # SQL migration files
+│   ├── scripts/           # Database utilities
+│   │   ├── initDatabase.js # Database initialization
+│   │   └── resetDatabase.js # Database reset
+│   ├── constants/         # Backend constants
+│   │   └── achievements.js # Achievement definitions
+│   ├── utils/             # Utility functions
+│   │   └── validation.js  # Input validation helpers
+│   └── public/            # Static files served by Express
+├── .github/               # GitHub workflows and templates
+├── dist/                  # Production build output
+├── Makefile              # CI/CD and development commands
+├── metadata.json         # Project metadata
+├── vercel.json           # Vercel deployment configuration
+├── vite.config.ts        # Vite build configuration
+├── tsconfig.json         # TypeScript configuration
+├── tailwind.config.js    # Tailwind CSS configuration
+└── postcss.config.js     # PostCSS configuration
 ```
 
 ## Quick Start

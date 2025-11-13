@@ -535,18 +535,61 @@ router.post('/sync-profile', authLimiter, authMiddleware, async (req, res, next)
       console.log(`[sync-profile] Username '${username}' taken, using '${uniqueUsername}' for new user`);
     }
 
-    user = await User.create({
-      id: targetUserId,
-      email,
-      username: uniqueUsername,
-      displayName: displayName || uniqueUsername,
-      profileImage,
-      authProvider: authProvider || 'google',
-      lastLogin: new Date(),
-      isActive: true
-    });
+    try {
+      user = await User.create({
+        id: targetUserId,
+        email,
+        username: uniqueUsername,
+        displayName: displayName || uniqueUsername,
+        profileImage,
+        authProvider: authProvider || 'google',
+        lastLogin: new Date(),
+        isActive: true
+      });
 
-    console.log('[sync-profile] User created successfully:', user.id);
+      console.log('[sync-profile] User created successfully:', user.id);
+    } catch (error) {
+      if (error.name === 'SequelizeUniqueConstraintError' && error.fields && error.fields.id) {
+        // User ID already exists in database, try to find and update instead
+        console.log(`[sync-profile] User ID ${targetUserId} already exists, attempting to update existing record`);
+        
+        user = await User.findByPk(targetUserId);
+        if (user) {
+          // Update the existing user record
+          user.email = email || user.email;
+          user.lastLogin = new Date();
+          user.displayName = displayName || user.displayName || uniqueUsername;
+          user.profileImage = profileImage || user.profileImage;
+          user.authProvider = authProvider || user.authProvider || 'google';
+          user.isActive = true;
+          
+          // Only update username if it's different and unique
+          if (uniqueUsername !== user.username) {
+            // Check if the unique username is still available
+            const usernameConflict = await User.findOne({
+              where: {
+                username: uniqueUsername,
+                id: { [require('sequelize').Op.ne]: targetUserId }
+              }
+            });
+            
+            if (!usernameConflict) {
+              user.username = uniqueUsername;
+            }
+          }
+          
+          await user.save();
+          console.log(`[sync-profile] Updated existing user: ${user.username} (${user.email})`);
+        } else {
+          // Still can't find the user - this shouldn't happen but handle gracefully
+          console.error('[sync-profile] Could not find user after unique constraint error');
+          throw new Error('User creation failed: ID conflict with non-existent user');
+        }
+      } else {
+        // Re-throw other errors
+        throw error;
+      }
+    }
 
     // Create associated PlayerStatistics record
     console.log('[sync-profile] Creating PlayerStatistics for user:', user.id);

@@ -44,7 +44,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
   const sortedLogs = [...displayLogs].reverse(); // Show most recent first
 
   return (
-  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 mb-2 md:mb-3 mt-2 md:mt-3">
+  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 mb-2 md:mb-3 mt-2 md:mt-3 overflow-hidden">
       {/* Mobile: Collapsed button */}
       <div className="lg:hidden">
         {isMobileCollapsed ? (
@@ -76,7 +76,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
               </button>
             </div>
 
-            <div className={`space-y-2 overflow-y-auto ${isExpanded ? 'max-h-48 sm:max-h-64 md:max-h-96' : 'max-h-32 sm:max-h-48'}`}>
+            <div className={`space-y-2 overflow-y-auto overflow-x-hidden ${isExpanded ? 'max-h-48 sm:max-h-64 md:max-h-96' : 'max-h-32 sm:max-h-48'}`}>
               {sortedLogs.length === 0 ? (
                 <div className="text-gray-500 text-center py-6 text-sm">
                   No history yet. Start making decisions!
@@ -91,7 +91,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
                       {log.icon && (
                         <span className="text-base leading-none mt-0.5 flex-shrink-0">{log.icon}</span>
                       )}
-                      <p className="text-xs font-medium leading-relaxed break-words flex-1">{log.message}</p>
+                      <p className="text-xs font-medium leading-relaxed break-words overflow-wrap-anywhere flex-1">{log.message}</p>
                     </div>
                   </div>
                 ))
@@ -143,7 +143,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
 
       {/* Collapsed: fixed height for 2 items so layout doesn't shift; Expanded: allow larger max height */}
       <div className={
-        `space-y-2 overflow-y-auto ${isExpanded ? 'max-h-96' : 'h-24 sm:h-32'}`
+        `space-y-2 overflow-y-auto overflow-x-hidden ${isExpanded ? 'max-h-96' : 'h-24 sm:h-32'}`
       }>
         {sortedLogs.length === 0 ? (
           <div className="text-gray-500 text-center py-6 sm:py-8 text-sm">
@@ -160,7 +160,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
                   {log.icon && (
                     <span className="text-base sm:text-lg leading-none mt-0.5 flex-shrink-0">{log.icon}</span>
                   )}
-                  <p className="text-xs sm:text-sm font-medium leading-relaxed break-words">{log.message}</p>
+                  <p className="text-xs sm:text-sm font-medium leading-relaxed break-words overflow-wrap-anywhere">{log.message}</p>
                 </div>
                 <span className="text-[10px] sm:text-xs text-gray-400 whitespace-nowrap mt-1 flex-shrink-0 hidden sm:block">
                   {formatDate(log.timestamp)}

@@ -38,6 +38,11 @@ export const authServiceSupabase = {
         provider: 'google',
         options: {
           redirectTo: window.location.origin,
+          queryParams: {
+            prompt: 'select_account', // Force Google account selection screen
+            access_type: 'offline',
+          },
+          skipBrowserRedirect: false
         }
       });
 

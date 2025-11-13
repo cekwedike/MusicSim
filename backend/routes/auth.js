@@ -366,18 +366,51 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
 
     console.log('[sync-profile] Request received:', { userId, email, username, displayName, authProvider });
 
+    const targetUserId = userId || req.userId;
+
     // Check if user already exists
-    let user = await User.findByPk(userId || req.userId);
+    let user = await User.findByPk(targetUserId);
 
     if (user) {
       // Update existing user
       console.log('[sync-profile] User exists, updating:', user.id);
       user.email = email || user.email;
-      user.username = username || user.username;
+      user.lastLogin = new Date();
+
+      // Update username only if provided and different (check for uniqueness)
+      if (username && username !== user.username) {
+        const existingUser = await User.findOne({
+          where: {
+            username: sanitizeInput(username),
+            id: { [require('sequelize').Op.ne]: targetUserId }
+          }
+        });
+
+        if (existingUser) {
+          // Username taken - generate unique alternative
+          let uniqueUsername = sanitizeInput(username);
+          let counter = 1;
+          
+          while (await User.findOne({
+            where: {
+              username: uniqueUsername,
+              id: { [require('sequelize').Op.ne]: targetUserId }
+            }
+          })) {
+            uniqueUsername = `${sanitizeInput(username)}${counter}`;
+            counter++;
+          }
+          
+          console.log(`[sync-profile] Username '${username}' taken, using '${uniqueUsername}'`);
+          user.username = uniqueUsername;
+        } else {
+          user.username = sanitizeInput(username);
+        }
+      }
+
       user.displayName = displayName || user.displayName || user.username;
       user.profileImage = profileImage || user.profileImage;
       user.authProvider = authProvider || user.authProvider;
-      user.lastLogin = new Date();
 
       await user.save();
 
@@ -399,14 +432,28 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
       });
     }
 
-    // Create new user profile
-    console.log('[sync-profile] Creating new user with data:', { userId: userId || req.userId, email, username, displayName, authProvider });
+    // Create new user profile with unique username
+    console.log('[sync-profile] Creating new user with data:', { userId: targetUserId, email, username, displayName, authProvider });
+
+    // Ensure username is unique before creating
+    let uniqueUsername = sanitizeInput(username || email.split('@')[0]);
+    let counter = 1;
+    
+    while (await User.findOne({ where: { username: uniqueUsername } })) {
+      const baseUsername = sanitizeInput(username || email.split('@')[0]);
+      uniqueUsername = `${baseUsername}${counter}`;
+      counter++;
+    }
+    
+    if (uniqueUsername !== username) {
+      console.log(`[sync-profile] Username '${username}' taken, using '${uniqueUsername}' for new user`);
+    }
 
     user = await User.create({
-      id: userId || req.userId,
+      id: targetUserId,
       email,
-      username,
-      displayName: displayName || username,
+      username: uniqueUsername,
+      displayName: displayName || uniqueUsername,
       profileImage,
       authProvider: authProvider || 'google',
       lastLogin: new Date(),
@@ -640,7 +687,7 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
 
     const sanitizedUsername = sanitizeInput(username);
 
-    // Check if username is taken
+    // Check if username is taken by ANY other user (strict uniqueness)
     const existingUser = await User.findOne({
       where: {
         username: sanitizedUsername,
@@ -649,9 +696,21 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
     });
 
     if (existingUser) {
+      // Suggest alternative usernames
+      const suggestions = [];
+      for (let i = 1; i <= 3; i++) {
+        const suggestion = `${sanitizedUsername}${i}`;
+        const isTaken = await User.findOne({ where: { username: suggestion } });
+        if (!isTaken) {
+          suggestions.push(suggestion);
+        }
+      }
+
       return res.status(400).json({
         success: false,
-        message: 'Username already taken'
+        message: `Username '${sanitizedUsername}' is already taken`,
+        suggestions: suggestions.length > 0 ? suggestions : [`${sanitizedUsername}1`, `${sanitizedUsername}2`],
+        field: 'username'
       });
     }
 
@@ -679,7 +738,7 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
         userId: user.id
       });
 
-      console.log('[update-username] Profile created successfully');
+      console.log('[update-username] Profile created successfully with username:', sanitizedUsername);
     } else if (!user) {
       return res.status(404).json({
         success: false,
@@ -687,11 +746,12 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
       });
     } else {
       // Update existing user's username
+      const oldUsername = user.username;
       user.username = sanitizedUsername;
       await user.save();
+      
+      console.log(`[update-username] Username updated for user ${req.userId}: ${oldUsername} → ${sanitizedUsername}`);
     }
-
-    console.log(`[update-username] Username updated for user ${req.userId}: ${sanitizedUsername}`);
 
     res.json({
       success: true,
@@ -702,6 +762,95 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
     });
   } catch (error) {
     console.error('[update-username] Error:', error);
+    
+    // Handle database unique constraint violations
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Username is already taken',
+        field: 'username'
+      });
+    }
+    
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/webhook/user-deleted:
+ *   post:
+ *     summary: Supabase webhook for user deletion cleanup
+ *     description: Handles database cleanup when a user is deleted from Supabase Auth
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type:
+ *                 type: string
+ *                 description: Event type
+ *               record:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: User ID that was deleted
+ *     responses:
+ *       200:
+ *         description: Database cleanup completed
+ *       404:
+ *         description: User not found in database
+ *       500:
+ *         description: Cleanup failed
+ */
+router.post('/webhook/user-deleted', async (req, res, next) => {
+  try {
+    const { type, record } = req.body;
+    
+    console.log('[webhook/user-deleted] Received:', { type, record });
+    
+    if (type !== 'DELETE' || !record?.id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid webhook payload'
+      });
+    }
+    
+    const userId = record.id;
+    
+    // Find and delete user from database
+    const user = await User.findByPk(userId);
+    
+    if (!user) {
+      console.log(`[webhook/user-deleted] User ${userId} not found in database (already cleaned up?)`);
+      return res.json({
+        success: true,
+        message: 'User not found in database (already cleaned up)'
+      });
+    }
+    
+    const username = user.username;
+    const email = user.email;
+    
+    // Delete user from database (CASCADE will delete associated data)
+    await user.destroy();
+    
+    console.log(`[webhook/user-deleted] ✅ Database cleanup completed for deleted user: ${username} (${email})`);
+    
+    res.json({
+      success: true,
+      message: 'Database cleanup completed',
+      data: {
+        deletedUserId: userId,
+        deletedUser: { username, email }
+      }
+    });
+  } catch (error) {
+    console.error('[webhook/user-deleted] ❌ Database cleanup failed:', error);
     next(error);
   }
 });

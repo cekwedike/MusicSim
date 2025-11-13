@@ -18,7 +18,8 @@ async function runMigration() {
     const migrations = [
       '007_remove_additional_redundancies.sql',
       '008_remove_achievements_tables.sql',
-      '009_add_gamesave_metadata_fields.sql'
+      '009_add_gamesave_metadata_fields.sql',
+      '010_add_username_unique_constraint.sql'
     ];
 
     for (const migrationFileName of migrations) {

@@ -189,6 +189,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (event === 'SIGNED_IN' && session) {
         setToken(session.access_token);
+        
+        // Auto-sync new OAuth users to database immediately
+        if (session.user && session.user.app_metadata?.provider) {
+          console.log('[AuthContext] New OAuth user detected, syncing to database...');
+          
+          try {
+            // Extract profile data from OAuth provider
+            const oauthUser = session.user;
+            const authProvider = oauthUser.app_metadata.provider;
+            const username = oauthUser.user_metadata?.username || 
+                           oauthUser.user_metadata?.name || 
+                           oauthUser.email!.split('@')[0];
+            const profileImage = oauthUser.user_metadata?.avatar_url || 
+                              oauthUser.user_metadata?.picture;
+            
+            // Immediately sync to backend to prevent database sync issues
+            await authServiceSupabase.syncProfile({
+              userId: oauthUser.id,
+              email: oauthUser.email!,
+              username,
+              profileImage,
+              authProvider
+            });
+            
+            console.log('[AuthContext] OAuth user synced to database successfully');
+          } catch (syncError) {
+            console.error('[AuthContext] Failed to sync OAuth user to database:', syncError);
+          }
+        }
+        
         await syncUserProfile(session.user);
         setError(null);
 

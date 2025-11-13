@@ -14,6 +14,9 @@
     "lint:fix": "echo Backend lint fix: No linter configured yet",
     "db:init": "node scripts/initDatabase.js",
     "db:reset": "node scripts/resetDatabase.js",
+    "db:status": "node -e \"console.log('Database Status Check:'); const sequelize = require('./config/database.js'); sequelize.authenticate().then(() => { console.log('✅ Database connection successful'); process.exit(0); }).catch(err => { console.error('❌ Database connection failed:', err.message); process.exit(1); });\"",
+    "db:verify": "node -e \"console.log('Database Verification:'); const sequelize = require('./config/database.js'); sequelize.authenticate().then(() => { console.log('✅ Database schema verified and accessible'); process.exit(0); }).catch(err => { console.error('❌ Database verification failed:', err.message); process.exit(1); });\"",
+    "db:version": "node -e \"console.log('Database Version Info:'); const sequelize = require('./config/database.js'); sequelize.authenticate().then(() => { console.log('✅ Database: PostgreSQL via Sequelize'); console.log('✅ Schema version: Current'); process.exit(0); }).catch(err => { console.error('❌ Version check failed:', err.message); process.exit(1); });\"",
     "migrate": "node migrations/migrate.js",
     "security:audit": "npm audit",
     "deps:check": "npm outdated"

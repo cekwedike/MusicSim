@@ -44,7 +44,7 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
   const sortedLogs = [...displayLogs].reverse(); // Show most recent first
 
   return (
-  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 mb-4 md:mb-6 mt-3 md:mt-6">
+  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 mb-2 md:mb-3 mt-2 md:mt-3">
       {/* Mobile: Collapsed button */}
       <div className="lg:hidden">
         {isMobileCollapsed ? (

@@ -2299,7 +2299,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const showDashboard = !['start', 'setup'].includes(status);
     
     return (
-        <div className="min-h-screen flex flex-col bg-gray-900 bg-grid-gray-800/[0.2]">
+        <div className="min-h-screen max-h-screen overflow-hidden flex flex-col bg-gray-900 bg-grid-gray-800/[0.2]">
              <style>{`.bg-grid-gray-800\\/\\[0\\.2\\] { background-image: linear-gradient(to right, rgba(55, 65, 81, 0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(55, 65, 81, 0.4) 1px, transparent 1px); background-size: 2.5rem 2.5rem; } .animate-fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`}</style>
             {/* PWA Components */}
             <OfflineBanner isOnline={isOnline} />
@@ -2386,13 +2386,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
 
-            <div className={`flex-grow w-full max-w-[1400px] mx-auto px-4 sm:px-5 py-4 sm:py-4 flex flex-col transition-all duration-300 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[30rem]' : ''}`}>
+            <div className={`flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-5 py-2 sm:py-3 flex flex-col transition-all duration-300 overflow-y-auto ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
 
-                <main className="flex justify-center mt-3 sm:mt-3 mb-6">
+                <main className="flex justify-center mt-2 sm:mt-2 mb-4">
                     {renderGameContent()}
                 </main>
             </div>

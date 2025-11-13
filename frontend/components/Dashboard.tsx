@@ -23,8 +23,8 @@ const colorClasses = {
 
 const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, maxValue = 100, isDate = false }) => {
     const classes = colorClasses[color];
-    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50"
-                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-3 sm:p-3 md:p-4 flex flex-col justify-between shadow-lg border border-gray-700/50";
+    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 md:p-3 flex flex-col justify-between shadow-lg border border-gray-700/50"
+                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 md:p-3 flex flex-col justify-between shadow-lg border border-gray-700/50";
 
     return (
         <div className={containerClass}>
@@ -57,7 +57,7 @@ const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
     const progressPercentage = (project.progress / project.requiredProgress) * 100;
 
     return (
-        <div className="current-project mt-3 bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-4 shadow-lg border border-gray-700/50">
+        <div className="current-project mt-2 bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 sm:p-3 shadow-lg border border-gray-700/50">
             <h3 className="text-sm sm:text-lg font-bold text-red-300 mb-1 sm:mb-2">Current Project: {project.name}</h3>
             <div className="flex items-center gap-2 sm:gap-4">
                 <div className="w-full bg-gray-700 rounded-full h-3 sm:h-4 overflow-hidden">
@@ -89,7 +89,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
     const displayDate = currentDate ? formatDate(currentDate) : `Y${date.year} M${date.month} W${date.week}`;
 
     return (
-        <div className="mb-3 md:mb-4 mt-4 sm:mt-5">
+        <div className="mb-2 md:mb-3 mt-2 sm:mt-3">
             {/* Mobile: Collapsible view */}
             <div className="lg:hidden bg-gray-800 rounded-lg border border-gray-700">
                 {isMobileCollapsed ? (

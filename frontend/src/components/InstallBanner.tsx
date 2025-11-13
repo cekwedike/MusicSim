@@ -51,6 +51,7 @@ const markBannerDismissed = () => {
 const InstallBanner: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
+  const [isInstalling, setIsInstalling] = useState(false);
   const bannerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -95,13 +96,20 @@ const InstallBanner: React.FC = () => {
     };
   }, []);
 
-  const handleClose = () => {
+  const handleClose = (event?: React.MouseEvent) => {
+    event?.stopPropagation();
     // Mark as dismissed for 24 hours
     markBannerDismissed();
     setVisible(false);
   };
 
-  const handleInstall = async () => {
+  const handleInstall = async (event?: React.MouseEvent) => {
+    event?.stopPropagation();
+    
+    if (isInstalling) return; // Prevent double-clicks
+    
+    setIsInstalling(true);
+    
     if (deferredPrompt) {
       try {
         // user clicks Install -> show native prompt
@@ -118,7 +126,15 @@ const InstallBanner: React.FC = () => {
           setDeferredPrompt(null);
         }
       } catch (e) {
+        console.error('Install prompt failed:', e);
         setDeferredPrompt(null);
+        // Show user-friendly error
+        if (typeof window !== 'undefined') {
+          const message = e instanceof Error ? e.message : 'Installation failed';
+          console.warn('PWA installation error:', message);
+        }
+      } finally {
+        setIsInstalling(false);
       }
       return;
     }
@@ -133,9 +149,14 @@ const InstallBanner: React.FC = () => {
           setVisible(false);
         }
         // if dismissed, keep banner visible so dev can try again or close
+      } else {
+        // No install prompt available, provide feedback
+        console.warn('PWA install not available on this browser/device');
       }
     } catch (e) {
-      // ignore
+      console.warn('Install simulation failed:', e);
+    } finally {
+      setIsInstalling(false);
     }
   };
 
@@ -144,18 +165,26 @@ const InstallBanner: React.FC = () => {
   return (
     <div
       ref={bannerRef}
-      className="fixed left-4 right-4 md:left-8 md:right-8 bottom-4 z-50"
+      className="fixed left-4 right-4 md:left-8 md:right-8 bottom-2 sm:bottom-4 z-[100]"
       style={{ pointerEvents: 'auto' }}
     >
       <style>{`
         .musicsim-install-slide { animation: slideUp 360ms cubic-bezier(.2,.8,.2,1); }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+        
+        /* Mobile touch optimizations */
+        @media (max-width: 640px) {
+          .musicsim-install-banner-button {
+            min-height: 44px; /* iOS recommended touch target size */
+            min-width: 44px;
+          }
+        }
       `}</style>
 
-      <div className="musicsim-install-slide flex items-center justify-between bg-gray-800 dark:bg-gray-800 light:bg-white light:border-gray-300 border border-gray-700 shadow-lg rounded-xl p-3 md:p-4">
-        <div className="flex items-center gap-3 md:gap-4">
-          <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 bg-red-600 rounded-lg flex items-center justify-center">
-            <Download className="w-6 h-6 text-white" />
+      <div className="musicsim-install-slide flex items-center justify-between bg-gray-800 dark:bg-gray-800 light:bg-white light:border-gray-300 border border-gray-700 shadow-lg rounded-xl p-2 sm:p-3 md:p-4">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+          <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 rounded-lg flex items-center justify-center">
+            <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
 
           <div className="hidden sm:block">
@@ -168,22 +197,23 @@ const InstallBanner: React.FC = () => {
           </div>
         </div>
 
-        <div className="ml-4 flex items-center gap-3">
+        <div className="ml-2 sm:ml-4 flex items-center gap-2 sm:gap-3">
           <button
             onClick={handleInstall}
-            className="flex items-center gap-3 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform"
+            disabled={isInstalling}
+            className={`musicsim-install-banner-button flex items-center gap-1 sm:gap-3 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform touch-manipulation ${isInstalling ? 'opacity-50 cursor-not-allowed' : ''}`}
             aria-label="Install MusicSim"
           >
-            <span className="hidden sm:inline">Install</span>
-            <span className="sm:hidden text-sm">Install</span>
+            <span className="hidden sm:inline">{isInstalling ? 'Installing...' : 'Install'}</span>
+            <span className="sm:hidden text-xs">{isInstalling ? 'Installing...' : 'Install'}</span>
           </button>
 
           <button
             onClick={handleClose}
-            className="ml-2 p-2 rounded-full text-gray-300 dark:text-gray-300 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 light:hover:bg-gray-100"
+            className="musicsim-install-banner-button ml-1 sm:ml-2 p-1.5 sm:p-2 rounded-full text-gray-300 dark:text-gray-300 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 light:hover:bg-gray-100 touch-manipulation"
             aria-label="Close install banner"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>

@@ -86,17 +86,17 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, d
     }, [scenario.title]);
 
     return (
-        <div className="scenario-card bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-3 sm:p-6 md:p-8 w-full max-w-2xl animate-fade-in">
-            <h2 className="text-base sm:text-2xl md:text-3xl font-bold text-red-300 mb-2 sm:mb-4 leading-tight">{scenario.title}</h2>
+        <div className="scenario-card bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-3 sm:p-4 md:p-5 w-full max-w-2xl animate-fade-in">
+            <h2 className="text-base sm:text-2xl md:text-2xl font-bold text-red-300 mb-2 sm:mb-3 leading-tight">{scenario.title}</h2>
             {/* Scenario voice-over player (if provided) */}
             {scenario.audioFile && showAudio && (
-                <div className="mb-3 sm:mb-5">
+                <div className="mb-2 sm:mb-3">
                     <AudioErrorBoundary>
                         <AudioPlayer audioSrc={scenario.audioFile} autoPlay={!!scenario.autoPlayAudio} />
                     </AudioErrorBoundary>
                 </div>
             )}
-            <p className="text-gray-300 mb-3 sm:mb-6 leading-relaxed text-sm sm:text-base">{scenario.description}</p>
+            <p className="text-gray-300 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">{scenario.description}</p>
 
             {hintsAvailable && (
                 <div className="mb-2 sm:mb-4 hidden sm:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">

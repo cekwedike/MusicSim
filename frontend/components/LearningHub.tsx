@@ -149,10 +149,10 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-red-900/20 to-gray-900 backdrop-blur-sm flex items-center justify-center z-[60] p-2 sm:p-4 animate-fadeIn">
-      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-xl sm:rounded-2xl w-full max-w-7xl max-h-[98vh] sm:max-h-[95vh] overflow-hidden border border-red-500/30 shadow-2xl shadow-red-500/20 flex flex-col">
+      <div className="bg-gradient-to-br from-gray-800 via-gray-800 to-gray-900 rounded-xl sm:rounded-2xl w-full max-w-7xl max-h-[90vh] sm:max-h-[92vh] md:max-h-[95vh] overflow-hidden border border-red-500/30 shadow-2xl shadow-red-500/20 flex flex-col">
 
         {/* Header Section */}
-        <div className="relative bg-gradient-to-r from-red-600 via-red-600 to-rose-600 p-4 sm:p-5 md:p-6 lg:p-8 flex-shrink-0">
+        <div className="relative bg-gradient-to-r from-red-600 via-red-600 to-rose-600 p-3 sm:p-4 md:p-5 lg:p-6 flex-shrink-0">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start gap-3 sm:gap-4 mb-4 sm:mb-5 md:mb-6">

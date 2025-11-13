@@ -51,11 +51,20 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	const handleLogout = async () => {
 		console.log('[ProfilePanel] Logging out...');
 		try {
-			// Always use onExitGuest to properly return to landing page
+			// Close the profile panel first
 			if (onClose) onClose();
-			onExitGuest(); // This handles both logout and returning to landing
+			
+			// Perform logout if authenticated
+			if (isAuthenticated && logout) {
+				await logout();
+			}
+			
+			// Always return to landing page
+			onExitGuest();
 		} catch (e) {
 			console.error('Logout failed:', e);
+			// Even if logout fails, still exit to landing
+			onExitGuest();
 		}
 	};
 
@@ -492,7 +501,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 				)}
 
 				<button
-					onClick={isGuestMode ? handleExitGuest : handleLogout}
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						isGuestMode ? handleExitGuest() : handleLogout();
+					}}
 					className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
 				>
 					{isGuestMode ? 'Exit Guest Mode' : 'Logout'}
@@ -500,7 +513,11 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 				{/* Delete Profile Button */}
 				<button
-					onClick={() => setShowDeleteDialog(true)}
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						setShowDeleteDialog(true);
+					}}
 					className="w-full bg-gray-700 hover:bg-gray-600 text-red-400 hover:text-red-300 px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 border border-gray-600"
 				>
 					Delete All Data

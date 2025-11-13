@@ -102,17 +102,26 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     version: '1.0.0'
   };
 
+  let backendSaveSuccess = false;
+
   try {
     // Only save to backend if authenticated (not guest mode)
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (isAuthenticated) {
-      await gameService.saveGame(slotId, state);
-      console.log(`[storageService] Saved to backend: ${slotId}`);
+      console.log('[storageService] User authenticated, saving to backend...');
+      try {
+        await gameService.saveGame(slotId, state);
+        console.log(`[storageService] ✅ Backend save successful: ${slotId}`);
+        backendSaveSuccess = true;
+      } catch (backendError) {
+        console.error(`[storageService] ❌ Backend save failed for ${slotId}:`, backendError);
+        // Don't throw here - we'll still try localStorage
+      }
     } else {
       console.log('[storageService] Guest mode - saving to localStorage only');
     }
 
-    // Always save to localStorage
+    // Always save to localStorage as backup
     const saves = loadLocalSaves();
     console.log('[storageService] Current saves before adding new one:', Object.keys(saves));
 
@@ -122,14 +131,34 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     try {
       // Ensure we can stringify before writing — helps surface circular/reference errors
       const payload = JSON.stringify(saves);
-  localStorage.setItem('musicsim_saves', payload);
-  console.log(`[storageService] Saved to localStorage: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      localStorage.setItem('musicsim_saves', payload);
+      console.log(`[storageService] ✅ localStorage save successful: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
 
       // Verify the save was written
       const verification = localStorage.getItem('musicsim_saves');
       if (verification) {
         const verified = JSON.parse(verification);
         console.log('[storageService] Verification - saved slots:', Object.keys(verified));
+        
+        // Report save status
+        if (backendSaveSuccess) {
+          console.log(`[storageService] ✅ Complete save success for ${slotId}: backend + localStorage`);
+        } else {
+          console.log(`[storageService] ⚠️ Partial save success for ${slotId}: localStorage only (backend failed)`);
+        }
+      } else {
+        throw new Error('Save verification failed - localStorage empty after write');
+      }
+    } catch (storageError) {
+      console.error('[storageService] ❌ localStorage save failed:', storageError);
+      
+      // If both backend and localStorage fail, this is critical
+      if (!backendSaveSuccess) {
+        throw new Error(`Save failed completely: ${storageError.message}`);
+      } else {
+        console.warn('[storageService] Backend save succeeded but localStorage failed - continuing...');
+      }
+    }
         if (verified[slotId]) {
           console.log('[storageService] Verification successful - save exists in localStorage');
         } else {

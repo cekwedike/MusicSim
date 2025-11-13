@@ -26,10 +26,14 @@ const SaveLoadModal: React.FC<SaveLoadModalProps> = ({ isOpen, onClose, onLoadGa
     setLoading(true);
     setError('');
     try {
+      console.log('[SaveLoadModal] Loading save slots...');
       const slots = await getAllSaveSlots();
+      console.log('[SaveLoadModal] Loaded', slots.length, 'save slots');
       setSaveSlots(slots);
     } catch (err) {
-      setError('Failed to load save slots');
+      console.error('[SaveLoadModal] Failed to load save slots:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load save slots';
+      setError(`Failed to load saves: ${errorMessage}`);
     } finally {
       setLoading(false);
     }

@@ -3,6 +3,53 @@ const router = express.Router();
 const runMigration = require('../migrations/migrate');
 
 /**
+ * @swagger
+ * /api/migrate/run:
+ *   post:
+ *     summary: Run database migrations
+ *     description: Execute pending database migrations (admin only - requires secret)
+ *     tags: [Migration]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - secret
+ *             properties:
+ *               secret:
+ *                 type: string
+ *                 description: Migration secret key for authorization
+ *     responses:
+ *       200:
+ *         description: Migrations completed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ *       403:
+ *         description: Unauthorized - Invalid secret
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Migration failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+/**
  * @route   POST /api/migrate/run
  * @desc    Run database migrations (admin only - requires secret key)
  * @access  Public (but requires MIGRATION_SECRET)
@@ -40,6 +87,66 @@ router.post('/run', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/migrate/status:
+ *   get:
+ *     summary: Check migration status
+ *     description: Check database migration status and schema validation
+ *     tags: [Migration]
+ *     responses:
+ *       200:
+ *         description: Migration status retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 database:
+ *                   type: object
+ *                   properties:
+ *                     connected:
+ *                       type: boolean
+ *                     tablesChecked:
+ *                       type: string
+ *                 schema:
+ *                   type: object
+ *                   properties:
+ *                     columns:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           column_name:
+ *                             type: string
+ *                           data_type:
+ *                             type: string
+ *                           is_nullable:
+ *                             type: string
+ *                     requiredColumns:
+ *                       type: object
+ *                       properties:
+ *                         lastPlayedAt:
+ *                           type: string
+ *                         currentDate:
+ *                           type: string
+ *                         startDate:
+ *                           type: string
+ *                         playerStats:
+ *                           type: string
+ *                     migrationNeeded:
+ *                       type: boolean
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Failed to check migration status
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 /**
  * @route   GET /api/migrate/status
  * @desc    Check migration status and database schema

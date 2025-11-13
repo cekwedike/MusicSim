@@ -296,6 +296,66 @@ router.delete('/account', authMiddleware, async (req, res, next) => {
 });
 
 /**
+ * @swagger
+ * /api/auth/sync-profile:
+ *   post:
+ *     summary: Sync OAuth user profile to database
+ *     description: Create or update user profile in database after OAuth authentication
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: User ID (optional, uses token if not provided)
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User email address
+ *               username:
+ *                 type: string
+ *                 description: Username
+ *               displayName:
+ *                 type: string
+ *                 description: Display name
+ *               profileImage:
+ *                 type: string
+ *                 description: Profile image URL
+ *               authProvider:
+ *                 type: string
+ *                 description: OAuth provider (google, github, etc.)
+ *     responses:
+ *       200:
+ *         description: Profile synced successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
+ *       201:
+ *         description: Profile created successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+/**
  * @route   POST /api/auth/sync-profile
  * @desc    Sync OAuth user profile to database (create or update)
  * @access  Private
@@ -385,6 +445,54 @@ router.post('/sync-profile', authMiddleware, async (req, res, next) => {
 });
 
 /**
+ * @swagger
+ * /api/auth/sync-guest-data:
+ *   post:
+ *     summary: Sync guest data to user profile
+ *     description: Transfer guest gameplay data to authenticated user profile after registration
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: User ID (optional, uses token if not provided)
+ *               guestData:
+ *                 type: object
+ *                 properties:
+ *                   statistics:
+ *                     type: object
+ *                     description: Guest gameplay statistics
+ *                   saves:
+ *                     type: array
+ *                     items:
+ *                       type: object
+ *                     description: Guest game saves
+ *     responses:
+ *       200:
+ *         description: Guest data synced successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+/**
  * @route   POST /api/auth/sync-guest-data
  * @desc    Sync guest data to user profile after registration
  * @access  Private
@@ -445,6 +553,66 @@ router.post('/sync-guest-data', authMiddleware, async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/auth/update-username:
+ *   post:
+ *     summary: Update username for current user
+ *     description: Update the username for the authenticated user with validation
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 20
+ *                 pattern: '^[a-zA-Z0-9_]+$'
+ *                 description: New username (3-20 characters, letters, numbers, underscore only)
+ *     responses:
+ *       200:
+ *         description: Username updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: string
+ *       400:
+ *         description: Invalid username or username already taken
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
 /**
  * @route   POST /api/auth/update-username
  * @desc    Update username for current user

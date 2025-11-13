@@ -1,41 +1,59 @@
 # MusicSim: Music Business Simulation
 
-A comprehensive strategic music business simulation where players navigate the complex world of the music industry, making critical decisions that shape their artist's career, reputation, and success.
+A comprehensive strategic music business simulation that empowers players to navigate the complex world of the music industry. Players make critical decisions that shape their artist's career, reputation, and financial success while learning real-world business concepts that apply to the African music industry and beyond.
 
-## Demo Video
+Visit the official website: https://www.musicsim.net
+
+## Overview
+
+MusicSim is an educational simulation game designed to bridge the gap between music creation and business acumen. Players develop industry knowledge through interactive scenarios that mirror real-world challenges faced by recording artists, from contract negotiations to revenue optimization.
+
+## Demo Videos
 
 **[Watch MusicSim in Action - UPDATED](https://www.loom.com/share/4d77df71abf64e25ab0583a1e1e66496)**
 
 **[Watch MusicSim in Action](https://www.loom.com/share/301477b7660b4f62802950b39f4910c3)**
 
-See the complete gameplay experience, from artist setup to career management and decision-making scenarios.
+These demonstrations showcase the complete gameplay experience, from initial artist setup through complex career management scenarios and strategic decision-making processes.
 
 ## Features
 
-### Core Gameplay
-- **Career Management**: Guide your artist through weeks, months, and years of industry challenges
-- **Strategic Decision Making**: Navigate complex scenarios with meaningful consequences
-- **Three Difficulty Levels**: Easy, Realistic, and Hard modes with different starting conditions
-- **Dynamic Scenarios**: Rich scenario bank with diverse industry challenges
-- **Achievement System**: Unlock achievements based on career milestones and decisions
+### Core Gameplay Mechanics
+- **Career Management**: Guide your artist through realistic career progression spanning weeks, months, and years of industry challenges
+- **Strategic Decision Making**: Navigate over 100 complex scenarios with meaningful long-term consequences affecting cash flow, reputation, and industry relationships
+- **Three Difficulty Levels**: Easy, Realistic, and Hard modes with different starting conditions and industry pressures
+- **Dynamic Scenario System**: Extensive scenario bank featuring contract negotiations, marketing decisions, collaboration opportunities, and crisis management
+- **Achievement System**: Comprehensive achievement tracking for career milestones, learning goals, and strategic decisions
+- **Real-time Consequences**: Decisions affect multiple game metrics including cash, fame, well-being, and hype
 
-### Analytics & Progress
-- **Learning Hub**: Educational modules about music industry concepts
-- **Career History**: Track multiple playthroughs and compare outcomes
-- **Statistics Dashboard**: Comprehensive analytics on performance and learning
-- **Save/Load System**: Multiple save slots with cloud synchronization (when authenticated)
+### Educational Framework
+- **Music Business Academy**: Interactive learning modules covering contracts, revenue streams, rights management, and industry law
+- **Concept Mastery Tracking**: Monitor progression through business skills and applied knowledge
+- **Contextual Learning**: Scenarios provide educational outcomes explaining industry mechanisms and best practices
+- **African Music Industry Focus**: Special emphasis on challenges and opportunities within African music markets
+- **Practical Application**: Learning modules directly connect to in-game scenarios for immediate application
 
-### Account Features
-- **Guest Mode**: Play without registration with localStorage saves
-- **User Accounts**: Cloud saves, cross-device progression, and enhanced analytics
-- **Authentication**: Secure JWT-based authentication system
-- **Progress Tracking**: Detailed learning analytics and career insights
+### Analytics and Progress Management
+- **Career History**: Comprehensive tracking of multiple playthroughs with detailed outcome comparisons
+- **Learning Analytics**: Detailed insights into educational progress and knowledge retention
+- **Performance Metrics**: Track decision-making patterns, success rates, and areas for improvement
+- **Statistics Dashboard**: Visual representations of career progression and learning achievements
+- **Save/Load System**: Multiple save slots with automatic cloud synchronization for authenticated users
 
-### User Experience
-- **Responsive Design**: Optimized for desktop and mobile devices
-- **Interactive UI**: Modern React-based interface with smooth animations
-- **Tutorial System**: Guided onboarding for new players
-- **Mistake Prevention**: Warning system for potentially harmful decisions
+### Account and Authentication Features
+- **Guest Mode**: Full gameplay access without registration using secure local storage
+- **User Accounts**: Enhanced experience with cloud saves and cross-device progression
+- **JWT-based Security**: Industry-standard authentication with secure token management
+- **Progress Synchronization**: Seamless data sync across multiple devices and platforms
+- **Privacy Controls**: Comprehensive data management and privacy settings
+
+### User Interface and Experience
+- **Responsive Design**: Fully optimized for desktop computers, tablets, and mobile devices
+- **Modern React Interface**: Built with TypeScript and contemporary UI/UX principles
+- **Interactive Tutorial**: Comprehensive guided onboarding system for new players
+- **Mistake Prevention**: Intelligent warning system for potentially harmful decisions
+- **Accessibility Features**: Screen reader support and keyboard navigation
+- **Progressive Web App**: Installable application with offline capabilities
 
 ## Project Architecture
 

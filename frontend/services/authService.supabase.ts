@@ -168,7 +168,7 @@ export const authServiceSupabase = {
   },
 
   // Sync profile with backend (used for OAuth and profile creation)
-  syncProfile: async (data: { userId: string; email: string; username: string; profileImage?: string; authProvider?: string }): Promise<ApiResponse<{ user: User }>> => {
+  syncProfile: async (data: { userId: string; email: string; username: string; displayName?: string; profileImage?: string; authProvider?: string }): Promise<ApiResponse<{ user: User }>> => {
     try {
       const response = await api.post<ApiResponse<{ user: User }>>('/auth/sync-profile', data);
       return response.data;

@@ -105,6 +105,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           userId: supabaseUser.id,
           email: supabaseUser.email!,
           username,
+          displayName: username, // Use username as displayName initially
           profileImage,
           authProvider
         }).catch(err => {
@@ -209,6 +210,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               userId: oauthUser.id,
               email: oauthUser.email!,
               username,
+              displayName: oauthUser.user_metadata?.name || username, // Use actual name from OAuth or fallback to username
               profileImage,
               authProvider
             });

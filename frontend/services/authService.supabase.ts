@@ -6,9 +6,11 @@ const ALLOWED_REDIRECT_URLS = [
   'http://localhost:4173',
   'http://localhost:3000', 
   'http://localhost:5173',
-  // Add your production domains here
-  // 'https://yourdomain.com',
-  // 'https://www.yourdomain.com'
+  // Add your production domains here - UPDATE THESE WITH YOUR ACTUAL DOMAINS
+  'https://musicsim.vercel.app',
+  'https://musicsim-frontend.vercel.app',
+  'https://musicsim-git-main.vercel.app',
+  // Add more production URLs as needed
 ];
 
 // Validate redirect URL for security
@@ -16,6 +18,28 @@ const validateRedirectUrl = (url: string): boolean => {
   try {
     const parsedUrl = new URL(url);
     const normalizedUrl = `${parsedUrl.protocol}//${parsedUrl.host}`;
+    
+    // Allow localhost for development
+    if (parsedUrl.hostname === 'localhost') {
+      return true;
+    }
+    
+    const allowedDomains = [
+      'musicsim.net',
+      'www.musicsim.net',
+      'music-sim.vercel.app',
+      'https://www.music-sim.vercel.app',
+    ];
+    
+    if (allowedDomains.includes(parsedUrl.hostname)) {
+      return true;
+    }
+    
+    // Allow vercel.app domains (for deployments)
+    if (parsedUrl.hostname.endsWith('.vercel.app')) {
+      return true;
+    }
+    
     return ALLOWED_REDIRECT_URLS.includes(normalizedUrl);
   } catch {
     return false;

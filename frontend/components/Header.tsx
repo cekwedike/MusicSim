@@ -5,36 +5,61 @@ import { getAutosaveAge } from '../services/storageService';
 import { Menu } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
+export interface AutoSaveStatus {
+    isInProgress: boolean;
+    lastSaveTime: number | null;
+    error: string | null;
+}
+
 interface HeaderProps {
     artistName?: string;
     difficulty?: Difficulty;
     onMenuClick?: () => void;
     showMenuButton?: boolean;
+    autoSaveStatus?: AutoSaveStatus;
 }
 
 
-const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, showMenuButton = false }) => {
+const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, showMenuButton = false, autoSaveStatus }) => {
     const [autosaveAge, setAutosaveAge] = useState<number | null>(null);
     const [justSaved, setJustSaved] = useState(false);
 
+    // Use new autosave status if provided, otherwise fall back to old system
+    const isNewSystem = !!autoSaveStatus;
+    
     useEffect(() => {
-        const updateAutosaveAge = () => {
-            const age = getAutosaveAge();
-            setAutosaveAge(age);
-        };
-        
-        updateAutosaveAge();
-        const interval = setInterval(updateAutosaveAge, 10000);
-        return () => clearInterval(interval);
-    }, []);
+        if (isNewSystem) {
+            // Use new autosave status
+            if (autoSaveStatus?.lastSaveTime) {
+                const ageMinutes = Math.floor((Date.now() - autoSaveStatus.lastSaveTime) / (1000 * 60));
+                setAutosaveAge(ageMinutes);
+                
+                // Show "Saved!" indicator for new saves
+                if (ageMinutes === 0) {
+                    setJustSaved(true);
+                    setTimeout(() => setJustSaved(false), 2000);
+                }
+            }
+        } else {
+            // Fall back to old system
+            const updateAutosaveAge = () => {
+                const age = getAutosaveAge();
+                setAutosaveAge(age);
+            };
+            
+            updateAutosaveAge();
+            const interval = setInterval(updateAutosaveAge, 10000);
+            return () => clearInterval(interval);
+        }
+    }, [isNewSystem, autoSaveStatus?.lastSaveTime]);
 
-    // Show brief "Saved!" indicator when autosave happens
+    // Show brief "Saved!" indicator when autosave happens (old system)
     useEffect(() => {
-        if (autosaveAge === 0) {
+        if (!isNewSystem && autosaveAge === 0) {
             setJustSaved(true);
             setTimeout(() => setJustSaved(false), 2000);
         }
-    }, [autosaveAge]);
+    }, [autosaveAge, isNewSystem]);
 
     return (
         <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center border-b border-default/50 relative bg-primary/95 backdrop-blur-sm">
@@ -79,13 +104,30 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
             {/* Autosave Indicator */}
             {artistName && (
                 <div className="absolute top-2 sm:top-3 left-2 sm:left-4 flex items-center gap-1 sm:gap-2">
-                    {justSaved && (
+                    {/* Saving in Progress */}
+                    {autoSaveStatus?.isInProgress && (
+                        <div className="bg-blue-500/20 border border-blue-500 rounded-lg px-2 sm:px-3 py-1 text-blue-400 text-xs sm:text-sm animate-pulse">
+                            Saving...
+                        </div>
+                    )}
+
+                    {/* Save Success */}
+                    {(justSaved || (!autoSaveStatus?.isInProgress && autoSaveStatus?.lastSaveTime && autosaveAge === 0)) && (
                         <div className="bg-semantic-success/20 border border-semantic-success rounded-lg px-2 sm:px-3 py-1 text-semantic-success text-xs sm:text-sm animate-fade-in">
                             Saved
                         </div>
                     )}
 
-                    {autosaveAge !== null && autosaveAge > 0 && (
+                    {/* Save Error */}
+                    {autoSaveStatus?.error && (
+                        <div className="bg-semantic-error/20 border border-semantic-error rounded-lg px-2 sm:px-3 py-1 text-semantic-error text-xs sm:text-sm cursor-pointer" 
+                             title={`Save Error: ${autoSaveStatus.error}`}>
+                            Save Failed
+                        </div>
+                    )}
+
+                    {/* Last Save Time */}
+                    {autosaveAge !== null && autosaveAge > 0 && !autoSaveStatus?.isInProgress && !autoSaveStatus?.error && (
                         <div className={`text-xs sm:text-sm ${autosaveAge >= 8 ? 'text-semantic-warning' : 'text-muted'} hidden sm:block`}>
                             Autosave: {autosaveAge}m ago
                         </div>

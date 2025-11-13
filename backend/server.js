@@ -12,6 +12,9 @@ validateEnvironmentOrExit();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Trust proxy for rate limiting behind reverse proxies (Render, Heroku, etc.)
+app.set('trust proxy', 1);
+
 // Import models to ensure they're loaded
 const { sequelize } = require('./models');
 

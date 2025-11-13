@@ -10,6 +10,7 @@ import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots } from './services/storageService';
+import { useAutoSave } from './hooks/useAutoSave';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { getGenreLabel } from './constants/genres';
 import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } from './data/difficultySettings';
@@ -1678,6 +1679,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
 
+    // Initialize autosave hook with 5-second debounce
+    const { autoSave: debouncedAutoSave, saveNow, status: autoSaveStatus, clearError: clearAutoSaveError } = useAutoSave(5000);
+
     // Sidebar state
     const [activeSidebarView, setActiveSidebarView] = useState<SidebarView>(null);
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -1840,12 +1844,21 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         }
     }, [status, artistName, fetchNextScenario, state, currentScenario]);
 
-    // Auto-save effect
+    // Auto-save effect with debouncing
     useEffect(() => {
+        // Only autosave during active gameplay
         if (status === 'playing' && isStorageAvailable()) {
-            autoSave(state);
+            debouncedAutoSave(state);
         }
-    }, [state.date, state.playerStats, status]); // Auto-save when date or stats change
+    }, [state.date, state.playerStats, status, debouncedAutoSave]); // Auto-save when date or stats change (debounced)
+
+    // Immediate save for important game events (no debounce)
+    useEffect(() => {
+        if (status === 'playing' && isStorageAvailable() && lastOutcome) {
+            // Save immediately after making a choice and seeing the outcome
+            saveNow(state);
+        }
+    }, [lastOutcome, status, saveNow, state]);
 
     // Clean up expired autosaves on mount
     useEffect(() => {
@@ -2030,6 +2043,11 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const handleContinue = () => {
         audioManager.playSound('weekAdvance');
         dispatch({ type: 'DISMISS_OUTCOME' });
+        
+        // Save immediately after advancing to next week
+        if (status === 'playing' && isStorageAvailable()) {
+            saveNow(state);
+        }
     };
 
     const handleStartGame = () => {
@@ -2309,6 +2327,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 difficulty={status === 'playing' ? state.difficulty : undefined}
                 onMenuClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
                 showMenuButton={!!artistName}
+                autoSaveStatus={autoSaveStatus}
             />
 
             {/* Sidebar - only show when game has started */}

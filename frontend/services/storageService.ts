@@ -159,16 +159,6 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
         console.warn('[storageService] Backend save succeeded but localStorage failed - continuing...');
       }
     }
-        if (verified[slotId]) {
-          console.log('[storageService] Verification successful - save exists in localStorage');
-        } else {
-          console.error('[storageService] Verification failed - save not found in localStorage after writing!');
-        }
-      }
-    } catch (err) {
-      console.error('[storageService] Failed to write saves to localStorage (stringify error):', err);
-      throw err;
-    }
   } catch (error) {
     console.error('[storageService] Save error:', error);
 
@@ -177,8 +167,8 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     saves[slotId] = saveData;
     try {
       const payload = JSON.stringify(saves);
-  localStorage.setItem('musicsim_saves', payload);
-  console.log(`[storageService] Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      localStorage.setItem('musicsim_saves', payload);
+      console.log(`[storageService] Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
     } catch (err) {
       console.error('[storageService] Fallback: failed to write saves to localStorage (stringify error):', err);
       // Re-throw so callers can surface the error if needed

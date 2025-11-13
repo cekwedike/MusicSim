@@ -4,6 +4,90 @@ const { User, PlayerStatistics, GameSave } = require('../models');
 const authMiddleware = require('../middleware/auth');
 const { sanitizeInput } = require('../utils/validation');
 const supabaseAdmin = require('../config/supabase');
+const rateLimit = require('express-rate-limit');
+const crypto = require('crypto');
+
+// Rate limiting for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 requests per windowMs
+  message: {
+    success: false,
+    message: 'Too many authentication attempts. Please try again in 15 minutes.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Skip rate limiting for successful requests to avoid penalizing normal usage
+  skipSuccessfulRequests: true
+});
+
+// Stricter rate limiting for sensitive operations
+const strictAuthLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per windowMs for sensitive operations
+  message: {
+    success: false,
+    message: 'Too many sensitive operations. Please try again in 15 minutes.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Webhook signature verification middleware
+const verifyWebhookSignature = (req, res, next) => {
+  try {
+    // Skip verification in development if no secret is set
+    const webhookSecret = process.env.SUPABASE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[WARNING] SUPABASE_WEBHOOK_SECRET not set. Skipping webhook verification in development.');
+        return next();
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: 'Webhook secret not configured'
+        });
+      }
+    }
+
+    const signature = req.headers['x-supabase-signature'];
+    if (!signature) {
+      return res.status(401).json({
+        success: false,
+        message: 'Missing webhook signature'
+      });
+    }
+
+    const payload = JSON.stringify(req.body);
+    const expectedSignature = crypto
+      .createHmac('sha256', webhookSecret)
+      .update(payload, 'utf8')
+      .digest('hex');
+
+    // Use secure comparison to prevent timing attacks
+    const providedSignature = signature.replace('sha256=', '');
+    const isValid = crypto.timingSafeEqual(
+      Buffer.from(expectedSignature, 'hex'),
+      Buffer.from(providedSignature, 'hex')
+    );
+
+    if (!isValid) {
+      console.error('[Webhook Security] Invalid signature detected from:', req.ip);
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid webhook signature'
+      });
+    }
+
+    next();
+  } catch (error) {
+    console.error('[Webhook Security] Signature verification error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Webhook verification failed'
+    });
+  }
+};
 
 /**
  * @swagger
@@ -18,8 +102,10 @@ const supabaseAdmin = require('../config/supabase');
  *         description: Current user
  *       401:
  *         description: Unauthorized
+ *       429:
+ *         description: Too many requests
  */
-router.get('/me', authMiddleware, async (req, res, next) => {
+router.get('/me', authLimiter, authMiddleware, async (req, res, next) => {
   try {
     let user = await User.findByPk(req.userId, {
       attributes: ['id', 'email', 'username', 'displayName', 'lastLogin', 'createdAt', 'isActive', 'profileImage'],
@@ -360,7 +446,7 @@ router.delete('/account', authMiddleware, async (req, res, next) => {
  * @desc    Sync OAuth user profile to database (create or update)
  * @access  Private
  */
-router.post('/sync-profile', authMiddleware, async (req, res, next) => {
+router.post('/sync-profile', authLimiter, authMiddleware, async (req, res, next) => {
   try {
     const { userId, email, username, displayName, profileImage, authProvider } = req.body;
 
@@ -665,13 +751,17 @@ router.post('/sync-guest-data', authMiddleware, async (req, res, next) => {
  * @desc    Update username for current user
  * @access  Private
  */
-router.post('/update-username', authMiddleware, async (req, res, next) => {
+router.post('/update-username', strictAuthLimiter, authMiddleware, async (req, res, next) => {
+  // Use database transaction to prevent race conditions
+  const transaction = await require('../models').sequelize.transaction();
+  
   try {
     const { username } = req.body;
 
     console.log('[update-username] Request from user:', req.userId, 'New username:', username);
 
     if (!username || username.length < 3 || username.length > 20) {
+      await transaction.rollback();
       return res.status(400).json({
         success: false,
         message: 'Username must be 3-20 characters'
@@ -679,6 +769,7 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
     }
 
     if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      await transaction.rollback();
       return res.status(400).json({
         success: false,
         message: 'Username can only contain letters, numbers, and underscores'
@@ -687,20 +778,27 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
 
     const sanitizedUsername = sanitizeInput(username);
 
-    // Check if username is taken by ANY other user (strict uniqueness)
+    // Check if username is taken by ANY other user (strict uniqueness) within transaction
     const existingUser = await User.findOne({
       where: {
         username: sanitizedUsername,
         id: { [require('sequelize').Op.ne]: req.userId }
-      }
+      },
+      lock: true, // Lock the row to prevent concurrent access
+      transaction
     });
 
     if (existingUser) {
-      // Suggest alternative usernames
+      await transaction.rollback();
+      
+      // Generate alternative suggestions
       const suggestions = [];
       for (let i = 1; i <= 3; i++) {
         const suggestion = `${sanitizedUsername}${i}`;
-        const isTaken = await User.findOne({ where: { username: suggestion } });
+        const isTaken = await User.findOne({ 
+          where: { username: suggestion },
+          transaction: await require('../models').sequelize.transaction()
+        });
         if (!isTaken) {
           suggestions.push(suggestion);
         }
@@ -714,7 +812,10 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
       });
     }
 
-    let user = await User.findByPk(req.userId);
+    let user = await User.findByPk(req.userId, {
+      lock: true, // Lock user record during update
+      transaction
+    });
 
     // If user doesn't exist yet (OAuth user not synced), create profile on the fly
     if (!user && req.supabaseUser) {
@@ -731,15 +832,16 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
         lastLogin: new Date(),
         isActive: true,
         profileImage: req.supabaseUser.user_metadata?.avatar_url || req.supabaseUser.user_metadata?.picture
-      });
+      }, { transaction });
 
       // Create associated PlayerStatistics
       await PlayerStatistics.create({
         userId: user.id
-      });
+      }, { transaction });
 
       console.log('[update-username] Profile created successfully with username:', sanitizedUsername);
     } else if (!user) {
+      await transaction.rollback();
       return res.status(404).json({
         success: false,
         message: 'User not found'
@@ -748,10 +850,13 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
       // Update existing user's username
       const oldUsername = user.username;
       user.username = sanitizedUsername;
-      await user.save();
+      await user.save({ transaction });
       
       console.log(`[update-username] Username updated for user ${req.userId}: ${oldUsername} → ${sanitizedUsername}`);
     }
+
+    // Commit the transaction
+    await transaction.commit();
 
     res.json({
       success: true,
@@ -761,6 +866,8 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
       }
     });
   } catch (error) {
+    // Rollback transaction on any error
+    await transaction.rollback();
     console.error('[update-username] Error:', error);
     
     // Handle database unique constraint violations
@@ -807,7 +914,7 @@ router.post('/update-username', authMiddleware, async (req, res, next) => {
  *       500:
  *         description: Cleanup failed
  */
-router.post('/webhook/user-deleted', async (req, res, next) => {
+router.post('/webhook/user-deleted', verifyWebhookSignature, async (req, res, next) => {
   try {
     const { type, record } = req.body;
     

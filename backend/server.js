@@ -2,7 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const { validateEnvironmentOrExit } = require('./utils/environmentValidator');
 require('dotenv').config();
+
+// Validate environment configuration before starting server
+console.log('🚀 Starting MusicSim Backend Server...');
+validateEnvironmentOrExit();
 
 const app = express();
 const PORT = process.env.PORT || 3001;

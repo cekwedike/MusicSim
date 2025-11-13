@@ -1,6 +1,27 @@
 import { supabase } from './supabase';
 import api from './api';
 
+// Allowed redirect URLs for OAuth (security measure)
+const ALLOWED_REDIRECT_URLS = [
+  'http://localhost:4173',
+  'http://localhost:3000', 
+  'http://localhost:5173',
+  // Add your production domains here
+  // 'https://yourdomain.com',
+  // 'https://www.yourdomain.com'
+];
+
+// Validate redirect URL for security
+const validateRedirectUrl = (url: string): boolean => {
+  try {
+    const parsedUrl = new URL(url);
+    const normalizedUrl = `${parsedUrl.protocol}//${parsedUrl.host}`;
+    return ALLOWED_REDIRECT_URLS.includes(normalizedUrl);
+  } catch {
+    return false;
+  }
+};
+
 // Types
 export interface User {
   id: string;
@@ -34,10 +55,16 @@ export const authServiceSupabase = {
   // Sign in with Google OAuth
   signInWithGoogle: async () => {
     try {
+      // Validate redirect URL for security
+      const redirectUrl = window.location.origin;
+      if (!validateRedirectUrl(redirectUrl)) {
+        throw new Error('Invalid redirect URL. Please contact support.');
+      }
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin,
+          redirectTo: redirectUrl,
           queryParams: {
             prompt: 'select_account', // Force Google account selection screen
             access_type: 'offline',

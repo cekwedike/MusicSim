@@ -56,9 +56,12 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Serve static files from public directory
 app.use(express.static('public'));
 
-// Request logging middleware
+// Request logging middleware (skip health checks to reduce log noise)
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  // Skip logging health/ping checks (Render.com checks every 30s)
+  if (req.path !== '/api/health' && req.path !== '/api/ping') {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  }
   next();
 });
 

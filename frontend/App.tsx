@@ -1427,9 +1427,9 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
     };
 
     return (
-        <div className="text-center p-8 flex flex-col items-center justify-center h-full animate-fade-in">
-            <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500 mb-4">Welcome to MusicSim</h2>
-            <p className="text-gray-300 max-w-md mb-8">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
+        <div className="text-center p-4 sm:p-6 flex flex-col items-center justify-center h-full animate-fade-in">
+            <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500 mb-2">Welcome to MusicSim</h2>
+            <p className="text-sm sm:text-base text-gray-300 max-w-md mb-4">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
 
             <div className="space-y-4 w-full max-w-2xl">
                 {/* Error Display */}
@@ -1449,18 +1449,18 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                     <button
                         onClick={handleContinue}
                         disabled={loadingSlotId === 'auto'}
-                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-lg hover:scale-105 transition-transform text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative"
+                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3 px-6 rounded-lg hover:scale-105 transition-transform text-base shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative"
                     >
                         {loadingSlotId === 'auto' ? (
-                            <div className="flex items-center justify-center gap-3">
-                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <div className="flex items-center justify-center gap-2">
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                 <span>Loading...</span>
                             </div>
                         ) : (
                             <>
                                 Continue Game
                                 {autosaveAge !== null && (
-                                    <span className="block text-sm mt-1 opacity-75">
+                                    <span className="block text-xs mt-0.5 opacity-75">
                                         Last saved {autosaveAge} {autosaveAge === 1 ? 'minute' : 'minutes'} ago
                                         {autosaveAge >= 8 && ' (expires soon!)'}
                                     </span>
@@ -1472,22 +1472,22 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
                 {/* Existing Save Slots */}
                 {!loadingSaves && saveSlots.length > 0 && (
-                    <div className="mt-6">
-                        <h3 className="text-lg font-semibold text-gray-300 mb-4 flex items-center justify-between">
+                    <div className="mt-4">
+                        <h3 className="text-base font-semibold text-gray-300 mb-3 flex items-center justify-between">
                             <span>Your Careers ({saveSlots.length}/5)</span>
-                            <div className="hidden sm:flex text-xs text-gray-500 gap-4">
+                            <div className="hidden sm:flex text-xs text-gray-500">
                                 <span>Click to continue</span>
                             </div>
                         </h3>
-                        
+
                         {/* Desktop/Tablet Grid Layout */}
-                        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                             {saveSlots.map((slot) => (
                                 <button
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
                                     disabled={loadingSlotId === slot.id}
-                                    className="bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:shadow-red-500/10 group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
+                                    className="bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-red-500/10 group disabled:opacity-60 disabled:cursor-not-allowed relative"
                                 >
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
@@ -1499,55 +1499,54 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         </div>
                                     )}
                                     
-                                    <div className="space-y-3">
+                                    <div className="space-y-2">
                                         {/* Header with artist name and genre */}
                                         <div className="flex items-center justify-between">
                                             <div className="min-w-0 flex-1">
-                                                <div className="text-xs text-gray-500 mb-1">
+                                                <div className="text-xs text-gray-500 mb-0.5">
                                                     {slot.slotName}
                                                 </div>
-                                                <div className="font-bold text-red-300 truncate group-hover:text-red-200 transition-colors">
+                                                <div className="font-bold text-sm text-red-300 truncate group-hover:text-red-200 transition-colors">
                                                     {slot.artistName}
                                                 </div>
-                                                <div className="text-sm text-gray-400 capitalize">
+                                                <div className="text-xs text-gray-400 capitalize">
                                                     {getGenreLabel(slot.genre)}
                                                 </div>
                                             </div>
-                                            <div className="flex-shrink-0 w-2 h-2 bg-red-700 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
                                         </div>
-                                        
+
                                         {/* Progress bar */}
-                                        <div className="space-y-1">
+                                        <div className="space-y-0.5">
                                             <div className="flex justify-between text-xs">
-                                                <span className="text-gray-500">Career Progress</span>
+                                                <span className="text-gray-500">Progress</span>
                                                 <span className="text-red-300 font-medium">{slot.careerProgress}%</span>
                                             </div>
-                                            <div className="w-full bg-gray-700 rounded-full h-1.5">
-                                                <div 
-                                                    className="bg-gradient-to-r from-red-700 to-rose-500 h-1.5 rounded-full transition-all duration-300"
+                                            <div className="w-full bg-gray-700 rounded-full h-1">
+                                                <div
+                                                    className="bg-gradient-to-r from-red-700 to-rose-500 h-1 rounded-full transition-all duration-300"
                                                     style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
                                                 ></div>
                                             </div>
                                         </div>
-                                        
+
                                         {/* Stats row */}
-                                        <div className="grid grid-cols-2 gap-2 text-xs">
-                                            <div className="bg-gray-900/50 rounded-lg p-2">
-                                                <div className="text-gray-500 mb-0.5">Cash</div>
-                                                <div className="text-green-400 font-mono font-semibold">${slot.stats.cash.toLocaleString()}</div>
+                                        <div className="grid grid-cols-2 gap-1.5 text-xs">
+                                            <div className="bg-gray-900/50 rounded p-1.5">
+                                                <div className="text-gray-500 text-[10px]">Cash</div>
+                                                <div className="text-green-400 font-mono font-semibold text-xs">${slot.stats.cash.toLocaleString()}</div>
                                             </div>
-                                            <div className="bg-gray-900/50 rounded-lg p-2">
-                                                <div className="text-gray-500 mb-0.5">Fame</div>
-                                                <div className="text-yellow-400 font-semibold">{Math.round(slot.stats.fame)}</div>
+                                            <div className="bg-gray-900/50 rounded p-1.5">
+                                                <div className="text-gray-500 text-[10px]">Fame</div>
+                                                <div className="text-yellow-400 font-semibold text-xs">{Math.round(slot.stats.fame)}</div>
                                             </div>
                                         </div>
-                                        
+
                                         {/* Date info */}
-                                        <div className="flex justify-between items-center pt-1">
-                                            <div className="text-xs text-gray-500">
-                                                Year {slot.date.year}, Week {slot.date.week}
+                                        <div className="flex justify-between items-center pt-0.5">
+                                            <div className="text-[10px] text-gray-500">
+                                                Y{slot.date.year}, W{slot.date.week}
                                             </div>
-                                            <div className="text-xs text-gray-400">
+                                            <div className="text-[10px] text-gray-400">
                                                 {new Date(slot.timestamp).toLocaleDateString()}
                                             </div>
                                         </div>
@@ -1557,13 +1556,13 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                         </div>
 
                         {/* Mobile List Layout */}
-                        <div className="md:hidden space-y-3">
+                        <div className="md:hidden space-y-2">
                             {saveSlots.map((slot) => (
                                 <button
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
                                     disabled={loadingSlotId === slot.id}
-                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-4 rounded-xl transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
+                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-3 rounded-lg transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                 >
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
@@ -2429,13 +2428,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
 
-            <div className={`flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-5 py-2 sm:py-3 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
+            <div className={`flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
 
-                <main className="flex justify-center mt-2 sm:mt-2 mb-4 flex-shrink-0">
+                <main className="flex justify-center mt-1 sm:mt-1.5 mb-2 sm:mb-3 flex-shrink-0">
                     {renderGameContent()}
                 </main>
             </div>

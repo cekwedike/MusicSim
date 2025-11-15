@@ -61,12 +61,12 @@ const ChoiceButton: React.FC<{
         <button
             onClick={onClick}
             disabled={disabled}
-            className="w-full text-left p-3 sm:p-4 bg-gray-700 hover:bg-red-600 border border-gray-600 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-[1.02] sm:hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative min-h-[44px] sm:min-h-[56px]"
+            className="w-full text-left p-2.5 sm:p-3 bg-gray-700 hover:bg-red-600 border border-gray-600 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative min-h-[40px] sm:min-h-[48px]"
         >
-            <p className="font-semibold pr-8 sm:pr-8 text-sm sm:text-base leading-relaxed">{choice.text}</p>
+            <p className="font-semibold pr-7 text-sm sm:text-base leading-snug">{choice.text}</p>
             {hint && (
                 <div
-                    className={`absolute top-3 sm:top-4 right-3 sm:right-4 w-3 h-3 sm:w-3 sm:h-3 rounded-full ${getHintColor(hint)}`}
+                    className={`absolute top-2.5 sm:top-3 right-2.5 sm:right-3 w-2.5 h-2.5 rounded-full ${getHintColor(hint)}`}
                     title={getHintTooltip(hint)}
                 />
             )}
@@ -86,31 +86,31 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, d
     }, [scenario.title]);
 
     return (
-        <div className="scenario-card bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-3 sm:p-4 md:p-5 w-full max-w-2xl animate-fade-in">
-            <h2 className="text-base sm:text-2xl md:text-2xl font-bold text-red-300 mb-2 sm:mb-3 leading-tight">{scenario.title}</h2>
+        <div className="scenario-card bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-xl shadow-2xl p-3 sm:p-4 w-full max-w-2xl animate-fade-in">
+            <h2 className="text-base sm:text-xl font-bold text-red-300 mb-1.5 sm:mb-2 leading-tight">{scenario.title}</h2>
             {/* Scenario voice-over player (if provided) */}
             {scenario.audioFile && showAudio && (
-                <div className="mb-2 sm:mb-3">
+                <div className="mb-1.5 sm:mb-2">
                     <AudioErrorBoundary>
                         <AudioPlayer audioSrc={scenario.audioFile} autoPlay={!!scenario.autoPlayAudio} />
                     </AudioErrorBoundary>
                 </div>
             )}
-            <p className="text-gray-300 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">{scenario.description}</p>
+            <p className="text-gray-300 mb-2 sm:mb-3 leading-snug text-sm sm:text-base">{scenario.description}</p>
 
             {hintsAvailable && (
-                <div className="mb-2 sm:mb-4 hidden sm:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-400">
+                <div className="mb-1.5 sm:mb-2 hidden sm:flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
+                    <div className="flex items-center gap-2 text-xs text-gray-400">
                         <span className="flex items-center gap-1">
-                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
                             Safe
                         </span>
                         <span className="flex items-center gap-1">
-                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-500"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-yellow-500"></div>
                             Risky
                         </span>
                         <span className="flex items-center gap-1">
-                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
                             Dangerous
                         </span>
                     </div>
@@ -123,7 +123,7 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, d
                 </div>
             )}
 
-            <div className="choice-buttons space-y-2 sm:space-y-4 mt-1">
+            <div className="choice-buttons space-y-1.5 sm:space-y-2">
                 {scenario.choices.map((choice, index) => (
                     <ChoiceButton
                         key={index}

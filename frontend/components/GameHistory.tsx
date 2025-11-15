@@ -44,54 +44,54 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
   const sortedLogs = [...displayLogs].reverse(); // Show most recent first
 
   return (
-  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 mb-2 md:mb-3 mt-2 md:mt-3 overflow-hidden">
+  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 mb-1.5 mt-1.5 overflow-hidden">
       {/* Mobile: Collapsed button */}
       <div className="lg:hidden">
         {isMobileCollapsed ? (
           <button
             onClick={() => setIsMobileCollapsed(false)}
-            className="w-full flex items-center justify-between p-3 hover:bg-gray-700/50 transition-colors rounded-lg"
+            className="w-full flex items-center justify-between p-2 hover:bg-gray-700/50 transition-colors rounded-lg"
           >
-            <div className="flex items-center gap-2">
-              <History className="w-4 h-4 text-red-400" />
-              <span className="text-sm font-bold text-white">History</span>
-              <span className="text-xs text-gray-400">({logs.length})</span>
+            <div className="flex items-center gap-1.5">
+              <History className="w-3.5 h-3.5 text-red-400" />
+              <span className="text-xs font-bold text-white">History</span>
+              <span className="text-[10px] text-gray-400">({logs.length})</span>
             </div>
-            <ChevronDown className="w-4 h-4 text-red-400" />
+            <ChevronDown className="w-3.5 h-3.5 text-red-400" />
           </button>
         ) : (
-          <div className="p-2 sm:p-3">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <History className="w-4 h-4 text-red-400" />
-                <h3 className="text-sm font-bold text-white">History</h3>
-                <span className="text-xs text-gray-400">({logs.length})</span>
+          <div className="p-2">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-1.5">
+                <History className="w-3.5 h-3.5 text-red-400" />
+                <h3 className="text-xs font-bold text-white">History</h3>
+                <span className="text-[10px] text-gray-400">({logs.length})</span>
               </div>
               <button
                 onClick={() => setIsMobileCollapsed(true)}
-                className="flex items-center gap-1 text-red-400 hover:text-red-300 text-xs font-medium transition-colors"
+                className="flex items-center gap-0.5 text-red-400 hover:text-red-300 text-xs font-medium transition-colors"
               >
                 <span>Hide</span>
-                <ChevronUp className="w-4 h-4" />
+                <ChevronUp className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            <div className={`space-y-2 overflow-y-auto overflow-x-hidden ${isExpanded ? 'max-h-48 sm:max-h-64 md:max-h-96' : 'max-h-32 sm:max-h-48'}`}>
+            <div className={`space-y-1.5 overflow-y-auto overflow-x-hidden ${isExpanded ? 'max-h-40 sm:max-h-48' : 'max-h-24 sm:max-h-32'}`}>
               {sortedLogs.length === 0 ? (
-                <div className="text-gray-500 text-center py-6 text-sm">
+                <div className="text-gray-500 text-center py-4 text-xs">
                   No history yet. Start making decisions!
                 </div>
               ) : (
                 sortedLogs.map((log, index) => (
                   <div
                     key={`${log.timestamp.getTime()}-${index}`}
-                    className={`border-l-4 rounded p-2 ${getLogColor(log.type)} transition-all`}
+                    className={`border-l-4 rounded p-1.5 ${getLogColor(log.type)} transition-all`}
                   >
-                    <div className="flex items-start gap-2">
+                    <div className="flex items-start gap-1.5">
                       {log.icon && (
-                        <span className="text-base leading-none mt-0.5 flex-shrink-0">{log.icon}</span>
+                        <span className="text-sm leading-none mt-0.5 flex-shrink-0">{log.icon}</span>
                       )}
-                      <p className="text-xs font-medium leading-relaxed break-words overflow-wrap-anywhere flex-1">{log.message}</p>
+                      <p className="text-[11px] font-medium leading-snug break-words overflow-wrap-anywhere flex-1">{log.message}</p>
                     </div>
                   </div>
                 ))

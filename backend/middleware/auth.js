@@ -24,8 +24,43 @@ const authMiddleware = async (req, res, next) => {
       });
     }
 
-    // Find user in our database
-    const user = await User.findByPk(supabaseUser.id);
+    // Find user in our database with retry logic for connection issues
+    let user = null;
+    let retries = 3;
+    let lastError = null;
+
+    while (retries > 0 && !user) {
+      try {
+        user = await User.findByPk(supabaseUser.id);
+        break; // Success, exit loop
+      } catch (dbError) {
+        lastError = dbError;
+        // Check if it's a connection error
+        if (dbError.name === 'SequelizeConnectionRefusedError' ||
+            dbError.name === 'SequelizeConnectionError' ||
+            dbError.parent?.code === 'ECONNREFUSED') {
+          retries--;
+          if (retries > 0) {
+            console.warn(`Database connection failed, retrying... (${3 - retries}/3)`);
+            // Wait 1 second before retry
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        } else {
+          // Not a connection error, throw it
+          throw dbError;
+        }
+      }
+    }
+
+    // If all retries failed, return service unavailable
+    if (!user && lastError) {
+      console.error('Database connection failed after 3 retries:', lastError.message);
+      return res.status(503).json({
+        success: false,
+        message: 'Database temporarily unavailable. Please try again in a moment.',
+        error: 'SERVICE_UNAVAILABLE'
+      });
+    }
 
     if (!user) {
       // User authenticated with Supabase but no profile in our DB yet
@@ -56,6 +91,18 @@ const authMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
+
+    // More specific error handling
+    if (error.name === 'SequelizeConnectionRefusedError' ||
+        error.name === 'SequelizeConnectionError' ||
+        error.parent?.code === 'ECONNREFUSED') {
+      return res.status(503).json({
+        success: false,
+        message: 'Database temporarily unavailable. Please try again in a moment.',
+        error: 'SERVICE_UNAVAILABLE'
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: 'Authentication error',

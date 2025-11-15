@@ -14,6 +14,7 @@ const serializeGameState = (state: GameState): any => {
     ...state,
     currentDate: state.currentDate ? state.currentDate.toISOString() : undefined,
     startDate: state.startDate ? state.startDate.toISOString() : undefined,
+    lastStaffPaymentDate: state.lastStaffPaymentDate ? state.lastStaffPaymentDate.toISOString() : undefined,
     logs: state.logs ? state.logs.map(log => ({
       ...log,
       timestamp: log.timestamp.toISOString()
@@ -29,6 +30,7 @@ const deserializeGameState = (data: any): GameState => {
     ...data,
     currentDate: data.currentDate ? new Date(data.currentDate) : new Date(),
     startDate: data.startDate ? new Date(data.startDate) : new Date(),
+    lastStaffPaymentDate: data.lastStaffPaymentDate ? new Date(data.lastStaffPaymentDate) : new Date(),
     logs: data.logs ? data.logs.map((log: any) => ({
       ...log,
       timestamp: new Date(log.timestamp)

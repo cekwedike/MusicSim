@@ -1,12 +1,8 @@
 export type SoundEffect =
   | 'buttonClick'
-  | 'buttonHover'
   | 'achievementUnlock'
   | 'cashGain'
-  | 'cashLoss'
-  | 'fameIncrease'
   | 'gameOver'
-  | 'weekAdvance'
   | 'contractSign'
   | 'lessonComplete';
 
@@ -68,18 +64,14 @@ export interface AudioManager {
   audioState: AudioState;
 }
 
-// Sound effects from Pixabay (these should work)
+// Sound effects - local files from /public/audio/sounds/
 export const SOUND_URLS: Record<SoundEffect, string> = {
-  buttonClick: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3', // Click sound
-  buttonHover: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_24d9e91124.mp3', // Subtle hover
-  achievementUnlock: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_12b0c7443c.mp3', // Success chime
-  cashGain: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_5963ba2b42.mp3', // Coins
-  cashLoss: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_d1718ab41b.mp3', // Negative tone
-  fameIncrease: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_12b0c7443c.mp3', // Uplifting
-  gameOver: 'https://cdn.pixabay.com/download/audio/2022/03/20/audio_2d789b73c1.mp3', // Sad/dramatic
-  weekAdvance: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_fb9b90f6ff.mp3', // Subtle whoosh
-  contractSign: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c24b472bc1.mp3', // Signature
-  lessonComplete: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_12b0c7443c.mp3', // Success ding
+  buttonClick: '/audio/sounds/button-click.mp3',
+  achievementUnlock: '/audio/sounds/achievement-unlock.mp3',
+  cashGain: '/audio/sounds/cash-gain.mp3',
+  gameOver: '/audio/sounds/game-over.mp3',
+  contractSign: '/audio/sounds/contract-sign.mp3',
+  lessonComplete: '/audio/sounds/achievement-unlock.mp3', // Reuses achievement sound
 };
 
 export const MUSIC_URLS: Record<BackgroundMusic, string> = {

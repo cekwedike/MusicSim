@@ -1824,14 +1824,14 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             if (cashDiff >= 100) {
                 audioManager.playSound('cashGain');
             } else if (cashDiff <= -100) {
-                audioManager.playSound('cashLoss');
+                audioManager.playSound('buttonClick'); // Neutral sound for cash loss
             }
 
             // Fame/Hype increases (only for increases of 5+)
             const fameDiff = currentStats.fame - prevStats.fame;
             const hypeDiff = currentStats.hype - prevStats.hype;
             if (fameDiff >= 5 || hypeDiff >= 5) {
-                audioManager.playSound('fameIncrease');
+                audioManager.playSound('achievementUnlock'); // Achievement sound for fame/hype increase
             }
         }
 
@@ -2041,7 +2041,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleContinue = () => {
-        audioManager.playSound('weekAdvance');
+        audioManager.playSound('buttonClick'); // Transition sound for advancing week
         dispatch({ type: 'DISMISS_OUTCOME' });
         
         // Save immediately after advancing to next week

@@ -2429,13 +2429,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
 
-            <div className={`flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-5 py-2 sm:py-3 flex flex-col transition-all duration-300 overflow-y-auto ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
+            <div className={`flex-1 w-full max-w-[1400px] mx-auto px-4 sm:px-5 py-2 sm:py-3 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
                 {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
 
-                <main className="flex justify-center mt-2 sm:mt-2 mb-4">
+                <main className="flex justify-center mt-2 sm:mt-2 mb-4 flex-shrink-0">
                     {renderGameContent()}
                 </main>
             </div>

@@ -246,7 +246,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 			{/* Account Header */}
 			<div className="bg-gradient-to-br from-red-600/20 to-red-700/20 border border-red-600/30 rounded-lg p-3 sm:p-4 mb-4">
 				{isAuthenticated && user ? (
-					<div className="flex items-center gap-2 sm:gap-3">
+					<div className="flex items-center gap-2 sm:gap-3 min-w-0">
 						<div
 							className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold text-white shadow-lg overflow-hidden flex-shrink-0 ${!user.profileImage ? 'bg-gradient-to-br from-red-500 to-red-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:ring-2 hover:ring-red-400 transition-all' : 'opacity-50'} group`}
 							onClick={handleImageClick}
@@ -270,38 +270,38 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 								</>
 							)}
 						</div>
-						<div className="flex-1">
+						<div className="flex-1 min-w-0">
 							{isEditingUsername ? (
-								<div>
-									<div className="flex items-center gap-2">
+								<div className="min-w-0">
+									<div className="flex items-center gap-1 sm:gap-2">
 										<input
 											type="text"
 											value={editedUsername}
 											onChange={(e) => setEditedUsername(e.target.value)}
-											className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-sm"
+											className="flex-1 min-w-0 bg-gray-700 text-white px-2 py-1 rounded text-sm"
 											placeholder="Username"
 											maxLength={30}
 											autoFocus
 										/>
 										<button
 											onClick={handleSaveUsername}
-											className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+											className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs flex-shrink-0"
 										>
-											Save
+											✓
 										</button>
 										<button
 											onClick={handleCancelEditUsername}
-											className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs"
+											className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs flex-shrink-0"
 										>
-											Cancel
+											✕
 										</button>
 									</div>
 									{usernameError && (
-										<div className="text-xs text-red-400 mt-1">{usernameError}</div>
+										<div className="text-xs text-red-400 mt-1 break-words">{usernameError}</div>
 									)}
 								</div>
 							) : (
-								<div className="flex items-center gap-2">
+								<div className="flex items-center gap-2 min-w-0">
 									<div className="font-bold text-base sm:text-lg text-white truncate">{user.username}</div>
 									<button
 										onClick={handleStartEditUsername}
@@ -314,56 +314,56 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 							)}
 							<div className="text-xs text-red-200/70 mt-0.5 truncate">{user.email}</div>
 							<div className="flex flex-wrap items-center gap-2 mt-1">
-								<span className="text-xs bg-red-600/50 text-red-200 px-2 py-0.5 rounded">
+								<span className="text-xs bg-red-600/50 text-red-200 px-2 py-0.5 rounded whitespace-nowrap">
 									Signed In
 								</span>
 							</div>
 						</div>
 					</div>
 				) : (
-					<div className="flex items-center gap-2 sm:gap-3">
+					<div className="flex items-center gap-2 sm:gap-3 min-w-0">
 						<div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-700 rounded-full flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
 							🎮
 						</div>
-						<div className="flex-1">
+						<div className="flex-1 min-w-0">
 							{isEditingGuestName ? (
-								<div className="flex items-center gap-2 mb-1">
+								<div className="flex items-center gap-1 sm:gap-2 mb-1 min-w-0">
 									<input
 										type="text"
 										value={editedGuestName}
 										onChange={(e) => setEditedGuestName(e.target.value)}
-										className="flex-1 bg-gray-700 text-white px-2 py-1 rounded text-sm"
+										className="flex-1 min-w-0 bg-gray-700 text-white px-2 py-1 rounded text-sm"
 										placeholder="Guest name"
 										autoFocus
 									/>
 									<button
 										onClick={handleSaveGuestName}
-										className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
+										className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs flex-shrink-0"
 									>
-										Save
+										✓
 									</button>
 									<button
 										onClick={handleCancelEditGuestName}
-										className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs"
+										className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs flex-shrink-0"
 									>
-										Cancel
+										✕
 									</button>
 								</div>
 							) : (
-								<div className="flex items-center gap-2">
-									<div className="font-bold text-lg text-white">{guestName}</div>
+								<div className="flex items-center gap-2 min-w-0">
+									<div className="font-bold text-base sm:text-lg text-white truncate">{guestName}</div>
 									<button
 										onClick={handleStartEditGuestName}
-										className="text-gray-300 hover:text-white text-xs"
+										className="text-gray-300 hover:text-white text-xs flex-shrink-0"
 										title="Edit name"
 									>
 										✏️
 									</button>
 								</div>
 							)}
-							<div className="text-sm text-gray-300">Playing without an account</div>
+							<div className="text-xs sm:text-sm text-gray-300 truncate">Playing without an account</div>
 							<div className="flex items-center gap-2 mt-1">
-								<span className="text-xs bg-yellow-600/50 text-yellow-200 px-2 py-0.5 rounded">
+								<span className="text-xs bg-yellow-600/50 text-yellow-200 px-2 py-0.5 rounded whitespace-nowrap">
 									Guest Mode
 								</span>
 							</div>

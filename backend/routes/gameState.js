@@ -44,9 +44,11 @@ router.use(authMiddleware);
 router.post('/save', async (req, res, next) => {
   try {
     const { slotName, gameState } = req.body;
+    console.log(`[/game/save] Save request received for slot: ${slotName}, userId: ${req.userId}`);
 
     // Validate input
     if (!gameState) {
+      console.error('[/game/save] ❌ No game state provided');
       return res.status(400).json({
         success: false,
         message: 'Game state is required'
@@ -160,6 +162,7 @@ router.post('/save', async (req, res, next) => {
 
     if (save) {
       // Update existing save
+      console.log(`[/game/save] Updating existing save: ${save.id}`);
       save.artistName = gameState.artistName;
       save.genre = gameState.artistGenre || 'Unknown';
       save.gameState = gameState;
@@ -171,8 +174,10 @@ router.post('/save', async (req, res, next) => {
       save.startDate = gameState.startDate ? new Date(gameState.startDate) : new Date();
       save.playerStats = gameState.playerStats || null;
       await save.save();
+      console.log(`[/game/save] ✅ Save updated successfully: ${save.id}`);
     } else {
       // Create new save
+      console.log(`[/game/save] Creating new save for slot: ${finalSlotName}`);
       save = await GameSave.create({
         userId: req.userId,
         slotName: finalSlotName,
@@ -187,6 +192,7 @@ router.post('/save', async (req, res, next) => {
         startDate: gameState.startDate ? new Date(gameState.startDate) : new Date(),
         playerStats: gameState.playerStats || null
       });
+      console.log(`[/game/save] ✅ New save created successfully: ${save.id}`);
     }
 
     res.json({

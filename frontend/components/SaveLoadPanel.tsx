@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { SaveSlot, GameState } from '../types';
 import { getAllSaveSlots, saveGame, deleteSave, loadGame, formatSaveDate } from '../services/storageService';
+import DeleteSaveModal from './DeleteSaveModal';
 
 interface SaveLoadPanelProps {
   onLoadGame: (gameState: GameState) => void;
@@ -16,6 +17,8 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   const [newSaveName, setNewSaveName] = useState('');
   const [showSaveInput, setShowSaveInput] = useState(false);
   const [activeTab, setActiveTab] = useState<'save' | 'load'>('load');
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [saveToDelete, setSaveToDelete] = useState<{ slotId: string; artistName: string; slotName: string } | null>(null);
 
   // Helper function to extract save name from slot ID
   const getSaveName = (slotId: string): string => {
@@ -108,21 +111,34 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
     }
   };
 
-  const handleDeleteSave = async (slotId: string, artistName: string) => {
-    if (!window.confirm(`Delete save for "${artistName}"?`)) {
-      return;
-    }
+  const handleDeleteSave = (slotId: string, artistName: string) => {
+    // Open custom delete modal instead of browser confirm
+    const saveName = getSaveName(slotId);
+    setSaveToDelete({ slotId, artistName, slotName: saveName });
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDeleteSave = async () => {
+    if (!saveToDelete) return;
 
     setLoading(true);
     setError('');
+    setDeleteModalOpen(false);
+
     try {
-      await deleteSave(slotId);
+      await deleteSave(saveToDelete.slotId);
       await loadSaveSlots();
+      setSaveToDelete(null);
     } catch (err) {
       setError('Failed to delete save');
     } finally {
       setLoading(false);
     }
+  };
+
+  const cancelDeleteSave = () => {
+    setDeleteModalOpen(false);
+    setSaveToDelete(null);
   };
 
   return (
@@ -316,6 +332,15 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
           </div>
         </div>
       )}
+
+      {/* Delete Save Confirmation Modal */}
+      <DeleteSaveModal
+        isOpen={deleteModalOpen}
+        artistName={saveToDelete?.artistName || ''}
+        slotName={saveToDelete?.slotName || ''}
+        onConfirm={confirmDeleteSave}
+        onCancel={cancelDeleteSave}
+      />
     </div>
   );
 };

@@ -56,11 +56,11 @@ router.post('/save', async (req, res, next) => {
     // Ensure user profile exists (for OAuth users)
     let user = await User.findByPk(req.userId);
     if (!user && req.supabaseUser) {
-      console.log('[/game/save] Creating profile for OAuth user:', req.userId);
+      console.log('[/game/save] User profile not found, attempting to create:', req.userId);
 
-      const username = req.supabaseUser.user_metadata?.username ||
-                      req.supabaseUser.user_metadata?.name ||
-                      req.supabaseUser.email.split('@')[0];
+      let username = req.supabaseUser.user_metadata?.username ||
+                     req.supabaseUser.user_metadata?.name ||
+                     req.supabaseUser.email.split('@')[0];
       const displayName = req.supabaseUser.user_metadata?.display_name ||
                          req.supabaseUser.user_metadata?.full_name ||
                          username;
@@ -69,23 +69,55 @@ router.post('/save', async (req, res, next) => {
                           req.supabaseUser.user_metadata?.picture;
       const authProvider = req.supabaseUser.app_metadata?.provider || 'google';
 
-      user = await User.create({
-        id: req.userId,
-        email: req.supabaseUser.email,
-        username,
-        displayName,
-        profileImage,
-        authProvider,
-        lastLogin: new Date(),
-        isActive: true
-      });
+      try {
+        // Ensure unique username
+        let uniqueUsername = username;
+        let counter = 1;
+        while (await User.findOne({ where: { username: uniqueUsername } })) {
+          uniqueUsername = `${username}${counter}`;
+          counter++;
+          if (counter > 100) break;
+        }
 
-      // Create associated PlayerStatistics
-      await PlayerStatistics.create({
-        userId: user.id
-      });
+        user = await User.create({
+          id: req.userId,
+          email: req.supabaseUser.email,
+          username: uniqueUsername,
+          displayName,
+          profileImage,
+          authProvider,
+          lastLogin: new Date(),
+          isActive: true
+        });
 
-      console.log('[/game/save] Profile created for OAuth user:', username);
+        // Create associated PlayerStatistics
+        const existingStats = await PlayerStatistics.findOne({ where: { userId: user.id } });
+        if (!existingStats) {
+          await PlayerStatistics.create({
+            userId: user.id
+          });
+        }
+
+        console.log('[/game/save] Profile created for OAuth user:', uniqueUsername);
+      } catch (createError) {
+        // Handle race condition
+        if (createError.name === 'SequelizeUniqueConstraintError') {
+          console.log('[/game/save] User created by parallel request, fetching...');
+          user = await User.findByPk(req.userId);
+          if (!user) {
+            throw new Error('Failed to create or fetch user profile');
+          }
+        } else {
+          throw createError;
+        }
+      }
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User profile not found and could not be created'
+      });
     }
 
     // Validate game state structure

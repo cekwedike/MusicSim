@@ -129,9 +129,9 @@ router.get('/me', authLimiter, authMiddleware, async (req, res, next) => {
       console.log('[/auth/me] User authenticated but no profile found. Creating profile...');
 
       // Extract profile data from Supabase user
-      const username = req.supabaseUser.user_metadata?.username ||
-                      req.supabaseUser.user_metadata?.name ||
-                      req.supabaseUser.email.split('@')[0];
+      let username = req.supabaseUser.user_metadata?.username ||
+                     req.supabaseUser.user_metadata?.name ||
+                     req.supabaseUser.email.split('@')[0];
       const displayName = req.supabaseUser.user_metadata?.display_name ||
                          req.supabaseUser.user_metadata?.full_name ||
                          username;
@@ -140,28 +140,65 @@ router.get('/me', authLimiter, authMiddleware, async (req, res, next) => {
                           req.supabaseUser.user_metadata?.picture;
       const authProvider = req.supabaseUser.app_metadata?.provider || 'google';
 
-      // Create user profile on-the-fly
-      user = await User.create({
-        id: req.userId,
-        email: req.supabaseUser.email,
-        username,
-        displayName,
-        profileImage,
-        authProvider,
-        lastLogin: new Date(),
-        isActive: true
-      });
+      try {
+        // Ensure unique username
+        let uniqueUsername = username;
+        let counter = 1;
+        while (await User.findOne({ where: { username: uniqueUsername } })) {
+          uniqueUsername = `${username}${counter}`;
+          counter++;
+          if (counter > 100) break; // Safety limit
+        }
 
-      // Create associated PlayerStatistics if it doesn't exist
-      const existingStats = await PlayerStatistics.findOne({ where: { userId: user.id } });
-      if (!existingStats) {
-        await PlayerStatistics.create({
-          userId: user.id
+        // Create user profile on-the-fly
+        user = await User.create({
+          id: req.userId,
+          email: req.supabaseUser.email,
+          username: uniqueUsername,
+          displayName,
+          profileImage,
+          authProvider,
+          lastLogin: new Date(),
+          isActive: true
         });
-        console.log(`[/auth/me] Created PlayerStatistics for user: ${user.id}`);
-      }
 
-      console.log(`[/auth/me] ✅ Auto-created profile for OAuth user: ${username}`);
+        // Create associated PlayerStatistics if it doesn't exist
+        const existingStats = await PlayerStatistics.findOne({ where: { userId: user.id } });
+        if (!existingStats) {
+          await PlayerStatistics.create({
+            userId: user.id
+          });
+          console.log(`[/auth/me] Created PlayerStatistics for user: ${user.id}`);
+        }
+
+        console.log(`[/auth/me] ✅ Auto-created profile for OAuth user: ${uniqueUsername}`);
+      } catch (createError) {
+        // Handle race condition - user might have been created by parallel request
+        if (createError.name === 'SequelizeUniqueConstraintError') {
+          console.log('[/auth/me] User created by parallel request, fetching...');
+          user = await User.findByPk(req.userId, {
+            include: [
+              {
+                model: PlayerStatistics,
+                as: 'statistics',
+                attributes: [
+                  'totalGamesPlayed', 'totalWeeksPlayed', 'gamesLostToDebt',
+                  'gamesLostToBurnout', 'careersAbandoned', 'careersCompleted',
+                  'totalLessonsViewed', 'totalModulesCompleted', 'averageQuizScore',
+                  'totalStudyTimeMinutes', 'totalPlayTimeMinutes', 'averageSessionDuration',
+                  'preferredDifficulty', 'favoriteGenre'
+                ]
+              }
+            ]
+          });
+
+          if (!user) {
+            throw createError; // Re-throw if we still can't find the user
+          }
+        } else {
+          throw createError; // Re-throw other errors
+        }
+      }
     }
 
     if (!user) {

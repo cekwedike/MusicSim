@@ -96,6 +96,15 @@ app.get('/api/health', async (req, res) => {
   res.json(health);
 });
 
+// Simple ping endpoint for keep-alive (no database query)
+app.get('/api/ping', (req, res) => {
+  res.json({
+    success: true,
+    message: 'pong',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Swagger Documentation
 /**
  * @swagger

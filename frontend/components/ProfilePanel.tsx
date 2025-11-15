@@ -83,6 +83,8 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 				console.log('[ProfilePanel] Deleting account from backend...');
 				const result = await deleteAccount();
 
+				console.log('[ProfilePanel] Delete account result:', result);
+
 				if (!result.success) {
 					throw new Error(result.message || 'Failed to delete account');
 				}

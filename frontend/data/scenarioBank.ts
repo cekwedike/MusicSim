@@ -992,7 +992,7 @@ export const scenarioBank: Scenario[] = [
     },
     {
         title: "The Collecting Society Registration",
-        description: "A music lawyer advises you to register with COSON (Nigeria) or COSOMA (Botswana) - the local collecting society that monitors radio play and collects royalties. Registration costs $200, plus annual fees, but they claim you're losing thousands in uncollected radio royalties. 'Every time your song plays on radio, TV, or in public spaces, you should get paid.' But many artists say these societies are inefficient and keep most of the money.",
+        description: "A music lawyer advises you to register with COSON (Nigeria) or Rwanda (RSAU) - the local collecting society that monitors radio play and collects royalties. Registration costs $200, plus annual fees, but they claim you're losing thousands in uncollected radio royalties. 'Every time your song plays on radio, TV, or in public spaces, you should get paid.' But many artists say these societies are inefficient and keep most of the money.",
         conditions: { minFame: 35, minCash: 300 },
         once: true,
         choices: [

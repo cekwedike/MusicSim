@@ -68,7 +68,7 @@ export interface AudioManager {
   audioState: AudioState;
 }
 
-// Placeholder audio URLs from free sources
+// Sound effects from Pixabay (these should work)
 export const SOUND_URLS: Record<SoundEffect, string> = {
   buttonClick: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3', // Click sound
   buttonHover: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_24d9e91124.mp3', // Subtle hover
@@ -83,10 +83,10 @@ export const SOUND_URLS: Record<SoundEffect, string> = {
 };
 
 export const MUSIC_URLS: Record<BackgroundMusic, string> = {
-  // Legacy tracks (can be replaced with local files later)
-  menu: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3', // Chill ambient (for reference)
-  gameplay: 'https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe5c20c.mp3', // Different upbeat track
-  gameOver: 'https://cdn.pixabay.com/download/audio/2022/03/20/audio_8d32d1f0e5.mp3', // Melancholic
+  // Legacy tracks disabled - external Pixabay CDN URLs return 403
+  menu: '', // Disabled
+  gameplay: '', // Disabled
+  gameOver: '', // Disabled
 
   // Dynamic background tracks - LOCAL FILES (African & Afrobeat themed)
   // Place downloaded files in: frontend/public/audio/music/

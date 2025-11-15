@@ -67,7 +67,18 @@ const PlayerStatistics = sequelize.define('PlayerStatistics', {
     defaultValue: 'realistic'
   },
   favoriteGenre: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+
+  // Tracking Fields
+  lastPlayedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  totalAchievementsUnlocked: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
   }
 }, {
   timestamps: true,

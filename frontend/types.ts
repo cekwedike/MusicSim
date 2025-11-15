@@ -307,6 +307,7 @@ export interface CareerHistory {
   gameId: string;
   artistName: string;
   genre: string;
+  difficulty: Difficulty;
   startDate: number;
   endDate: number;
   finalStats: PlayerStats;

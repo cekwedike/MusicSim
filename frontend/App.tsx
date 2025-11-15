@@ -12,6 +12,7 @@ import { toGameDate } from './src/utils/dateUtils';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, deserializeGameState } from './services/storageService';
 import { useAutoSave } from './hooks/useAutoSave';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
+import { startModule, completeModule } from './services/learningProgressService';
 import { getGenreLabel } from './constants/genres';
 import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
@@ -790,6 +791,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     gameId: `game_${Date.now()}`,
                     artistName: state.artistName,
                     genre: state.artistGenre,
+                    difficulty: state.difficulty,
                     startDate: state.sessionStartTime,
                     endDate: Date.now(),
                     finalStats: newStats,
@@ -866,6 +868,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     gameId: `game_${Date.now()}`,
                     artistName: state.artistName,
                     genre: state.artistGenre,
+                    difficulty: state.difficulty,
                     startDate: state.sessionStartTime,
                     endDate: Date.now(),
                     finalStats: state.playerStats,
@@ -2153,11 +2156,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const handleOpenModule = (module: LearningModule) => {
         // No sound - just opening content
         dispatch({ type: 'OPEN_MODULE', payload: module });
+        // Track module start in database
+        startModule(module.id, module.title).catch(console.error);
     };
 
     const handleCompleteModule = (moduleId: string, score: number, conceptsMastered: string[]) => {
         audioManager.playSound('lessonComplete');
         dispatch({ type: 'COMPLETE_MODULE', payload: { moduleId, score, conceptsMastered } });
+        // Track module completion in database
+        completeModule(moduleId, score).catch(console.error);
     };
 
     const handleCloseModule = () => {

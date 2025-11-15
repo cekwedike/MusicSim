@@ -1,5 +1,6 @@
 import type { GameStatistics, GameState, CareerHistory } from '../types';
 import { toGameDate } from '../src/utils/dateUtils';
+import api from './api';
 
 export const loadStatistics = (): GameStatistics => {
   const saved = localStorage.getItem('musicsim_statistics');
@@ -125,13 +126,33 @@ export const loadCareerHistories = (): CareerHistory[] => {
   }
 };
 
-export const saveCareerHistory = (career: CareerHistory): void => {
+export const saveCareerHistory = async (career: CareerHistory): Promise<void> => {
   try {
+    // Save to localStorage first (immediate, for offline mode)
     const histories = loadCareerHistories();
     histories.push(career);
     // Keep only last 20 careers to manage storage
     const recent = histories.slice(-20);
     localStorage.setItem('musicsim_careers', JSON.stringify(recent));
+
+    // Send to backend API (for persistent database storage)
+    try {
+      await api.post('/career/complete', {
+        artistName: career.artistName,
+        genre: career.genre,
+        difficulty: career.difficulty,
+        finalStats: career.finalStats,
+        gameEndReason: career.outcome,
+        weeksPlayed: career.weeksPlayed,
+        achievements: career.achievementsEarned,
+        finalScore: career.peakCareerProgress || 0
+      });
+      console.log('Career history saved to database');
+    } catch (apiError: any) {
+      // API errors are handled by the api interceptor (offline queue, etc.)
+      console.warn('Failed to sync career history to database:', apiError?.message || apiError);
+      // Don't throw - the localStorage save succeeded
+    }
   } catch (error) {
     console.error('Failed to save career history:', error);
   }

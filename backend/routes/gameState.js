@@ -240,6 +240,7 @@ router.post('/save', async (req, res, next) => {
 router.get('/load/:slotName', async (req, res, next) => {
   try {
     const { slotName } = req.params;
+    console.log(`[/game/load] Load request for slot: ${slotName}, userId: ${req.userId}`);
 
     const save = await GameSave.findOne({
       where: {
@@ -251,12 +252,14 @@ router.get('/load/:slotName', async (req, res, next) => {
     });
 
     if (!save) {
+      console.log(`[/game/load] ❌ Save not found: ${slotName}`);
       return res.status(404).json({
         success: false,
         message: 'Save not found'
       });
     }
 
+    console.log(`[/game/load] ✅ Save found, returning data for: ${slotName}, saveId: ${save.id}`);
     res.json({
       success: true,
       data: {

@@ -48,7 +48,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
       case 'revenue':
         return 'from-green-500 to-teal-600';
       case 'rights':
-        return 'from-red-500 to-indigo-600';
+        return 'from-red-500 to-rose-700';
       case 'marketing':
         return 'from-rose-500 to-rose-600';
       case 'legal':

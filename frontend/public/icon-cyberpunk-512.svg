@@ -3,11 +3,11 @@
   <defs>
     <!-- Cyberpunk neon gradients -->
     <linearGradient id="cyber-main" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ff0080"/>
-      <stop offset="25%" style="stop-color:#ff0040"/>
-      <stop offset="50%" style="stop-color:#8000ff"/>
-      <stop offset="75%" style="stop-color:#0080ff"/>
-      <stop offset="100%" style="stop-color:#00ff80"/>
+      <stop offset="0%" style="stop-color:#ff0040"/>
+      <stop offset="25%" style="stop-color:#dc2626"/>
+      <stop offset="50%" style="stop-color:#991b1b"/>
+      <stop offset="75%" style="stop-color:#7f1d1d"/>
+      <stop offset="100%" style="stop-color:#ff4444"/>
     </linearGradient>
     
     <linearGradient id="cyber-accent" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -50,7 +50,7 @@
   <!-- Inner circuit-like rings -->
   <circle cx="256" cy="256" r="200" fill="none" stroke="#00ff80" stroke-width="2" opacity="0.6"/>
   <circle cx="256" cy="256" r="170" fill="none" stroke="#ff0080" stroke-width="1" opacity="0.4"/>
-  <circle cx="256" cy="256" r="140" fill="none" stroke="#8000ff" stroke-width="1" opacity="0.3"/>
+  <circle cx="256" cy="256" r="140" fill="none" stroke="#dc2626" stroke-width="1" opacity="0.3"/>
   
   <!-- Central hexagon (cyberpunk geometric element) -->
   <polygon points="256,140 300,170 300,220 256,250 212,220 212,170" 

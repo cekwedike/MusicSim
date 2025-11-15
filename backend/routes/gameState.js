@@ -453,7 +453,7 @@ router.get('/saves', async (req, res, next) => {
  * @swagger
  * /api/game/save/{saveId}:
  *   delete:
- *     summary: Delete a save (soft delete)
+ *     summary: Delete a save (permanently)
  *     tags: [Game State]
  *     security:
  *       - bearerAuth: []
@@ -487,16 +487,17 @@ router.delete('/save/:saveId', async (req, res, next) => {
       });
     }
 
-    // Soft delete by marking as inactive
-    save.isActive = false;
-    await save.save();
+    const slotName = save.slotName;
+
+    // Hard delete - permanently remove from database
+    await save.destroy();
 
     res.json({
       success: true,
       message: 'Save deleted successfully',
       data: {
-        saveId: save.id,
-        slotName: save.slotName
+        saveId,
+        slotName
       }
     });
   } catch (error) {
@@ -508,7 +509,7 @@ router.delete('/save/:saveId', async (req, res, next) => {
  * @swagger
  * /api/game/saves/all:
  *   delete:
- *     summary: Delete all saves for user (soft delete)
+ *     summary: Delete all saves for user (permanently)
  *     tags: [Game State]
  *     security:
  *       - bearerAuth: []
@@ -518,21 +519,17 @@ router.delete('/save/:saveId', async (req, res, next) => {
  */
 router.delete('/saves/all', async (req, res, next) => {
   try {
-    const result = await GameSave.update(
-      { isActive: false },
-      {
-        where: {
-          userId: req.userId,
-          isActive: true
-        }
+    const deletedCount = await GameSave.destroy({
+      where: {
+        userId: req.userId
       }
-    );
+    });
 
     res.json({
       success: true,
-      message: `${result[0]} saves deleted successfully`,
+      message: `${deletedCount} saves deleted successfully`,
       data: {
-        deletedCount: result[0]
+        deletedCount
       }
     });
   } catch (error) {

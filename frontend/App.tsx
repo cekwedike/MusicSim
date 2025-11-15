@@ -2171,6 +2171,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const handleLoadGame = (gameState: GameState) => {
         // Show audio unlock prompt if not shown before on new devices
         if (!hasShownAudioPrompt) {
+            // Close the save/load panel immediately
+            setActiveSidebarView(null);
             setShowAudioUnlock(true);
             // Store the game state to load after audio unlock
             sessionStorage.setItem('pendingLoadGame', JSON.stringify(gameState));

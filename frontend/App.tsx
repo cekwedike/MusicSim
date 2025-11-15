@@ -1503,6 +1503,9 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         {/* Header with artist name and genre */}
                                         <div className="flex items-center justify-between">
                                             <div className="min-w-0 flex-1">
+                                                <div className="text-xs text-gray-500 mb-1">
+                                                    {slot.slotName}
+                                                </div>
                                                 <div className="font-bold text-red-300 truncate group-hover:text-red-200 transition-colors">
                                                     {slot.artistName}
                                                 </div>
@@ -1576,6 +1579,9 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         {/* Header */}
                                         <div className="flex justify-between items-start">
                                             <div className="min-w-0 flex-1">
+                                                <div className="text-xs text-gray-500 mb-1">
+                                                    {slot.slotName}
+                                                </div>
                                                 <div className="font-bold text-red-300 group-hover:text-red-200 transition-colors">
                                                     {slot.artistName}
                                                 </div>

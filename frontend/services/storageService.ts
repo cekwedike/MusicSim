@@ -406,6 +406,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 
               return {
                 id: save.slotName,
+                slotName: save.slotName,
                 artistName: save.artistName,
                 genre: save.genre,
                 date: gd,
@@ -461,6 +462,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
       const gdLocal = toGameDate(state.currentDate, state.startDate);
       saveSlots.push({
         id: slotId,
+        slotName: slotId,
         artistName: state.artistName,
         genre: state.artistGenre,
         date: gdLocal,

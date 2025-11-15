@@ -195,6 +195,7 @@ export interface RecordLabel {
 
 export interface SaveSlot {
   id: string;
+  slotName: string; // The name/identifier of the save slot (e.g., "Slot 1", "Slot 2")
   artistName: string;
   genre: string;
   date: GameDate;

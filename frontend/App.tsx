@@ -2169,8 +2169,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     };
 
     const handleLoadGame = (gameState: GameState) => {
-        audioManager.playSound('buttonClick');
-        dispatch({ type: 'LOAD_GAME', payload: gameState });
+        // Show audio unlock prompt if not shown before on new devices
+        if (!hasShownAudioPrompt) {
+            setShowAudioUnlock(true);
+            // Store the game state to load after audio unlock
+            sessionStorage.setItem('pendingLoadGame', JSON.stringify(gameState));
+        } else {
+            audioManager.playSound('buttonClick');
+            dispatch({ type: 'LOAD_GAME', payload: gameState });
+        }
     };
 
     const handleViewContract = () => {

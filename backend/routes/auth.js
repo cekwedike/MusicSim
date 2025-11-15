@@ -152,10 +152,14 @@ router.get('/me', authLimiter, authMiddleware, async (req, res, next) => {
         isActive: true
       });
 
-      // Create associated PlayerStatistics
-      await PlayerStatistics.create({
-        userId: user.id
-      });
+      // Create associated PlayerStatistics if it doesn't exist
+      const existingStats = await PlayerStatistics.findOne({ where: { userId: user.id } });
+      if (!existingStats) {
+        await PlayerStatistics.create({
+          userId: user.id
+        });
+        console.log(`[/auth/me] Created PlayerStatistics for user: ${user.id}`);
+      }
 
       console.log(`[/auth/me] ✅ Auto-created profile for OAuth user: ${username}`);
     }
@@ -591,13 +595,21 @@ router.post('/sync-profile', authLimiter, authMiddleware, async (req, res, next)
       }
     }
 
-    // Create associated PlayerStatistics record
-    console.log('[sync-profile] Creating PlayerStatistics for user:', user.id);
-    await PlayerStatistics.create({
-      userId: user.id
-    });
+    // Create associated PlayerStatistics record if it doesn't exist
+    console.log('[sync-profile] Checking PlayerStatistics for user:', user.id);
+    const existingStats = await PlayerStatistics.findOne({ where: { userId: user.id } });
 
-    console.log(`[sync-profile] ✅ New user profile created: ${user.username} (${user.email})`);
+    if (!existingStats) {
+      console.log('[sync-profile] Creating PlayerStatistics for user:', user.id);
+      await PlayerStatistics.create({
+        userId: user.id
+      });
+      console.log('[sync-profile] PlayerStatistics created successfully');
+    } else {
+      console.log('[sync-profile] PlayerStatistics already exists for user:', user.id);
+    }
+
+    console.log(`[sync-profile] ✅ User profile synced: ${user.username} (${user.email})`);
 
     res.status(201).json({
       success: true,

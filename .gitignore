@@ -25,6 +25,7 @@ dist-ssr
 
 # Large media files
 *.mp4
+*.pdf
 *.mov
 *.avi
 *.mkv

@@ -233,6 +233,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(null);
         setToken(null);
         setError(null);
+        setIsLoading(false);
       } else if (event === 'TOKEN_REFRESHED' && session) {
         setToken(session.access_token);
       } else if (event === 'USER_UPDATED' && session) {

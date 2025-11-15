@@ -9,7 +9,7 @@ import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDat
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
-import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots } from './services/storageService';
+import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, deserializeGameState } from './services/storageService';
 import { useAutoSave } from './hooks/useAutoSave';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { getGenreLabel } from './constants/genres';
@@ -2079,7 +2079,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         const pendingLoad = sessionStorage.getItem('pendingLoadGame');
         if (pendingLoad) {
             sessionStorage.removeItem('pendingLoadGame');
-            const gameState = JSON.parse(pendingLoad);
+            const parsedState = JSON.parse(pendingLoad);
+            const gameState = deserializeGameState(parsedState);
             dispatch({ type: 'LOAD_GAME', payload: gameState });
         } else {
             dispatch({ type: 'START_SETUP' });
@@ -2099,7 +2100,8 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         const pendingLoad = sessionStorage.getItem('pendingLoadGame');
         if (pendingLoad) {
             sessionStorage.removeItem('pendingLoadGame');
-            const gameState = JSON.parse(pendingLoad);
+            const parsedState = JSON.parse(pendingLoad);
+            const gameState = deserializeGameState(parsedState);
             dispatch({ type: 'LOAD_GAME', payload: gameState });
         } else {
             dispatch({ type: 'START_SETUP' });

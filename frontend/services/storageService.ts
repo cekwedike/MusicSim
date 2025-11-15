@@ -9,7 +9,7 @@ const MAX_SAVE_SLOTS = 5; // Maximum number of manual save slots allowed per use
 /**
  * Serialize GameState for storage (convert Dates to ISO strings)
  */
-const serializeGameState = (state: GameState): any => {
+export const serializeGameState = (state: GameState): any => {
   return {
     ...state,
     currentDate: state.currentDate ? state.currentDate.toISOString() : undefined,
@@ -25,7 +25,7 @@ const serializeGameState = (state: GameState): any => {
 /**
  * Deserialize GameState from storage (convert ISO strings back to Dates)
  */
-const deserializeGameState = (data: any): GameState => {
+export const deserializeGameState = (data: any): GameState => {
   return {
     ...data,
     currentDate: data.currentDate ? new Date(data.currentDate) : new Date(),

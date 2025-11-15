@@ -9,8 +9,27 @@ type BeforeInstallPromptEvent = Event & {
 const DISMISS_KEY = 'musicsim_install_banner_dismissed';
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
+const isAppInstalled = (): boolean => {
+  // Check if running as PWA (installed app)
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    return true;
+  }
+  // Check for iOS standalone mode
+  if ((window.navigator as any).standalone === true) {
+    return true;
+  }
+  return false;
+};
+
 const isBannerDismissed = (): boolean => {
   try {
+    // First check if app is actually installed via browser detection
+    if (isAppInstalled()) {
+      // Ensure localStorage is set to prevent showing banner again
+      markAppInstalled();
+      return true;
+    }
+
     const raw = localStorage.getItem(DISMISS_KEY);
     if (!raw) return false;
     const parsed = JSON.parse(raw);

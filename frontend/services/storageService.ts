@@ -418,7 +418,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                   hype: 0
                 },
                 timestamp: new Date(save.lastPlayedAt).getTime(),
-                careerProgress: Math.min(Math.round((save.weeksPlayed / 240) * 100), 100) // 240 weeks = 5 years * 48 weeks/year
+                careerProgress: save.playerStats?.careerProgress || 0 // Use actual career progress from playerStats
               };
             } catch (error) {
               console.warn(`[storageService] Failed to process save ${save.slotName}:`, error);

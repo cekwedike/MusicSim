@@ -33,8 +33,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The First Spark",
         description: "You're full of ideas and ambition. The first step on this long road is to create something, a single song to define your sound and announce your arrival.",
-        conditions: { maxFame: 10, noProjectRequired: true },
-        once: true,
+        conditions: { maxFame: 30, noProjectRequired: true }, // Expanded from 10 to 30
         choices: [
             {
                 text: "Let's do it. Time to write a single.",
@@ -43,14 +42,20 @@ export const scenarioBank: Scenario[] = [
                     cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: 5,
                     startProject: "SINGLE_1",
                 }
+            },
+            {
+                text: "Not ready yet. Keep practicing.",
+                outcome: {
+                    text: "You spend more time honing your craft. The right moment will come.",
+                    cash: -20, fame: 0, wellBeing: 3, careerProgress: 1, hype: 0,
+                }
             }
         ]
     },
      {
         title: "Time for an EP",
-        description: "Your first single made a small splash, but to be taken seriously, you need a collection of songs. An EP seems like the perfect next step.",
-        conditions: { requiredAchievementId: 'PROJECT_SINGLE_1', noProjectRequired: true },
-        once: true,
+        description: "You need a collection of songs to build your fanbase. An EP is the perfect next step to showcase your range and talent.",
+        conditions: { minFame: 10, noProjectRequired: true }, // Removed achievement requirement, lowered fame
         choices: [
             {
                 text: "Begin pre-production for the EP.",
@@ -59,14 +64,20 @@ export const scenarioBank: Scenario[] = [
                     cash: -200, fame: 2, wellBeing: 0, careerProgress: 0, hype: 10,
                     startProject: "EP_1",
                 }
+            },
+            {
+                text: "Save money first, start later.",
+                outcome: {
+                    text: "You decide to build up your funds before committing to a big project. Smart thinking.",
+                    cash: 0, fame: 0, wellBeing: 2, careerProgress: 0, hype: 0,
+                }
             }
         ]
     },
     {
         title: "The Debut Album",
-        description: "You've built a following, honed your craft, and now it's time for the ultimate statement: a full-length album. This will define your career.",
-        conditions: { requiredAchievementId: 'PROJECT_EP_1', noProjectRequired: true, minFame: 30 },
-        once: true,
+        description: "You've built a following and honed your craft. Now it's time for the ultimate statement: a full-length album. This will define your career.",
+        conditions: { minFame: 20, noProjectRequired: true }, // Lowered from 30, removed achievement requirement
         choices: [
             {
                 text: "It's time. Let's make an album.",
@@ -75,21 +86,156 @@ export const scenarioBank: Scenario[] = [
                     cash: -2500, fame: 5, wellBeing: -5, careerProgress: 0, hype: 20,
                     startProject: "ALBUM_1",
                 }
+            },
+            {
+                text: "Too ambitious right now.",
+                outcome: {
+                    text: "An album is a huge commitment. You decide to wait until you're truly ready.",
+                    cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: 0,
+                }
             }
         ]
     },
      {
-        title: "The Sophomore Slump?",
-        description: "Your debut was a success, but now the pressure is on. The second album is where legends are made... or where they fade away. No pressure.",
-        conditions: { requiredAchievementId: 'PROJECT_ALBUM_1', noProjectRequired: true, minFame: 50 },
-        once: true,
+        title: "The Sophomore Album",
+        description: "You're ready for your next major project. Time to evolve your sound and push creative boundaries with another full-length album.",
+        conditions: { minFame: 35, noProjectRequired: true }, // Lowered from 50, removed achievement requirement
         choices: [
             {
                 text: "Time to evolve my sound.",
                 outcome: {
-                    text: "You decide to push your boundaries, exploring new genres and themes for your second album.",
+                    text: "You decide to push your boundaries, exploring new genres and themes for your next album.",
                     cash: -5000, fame: 0, wellBeing: -10, careerProgress: 0, hype: 10,
                     startProject: "ALBUM_2",
+                }
+            },
+            {
+                text: "Play it safe with what works.",
+                outcome: {
+                    text: "Innovation is risky. You decide to stick with your proven formula for now.",
+                    cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: -5,
+                }
+            }
+        ]
+    },
+
+    // --- ADDITIONAL PROJECT SCENARIOS (Alternative paths) ---
+    {
+        title: "Creative Burst",
+        description: "Inspiration strikes! You've got melodies flooding your mind and lyrics pouring out. This creative energy is too good to waste. Time to channel it into something concrete.",
+        conditions: { minHype: 20, noProjectRequired: true },
+        choices: [
+            {
+                text: "Ride this wave - start a single!",
+                outcome: {
+                    text: "You capture the lightning in a bottle, pouring your inspiration into a fresh track.",
+                    cash: -50, fame: 0, wellBeing: 10, careerProgress: 0, hype: -10,
+                    startProject: "SINGLE_1",
+                }
+            },
+            {
+                text: "Go big - start an EP!",
+                outcome: {
+                    text: "Why stop at one song? You've got enough ideas for a whole project!",
+                    cash: -300, fame: 2, wellBeing: 5, careerProgress: 0, hype: 0,
+                    startProject: "EP_1",
+                }
+            },
+            {
+                text: "Let it simmer for now.",
+                outcome: {
+                    text: "You jot down ideas for later. Sometimes the best songs need time to mature.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 2, hype: 5,
+                }
+            }
+        ]
+    },
+    {
+        title: "Studio Time Available",
+        description: "A friend who runs a recording studio offers you a sweet deal on studio time this month. It's now or never - perfect opportunity to lay down some tracks.",
+        conditions: { minCash: 1000, noProjectRequired: true },
+        choices: [
+            {
+                text: "Book it for a single.",
+                outcome: {
+                    text: "You lock in the studio time and start pre-production on your single.",
+                    cash: -100, fame: 1, wellBeing: 5, careerProgress: 0, hype: 5,
+                    startProject: "SINGLE_1",
+                }
+            },
+            {
+                text: "Book it for an EP.",
+                outcome: {
+                    text: "This is your shot to make something substantial. You book multiple sessions for an EP.",
+                    cash: -400, fame: 2, wellBeing: 3, careerProgress: 0, hype: 10,
+                    startProject: "EP_1",
+                }
+            },
+            {
+                text: "Pass on the deal.",
+                outcome: {
+                    text: "It's tempting, but you're not ready yet. You save your money for when inspiration truly strikes.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                }
+            }
+        ]
+    },
+    {
+        title: "Fans Are Asking",
+        description: "Your social media is blowing up. Fans are constantly asking 'When's the next project dropping?' The demand is real. Maybe it's time to give the people what they want.",
+        conditions: { minFame: 25, minHype: 30, noProjectRequired: true },
+        choices: [
+            {
+                text: "Start working on an album!",
+                outcome: {
+                    text: "The fans have spoken. You announce your album and begin the journey. No turning back now!",
+                    cash: -3000, fame: 5, wellBeing: -5, careerProgress: 0, hype: 25,
+                    startProject: "ALBUM_1",
+                }
+            },
+            {
+                text: "Drop an EP to tide them over.",
+                outcome: {
+                    text: "An EP is perfect - substantial enough to satisfy fans, but won't take forever to finish.",
+                    cash: -250, fame: 3, wellBeing: 0, careerProgress: 0, hype: 15,
+                    startProject: "EP_1",
+                }
+            },
+            {
+                text: "Make them wait - build more hype.",
+                outcome: {
+                    text: "Anticipation is part of the game. You tease new music without committing to a timeline.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 0, hype: 10,
+                }
+            }
+        ]
+    },
+    {
+        title: "Career Crossroads",
+        description: "You've been in the game for a while now. It's time to take stock: keep grinding with singles and EPs, or make a real statement with a full album? This decision could define your trajectory.",
+        conditions: { minCareerProgress: 40, noProjectRequired: true },
+        choices: [
+            {
+                text: "Commit to a full album.",
+                outcome: {
+                    text: "You've earned this. It's time to create your defining work - a full-length album that showcases everything you've learned.",
+                    cash: -3500, fame: 10, wellBeing: -10, careerProgress: 0, hype: 30,
+                    startProject: "ALBUM_1",
+                }
+            },
+            {
+                text: "Another EP keeps momentum going.",
+                outcome: {
+                    text: "Consistency over spectacle. You keep the releases flowing with another solid EP.",
+                    cash: -300, fame: 3, wellBeing: 0, careerProgress: 0, hype: 10,
+                    startProject: "EP_1",
+                }
+            },
+            {
+                text: "Focus on live performances instead.",
+                outcome: {
+                    text: "Maybe the studio can wait. You double down on live shows to build your fanbase organically.",
+                    cash: 0, fame: 5, wellBeing: 5, careerProgress: 3, hype: 15,
                 }
             }
         ]
@@ -218,7 +364,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Indie Label Offer",
         description: "A small but respected indie record label, 'Vinyl Heart Records', wants to sign you. They've sent over a contract for you to review. Should you examine their terms or hold out for something bigger?",
-        conditions: { minFame: 20, maxFame: 60, requiredAchievementId: 'PROJECT_EP_1' },
+        conditions: { minFame: 15, maxFame: 60 }, // Lowered fame requirement, removed achievement requirement
         // audio: first record deal voiceover
         audioFile: '/audio/scenarios/first-record-deal.m4a',
         autoPlayAudio: true,

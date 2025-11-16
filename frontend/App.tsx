@@ -35,6 +35,7 @@ const LearningPanel = lazy(() => import('./components/LearningPanel'));
 const ModuleViewer = lazy(() => import('./components/ModuleViewer'));
 const ContractViewer = lazy(() => import('./components/ContractViewer'));
 import ManagementPanel from './components/ManagementPanel';
+import ProjectsPanel from './components/ProjectsPanel';
 import StatisticsPanel from './components/StatisticsPanel';
 import SidebarAudioSettings from './components/SidebarAudioSettings';
 // SaveLoadPanel already used inside the sidebar
@@ -224,7 +225,7 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
 
-function gameReducer(state: GameState, action: Action): GameState {
+function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT'; payload: { projectId: string } }): GameState {
     switch (action.type) {
         case 'START_SETUP':
             return { ...generateInitialState(), status: 'setup' };
@@ -262,11 +263,11 @@ function gameReducer(state: GameState, action: Action): GameState {
             const updatedStatistics = recordDecision(state.statistics, action.payload.text);
             
             const newStats: PlayerStats = {
-                cash: state.playerStats.cash + outcome.cash,
-                fame: Math.min(100, Math.max(0, state.playerStats.fame + outcome.fame)),
-                wellBeing: Math.min(100, Math.max(0, state.playerStats.wellBeing + outcome.wellBeing)),
-                careerProgress: Math.min(100, Math.max(0, state.playerStats.careerProgress + outcome.careerProgress)),
-                hype: Math.min(100, Math.max(0, state.playerStats.hype + outcome.hype)),
+                cash: Math.round(state.playerStats.cash + outcome.cash),
+                fame: Math.round(Math.min(100, Math.max(0, state.playerStats.fame + outcome.fame))),
+                wellBeing: Math.round(Math.min(100, Math.max(0, state.playerStats.wellBeing + outcome.wellBeing))),
+                careerProgress: Math.round(Math.min(100, Math.max(0, state.playerStats.careerProgress + outcome.careerProgress))),
+                hype: Math.round(Math.min(100, Math.max(0, state.playerStats.hype + outcome.hype))),
             };
 
             let newProject = state.currentProject;
@@ -482,11 +483,46 @@ function gameReducer(state: GameState, action: Action): GameState {
                 }
             }
 
-            // Apply minimum cash flow (living expenses)
+            // Apply minimum cash flow (living expenses) - scales with wealth
             if (settings.economicPressure.minimumCashFlow > 0) {
-                const livingExpenses = Math.floor(settings.economicPressure.minimumCashFlow * dynamicMods.inflationMultiplier);
-                newStats.cash -= livingExpenses;
-                if (livingExpenses > 0) eventsThisWeek.push(`Living expenses: -$${livingExpenses.toLocaleString()}`);
+                // Base living expense
+                const baseLivingExpense = settings.economicPressure.minimumCashFlow;
+
+                // Calculate wealth tier and progressive multiplier
+                // As you get richer, your lifestyle expands (better housing, studio, equipment, team, etc.)
+                let wealthMultiplier = 1;
+                let lifestyleLabel = "Basic";
+
+                if (newStats.cash > 100000) {
+                    wealthMultiplier = 20; // Superstar: $1,000/week (mansion, luxury cars, entourage)
+                    lifestyleLabel = "Superstar";
+                } else if (newStats.cash > 50000) {
+                    wealthMultiplier = 12; // Elite: $600/week (nice house, good car, small team)
+                    lifestyleLabel = "Elite";
+                } else if (newStats.cash > 20000) {
+                    wealthMultiplier = 7; // Established: $350/week (decent apartment, used car, basic gear)
+                    lifestyleLabel = "Established";
+                } else if (newStats.cash > 10000) {
+                    wealthMultiplier = 4; // Rising: $200/week (better place, some equipment)
+                    lifestyleLabel = "Rising";
+                } else if (newStats.cash > 5000) {
+                    wealthMultiplier = 2.5; // Growing: $125/week (modest upgrade)
+                    lifestyleLabel = "Growing";
+                } else if (newStats.cash > 2000) {
+                    wealthMultiplier = 1.5; // Entry: $75/week (shared apartment)
+                    lifestyleLabel = "Entry";
+                }
+                // else stay at base $50/week for struggling artists (living with parents/friends)
+
+                const livingExpenses = Math.floor(baseLivingExpense * wealthMultiplier * dynamicMods.inflationMultiplier);
+                newStats.cash = Math.round(newStats.cash - livingExpenses);
+
+                // Show lifestyle tier when expenses are significant
+                if (livingExpenses >= 100) {
+                    eventsThisWeek.push(`Living expenses (${lifestyleLabel} lifestyle): -$${livingExpenses.toLocaleString()}`);
+                } else if (livingExpenses > 0) {
+                    eventsThisWeek.push(`Living expenses: -$${livingExpenses.toLocaleString()}`);
+                }
             }
 
             // Apply debt interest (hardcore only)
@@ -654,10 +690,10 @@ function gameReducer(state: GameState, action: Action): GameState {
                     }
                 }
 
-                newStats.cash += eventCash;
-                newStats.fame += eventFame;
-                newStats.wellBeing += randomEvent.wellBeing || 0;
-                newStats.hype += eventHype;
+                newStats.cash = Math.round(newStats.cash + eventCash);
+                newStats.fame = Math.round(newStats.fame + eventFame);
+                newStats.wellBeing = Math.round(newStats.wellBeing + (randomEvent.wellBeing || 0));
+                newStats.hype = Math.round(newStats.hype + eventHype);
             }
             
             // 3. Project Release Check
@@ -694,10 +730,10 @@ function gameReducer(state: GameState, action: Action): GameState {
                     : 0;
                 const netIncome = projectIncome - taxAmount;
 
-                newStats.cash += netIncome;
-                newStats.fame += fameBonus;
-                newStats.hype += hypeBonus;
-                newStats.careerProgress += careerBonus;
+                newStats.cash = Math.round(newStats.cash + netIncome);
+                newStats.fame = Math.round(newStats.fame + fameBonus);
+                newStats.hype = Math.round(newStats.hype + hypeBonus);
+                newStats.careerProgress = Math.round(newStats.careerProgress + careerBonus);
 
                 if (taxAmount > 0) {
                     eventsThisWeek.push(`Released '${newProject.name}'! Earned $${projectIncome.toLocaleString()} (-$${taxAmount.toLocaleString()} tax), gained ${fameBonus} Fame, ${hypeBonus} Hype, ${careerBonus} Career Progress.`);
@@ -713,7 +749,7 @@ function gameReducer(state: GameState, action: Action): GameState {
             }
 
             // 4. Update Stats with dynamic difficulty modifiers
-            newStats.fame = Math.min(100, Math.max(0, newStats.fame + bonusFame));
+            newStats.fame = Math.round(Math.min(100, Math.max(0, newStats.fame + bonusFame)));
 
             // Apply stat decay with dynamic difficulty modifiers
             const hypeDecay = Math.floor(2 * dynamicMods.decayMultiplier);
@@ -724,9 +760,10 @@ function gameReducer(state: GameState, action: Action): GameState {
             const competitionFameLoss = settings.competition.enabled ? settings.competition.fameDrain : 0;
             const competitionHypeLoss = settings.competition.enabled ? settings.competition.hypeDrain : 0;
 
-            newStats.hype = Math.min(100, Math.max(0, newStats.hype + bonusHype - hypeDecay - competitionHypeLoss));
-            newStats.fame = Math.min(100, Math.max(0, newStats.fame - fameDecay - competitionFameLoss));
-            newStats.wellBeing = Math.min(100, Math.max(0, newStats.wellBeing - wellBeingDecay));
+            newStats.hype = Math.round(Math.min(100, Math.max(0, newStats.hype + bonusHype - hypeDecay - competitionHypeLoss)));
+            newStats.fame = Math.round(Math.min(100, Math.max(0, newStats.fame - fameDecay - competitionFameLoss)));
+            newStats.wellBeing = Math.round(Math.min(100, Math.max(0, newStats.wellBeing - wellBeingDecay)));
+            newStats.careerProgress = Math.round(Math.min(100, Math.max(0, newStats.careerProgress)));
 
             // Log if significant competition impact
             if (totalWeeksPlayed > 10 && settings.competition.enabled && (competitionFameLoss + competitionHypeLoss) > 2) {
@@ -1014,6 +1051,52 @@ function gameReducer(state: GameState, action: Action): GameState {
                 unseenAchievements: newUnseenAchievements,
                 // legacy careerLog append removed; Date-based log added instead
                 logs: appendLogToArray(state.logs, createLog(`Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.`, 'info', new Date(state.currentDate || new Date())))
+            };
+        }
+        case 'START_PROJECT': {
+            const { projectId } = action.payload;
+            const projectTemplate = allProjects.find(p => p.id === projectId);
+
+            if (!projectTemplate || state.currentProject) {
+                return state; // Already have a project or invalid ID
+            }
+
+            const cost = projectId.includes('SINGLE') ? 100
+                : projectId.includes('EP') ? 300
+                : projectId === 'ALBUM_1' ? 2500
+                : projectId === 'ALBUM_2' ? 5000
+                : 0;
+
+            if (state.playerStats.cash < cost) {
+                return state; // Can't afford
+            }
+
+            const newProject: Project = {
+                ...projectTemplate,
+                progress: 0,
+                quality: 0
+            };
+
+            const newStats = {
+                ...state.playerStats,
+                cash: Math.round(state.playerStats.cash - cost),
+                wellBeing: Math.round(state.playerStats.wellBeing + 5),
+                hype: Math.round(state.playerStats.hype + (cost > 1000 ? 15 : 5))
+            };
+
+            return {
+                ...state,
+                currentProject: newProject,
+                playerStats: newStats,
+                logs: appendLogToArray(
+                    state.logs,
+                    createLog(
+                        `Started working on ${newProject.name}! This is going to be amazing. (Cost: $${cost.toLocaleString()})`,
+                        'success',
+                        new Date(state.currentDate || new Date()),
+                        '🎵'
+                    )
+                )
             };
         }
         case 'LOAD_GAME':
@@ -2504,6 +2587,17 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                             onExtendContract={(staffIndex, additionalMonths) => {
                                 dispatch({ type: 'EXTEND_STAFF_CONTRACT', payload: { staffIndex, additionalMonths } });
                             }}
+                            isGuestMode={isGuestMode}
+                        />
+                    )}
+
+                    {activeSidebarView === 'projects' && (
+                        <ProjectsPanel
+                            currentProject={currentProject}
+                            playerStats={playerStats}
+                            onStartProject={(projectId) => {
+                                dispatch({ type: 'START_PROJECT', payload: { projectId } });
+                            }}
                         />
                     )}
 
@@ -2556,7 +2650,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             )}
             {modal === 'learning' && (
                 <Suspense fallback={<Loader text="Loading learning hub..." />}>
-                    <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} gameState={state} />
+                    <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} gameState={state} isGuestMode={isGuestMode} />
                 </Suspense>
             )}
             {modal === 'moduleViewer' && state.currentModule && (

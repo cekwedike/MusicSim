@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BookIcon, ChartIcon, QuestionMarkIcon, SaveIcon, BriefcaseIcon, MusicNoteIcon, UserIcon } from './icons/Icons';
 import { useTheme } from '../contexts/ThemeContext';
-import { Sun, Moon, Menu, X } from 'lucide-react';
+import { Sun, Moon, Menu, X, Music } from 'lucide-react';
 import type { Difficulty } from '../types';
 import { getDifficultyColor, getDifficultyIcon } from '../data/difficultySettings';
 
-export type SidebarView = 'profile' | 'achievements' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
+export type SidebarView = 'profile' | 'achievements' | 'projects' | 'learning' | 'statistics' | 'tutorial' | 'saveload' | 'audio' | null;
 
 interface SidebarProps {
   activeView: SidebarView;
@@ -59,6 +59,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       label: 'Management Hub',
       ariaLabel: 'Show Management Hub',
       badge: hasUnseenAchievements
+    },
+    {
+      id: 'projects',
+      icon: <Music className="w-5 h-5" />,
+      label: 'Projects',
+      ariaLabel: 'Create Music Projects'
     },
     {
       id: 'learning',

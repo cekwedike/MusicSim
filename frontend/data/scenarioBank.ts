@@ -364,7 +364,10 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Indie Label Offer",
         description: "A small but respected indie record label, 'Vinyl Heart Records', wants to sign you. They've sent over a contract for you to review. Should you examine their terms or hold out for something bigger?",
-        conditions: { minFame: 15, maxFame: 60 }, // Lowered fame requirement, removed achievement requirement
+        conditions: {
+            minFameByDifficulty: { beginner: 35, realistic: 50, hardcore: 75 },
+            maxFame: 60
+        }, // Contract unlock scales with difficulty
         // audio: first record deal voiceover
         audioFile: '/audio/scenarios/first-record-deal.m4a',
         autoPlayAudio: true,

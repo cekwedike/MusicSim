@@ -400,6 +400,7 @@ export interface Choice {
 export interface ScenarioConditions {
   minFame?: number;
   maxFame?: number;
+  minFameByDifficulty?: { beginner: number; realistic: number; hardcore: number }; // Fame requirements scaled by difficulty
   minCash?: number;
   maxCash?: number;
   minWellBeing?: number;

@@ -12,15 +12,22 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
         return true; // No conditions, always available
     }
 
-    const { playerStats, artistGenre, achievements, currentProject, staff } = state;
-    const { 
-        minFame, maxFame, minCash, maxCash, minWellBeing, maxWellBeing, 
-        requiredGenre, minCareerProgress, minHype, maxHype, 
+    const { playerStats, artistGenre, achievements, currentProject, staff, difficulty } = state;
+    const {
+        minFame, maxFame, minFameByDifficulty, minCash, maxCash, minWellBeing, maxWellBeing,
+        requiredGenre, minCareerProgress, minHype, maxHype,
         requiredAchievementId, projectRequired, noProjectRequired,
         requiresStaff, missingStaff
     } = scenario.conditions;
 
-    if (minFame !== undefined && playerStats.fame < minFame) return false;
+    // Check difficulty-based fame requirement (overrides minFame if present)
+    if (minFameByDifficulty !== undefined) {
+        const requiredFame = minFameByDifficulty[difficulty];
+        if (playerStats.fame < requiredFame) return false;
+    } else {
+        // Fall back to standard minFame if no difficulty scaling
+        if (minFame !== undefined && playerStats.fame < minFame) return false;
+    }
     if (maxFame !== undefined && playerStats.fame > maxFame) return false;
     if (minCash !== undefined && playerStats.cash < minCash) return false;
     if (maxCash !== undefined && playerStats.cash > maxCash) return false;

@@ -24,6 +24,7 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import ScenarioCard from './components/ScenarioCard';
 import OutcomeModal from './components/OutcomeModal';
+import StaffTerminationModal from './components/StaffTerminationModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
 import AudioUnlockPrompt from './components/AudioUnlockPrompt';
@@ -1235,12 +1236,109 @@ function gameReducer(state: GameState, action: Action): GameState {
             const terminatedStaff = state.staff[staffIndex];
             const newStaff = state.staff.filter((_, i) => i !== staffIndex);
 
-            // Termination penalty: pay 2 months salary
-            const penalty = terminatedStaff.salary * 2;
+            // Base termination penalty: pay 2 months salary
+            const basePenalty = terminatedStaff.salary * 2;
+            let severance = basePenalty;
+            let wellBeingLoss = 5;
+            const additionalEffects: { stat: string; value: number; label: string }[] = [];
+
+            // Generate varied outcomes based on staff tier and role
+            const outcomeRoll = Math.random();
+            let outcomeMessage = '';
+
+            if (terminatedStaff.tier === 'elite') {
+                // Elite staff terminations have bigger consequences
+                if (outcomeRoll < 0.3) {
+                    // Bad outcome: Industry backlash
+                    outcomeMessage = `${terminatedStaff.name} didn't take the termination well. Word spreads in the industry about your decision, damaging your reputation.`;
+                    wellBeingLoss = 10;
+                    additionalEffects.push({ stat: 'fame', value: -3, label: 'Industry Reputation' });
+                } else if (outcomeRoll < 0.6) {
+                    // Neutral outcome
+                    outcomeMessage = `${terminatedStaff.name} understood it was business. They move on professionally, but the separation still stings.`;
+                    wellBeingLoss = 7;
+                } else {
+                    // Good outcome: Mutual respect
+                    outcomeMessage = `${terminatedStaff.name} appreciated your honesty. They leave on good terms and even recommend you to their network before departing.`;
+                    wellBeingLoss = 4;
+                    additionalEffects.push({ stat: 'fame', value: 1, label: 'Professional Respect' });
+                }
+            } else if (terminatedStaff.tier === 'expert') {
+                // Expert staff terminations
+                if (outcomeRoll < 0.25) {
+                    // Bad outcome: Legal complications
+                    outcomeMessage = `${terminatedStaff.name} disputes the termination terms. Legal complications increase the severance cost.`;
+                    severance = basePenalty * 1.5;
+                    wellBeingLoss = 8;
+                } else if (outcomeRoll < 0.6) {
+                    // Neutral outcome
+                    outcomeMessage = `${terminatedStaff.name} accepts the termination. It's awkward but professional. You feel the weight of the decision.`;
+                    wellBeingLoss = 6;
+                } else {
+                    // Good outcome: Grateful exit
+                    outcomeMessage = `${terminatedStaff.name} thanks you for the opportunity and leaves gracefully. You feel relieved it went smoothly.`;
+                    wellBeingLoss = 3;
+                }
+            } else if (terminatedStaff.tier === 'professional') {
+                // Professional staff terminations
+                if (outcomeRoll < 0.3) {
+                    // Bad outcome: Team morale hit
+                    outcomeMessage = `${terminatedStaff.name} was well-liked. Their termination creates tension and affects team morale.`;
+                    wellBeingLoss = 7;
+                    additionalEffects.push({ stat: 'hype', value: -2, label: 'Team Morale Impact' });
+                } else if (outcomeRoll < 0.7) {
+                    // Neutral outcome
+                    outcomeMessage = `${terminatedStaff.name} takes the news professionally. The termination is clean, but you still feel guilty about it.`;
+                    wellBeingLoss = 5;
+                } else {
+                    // Good outcome: Amicable split
+                    outcomeMessage = `${terminatedStaff.name} saw it coming and already had backup plans. The split is amicable and stress-free.`;
+                    wellBeingLoss = 2;
+                }
+            } else {
+                // Entry level staff terminations
+                if (outcomeRoll < 0.35) {
+                    // Bad outcome: Emotional reaction
+                    outcomeMessage = `${terminatedStaff.name} is devastated by the news. Their emotional reaction weighs heavily on your conscience.`;
+                    wellBeingLoss = 8;
+                } else if (outcomeRoll < 0.7) {
+                    // Neutral outcome
+                    outcomeMessage = `${terminatedStaff.name} is disappointed but understands. You pay the severance and part ways professionally.`;
+                    wellBeingLoss = 5;
+                } else {
+                    // Good outcome: New opportunities
+                    outcomeMessage = `${terminatedStaff.name} actually thanks you - they just got a better offer elsewhere! The severance helps them transition smoothly.`;
+                    wellBeingLoss = 1;
+                    additionalEffects.push({ stat: 'wellBeing', value: 2, label: 'Good Deed Bonus' });
+                }
+            }
+
+            // Apply stat changes
             const newStats = {
                 ...state.playerStats,
-                cash: state.playerStats.cash - penalty,
-                wellBeing: Math.max(0, state.playerStats.wellBeing - 5) // Guilt/stress
+                cash: state.playerStats.cash - severance,
+                wellBeing: Math.max(0, state.playerStats.wellBeing - wellBeingLoss)
+            };
+
+            // Apply additional effects
+            additionalEffects.forEach(effect => {
+                if (effect.stat === 'fame') {
+                    newStats.fame = Math.max(0, newStats.fame + effect.value);
+                } else if (effect.stat === 'hype') {
+                    newStats.hype = Math.max(0, newStats.hype + effect.value);
+                } else if (effect.stat === 'wellBeing') {
+                    newStats.wellBeing = Math.min(100, newStats.wellBeing + effect.value);
+                }
+            });
+
+            // Create termination outcome
+            const terminationOutcome = {
+                type: 'termination' as const,
+                staff: terminatedStaff,
+                message: outcomeMessage,
+                severance,
+                wellBeingLoss,
+                additionalEffects
             };
 
             return {
@@ -1250,12 +1348,13 @@ function gameReducer(state: GameState, action: Action): GameState {
                 logs: appendLogToArray(
                     state.logs,
                     createLog(
-                        `Terminated ${terminatedStaff.name}'s contract. Severance pay: $${penalty.toLocaleString()}. Your well-being drops from the difficult decision.`,
+                        `Terminated ${terminatedStaff.name}'s contract. Severance pay: $${severance.toLocaleString()}. Well-being -${wellBeingLoss}.`,
                         'warning',
                         new Date(state.currentDate || new Date()),
-                        ''
+                        '⚠️'
                     )
-                )
+                ),
+                lastOutcome: terminationOutcome as any
             };
         }
 
@@ -2439,7 +2538,22 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </main>
             </div>
 
-            {lastOutcome && <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />}
+            {lastOutcome && (
+                (lastOutcome as any).type === 'termination' ? (
+                    <StaffTerminationModal
+                        staff={(lastOutcome as any).staff}
+                        outcome={{
+                            message: (lastOutcome as any).message,
+                            severance: (lastOutcome as any).severance,
+                            wellBeingLoss: (lastOutcome as any).wellBeingLoss,
+                            additionalEffects: (lastOutcome as any).additionalEffects
+                        }}
+                        onClose={handleContinue}
+                    />
+                ) : (
+                    <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />
+                )
+            )}
             {modal === 'learning' && (
                 <Suspense fallback={<Loader text="Loading learning hub..." />}>
                     <LearningHub isOpen={true} onClose={handleCloseModal} onOpenModule={handleOpenModule} playerKnowledge={state.playerKnowledge} gameState={state} />

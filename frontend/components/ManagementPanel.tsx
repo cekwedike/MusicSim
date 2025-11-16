@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import type { Achievement, HiredStaff, PlayerStats, ContractDuration, Difficulty } from '../types';
 import { TrophyIcon, BriefcaseIcon } from './icons/Icons';
 import { getAvailableStaff, staffTemplates } from '../data/staff';
+import TerminationConfirmModal from './TerminationConfirmModal';
+
+interface TerminationConfirmation {
+  staff: HiredStaff;
+  staffIndex: number;
+}
 
 interface ManagementPanelProps {
   achievements: Achievement[];
@@ -47,6 +53,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
   const [activeTab, setActiveTab] = useState<'achievements' | 'staff'>('achievements');
   const [hiringView, setHiringView] = useState<'current' | 'hire'>('current');
   const [selectedContractDuration, setSelectedContractDuration] = useState<Record<string, ContractDuration>>({});
+  const [terminationPending, setTerminationPending] = useState<TerminationConfirmation | null>(null);
 
   const unlockedCount = achievements.filter(a => a.unlocked).length;
   const totalCount = achievements.length;
@@ -264,9 +271,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                           )}
                           <button
                             onClick={() => {
-                              if (window.confirm(`Terminate ${member.name}? This will cost $${(member.salary * 2).toLocaleString()} in severance and reduce your well-being.`)) {
-                                onTerminateStaff(index);
-                              }
+                              setTerminationPending({ staff: member, staffIndex: index });
                             }}
                             className="px-2 sm:px-3 py-2 rounded font-medium text-xs sm:text-sm bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-600/50 transition-colors"
                           >
@@ -451,6 +456,18 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
             </>
           )}
         </div>
+      )}
+
+      {/* Termination Confirmation Modal */}
+      {terminationPending && (
+        <TerminationConfirmModal
+          staff={terminationPending.staff}
+          onConfirm={() => {
+            onTerminateStaff(terminationPending.staffIndex);
+            setTerminationPending(null);
+          }}
+          onCancel={() => setTerminationPending(null)}
+        />
       )}
     </div>
   );

@@ -17,7 +17,7 @@ export const staffTemplates: StaffTemplate[] = [
     // ==================== MANAGERS ====================
     {
         id: 'MANAGER_ENTRY',
-        name: 'Jordan Brooks',
+        name: 'Amara Okonkwo', // Nigerian
         role: 'Manager',
         tier: 'entry',
         salary: 100, // per month
@@ -32,7 +32,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'MANAGER_PROFESSIONAL',
-        name: 'Alex "The Fixer" Chen',
+        name: 'Kwame "The Fixer" Mensah', // Ghanaian
         role: 'Manager',
         tier: 'professional',
         salary: 300,
@@ -49,7 +49,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'MANAGER_EXPERT',
-        name: 'Sarah "Powerhouse" Martinez',
+        name: 'Aisha "Powerhouse" Uwimana', // Rwandan
         role: 'Manager',
         tier: 'expert',
         salary: 600,
@@ -67,7 +67,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'MANAGER_ELITE',
-        name: 'Marcus "The Kingmaker" Stone',
+        name: 'Chidi "The Kingmaker" Nwachukwu', // Nigerian
         role: 'Manager',
         tier: 'elite',
         salary: 1200,
@@ -87,7 +87,7 @@ export const staffTemplates: StaffTemplate[] = [
     // ==================== BOOKERS ====================
     {
         id: 'BOOKER_ENTRY',
-        name: 'Casey Miller',
+        name: 'Thabo Ndlovu', // South African
         role: 'Booker',
         tier: 'entry',
         salary: 100,
@@ -102,7 +102,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'BOOKER_PROFESSIONAL',
-        name: 'Maya "The Calendar" Singh',
+        name: 'Nuru "The Calendar" Kamau', // Kenyan
         role: 'Booker',
         tier: 'professional',
         salary: 300,
@@ -119,7 +119,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'BOOKER_EXPERT',
-        name: 'Ryan "The Route Master" O\'Connor',
+        name: 'Yves "The Route Master" Mugisha', // Rwandan
         role: 'Booker',
         tier: 'expert',
         salary: 600,
@@ -137,7 +137,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'BOOKER_ELITE',
-        name: 'Victoria "The Stadium Queen" Chen',
+        name: 'Zara "The Stadium Queen" Adeyemi', // Nigerian
         role: 'Booker',
         tier: 'elite',
         salary: 1200,
@@ -157,7 +157,7 @@ export const staffTemplates: StaffTemplate[] = [
     // ==================== PROMOTERS ====================
     {
         id: 'PROMOTER_ENTRY',
-        name: 'Sam Taylor',
+        name: 'Nia Mwangi', // Kenyan
         role: 'Promoter',
         tier: 'entry',
         salary: 100,
@@ -172,7 +172,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'PROMOTER_PROFESSIONAL',
-        name: 'Leo "The Mouthpiece" Petrov',
+        name: 'Kofi "The Mouthpiece" Asante', // Ghanaian
         role: 'Promoter',
         tier: 'professional',
         salary: 300,
@@ -189,7 +189,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'PROMOTER_EXPERT',
-        name: 'Nina "The Narrative" Rodriguez',
+        name: 'Amara "The Narrative" Okafor', // Nigerian
         role: 'Promoter',
         tier: 'expert',
         salary: 600,
@@ -206,7 +206,7 @@ export const staffTemplates: StaffTemplate[] = [
     },
     {
         id: 'PROMOTER_ELITE',
-        name: 'Diana "The Legend" Washington',
+        name: 'Thandiwe "The Legend" Ncube', // South African/Zimbabwean
         role: 'Promoter',
         tier: 'elite',
         salary: 1200,

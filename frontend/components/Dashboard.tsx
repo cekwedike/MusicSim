@@ -51,30 +51,6 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, ma
     );
 }
 
-const ProjectTracker: React.FC<{ project: Project | null }> = ({ project }) => {
-    if (!project) return null;
-
-    const progressPercentage = (project.progress / project.requiredProgress) * 100;
-
-    return (
-        <div className="current-project mt-1.5 bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 shadow-lg border border-gray-700/50">
-            <h3 className="text-xs sm:text-sm font-bold text-red-300 mb-1">Current Project: {project.name}</h3>
-            <div className="flex items-center gap-2">
-                <div className="w-full bg-gray-700 rounded-full h-2 sm:h-2.5 overflow-hidden">
-                    <div
-                        className="bg-gradient-to-r from-red-500 to-rose-500 h-2 sm:h-2.5 rounded-full transition-all duration-500 ease-out text-right"
-                        style={{ width: `${progressPercentage}%`}}
-                    >
-                    </div>
-                </div>
-                <span className="font-bold text-gray-200 text-xs sm:text-sm">{Math.floor(progressPercentage)}%</span>
-            </div>
-            <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Quality: {project.quality}</p>
-        </div>
-    );
-};
-
-
 const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date }> = ({ stats, project, date, currentDate }) => {
     const [isMobileCollapsed, setIsMobileCollapsed] = useState(true);
 
@@ -127,7 +103,6 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                                 <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="red" isDate={true} />
                             </div>
                         </div>
-                        <ProjectTracker project={project} />
                     </div>
                 )}
             </div>
@@ -141,7 +116,6 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                     <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
                     <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="red" isDate={true} />
                 </div>
-                <ProjectTracker project={project} />
             </div>
         </div>
     );

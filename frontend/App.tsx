@@ -35,7 +35,6 @@ const LearningPanel = lazy(() => import('./components/LearningPanel'));
 const ModuleViewer = lazy(() => import('./components/ModuleViewer'));
 const ContractViewer = lazy(() => import('./components/ContractViewer'));
 import ManagementPanel from './components/ManagementPanel';
-import ProjectsPanel from './components/ProjectsPanel';
 import StatisticsPanel from './components/StatisticsPanel';
 import SidebarAudioSettings from './components/SidebarAudioSettings';
 // SaveLoadPanel already used inside the sidebar
@@ -225,7 +224,7 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
 
-function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT'; payload: { projectId: string } }): GameState {
+function gameReducer(state: GameState, action: Action): GameState {
     switch (action.type) {
         case 'START_SETUP':
             return { ...generateInitialState(), status: 'setup' };
@@ -270,18 +269,8 @@ function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT';
                 hype: Math.round(Math.min(100, Math.max(0, state.playerStats.hype + outcome.hype))),
             };
 
-            let newProject = state.currentProject;
-            if (outcome.startProject && !newProject) {
-                const projectTemplate = allProjects.find(p => p.id === outcome.startProject);
-                if (projectTemplate) {
-                    newProject = { ...projectTemplate, progress: 0, quality: 0 };
-                }
-            }
-            if (outcome.progressProject && newProject) {
-                newProject.progress += outcome.progressProject;
-                newProject.quality += Math.floor(Math.random() * 5 + outcome.fame / 20);
-            }
-            
+            // Projects have been removed - no project handling needed
+
             let updatedAchievements = [...state.achievements];
             let newUnseenAchievements = [...state.unseenAchievements];
 
@@ -387,7 +376,6 @@ function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT';
                 ...state,
                 playerStats: newStats,
                 lastOutcome: outcome,
-                currentProject: newProject,
                 // legacy careerLog append removed; message added to Date-based logs instead
                 logs: appendLogToArray(state.logs, createLog(outcome.text, 'info', new Date(state.currentDate || new Date()))),
                 achievements: updatedAchievements,
@@ -696,57 +684,9 @@ function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT';
                 newStats.hype = Math.round(newStats.hype + eventHype);
             }
             
-            // 3. Project Release Check
-            let newProject = state.currentProject;
+            // 3. Projects removed - no project completion logic needed
             let updatedAchievements = [...state.achievements];
             let newUnseenAchievements = [...state.unseenAchievements];
-            if (newProject && newProject.progress >= newProject.requiredProgress) {
-                const qualityBonus = Math.floor(newProject.quality / 10);
-                const hypeBonus = Math.floor(newProject.quality / 5 + state.playerStats.hype / 10);
-                const fameBonus = 5 + qualityBonus;
-                const careerBonus = 10 + qualityBonus;
-
-                // Calculate project income based on type and quality, modified by difficulty
-                let baseIncome = 0;
-                if (newProject.id.includes('SINGLE')) {
-                    baseIncome = 200 + newProject.quality * 10;
-                } else if (newProject.id.includes('EP')) {
-                    baseIncome = 800 + newProject.quality * 25;
-                } else if (newProject.id.includes('ALBUM')) {
-                    baseIncome = 3000 + newProject.quality * 50;
-                }
-
-                // Apply dynamic income multiplier and market volatility
-                let projectIncome = Math.floor(baseIncome * dynamicMods.incomeMultiplier);
-                if (settings.marketVolatility.enabled) {
-                    const [minSwing, maxSwing] = settings.marketVolatility.cashSwingRange;
-                    const swing = minSwing + Math.random() * (maxSwing - minSwing);
-                    projectIncome = Math.floor(projectIncome * (1 + swing));
-                }
-
-                // Apply tax on income
-                const taxAmount = settings.economicPressure.taxRate > 0
-                    ? Math.floor(projectIncome * settings.economicPressure.taxRate)
-                    : 0;
-                const netIncome = projectIncome - taxAmount;
-
-                newStats.cash = Math.round(newStats.cash + netIncome);
-                newStats.fame = Math.round(newStats.fame + fameBonus);
-                newStats.hype = Math.round(newStats.hype + hypeBonus);
-                newStats.careerProgress = Math.round(newStats.careerProgress + careerBonus);
-
-                if (taxAmount > 0) {
-                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${projectIncome.toLocaleString()} (-$${taxAmount.toLocaleString()} tax), gained ${fameBonus} Fame, ${hypeBonus} Hype, ${careerBonus} Career Progress.`);
-                } else {
-                    eventsThisWeek.push(`Released '${newProject.name}'! Earned $${netIncome.toLocaleString()}, gained ${fameBonus} Fame, ${hypeBonus} Hype, ${careerBonus} Career Progress.`);
-                }
-                const projectAchievement = updatedAchievements.find(a => a.id === `PROJECT_${newProject?.id}`);
-                if(projectAchievement && !projectAchievement.unlocked){
-                    projectAchievement.unlocked = true;
-                    newUnseenAchievements.push(projectAchievement.id);
-                }
-                newProject = null;
-            }
 
             // 4. Update Stats with dynamic difficulty modifiers
             newStats.fame = Math.round(Math.min(100, Math.max(0, newStats.fame + bonusFame)));
@@ -880,7 +820,6 @@ function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT';
                 playerStats: newStats,
                 // legacy `date` removed; `currentDate` represents actual timeline
                 currentDate: newCurrentDate,
-                currentProject: newProject,
                 // careerLog removed; preserve only Date-based logs
                 logs: newLogs,
                 achievements: milestoneCheck.achievements,
@@ -1010,16 +949,26 @@ function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT';
             newStats.fame += 10;
             newStats.hype += 15;
             newStats.careerProgress += 15;
-            
+
             let updatedAchievements = [...state.achievements];
             let newUnseenAchievements = [...state.unseenAchievements];
-            
+
             const signAchievement = updatedAchievements.find(a => a.id === `SIGNED_${state.currentLabelOffer.name.replace(/\s+/g, '_').toUpperCase()}`);
             if (signAchievement && !signAchievement.unlocked) {
                 signAchievement.unlocked = true;
                 newUnseenAchievements = [...newUnseenAchievements, signAchievement.id];
             }
-            
+
+            // Create an outcome to show what happened
+            const signOutcome = {
+                text: `You've signed with ${state.currentLabelOffer.name}! You received a $${adjustedAdvance.toLocaleString()} advance. Your fame, hype, and career progress have all increased significantly.`,
+                cash: adjustedAdvance,
+                fame: 10,
+                wellBeing: 0,
+                careerProgress: 15,
+                hype: 15
+            };
+
             return {
                 ...state,
                 playerStats: newStats,
@@ -1028,6 +977,7 @@ function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT';
                 modal: 'none',
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
+                lastOutcome: signOutcome,
                 // legacy careerLog append removed; Date-based log added instead
                 logs: appendLogToArray(state.logs, createLog(`Signed with ${state.currentLabelOffer.name}! Received $${adjustedAdvance.toLocaleString()} advance.`, 'success', new Date(state.currentDate || new Date())))
             };
@@ -1035,68 +985,33 @@ function gameReducer(state: GameState, action: Action | { type: 'START_PROJECT';
         case 'DECLINE_CONTRACT': {
             let updatedAchievements = [...state.achievements];
             let newUnseenAchievements = [...state.unseenAchievements];
-            
+
             // Walk away achievement
             const walkAwayAchievement = updatedAchievements.find(a => a.id === 'WALKED_AWAY');
             if (walkAwayAchievement && !walkAwayAchievement.unlocked) {
                 walkAwayAchievement.unlocked = true;
                 newUnseenAchievements = [...newUnseenAchievements, walkAwayAchievement.id];
             }
-            
-            return { 
-                ...state, 
-                currentLabelOffer: null, 
-                modal: 'none',
-                achievements: updatedAchievements,
-                unseenAchievements: newUnseenAchievements,
-                // legacy careerLog append removed; Date-based log added instead
-                logs: appendLogToArray(state.logs, createLog(`Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.`, 'info', new Date(state.currentDate || new Date())))
-            };
-        }
-        case 'START_PROJECT': {
-            const { projectId } = action.payload;
-            const projectTemplate = allProjects.find(p => p.id === projectId);
 
-            if (!projectTemplate || state.currentProject) {
-                return state; // Already have a project or invalid ID
-            }
-
-            const cost = projectId.includes('SINGLE') ? 100
-                : projectId.includes('EP') ? 300
-                : projectId === 'ALBUM_1' ? 2500
-                : projectId === 'ALBUM_2' ? 5000
-                : 0;
-
-            if (state.playerStats.cash < cost) {
-                return state; // Can't afford
-            }
-
-            const newProject: Project = {
-                ...projectTemplate,
-                progress: 0,
-                quality: 0
-            };
-
-            const newStats = {
-                ...state.playerStats,
-                cash: Math.round(state.playerStats.cash - cost),
-                wellBeing: Math.round(state.playerStats.wellBeing + 5),
-                hype: Math.round(state.playerStats.hype + (cost > 1000 ? 15 : 5))
+            // Create an outcome to show what happened
+            const declineOutcome = {
+                text: `You declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal. You maintain full control of your career.`,
+                cash: 0,
+                fame: 0,
+                wellBeing: 5,
+                careerProgress: 0,
+                hype: 0
             };
 
             return {
                 ...state,
-                currentProject: newProject,
-                playerStats: newStats,
-                logs: appendLogToArray(
-                    state.logs,
-                    createLog(
-                        `Started working on ${newProject.name}! This is going to be amazing. (Cost: $${cost.toLocaleString()})`,
-                        'success',
-                        new Date(state.currentDate || new Date()),
-                        '🎵'
-                    )
-                )
+                currentLabelOffer: null,
+                modal: 'none',
+                achievements: updatedAchievements,
+                unseenAchievements: newUnseenAchievements,
+                lastOutcome: declineOutcome,
+                // legacy careerLog append removed; Date-based log added instead
+                logs: appendLogToArray(state.logs, createLog(`Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.`, 'info', new Date(state.currentDate || new Date())))
             };
         }
         case 'LOAD_GAME':
@@ -1901,7 +1816,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     }
     const [unlockNotifications, setUnlockNotifications] = useState<UnlockNotif[]>([]);
 
-    const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, currentProject, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
+    const { status, playerStats, currentScenario, lastOutcome, artistName, achievements, unseenAchievements, modal, date, staff, gameOverReason, logs } = state;
 
     // Auth context
     const { user, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -2591,16 +2506,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         />
                     )}
 
-                    {activeSidebarView === 'projects' && (
-                        <ProjectsPanel
-                            currentProject={currentProject}
-                            playerStats={playerStats}
-                            onStartProject={(projectId) => {
-                                dispatch({ type: 'START_PROJECT', payload: { projectId } });
-                            }}
-                        />
-                    )}
-
                     {activeSidebarView === 'learning' && (
                         <Suspense fallback={<Loader text="Loading learning panel..." />}>
                             <LearningPanel
@@ -2622,7 +2527,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             )}
 
             <div className={`flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
-                {showDashboard && <Dashboard stats={playerStats} project={currentProject} date={date} currentDate={state.currentDate} />}
+                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}

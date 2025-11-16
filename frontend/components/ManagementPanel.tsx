@@ -151,37 +151,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
       {/* STAFF TAB */}
       {activeTab === 'staff' && (
         <div>
-          {/* Guest Mode Restriction */}
-          {isGuestMode ? (
-            <div className="text-center py-8 sm:py-12 px-4">
-              <BriefcaseIcon className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-yellow-500" />
-              <h3 className="text-base sm:text-lg font-semibold text-white mb-2">🎵 Staff Management - Premium Feature</h3>
-              <p className="text-xs sm:text-sm text-gray-300 max-w-md mx-auto mb-4">
-                Hiring managers, bookers, and promoters is available to registered users only!
-              </p>
-              <div className="mt-3 sm:mt-4 bg-yellow-900/20 border border-yellow-500/40 rounded-lg p-3 sm:p-4 max-w-md mx-auto">
-                <p className="text-xs sm:text-sm text-yellow-200 mb-3">
-                  <strong>Register for free to unlock:</strong>
-                </p>
-                <ul className="text-xs sm:text-sm text-yellow-100 text-left space-y-1.5 max-w-xs mx-auto">
-                  <li>✓ Hire managers for better deals (+25% income)</li>
-                  <li>✓ Book agents for premium gigs (+20% income)</li>
-                  <li>✓ Promoters for massive hype (+8 hype/week)</li>
-                  <li>✓ Cloud saves across all devices</li>
-                  <li>✓ Full access to all 12 learning courses</li>
-                </ul>
-              </div>
-              <button
-                onClick={() => {
-                  // This will trigger the registration flow
-                  window.dispatchEvent(new Event('openLoginModal'));
-                }}
-                className="mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
-              >
-                Register Now - It's Free!
-              </button>
-            </div>
-          ) : !staffHiringUnlocked && (
+          {!staffHiringUnlocked && (
             <div className="text-center py-8 sm:py-12 px-4">
               <BriefcaseIcon className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-600" />
               <h3 className="text-base sm:text-lg font-semibold text-gray-300 mb-2">Staff Hiring Locked</h3>

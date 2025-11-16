@@ -72,7 +72,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
             Continue as Guest
           </button>
           <p className="text-gray-500 text-xs mt-1">
-            Note: Guest progress is saved locally only. Staff management, most courses, and cloud sync require registration.
+            Note: Guest progress is saved locally only. Register for cloud sync across devices.
           </p>
         </div>
       </div>

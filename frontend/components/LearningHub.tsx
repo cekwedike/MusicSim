@@ -87,14 +87,6 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
   };
 
   const isModuleUnlocked = (module: LearningModule): boolean => {
-    // For guests, only unlock first 2 modules (contracts-basics and revenue-streams)
-    if (isGuestMode) {
-      const guestAllowedModules = ['contracts-basics', 'revenue-streams'];
-      if (!guestAllowedModules.includes(module.id)) {
-        return false;
-      }
-    }
-
     // Check milestone requirements first
     if (!checkMilestoneUnlock(module)) return false;
 
@@ -378,33 +370,16 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                         {/* Unlock Requirement */}
                         {!isUnlocked && (
                           <div className="mt-auto pt-3 sm:pt-4 border-t border-white/20">
-                            <div className={`border rounded-lg p-3 ${
-                              isGuestMode
-                                ? 'bg-yellow-900/50 border-yellow-500/40'
-                                : 'bg-red-900/50 border-red-500/40'
-                            }`}>
+                            <div className="border rounded-lg p-3 bg-red-900/50 border-red-500/40">
                               <div className="flex items-start gap-2">
-                                <svg className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
-                                  isGuestMode ? 'text-yellow-400' : 'text-red-400'
-                                }`} fill="currentColor" viewBox="0 0 20 20">
+                                <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                                 </svg>
                                 <div className="flex-1">
-                                  {isGuestMode ? (
-                                    <>
-                                      <h4 className="text-yellow-200 font-semibold text-xs sm:text-sm mb-1">🎓 Register to Unlock</h4>
-                                      <p className="text-yellow-100 text-xs sm:text-sm leading-relaxed">
-                                        Create a free account to access all courses and save your progress!
-                                      </p>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <h4 className="text-red-200 font-semibold text-xs sm:text-sm mb-1">Unlock Requirement</h4>
-                                      <p className="text-red-100 text-xs sm:text-sm leading-relaxed">
-                                        {module.unlockRequirement?.message || 'Locked'}
-                                      </p>
-                                    </>
-                                  )}
+                                  <h4 className="text-red-200 font-semibold text-xs sm:text-sm mb-1">Unlock Requirement</h4>
+                                  <p className="text-red-100 text-xs sm:text-sm leading-relaxed">
+                                    {module.unlockRequirement?.message || 'Locked'}
+                                  </p>
                                 </div>
                               </div>
                             </div>

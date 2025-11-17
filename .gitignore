@@ -49,3 +49,14 @@ dist-ssr
 
 # Claude Code
 .claude/
+.qodo/
+.vscode/
+*.test.tsx
+*.test.ts
+*.behavior.test.ts
+*.spec.ts
+*.spec.tsx
+__tests__/
+*.tsx.html
+*.ts.html
+coverage/

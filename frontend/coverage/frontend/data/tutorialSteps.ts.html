@@ -1,0 +1,769 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for frontend/data/tutorialSteps.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">frontend/data</a> tutorialSteps.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">97.14% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>204/210</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/3</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">97.14% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>204/210</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TutorialStep } from '../types';
+&nbsp;
+export const tutorialSteps: TutorialStep[] = [
+  {
+    id: 'welcome',
+    title: 'Welcome to MusicSim!',
+    message: 'Welcome to MusicSim, where you\'ll learn real music business skills while building your virtual career. This tutorial will guide you through the game and teach you about the music industry.',
+    position: 'center',
+    action: 'block',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'The music industry is complex and requires both creative talent and business knowledge to succeed. This simulation will teach you both!'
+  },
+  {
+    id: 'cash-stat',
+    title: 'Cash - Your Financial Health',
+    message: 'Cash represents your available money. You need it for everything - recording, marketing, living expenses. Running out of cash for too long leads to bankruptcy and game over.',
+    target: '.player-stats &gt; div:nth-child(1)',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Financial stability is the foundation of any music career. Even talented artists fail without proper money management. Track your income and expenses carefully.'
+  },
+  {
+    id: 'fame-stat',
+    title: 'Fame - Your Public Recognition',
+    message: 'Fame measures how well-known you are. Higher fame opens bigger opportunities, attracts better deals, and increases your earning potential.',
+    target: '.player-stats &gt; div:nth-child(2)',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Fame is built through consistent quality work, smart marketing, and public engagement. It takes time to build but can be lost quickly through scandals or poor decisions.'
+  },
+  {
+    id: 'wellbeing-stat',
+    title: 'Well-Being - Your Mental Health',
+    message: 'Well-being represents your mental and physical health. Overworking, stress, and poor lifestyle choices damage it. Let it drop too low for too long, and you\'ll burn out.',
+    target: '.player-stats &gt; div:nth-child(3)',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'The music industry is notorious for burnout. Many successful careers ended because artists didn\'t prioritize their health. Balance work with rest and self-care.'
+  },
+  {
+    id: 'hype-stat',
+    title: 'Hype - Your Current Buzz',
+    message: 'Hype is your current momentum and buzz in the industry. It fluctuates based on your recent activities, releases, and media presence. Strike while the iron is hot!',
+    target: '.player-stats &gt; div:nth-child(4)',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Hype is temporary but powerful. Smart artists capitalize on high hype moments with strategic releases and appearances, then use that momentum to build lasting fame.'
+  },
+  {
+    id: 'date-display',
+    title: 'Career Timeline',
+    message: 'This shows your current career date. Your career progresses week by week, and decisions have both immediate and long-term consequences.',
+    target: '.date-display',
+    position: 'bottom',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Music careers are marathons, not sprints. Building lasting success takes time, and timing your releases and decisions is crucial.'
+  },
+  {
+    id: 'scenario-system',
+    title: 'Decision-Based Scenarios',
+    message: 'Each scenario presents a real music industry situation. Read carefully and choose wisely - every decision impacts your career trajectory and teaches you about the business.',
+    target: '.scenario-card',
+    position: 'top',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Music industry professionals face complex decisions daily. Learning to evaluate options, understand consequences, and make strategic choices is essential for success.'
+  },
+  {
+    id: 'choice-selection',
+    title: 'Making Choices',
+    message: 'These are your decision options. Each choice has different outcomes affecting your stats. Some provide immediate benefits but long-term costs, others are investments in your future. Think strategically!',
+    target: '.scenario-card .choice-buttons',
+    position: 'top',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'In the music business, short-term gains often come with long-term consequences. Successful artists learn to balance immediate needs with future goals.'
+  },
+  {
+    id: 'educational-outcomes',
+    title: 'Learning from Outcomes',
+    message: 'After each choice, you\'ll see the results and learn WHY it happened. Pay attention to these lessons - they contain real industry insights and examples.',
+    target: '.outcome-modal',
+    position: 'center',
+    action: 'highlight',
+    nextTrigger: 'click',
+    delay: 1000,
+    musicBusinessLesson: 'Every experience in the music industry is a learning opportunity. Successful artists analyze their successes and failures to make better future decisions.'
+  },
+  {
+    id: 'career-log',
+    title: 'Career History',
+    message: 'Your career log tracks all major events and decisions. Review it regularly to understand patterns and learn from your journey.',
+    target: '.game-history',
+    position: 'left',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Keeping detailed records of your career decisions, contacts, and outcomes helps you identify what works and avoid repeating mistakes.'
+  },
+  {
+    id: 'achievements-system',
+    title: 'Achievements &amp; Milestones',
+    message: 'Achievements celebrate your progress and teach you about industry milestones. They represent real career accomplishments that matter in the music business.',
+    target: 'button[aria-label="Show Management Hub"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'The music industry measures success through various milestones: chart positions, sales figures, tour attendance, industry recognition, and career longevity.'
+  },
+  {
+    id: 'learning-hub',
+    title: 'Learning Hub',
+    message: 'Access detailed lessons about music business concepts from the right-side Sidebar. Open the Learning Hub to read bite-sized lessons and practical advice.',
+    target: 'button[aria-label="Learning Hub"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Continuous learning is essential in the evolving music industry. Understanding concepts like royalties, publishing, marketing, and contracts gives you competitive advantages.'
+  },
+  // Projects feature is not currently visible in the UI - skip this step
+  // {
+  //   id: 'projects-system',
+  //   title: 'Projects &amp; Releases',
+  //   message: 'Projects represent your creative work - albums, singles, tours. Managing projects well balances artistic vision with commercial viability and timing.',
+  //   target: '.current-project',
+  //   position: 'bottom',
+  //   action: 'highlight',
+  //   nextTrigger: 'click',
+  //   musicBusinessLesson: 'Successful artists treat each release as a business project with budgets, timelines, marketing strategies, and measurable goals, not just creative expression.'
+  // },
+  {
+    id: 'record-labels',
+    title: 'Record Label Contracts',
+    message: 'You\'ll encounter record label offers throughout your career. Open the Management Hub from the Sidebar to view contract offers and label interactions.',
+    target: 'button[aria-label="Show Management Hub"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Record deals can accelerate careers but involve giving up control and revenue. Understanding contract terms, advances, royalties, and recoupment is crucial for fair negotiations.'
+  },
+  {
+    id: 'contract-analysis',
+    title: 'Contract Education',
+    message: 'When viewing contracts, look for red flags (negative terms) and green flags (positive terms). This teaches you real contract evaluation skills.',
+    target: '.contract-viewer',
+    position: 'center',
+    action: 'highlight',
+    nextTrigger: 'click',
+    delay: 500,
+    musicBusinessLesson: 'Contract literacy separates successful artists from those who get exploited. Learn to identify predatory terms, fair deals, and negotiation opportunities.'
+  },
+  {
+    id: 'statistics-tracking',
+    title: 'Career Analytics',
+    message: 'Track your progress across multiple careers from the Sidebar Analytics panel. Use the statistics view to inspect trends and learn from past decisions.',
+    target: 'button[aria-label="Career Statistics"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Data-driven decision making is increasingly important in music. Understanding metrics like streaming numbers, audience demographics, and revenue sources helps optimize strategies.'
+  },
+&nbsp;
+  {
+    id: 'saveload-hub',
+    title: 'Save &amp; Load',
+    message: 'Use the Save &amp; Load panel in the Sidebar to create manual saves, load previous games, or manage autosaves. Saving regularly preserves your progress.',
+    target: 'button[aria-label="Save/Load Game"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Regular saves let you experiment with risky choices without permanent consequences. Use manual saves before big decisions.'
+  },
+&nbsp;
+  {
+    id: 'audio-panel',
+    title: 'Audio Settings',
+    message: 'Audio settings (music &amp; SFX) are now available in the Sidebar under Audio. Tweak volumes and toggles to match your preference.',
+    target: 'button[aria-label="Audio Settings"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Audio preferences help tailor the learning experience—turn down music while studying lessons or lower SFX for quieter play.'
+  },
+&nbsp;
+  {
+    id: 'profile-panel',
+    title: 'Your Profile',
+    message: 'The new Profile panel lives in the Sidebar. Open it to logout, exit guest mode, or manage account preferences.',
+    target: 'button[aria-label="User Profile"]',
+    position: 'right',
+    action: 'highlight',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'Keeping account details and session controls in one place helps you manage your play sessions and account safely.'
+  },
+  {
+    id: 'survival-focus',
+    title: 'Career Longevity',
+    message: 'This game has no "win condition" - it\'s about building sustainable, long-term careers. Focus on balance, smart decisions, and continuous learning.',
+    position: 'center',
+    action: 'block',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'The most successful music careers span decades, not months. Building sustainable practices, maintaining relationships, and adapting to industry changes matters more than quick fame.'
+  },
+  {
+    id: 'tutorial-complete',
+    title: 'Ready to Begin!',
+    message: 'You\'re now ready to start your music career simulation! Remember: every choice teaches you something about the real music business. Good luck, and have fun learning!',
+    position: 'center',
+    action: 'block',
+    nextTrigger: 'click',
+    musicBusinessLesson: 'The music industry rewards those who combine passion with business knowledge. Use this simulation to develop both your instincts and your understanding of how the industry really works.'
+  }
+];
+&nbsp;
+export const getTutorialStep = <span class="fstat-no" title="function not covered" >(stepId: string): TutorialStep | undefined =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return tutorialSteps.find(step =&gt; step.id === stepId);</span>
+<span class="cstat-no" title="statement not covered" >};</span>
+&nbsp;
+export const getTutorialStepByIndex = <span class="fstat-no" title="function not covered" >(index: number): TutorialStep | undefined =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return tutorialSteps[index];</span>
+<span class="cstat-no" title="statement not covered" >};</span>
+&nbsp;
+export const getTutorialLength = <span class="fstat-no" title="function not covered" >(): number =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return tutorialSteps.length;</span>
+<span class="cstat-no" title="statement not covered" >};</span></pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2025-11-17T16:38:31.559Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

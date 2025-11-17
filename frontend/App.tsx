@@ -33,7 +33,8 @@ import AudioUnlockPrompt from './components/AudioUnlockPrompt';
 const LearningHub = lazy(() => import('./components/LearningHub'));
 const LearningPanel = lazy(() => import('./components/LearningPanel'));
 const ModuleViewer = lazy(() => import('./components/ModuleViewer'));
-const ContractViewer = lazy(() => import('./components/ContractViewer'));
+// ContractViewer exports a named component; map it to `default` for React.lazy typing
+const ContractViewer = lazy(() => import('./components/ContractViewer').then(mod => ({ default: (mod as any).ContractViewer }))) as React.LazyExoticComponent<React.ComponentType<{ label: RecordLabel; onSign: () => void; onDecline: () => void }>>;
 import ManagementPanel from './components/ManagementPanel';
 import StatisticsPanel from './components/StatisticsPanel';
 import SidebarAudioSettings from './components/SidebarAudioSettings';
@@ -2295,7 +2296,12 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     const handleViewContract = () => {
         // No sound - just viewing
-        dispatch({ type: 'VIEW_CONTRACT' });
+        // Ensure there is a current label offer to view; the action expects a RecordLabel payload.
+        if (!state.currentLabelOffer) {
+            // Nothing to view, bail out.
+            return;
+        }
+        dispatch({ type: 'VIEW_CONTRACT', payload: state.currentLabelOffer });
     };
 
     const handleSignContract = () => {
@@ -2610,8 +2616,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 <LoginModal
                     isOpen={showLoginModal}
                     onClose={() => setShowLoginModal(false)}
-                    isGuestMode={isGuestMode}
-                    guestStatistics={isGuestMode ? state.statistics : undefined}
                 />
             )}
 

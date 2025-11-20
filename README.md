@@ -10,9 +10,7 @@ MusicSim is an educational simulation game designed to bridge the gap between mu
 
 ## Demo Videos
 
-**[Watch MusicSim in Action - UPDATED](https://www.loom.com/share/4d77df71abf64e25ab0583a1e1e66496)**
-
-**[Watch MusicSim in Action](https://www.loom.com/share/301477b7660b4f62802950b39f4910c3)**
+**[Watch MusicSim in Action](https://www.loom.com/share/4d77df71abf64e25ab0583a1e1e66496)**
 
 These demonstrations showcase the complete gameplay experience, from initial artist setup through complex career management scenarios and strategic decision-making processes.
 
@@ -59,85 +57,37 @@ These demonstrations showcase the complete gameplay experience, from initial art
 
 ```
 MusicSim/
-├── frontend/              # React + TypeScript + Vite
+├── frontend/              # React + TypeScript + Vite (deployed to Vercel)
 │   ├── components/        # Reusable UI components
-│   │   ├── Dashboard.tsx  # Game statistics display
-│   │   ├── ScenarioCard.tsx # Main gameplay interface
-│   │   ├── AchievementsModal.tsx # Achievement system
-│   │   ├── SaveLoadModal.tsx # Save/load management
-│   │   ├── LearningHub.tsx # Educational content
-│   │   ├── LoginModal.tsx # Authentication UI
-│   │   ├── Header.tsx     # Main navigation header
-│   │   ├── Sidebar.tsx    # Navigation sidebar
-│   │   ├── AudioControls.tsx # Background music system
-│   │   └── TutorialOverlay.tsx # Game tutorial system
 │   ├── services/          # API integration & game logic
-│   │   ├── api.ts         # Axios configuration
-│   │   ├── authService.ts # Authentication API
-│   │   ├── gameService.ts # Game state management
-│   │   ├── scenarioService.ts # Scenario generation
-│   │   └── analyticsService.ts # Learning analytics
 │   ├── data/              # Game content & configuration
-│   │   ├── scenarios.ts   # Scenario templates
-│   │   ├── achievements.ts # Achievement definitions
-│   │   ├── difficultySettings.ts # Game balance
-│   │   └── learningModules.ts # Educational content
 │   ├── contexts/          # React context providers
-│   │   ├── AuthContext.tsx # Global authentication state
-│   │   ├── AudioContext.tsx # Background music control
-│   │   ├── ThemeContext.tsx # UI theme management
-│   │   └── ToastContext.tsx # Notification system
 │   ├── constants/         # Application constants
-│   │   └── genres.ts      # Music genre definitions
 │   ├── hooks/             # Custom React hooks
 │   ├── types/             # TypeScript type definitions
 │   ├── scripts/           # Build and utility scripts
 │   ├── public/            # Static assets and audio files
-│   │   └── audio/         # Background music tracks
 │   └── src/               # Additional source files
-├── backend/               # Express.js + PostgreSQL
+├── backend/               # Express.js + PostgreSQL (deployed to Render)
 │   ├── routes/            # API endpoint definitions
-│   │   ├── auth.js        # User authentication
-│   │   ├── gameState.js   # Game save/load
-│   │   ├── careerHistory.js # Career tracking
-│   │   ├── learning.js    # Learning progress
-│   │   ├── lessons.js     # Lesson engagement
-│   │   ├── analytics.js   # User analytics
-│   │   └── migrate.js     # Database migration endpoints
 │   ├── models/            # Database schemas (Sequelize)
-│   │   ├── User.js        # User accounts
-│   │   ├── GameSave.js    # Game state storage
-│   │   ├── CareerHistory.js # Career records
-│   │   ├── LearningProgress.js # Educational tracking
-│   │   ├── PlayerStatistics.js # Player analytics
-│   │   └── index.js       # Model exports and associations
 │   ├── middleware/        # Express middleware
-│   │   ├── auth.js        # JWT authentication
-│   │   └── errorHandler.js # Error management
-│   ├── config/            # Configuration files
-│   │   ├── database.js    # Database connection (Sequelize)
-│   │   ├── supabase.js    # Supabase configuration
-│   │   └── swagger.js     # API documentation
+│   ├── config/            # Configuration files (includes Supabase)
 │   ├── migrations/        # Database migration scripts
-│   │   ├── migrate.js     # Migration runner
-│   │   └── *.sql          # SQL migration files
 │   ├── scripts/           # Database utilities
-│   │   ├── initDatabase.js # Database initialization
-│   │   └── resetDatabase.js # Database reset
 │   ├── constants/         # Backend constants
-│   │   └── achievements.js # Achievement definitions
 │   ├── utils/             # Utility functions
-│   │   └── validation.js  # Input validation helpers
 │   └── public/            # Static files served by Express
 ├── .github/               # GitHub workflows and templates
 ├── dist/                  # Production build output
-├── Makefile              # CI/CD and development commands
-├── metadata.json         # Project metadata
-├── vercel.json           # Vercel deployment configuration
-├── vite.config.ts        # Vite build configuration
-├── tsconfig.json         # TypeScript configuration
-├── tailwind.config.js    # Tailwind CSS configuration
-└── postcss.config.js     # PostCSS configuration
+├── Makefile               # CI/CD and development commands
+├── metadata.json          # Project metadata
+├── vercel.json            # Vercel deployment configuration
+├── render.yaml            # Render deployment configuration
+├── vite.config.ts         # Vite build configuration
+├── tsconfig.json          # TypeScript configuration
+├── tailwind.config.js     # Tailwind CSS configuration
+└── postcss.config.js      # PostCSS configuration
 ```
 
 ## Quick Start
@@ -145,7 +95,7 @@ MusicSim/
 ### Prerequisites
 - **Node.js** (v16 or higher)
 - **npm** or **yarn**
-- **PostgreSQL** (optional, for full backend features)
+- **Supabase account** (managed PostgreSQL)
 
 ### Play Now (Fastest)
 ```bash
@@ -201,15 +151,13 @@ NODE_ENV=development
 PORT=3001
 ```
 
-#### 3. **Database Setup** (Optional)
-For full backend features including user accounts and cloud saves:
+#### 3. **Database Setup**
+For full backend features including user accounts and cloud saves, connect your backend to Supabase (managed PostgreSQL):
 
+- Create a Supabase project and database.
+- Copy your Supabase connection string to `backend/.env` as `DATABASE_URL`.
+- Run migrations and initialization scripts as needed:
 ```bash
-# Install PostgreSQL (if not already installed)
-# Create database
-createdb musicsim
-
-# Initialize database tables
 cd backend
 npm run db:init
 ```
@@ -304,23 +252,24 @@ npm run test:analytics  # Analytics endpoints
 
 ## Deployment
 
-### Frontend (Vercel/Netlify)
+### Frontend (Vercel)
 ```bash
 npm run build
-# Deploy `dist/` folder to your hosting platform
+# Deploy `dist/` folder to Vercel
 ```
 
-### Backend (Railway/Heroku)
+### Backend (Render)
 ```bash
-# Set environment variables
-# Deploy backend/ folder with PostgreSQL addon
+# Set environment variables in Render dashboard
+# Deploy backend/ folder, connect to Supabase database
 ```
 
-### Full Stack (Docker)
-```bash
-# Coming soon: Docker Compose configuration
-docker-compose up
-```
+### Database (Supabase)
+- Managed PostgreSQL, connection string provided in Supabase project settings
+
+### Deployment Verification
+- System is live and verified on Vercel (frontend), Render (backend), and Supabase (database) as of November 2025.
+- Health endpoint, authentication, save/load, and analytics features tested and confirmed functional in production.
 
 ## 🤝 Contributing
 
@@ -346,7 +295,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **React**: Frontend framework
 - **Vite**: Lightning-fast development server
 - **Node.js**: Backend runtime
-- **PostgreSQL**: Database system
+- **Supabase**: Managed PostgreSQL database
+- **Render**: Backend hosting
+- **Vercel**: Frontend hosting
 - **Swagger**: API documentation
 
 ## Support
@@ -357,4 +308,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Ready to build your music empire? [Start playing now!](http://localhost:5173/)**
+**Ready to build your music empire? [Start playing now!](http://www.musicsim.net)**

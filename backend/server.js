@@ -10,7 +10,8 @@ console.log('🚀 Starting MusicSim Backend Server...');
 validateEnvironmentOrExit();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+// Use a random port in test environment to avoid EADDRINUSE
+const PORT = process.env.NODE_ENV === 'test' ? 0 : (process.env.PORT || 3001);
 
 // Trust proxy for rate limiting behind reverse proxies (Render, Heroku, etc.)
 app.set('trust proxy', 1);
@@ -184,25 +185,32 @@ const startServer = async () => {
   try {
     // Test database connection
     await sequelize.authenticate();
-    console.log('Database connection established successfully.');
+    if (process.env.NODE_ENV !== 'test') {
+      console.log('Database connection established successfully.');
+    }
     isDatabaseConnected = true;
 
     // NOTE: Schema changes are now handled by migrations (npm run migrate)
     // We no longer use sequelize.sync() to avoid conflicts with migration-managed schema
-    console.log('Database ready. Schema is managed by migrations.');
+    if (process.env.NODE_ENV !== 'test') {
+      console.log('Database ready. Schema is managed by migrations.');
+    }
 
     // Start listening
     server = app.listen(PORT, () => {
-      console.log(`MusicSim Backend running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`Health check: ${baseUrl}/api/health`);
-      console.log(`API Documentation: ${baseUrl}/api-docs`);
-      console.log(`Auth endpoints: ${baseUrl}/api/auth`);
-      console.log(`Game state endpoints: ${baseUrl}/api/game`);
-      console.log(`Career history endpoints: ${baseUrl}/api/career`);
-      console.log(`Learning analytics endpoints: ${baseUrl}/api/learning`);
-      console.log(`Lesson tracking endpoints: ${baseUrl}/api/lessons`);
-      console.log(`Analytics dashboard endpoints: ${baseUrl}/api/analytics`);
+      const actualPort = server.address().port;
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`MusicSim Backend running on port ${actualPort}`);
+        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+        console.log(`Health check: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api/health`);
+        console.log(`API Documentation: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api-docs`);
+        console.log(`Auth endpoints: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api/auth`);
+        console.log(`Game state endpoints: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api/game`);
+        console.log(`Career history endpoints: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api/career`);
+        console.log(`Learning analytics endpoints: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api/learning`);
+        console.log(`Lesson tracking endpoints: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api/lessons`);
+        console.log(`Analytics dashboard endpoints: ${baseUrl.replace(/:\d+$/, ':' + actualPort)}/api/analytics`);
+      }
     });
   } catch (error) {
     console.error('Unable to connect to the database:', error.message);
@@ -210,17 +218,19 @@ const startServer = async () => {
 
     // Start server anyway (for development)
     server = app.listen(PORT, () => {
-      console.log(`MusicSim Backend running on port ${PORT} (NO DATABASE)`);
-      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`Health check: ${baseUrl}/api/health`);
-      console.log(`API Documentation: ${baseUrl}/api-docs`);
-      console.log(`Auth endpoints: ${baseUrl}/api/auth (limited functionality)`);
-      console.log(`Game state endpoints: ${baseUrl}/api/game (limited functionality)`);
-      console.log(`Career history endpoints: ${baseUrl}/api/career (limited functionality)`);
-      console.log(`Learning analytics endpoints: ${baseUrl}/api/learning (limited functionality)`);
-      console.log(`Lesson tracking endpoints: ${baseUrl}/api/lessons (limited functionality)`);
-      console.log(`Analytics dashboard endpoints: ${baseUrl}/api/analytics (limited functionality)`);
-      console.log('Database connection failed - some features may not work');
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`MusicSim Backend running on port ${PORT} (NO DATABASE)`);
+        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+        console.log(`Health check: ${baseUrl}/api/health`);
+        console.log(`API Documentation: ${baseUrl}/api-docs`);
+        console.log(`Auth endpoints: ${baseUrl}/api/auth (limited functionality)`);
+        console.log(`Game state endpoints: ${baseUrl}/api/game (limited functionality)`);
+        console.log(`Career history endpoints: ${baseUrl}/api/career (limited functionality)`);
+        console.log(`Learning analytics endpoints: ${baseUrl}/api/learning (limited functionality)`);
+        console.log(`Lesson tracking endpoints: ${baseUrl}/api/lessons (limited functionality)`);
+        console.log(`Analytics dashboard endpoints: ${baseUrl}/api/analytics (limited functionality)`);
+        console.log('Database connection failed - some features may not work');
+      }
     });
   }
 };

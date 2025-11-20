@@ -1,4 +1,4 @@
-# MusicSim Analysis Report (Initial Scaffold)
+# MusicSim Analysis Report (2025-11-20)
 
 ## 1. Original Objectives (Excerpt)
 Summarize proposal goals: educational effectiveness, strategic decision learning, user engagement, career outcome variability.
@@ -19,8 +19,11 @@ Summarize proposal goals: educational effectiveness, strategic decision learning
 | Decision Accuracy | Beneficial decisions / total decisions | Strategic learning |
 | Time-on-Learning Ratio | Time in learning modules / total session | Balance of play vs study |
 
-## 4. Preliminary Findings (Placeholder)
-To be filled after data extraction scripts and user study.
+## 4. Preliminary Findings
+- Automated tests (backend & frontend) all pass; coverage includes authentication, storage, scenario, statistics, and UI components.
+- User testing feedback collected; SUS scores indicate positive engagement, but sample size is limited.
+- Career completion and quiz performance data show moderate learning retention and strategic decision accuracy.
+- No critical deployment or runtime errors detected in recent CI/CD runs.
 
 ## 5. Interpretation Framework
 Use correlations (e.g. Pearson r between quiz score & career success) and trend charts to assess learning impact.
@@ -32,7 +35,14 @@ Identify outlier sessions (very short, very long, extreme fame spikes) for quali
 Current absence of longitudinal retention, small N user test until expanded, simulated data in early phase.
 
 ## 8. Improvement Actions
-List prioritized feature or content adjustments derived from insights.
+- Expand user testing to increase sample size and diversity.
+- Add formal accessibility audit and address any critical findings.
+- Enhance negative test coverage for security and edge cases.
+- Refine learning modules based on quiz performance trends.
+- Improve analytics dashboard for clearer career outcome visualization.
 
 ## 9. Future Work
-Long-term retention study, adaptive difficulty, personalized learning path refinement.
+- Long-term retention study with follow-up surveys.
+- Adaptive difficulty and personalized learning path refinement.
+- Cross-browser and mobile viewport validation.
+- Automated performance and accessibility monitoring.

@@ -362,6 +362,8 @@ export interface GameState {
   mistakesMade: number;
   lastMistakeWeek: number;
   unlocksShown: string[]; // Track which unlock notifications have been shown
+  fameThresholdWeeks: number; // Weeks player has maintained minimum fame for contract unlocks
+  contractEligibilityUnlocked: boolean; // Whether indie contract scenario is unlocked
 }
 
 export interface ChoiceOutcome {
@@ -414,6 +416,7 @@ export interface ScenarioConditions {
   noProjectRequired?: boolean; // True if no project should be active
   requiresStaff?: StaffRole[]; // Must have these staff roles
   missingStaff?: StaffRole[]; // Must NOT have these staff roles
+  requiresContractEligibility?: boolean; // Requires sustained fame threshold to be unlocked
 }
 
 export interface Scenario {

@@ -12,12 +12,12 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
         return true; // No conditions, always available
     }
 
-    const { playerStats, artistGenre, achievements, currentProject, staff, difficulty } = state;
+    const { playerStats, artistGenre, achievements, currentProject, staff, difficulty, contractEligibilityUnlocked } = state;
     const {
         minFame, maxFame, minFameByDifficulty, minCash, maxCash, minWellBeing, maxWellBeing,
         requiredGenre, minCareerProgress, minHype, maxHype,
         requiredAchievementId, projectRequired, noProjectRequired,
-        requiresStaff, missingStaff
+        requiresStaff, missingStaff, requiresContractEligibility
     } = scenario.conditions;
 
     // Check difficulty-based fame requirement (overrides minFame if present)
@@ -56,6 +56,9 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
     if (missingStaff) {
         if (missingStaff.some(role => currentStaffRoles.includes(role))) return false;
     }
+
+    // Check contract eligibility (sustained fame threshold)
+    if (requiresContractEligibility && !contractEligibilityUnlocked) return false;
 
     return true;
 };

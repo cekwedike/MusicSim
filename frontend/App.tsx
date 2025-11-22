@@ -815,18 +815,18 @@ function gameReducer(state: GameState, action: Action): GameState {
                 }
             }
 
-            // Track fame threshold for contract eligibility (3-4 weeks at minimum fame)
+            // Track fame threshold for contract eligibility (3 weeks at minimum fame)
             let fameThresholdWeeks = state.fameThresholdWeeks;
             let contractEligibilityUnlocked = state.contractEligibilityUnlocked;
 
             if (!contractEligibilityUnlocked) {
                 const contractFameThresholds = {
-                    beginner: 60,
-                    realistic: 75,
-                    hardcore: 90
+                    beginner: 40,  // Lower threshold for beginner
+                    realistic: 50, // Lower threshold for realistic (was 75)
+                    hardcore: 65   // Lower threshold for hardcore (was 90)
                 };
                 const requiredFame = contractFameThresholds[state.difficulty];
-                const requiredWeeks = 3; // 3-4 weeks
+                const requiredWeeks = 3; // Must maintain for 3 consecutive weeks
 
                 // Increment counter if fame is at or above threshold
                 if (newStats.fame >= requiredFame) {

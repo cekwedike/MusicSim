@@ -387,7 +387,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                 currentLabelOffer: newLabelOffer,
                 contractsViewed: newContractsViewed,
                 lessonsViewed: newLessonsViewed,
-                modal: outcome.viewContract ? 'contract' : state.modal,
+                modal: state.modal, // Let OutcomeModal handle contract viewing via button
                 statistics: updatedStatistics,
             };
         }
@@ -2556,7 +2556,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         onClose={handleContinue}
                     />
                 ) : (
-                    <OutcomeModal outcome={lastOutcome} onClose={handleContinue} />
+                    <OutcomeModal outcome={lastOutcome} onClose={handleContinue} onViewContract={handleViewContract} />
                 )
             )}
             {modal === 'learning' && (

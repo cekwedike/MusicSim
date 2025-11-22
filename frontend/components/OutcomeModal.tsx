@@ -6,6 +6,7 @@ import AudioErrorBoundary from './AudioErrorBoundary';
 interface OutcomeModalProps {
     outcome: ChoiceOutcome;
     onClose: () => void;
+    onViewContract?: () => void;
 }
 
 const StatChange: React.FC<{ label: string, value: number }> = ({ label, value }) => {
@@ -22,8 +23,9 @@ const StatChange: React.FC<{ label: string, value: number }> = ({ label, value }
     );
 };
 
-const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
+const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose, onViewContract }) => {
     const hasLesson = outcome.lesson;
+    const hasContract = outcome.viewContract;
 
     return (
         <div className="outcome-modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-3 sm:p-4 z-[60] animate-fade-in">
@@ -97,11 +99,26 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose }) => {
                     </div>
                 )}
 
+                {/* Contract viewing option */}
+                {hasContract && onViewContract && (
+                    <div className="mb-3 bg-yellow-900/30 border border-yellow-700 rounded-lg p-3">
+                        <p className="text-yellow-200 text-sm mb-2">
+                            📄 <strong>{outcome.viewContract}</strong> has sent you a contract offer!
+                        </p>
+                        <button
+                            onClick={onViewContract}
+                            className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base min-h-[44px]"
+                        >
+                            View Contract Details
+                        </button>
+                    </div>
+                )}
+
                 <button
                     onClick={onClose}
                     className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-400 text-sm sm:text-base min-h-[44px]"
                 >
-                    Continue
+                    {hasContract ? 'Review Later' : 'Continue'}
                 </button>
             </div>
         </div>

@@ -4,12 +4,14 @@ import { ToastProvider } from './contexts/ToastContext';
 import { AudioProvider } from './contexts/AudioContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LoginModal } from './components/LoginModal';
+import GuestDataMergeModal from './components/GuestDataMergeModal';
 import LandingPage from './components/LandingPage';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, HiredStaff, StaffTemplate, ContractDuration, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry, SaveSlot } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
-import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, deserializeGameState } from './services/storageService';
+import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, deserializeGameState, getGuestData, clearGuestData } from './services/storageService';
+import authServiceSupabase from './services/authService.supabase';
 import { useAutoSave } from './hooks/useAutoSave';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
 import { startModule, completeModule } from './services/learningProgressService';
@@ -2718,8 +2720,50 @@ const UserProfile: React.FC<{ onOpenLoginModal: () => void }> = ({ onOpenLoginMo
 const AuthenticatedApp: React.FC = () => {
     const { user, isAuthenticated, isLoading, logout } = useAuth();
     const [guestMode, setGuestMode] = useState(false);
+    const [wasGuestMode, setWasGuestMode] = useState(false);
+    const [showGuestDataModal, setShowGuestDataModal] = useState(false);
+    const [guestDataInfo, setGuestDataInfo] = useState<{ saveCount: number; hasCloudData: boolean } | null>(null);
     // Start with landing hidden if user is already authenticated (persistent login)
     const [showLanding, setShowLanding] = useState(!isAuthenticated);
+
+    // Detect guest-to-authenticated transition and check for guest data
+    useEffect(() => {
+        const checkGuestDataOnLogin = async () => {
+            // If user just logged in and was previously in guest mode
+            if (isAuthenticated && wasGuestMode) {
+                const guestData = getGuestData();
+
+                if (guestData && guestData.saves.length > 0) {
+                    // Check if user has cloud saves
+                    try {
+                        const cloudSlots = await getAllSaveSlots();
+                        // Some backends may not include an `isLocal` property on SaveSlot.
+                        // Use a safe runtime check and treat missing `isLocal` as cloud data.
+                        const hasCloudData = cloudSlots.some(slot => ('isLocal' in slot) ? !(slot as any).isLocal : true);
+
+                        setGuestDataInfo({
+                            saveCount: guestData.saves.length,
+                            hasCloudData
+                        });
+                        setShowGuestDataModal(true);
+                    } catch (error) {
+                        console.error('[App] Error checking cloud data:', error);
+                        // If error checking cloud, assume no cloud data and show modal anyway
+                        setGuestDataInfo({
+                            saveCount: guestData.saves.length,
+                            hasCloudData: false
+                        });
+                        setShowGuestDataModal(true);
+                    }
+                }
+
+                // Reset wasGuestMode flag
+                setWasGuestMode(false);
+            }
+        };
+
+        checkGuestDataOnLogin();
+    }, [isAuthenticated, wasGuestMode]);
 
     // Hide landing page once user is authenticated or playing as guest.
     // Delay hiding the landing page briefly when the user authenticates so
@@ -2740,6 +2784,7 @@ const AuthenticatedApp: React.FC = () => {
     // Handle guest mode
     const handlePlayAsGuest = () => {
         setGuestMode(true);
+        setWasGuestMode(true); // Track that user was in guest mode
         setShowLanding(false);
     };
 
@@ -2747,8 +2792,61 @@ const AuthenticatedApp: React.FC = () => {
     const handleLogout = async () => {
         await logout();
         setGuestMode(false);
+        setWasGuestMode(false);
         setShowLanding(true);
         // Game state will be reset by GameApp component
+    };
+
+    // Handle guest data merge choice
+    const handleGuestDataChoice = async (choice: 'merge' | 'cloud' | 'both') => {
+        const guestData = getGuestData();
+
+        if (!guestData) {
+            console.warn('[App] No guest data found');
+            return;
+        }
+
+        try {
+            if (choice === 'merge') {
+                // Merge: Sync guest data to cloud and clear localStorage
+                console.log('[App] Merging guest data to cloud...');
+                const result = await authServiceSupabase.syncGuestData(guestData);
+
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+
+                // Clear guest data from localStorage after successful sync
+                clearGuestData(true, false); // Clear saves but keep statistics
+                console.log('[App] Guest data merged successfully');
+
+            } else if (choice === 'cloud') {
+                // Cloud: Discard guest data and load cloud saves
+                console.log('[App] Discarding guest data...');
+                clearGuestData(true, true); // Clear both saves and statistics
+                console.log('[App] Guest data cleared');
+
+            } else if (choice === 'both') {
+                // Both: Keep guest data in localStorage AND sync statistics
+                console.log('[App] Keeping both guest and cloud data...');
+                // Only sync statistics, not saves
+                const statsOnly = { statistics: guestData.statistics };
+                const result = await authServiceSupabase.syncGuestData(statsOnly);
+
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+
+                console.log('[App] Statistics synced, guest saves preserved in localStorage');
+            }
+
+            // Reset guest mode state
+            setGuestMode(false);
+
+        } catch (error) {
+            console.error('[App] Error handling guest data choice:', error);
+            throw error; // Let modal handle the error display
+        }
     };
 
     if (isLoading) {
@@ -2802,6 +2900,17 @@ const AuthenticatedApp: React.FC = () => {
             <div className={`${!showLanding ? 'pt-16' : ''}`}>
                 <GameApp isGuestMode={guestMode} onResetToLanding={handleLogout} />
             </div>
+
+            {/* Guest Data Merge Modal */}
+            {guestDataInfo && (
+                <GuestDataMergeModal
+                    isOpen={showGuestDataModal}
+                    onClose={() => setShowGuestDataModal(false)}
+                    onChoice={handleGuestDataChoice}
+                    guestSaveCount={guestDataInfo.saveCount}
+                    hasCloudData={guestDataInfo.hasCloudData}
+                />
+            )}
         </div>
     );
 };

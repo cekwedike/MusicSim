@@ -161,6 +161,39 @@ export const authServiceSupabase = {
     return null;
   },
 
+  // Get token (access token) from Supabase session or fallback to stored token
+  getToken: async (): Promise<string | null> => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      // session may be null if not authenticated; return access_token if present
+      if (session && (session as any).access_token) {
+        return (session as any).access_token;
+      }
+      // fallback to local storage parsed token
+      const sessionRaw = localStorage.getItem('musicsim_auth');
+      if (sessionRaw) {
+        try {
+          const parsed = JSON.parse(sessionRaw);
+          return parsed.access_token || null;
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    } catch {
+      const sessionRaw = localStorage.getItem('musicsim_auth');
+      if (sessionRaw) {
+        try {
+          const parsed = JSON.parse(sessionRaw);
+          return parsed.access_token || null;
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    }
+  },
+
   // Check if authenticated
   isAuthenticated: async (): Promise<boolean> => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -323,6 +356,37 @@ export const authServiceSupabase = {
       return {
         success: false,
         message: error.message || 'Failed to update username'
+      };
+    }
+  },
+
+  /**
+   * Sync guest data (statistics and saves) to the authenticated user's account
+   */
+  syncGuestData: async (guestData: { statistics?: any; saves?: any[] }): Promise<{ success: boolean; message: string }> => {
+    try {
+      const token = await authServiceSupabase.getToken();
+      if (!token) {
+        throw new Error('Not authenticated');
+      }
+
+      const response = await api.post('/auth/sync-guest-data', {
+        guestData
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      return {
+        success: response.data.success,
+        message: response.data.message || 'Guest data synced successfully'
+      };
+    } catch (error: any) {
+      console.error('[authService] Sync guest data error:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message || 'Failed to sync guest data'
       };
     }
   },

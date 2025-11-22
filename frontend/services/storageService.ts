@@ -543,5 +543,70 @@ export default {
   isStorageAvailable,
   formatSaveDate,
   canCreateNewSave,
-  getManualSaveCount
+  getManualSaveCount,
+  getGuestData,
+  clearGuestData
 };
+
+/**
+ * Retrieve all guest data (saves and statistics) from localStorage
+ */
+export function getGuestData(): { saves: any[]; statistics: any } | null {
+  try {
+    if (!isStorageAvailable()) {
+      return null;
+    }
+
+    // Get all saves from localStorage
+    const localSaves = loadLocalSaves();
+    const saves = Object.entries(localSaves)
+      .filter(([slotId]) => slotId !== 'auto') // Exclude autosave
+      .map(([slotId, saveData]) => ({
+        slotId,
+        name: saveData.state?.artistName || 'Unnamed Save',
+        state: saveData.state,
+        timestamp: saveData.timestamp
+      }));
+
+    // Get statistics from localStorage
+    const statisticsStr = localStorage.getItem('musicsim_statistics');
+    const statistics = statisticsStr ? JSON.parse(statisticsStr) : null;
+
+    if (saves.length === 0 && !statistics) {
+      return null;
+    }
+
+    return {
+      saves,
+      statistics
+    };
+  } catch (error) {
+    console.error('[storageService] Error getting guest data:', error);
+    return null;
+  }
+}
+
+/**
+ * Clear guest data from localStorage
+ * @param clearSaves - Whether to clear save data
+ * @param clearStatistics - Whether to clear statistics
+ */
+export function clearGuestData(clearSaves: boolean = true, clearStatistics: boolean = false): void {
+  try {
+    if (!isStorageAvailable()) {
+      return;
+    }
+
+    if (clearSaves) {
+      localStorage.removeItem('musicsim_saves');
+      console.log('[storageService] Guest saves cleared from localStorage');
+    }
+
+    if (clearStatistics) {
+      localStorage.removeItem('musicsim_statistics');
+      console.log('[storageService] Guest statistics cleared from localStorage');
+    }
+  } catch (error) {
+    console.error('[storageService] Error clearing guest data:', error);
+  }
+}

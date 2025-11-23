@@ -43,7 +43,7 @@ const DeleteSaveModal: React.FC<DeleteSaveModalProps> = ({
               You are about to permanently delete the following save:
             </p>
 
-            <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
+            <div className="bg-[#1A0A0F]/50 rounded-lg p-4 border border-gray-700">
               <div className="flex items-center gap-3 mb-2">
                 <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
@@ -74,7 +74,7 @@ const DeleteSaveModal: React.FC<DeleteSaveModalProps> = ({
           <div className="flex gap-3">
             <button
               onClick={onCancel}
-              className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-gray-600 hover:border-gray-500"
+              className="flex-1 bg-[#3D1820] hover:bg-[#4D1F2A] text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-gray-600 hover:border-gray-500"
             >
               Cancel
             </button>

@@ -278,7 +278,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 											type="text"
 											value={editedUsername}
 											onChange={(e) => setEditedUsername(e.target.value)}
-											className="flex-1 min-w-0 bg-gray-700 text-white px-2 py-1 rounded text-sm"
+											className="flex-1 min-w-0 bg-[#3D1820] text-white px-2 py-1 rounded text-sm"
 											placeholder="Username"
 											maxLength={30}
 											autoFocus
@@ -291,7 +291,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 										</button>
 										<button
 											onClick={handleCancelEditUsername}
-											className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs flex-shrink-0"
+											className="bg-[#4D1F2A] hover:bg-[#3D1820] text-white px-2 py-1 rounded text-xs flex-shrink-0"
 										>
 											✕
 										</button>
@@ -322,7 +322,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					</div>
 				) : (
 					<div className="flex items-center gap-2 sm:gap-3 min-w-0">
-						<div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-700 rounded-full flex items-center justify-center text-xl sm:text-2xl flex-shrink-0 font-bold text-white">
+						<div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#3D1820] rounded-full flex items-center justify-center text-xl sm:text-2xl flex-shrink-0 font-bold text-white">
 							G
 						</div>
 						<div className="flex-1 min-w-0">
@@ -332,7 +332,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 										type="text"
 										value={editedGuestName}
 										onChange={(e) => setEditedGuestName(e.target.value)}
-										className="flex-1 min-w-0 bg-gray-700 text-white px-2 py-1 rounded text-sm"
+										className="flex-1 min-w-0 bg-[#3D1820] text-white px-2 py-1 rounded text-sm"
 										placeholder="Guest name"
 										autoFocus
 									/>
@@ -344,7 +344,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 									</button>
 									<button
 										onClick={handleCancelEditGuestName}
-										className="bg-gray-600 hover:bg-gray-700 text-white px-2 py-1 rounded text-xs flex-shrink-0"
+										className="bg-[#4D1F2A] hover:bg-[#3D1820] text-white px-2 py-1 rounded text-xs flex-shrink-0"
 									>
 										✕
 									</button>
@@ -374,7 +374,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 			{/* Current Session */}
 			{artistName && (
-				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+				<div className="bg-[#3D1820]/50 rounded-lg p-4 mb-4 border border-[#4D1F2A]">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
 						Current Session
 					</h3>
@@ -395,26 +395,26 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 			{/* Career Statistics */}
 			{statistics && (
-				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+				<div className="bg-[#3D1820]/50 rounded-lg p-4 mb-4 border border-[#4D1F2A]">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
 						Career Statistics
 					</h3>
 					<div className="grid grid-cols-2 gap-3">
-						<div className="bg-gray-800/50 rounded-lg p-3">
+						<div className="bg-[#2D1115]/50 rounded-lg p-3">
 							<div className="text-xs text-gray-400 mb-1">Total Careers</div>
 							<div className="text-xl font-bold text-red-400">{statistics.totalGamesPlayed}</div>
 						</div>
-						<div className="bg-gray-800/50 rounded-lg p-3">
+						<div className="bg-[#2D1115]/50 rounded-lg p-3">
 							<div className="text-xs text-gray-400 mb-1">Total Weeks</div>
 							<div className="text-xl font-bold text-green-400">{statistics.totalWeeksPlayed}</div>
 						</div>
-						<div className="bg-gray-800/50 rounded-lg p-3">
+						<div className="bg-[#2D1115]/50 rounded-lg p-3">
 							<div className="text-xs text-gray-400 mb-1">Play Time</div>
 							<div className="text-xl font-bold text-blue-400">
 								{formatPlayTime(statistics.totalPlayTimeMinutes || 0)}
 							</div>
 						</div>
-						<div className="bg-gray-800/50 rounded-lg p-3">
+						<div className="bg-[#2D1115]/50 rounded-lg p-3">
 							<div className="text-xs text-gray-400 mb-1">Achievements</div>
 							<div className="text-xl font-bold text-yellow-400">{statistics.achievementsUnlocked}</div>
 						</div>
@@ -424,7 +424,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 			{/* Milestones */}
 			{statistics && (statistics.highestCash > 0 || statistics.highestFameReached > 0) && (
-				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+				<div className="bg-[#3D1820]/50 rounded-lg p-4 mb-4 border border-[#4D1F2A]">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
 						Personal Records
 					</h3>
@@ -459,7 +459,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 
 			{/* Learning Progress */}
 			{statistics && statistics.modulesCompleted > 0 && (
-				<div className="bg-gray-700/50 rounded-lg p-4 mb-4 border border-gray-600">
+				<div className="bg-[#3D1820]/50 rounded-lg p-4 mb-4 border border-[#4D1F2A]">
 					<h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
 						Learning Progress
 					</h3>
@@ -520,7 +520,7 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 						e.stopPropagation();
 						setShowDeleteDialog(true);
 					}}
-					className="w-full bg-gray-700 hover:bg-gray-600 text-red-400 hover:text-red-300 px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 border border-gray-600"
+					className="w-full bg-[#3D1820] hover:bg-[#4D1F2A] text-red-400 hover:text-red-300 px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 border border-[#4D1F2A]"
 				>
 					Delete All Data
 				</button>

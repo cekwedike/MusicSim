@@ -17,7 +17,7 @@ const TerminationConfirmModal: React.FC<TerminationConfirmModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-3 sm:p-4">
-      <div className="bg-gray-800 rounded-lg max-w-md w-full border-2 border-red-600/50 shadow-2xl">
+      <div className="bg-[#2D1115] rounded-lg max-w-md w-full border-2 border-red-600/50 shadow-2xl">
         {/* Header */}
         <div className="bg-gradient-to-r from-red-600 to-rose-700 p-3 sm:p-4 rounded-t-lg">
           <div className="flex items-center justify-between">
@@ -37,7 +37,7 @@ const TerminationConfirmModal: React.FC<TerminationConfirmModalProps> = ({
 
         {/* Content */}
         <div className="p-4 sm:p-5 space-y-4">
-          <div className="bg-gray-700/50 rounded-lg p-3 border border-gray-600">
+          <div className="bg-[#3D1820]/50 rounded-lg p-3 border border-gray-600">
             <h3 className="text-base sm:text-lg font-bold text-white mb-1">{staff.name}</h3>
             <p className="text-xs sm:text-sm text-gray-400">{staff.role} • {staff.tier}</p>
           </div>
@@ -49,13 +49,13 @@ const TerminationConfirmModal: React.FC<TerminationConfirmModalProps> = ({
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center justify-between bg-gray-700/30 rounded-lg p-2.5">
+            <div className="flex items-center justify-between bg-[#3D1820]/30 rounded-lg p-2.5">
               <span className="text-xs sm:text-sm text-gray-300">Severance Cost</span>
               <span className="text-sm sm:text-base font-bold text-red-400">
                 ${severanceCost.toLocaleString()}
               </span>
             </div>
-            <div className="flex items-center justify-between bg-gray-700/30 rounded-lg p-2.5">
+            <div className="flex items-center justify-between bg-[#3D1820]/30 rounded-lg p-2.5">
               <span className="text-xs sm:text-sm text-gray-300">Well-being Impact</span>
               <span className="text-sm sm:text-base font-bold text-yellow-400">
                 Reduced
@@ -72,7 +72,7 @@ const TerminationConfirmModal: React.FC<TerminationConfirmModalProps> = ({
         <div className="p-3 sm:p-4 border-t border-gray-700 flex gap-2 sm:gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 py-2.5 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg transition-colors text-sm sm:text-base"
+            className="flex-1 py-2.5 bg-[#3D1820] hover:bg-[#4D1F2A] text-white font-bold rounded-lg transition-colors text-sm sm:text-base"
           >
             Cancel
           </button>

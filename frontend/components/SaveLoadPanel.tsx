@@ -150,7 +150,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
           className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
             activeTab === 'load'
               ? 'bg-red-600 text-white'
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-650'
+              : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
           }`}
         >
           Load Game
@@ -160,7 +160,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
           className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
             activeTab === 'save'
               ? 'bg-red-600 text-white'
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-650'
+              : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
           }`}
         >
           Save Game
@@ -181,7 +181,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
             <button
               onClick={() => setShowSaveInput(true)}
               disabled={loading}
-              className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-red-600 hover:bg-red-700 disabled:bg-[#4D1F2A] text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -189,14 +189,14 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
               Create New Save
             </button>
           ) : (
-            <div className="space-y-3 bg-gray-700/50 p-4 rounded-lg">
+            <div className="space-y-3 bg-[#3D1820]/50 p-4 rounded-lg">
               <div className="space-y-2">
                 <input
                   type="text"
                   value={newSaveName}
                   onChange={(e) => setNewSaveName(e.target.value)}
                   placeholder={getDefaultSaveName()}
-                  className="w-full bg-gray-800 border border-gray-600 text-white px-3 py-2 rounded-lg focus:outline-none focus:border-red-500 text-sm"
+                  className="w-full bg-[#2D1115] border border-[#4D1F2A] text-white px-3 py-2 rounded-lg focus:outline-none focus:border-red-500 text-sm"
                   maxLength={50}
                   onKeyPress={(e) => e.key === 'Enter' && handleSaveGame()}
                   autoFocus
@@ -209,7 +209,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                 <button
                   onClick={handleSaveGame}
                   disabled={loading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
+                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-[#4D1F2A] text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
                 >
                   Save
                 </button>
@@ -218,7 +218,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                     setShowSaveInput(false);
                     setNewSaveName('');
                   }}
-                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
+                  className="flex-1 bg-[#4D1F2A] hover:bg-[#3D1820] text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
                 >
                   Cancel
                 </button>
@@ -226,7 +226,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
             </div>
           )}
 
-          <div className="text-sm text-gray-400 bg-gray-700/30 p-3 rounded-lg">
+          <div className="text-sm text-gray-400 bg-[#3D1820]/30 p-3 rounded-lg">
             <p className="font-medium text-gray-300 mb-1">Quick Save Tip</p>
             <p>Your game auto-saves every 5 minutes. Manual saves are great for backing up before risky decisions!</p>
           </div>
@@ -241,7 +241,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
             <button
               onClick={() => loadSaveSlots()}
               disabled={loading}
-              className="w-full bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm"
+              className="w-full bg-[#3D1820] hover:bg-[#4D1F2A] disabled:bg-[#2D1115] text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm"
             >
               <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -269,7 +269,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
               {saveSlots.map((slot) => (
                 <div
                   key={slot.id}
-                  className="bg-gray-700/50 border border-gray-600 rounded-lg p-3 hover:bg-gray-700 transition-colors"
+                  className="bg-[#3D1820]/50 border border-[#4D1F2A] rounded-lg p-3 hover:bg-[#3D1820] transition-colors"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1 min-w-0">
@@ -287,7 +287,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-300 mb-3 bg-gray-800/50 p-2 rounded">
+                  <div className="grid grid-cols-2 gap-2 text-xs text-gray-300 mb-3 bg-[#2D1115]/50 p-2 rounded">
                     <div>
                       <span className="text-gray-500">In-Game Date:</span> {new Date(slot.currentDate).toLocaleDateString()}
                     </div>
@@ -310,7 +310,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                       <button
                         onClick={() => handleLoadGame(slot.id)}
                         disabled={loading}
-                        className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white px-3 py-1 rounded text-xs font-medium transition-colors"
+                        className="bg-red-600 hover:bg-red-700 disabled:bg-[#4D1F2A] text-white px-3 py-1 rounded text-xs font-medium transition-colors"
                       >
                         Load
                       </button>
@@ -318,7 +318,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                         <button
                           onClick={() => handleDeleteSave(slot.id, slot.artistName)}
                           disabled={loading}
-                          className="bg-red-600/80 hover:bg-red-600 disabled:bg-gray-600 text-white px-3 py-1 rounded text-xs font-medium transition-colors"
+                          className="bg-red-600/80 hover:bg-red-600 disabled:bg-[#4D1F2A] text-white px-3 py-1 rounded text-xs font-medium transition-colors"
                         >
                           Delete
                         </button>

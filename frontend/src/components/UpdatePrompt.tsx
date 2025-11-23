@@ -17,7 +17,7 @@ const UpdatePrompt: React.FC<UpdatePromptProps> = ({ onUpdate, onDismiss }) => {
   };
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-gray-900 border border-gray-800 rounded-xl shadow-2xl p-6 max-w-md mx-4 animate-fade-in">
+      <div className="bg-[#1A0A0F] border border-gray-800 rounded-xl shadow-2xl p-6 max-w-md mx-4 animate-fade-in">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-red-500 to-rose-500 rounded-lg flex items-center justify-center">
             <RefreshCw className="w-6 h-6 text-white" />
@@ -41,7 +41,7 @@ const UpdatePrompt: React.FC<UpdatePromptProps> = ({ onUpdate, onDismiss }) => {
 
               <button
                 onClick={onDismiss}
-                className="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-lg transition-colors"
+                className="px-4 py-2.5 bg-[#2D1115] hover:bg-[#3D1820] text-gray-300 hover:text-white rounded-lg transition-colors"
                 aria-label="Dismiss update"
               >
                 <X className="w-5 h-5" />

@@ -9,7 +9,7 @@ interface AudioUnlockPromptProps {
 const AudioUnlockPrompt: React.FC<AudioUnlockPromptProps> = ({ onUnlock, onSkip }) => {
   return (
     <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800/95 border border-gray-700 rounded-lg shadow-2xl max-w-md w-full p-6 animate-slide-up">
+      <div className="bg-[#2D1115]/95 border border-gray-700 rounded-lg shadow-2xl max-w-md w-full p-6 animate-slide-up">
         <div className="flex items-center gap-4 mb-4">
           <div className="p-3 bg-red-600/20 rounded-full">
             <Volume2 className="w-8 h-8 text-red-400" />
@@ -44,7 +44,7 @@ const AudioUnlockPrompt: React.FC<AudioUnlockPromptProps> = ({ onUnlock, onSkip 
           </button>
           <button
             onClick={onSkip}
-            className="px-4 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors"
+            className="px-4 py-3 bg-[#3D1820] hover:bg-[#4D1F2A] text-gray-300 rounded-lg transition-colors"
           >
             Skip
           </button>

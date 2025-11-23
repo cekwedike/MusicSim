@@ -175,7 +175,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
       <button
         onClick={togglePlay}
         disabled={isMuted}
-        className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors shadow-md hover:shadow-lg"
+        className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-[#4D1F2A] disabled:cursor-not-allowed text-white rounded-lg transition-colors shadow-md hover:shadow-lg"
         aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
       >
         {isPlaying ? (
@@ -193,7 +193,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({
         <button
           onClick={handleReplay}
           disabled={isMuted}
-          className="p-2 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white rounded-lg transition-colors"
+          className="p-2 bg-[#3D1820] hover:bg-[#4D1F2A] disabled:bg-[#2D1115] text-white rounded-lg transition-colors"
           aria-label="Replay audio"
           title="Replay"
         >

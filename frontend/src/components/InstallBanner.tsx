@@ -243,7 +243,7 @@ const InstallBanner: React.FC = () => {
         }
       `}</style>
 
-      <div className="musicsim-install-slide flex items-center justify-between bg-gray-800 dark:bg-gray-800 light:bg-white light:border-gray-300 border border-gray-700 shadow-lg rounded-xl p-2 sm:p-3 md:p-4">
+      <div className="musicsim-install-slide flex items-center justify-between bg-[#2D1115] dark:bg-[#2D1115] light:bg-white light:border-gray-300 border border-[#4D1F2A] shadow-lg rounded-xl p-2 sm:p-3 md:p-4">
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 rounded-lg flex items-center justify-center">
             <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -272,7 +272,7 @@ const InstallBanner: React.FC = () => {
 
           <button
             onClick={handleClose}
-            className="musicsim-install-banner-button ml-1 sm:ml-2 p-1.5 sm:p-2 rounded-full text-gray-300 dark:text-gray-300 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 light:hover:bg-gray-100 touch-manipulation"
+            className="musicsim-install-banner-button ml-1 sm:ml-2 p-1.5 sm:p-2 rounded-full text-gray-300 dark:text-gray-300 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:bg-[#3D1820] dark:hover:bg-[#3D1820] light:hover:bg-gray-100 touch-manipulation"
             aria-label="Close install banner"
           >
             <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

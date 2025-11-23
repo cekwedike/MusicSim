@@ -37,7 +37,7 @@ const SidebarAudioSettings: React.FC = () => {
         </div>
       )}
 
-      <section className="mb-6 bg-gray-800/60 p-4 rounded-lg border border-gray-700">
+      <section className="mb-6 bg-[#2D1115]/60 p-4 rounded-lg border border-gray-700">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h4 className="font-semibold text-white">Background Music</h4>
@@ -56,13 +56,13 @@ const SidebarAudioSettings: React.FC = () => {
             step="0.01"
             value={audioState.musicVolume}
             onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
-            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-red"
+            className="w-full h-2 bg-[#3D1820] rounded-lg appearance-none cursor-pointer slider-red"
           />
           <div className="w-12 text-right text-sm text-gray-300">{Math.round(audioState.musicVolume * 100)}%</div>
         </div>
       </section>
 
-      <section className="mb-6 bg-gray-800/60 p-4 rounded-lg border border-gray-700">
+      <section className="mb-6 bg-[#2D1115]/60 p-4 rounded-lg border border-gray-700">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h4 className="font-semibold text-white">Sound Effects</h4>
@@ -81,7 +81,7 @@ const SidebarAudioSettings: React.FC = () => {
             step="0.01"
             value={audioState.sfxVolume}
             onChange={(e) => setSfxVolume(parseFloat(e.target.value))}
-            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-red"
+            className="w-full h-2 bg-[#3D1820] rounded-lg appearance-none cursor-pointer slider-red"
           />
           <div className="w-12 text-right text-sm text-gray-300">{Math.round(audioState.sfxVolume * 100)}%</div>
         </div>
@@ -89,7 +89,7 @@ const SidebarAudioSettings: React.FC = () => {
 
       <div className="flex gap-2">
         <button onClick={() => playSound('buttonClick')} className="flex-1 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">Test SFX</button>
-        <button onClick={() => nextTrack()} className="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Next Track</button>
+        <button onClick={() => nextTrack()} className="flex-1 py-2 bg-[#3D1820] hover:bg-[#4D1F2A] text-white rounded-lg">Next Track</button>
       </div>
 
       <style>{`

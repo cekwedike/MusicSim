@@ -67,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
             {showMenuButton && (
                 <button
                     onClick={onMenuClick}
-                    className="absolute top-2 sm:top-3 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-gray-800/60 hover:bg-gray-700/70 border border-gray-600/50 hover:border-gray-500 text-gray-300 hover:text-white transition-all duration-200 z-10"
+                    className="absolute top-2 sm:top-3 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-[#2D1115]/60 hover:bg-[#3D1820]/70 border border-gray-600/50 hover:border-gray-500 text-gray-300 hover:text-white transition-all duration-200 z-10"
                     aria-label="Open menu"
                 >
                     <Menu className="w-5 h-5" />

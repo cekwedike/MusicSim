@@ -16,7 +16,7 @@ const StatChange: React.FC<{ label: string, value: number }> = ({ label, value }
     const sign = isPositive ? '+' : '';
 
     return (
-        <div className={`flex justify-between items-center p-1.5 sm:p-2 rounded-md bg-gray-700/50`}>
+        <div className={`flex justify-between items-center p-1.5 sm:p-2 rounded-md bg-[#3D1820]/50`}>
             <span className="text-gray-300 text-xs sm:text-sm">{label}</span>
             <span className={`font-bold ${color} text-xs sm:text-sm`}>{sign}{label === 'Cash' ? '$' : ''}{value.toLocaleString()}</span>
         </div>
@@ -29,7 +29,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose, onViewCon
 
     return (
         <div className="outcome-modal fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-3 sm:p-4 z-[60] animate-fade-in">
-            <div className={`bg-gray-800 border border-gray-700 rounded-xl shadow-2xl p-3 sm:p-4 w-full ${hasLesson ? 'max-w-2xl' : 'max-w-md'} max-h-[90vh] overflow-y-auto`}>
+            <div className={`bg-[#2D1115] border border-gray-700 rounded-xl shadow-2xl p-3 sm:p-4 w-full ${hasLesson ? 'max-w-2xl' : 'max-w-md'} max-h-[90vh] overflow-y-auto`}>
                 <h3 className="text-base sm:text-lg font-bold text-red-300 mb-2">Outcome</h3>
                 <p className="text-gray-300 mb-2.5 sm:mb-3 leading-snug text-sm sm:text-base">{outcome.text}</p>
 

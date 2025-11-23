@@ -50,9 +50,9 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
   return (
     <div className="contract-viewer fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-xl border border-gray-700 max-w-4xl w-full mx-4 max-h-[85vh] overflow-y-auto">
+      <div className="bg-[#2D1115] rounded-xl border border-[#3D1820] max-w-4xl w-full mx-4 max-h-[85vh] overflow-y-auto">
         {/* Header */}
-        <div className="p-6 border-b border-gray-700">
+        <div className="p-6 border-b border-[#3D1820]">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-rose-400 bg-clip-text text-transparent">
@@ -77,7 +77,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
           {/* The Pitch */}
           <section>
             <h2 className="text-xl font-bold text-red-300 mb-4">Their Offer</h2>
-            <blockquote className="bg-gray-700/50 border-l-4 border-red-500 pl-6 py-4 italic text-gray-300 leading-relaxed">
+            <blockquote className="bg-[#3D1820]/50 border-l-4 border-red-500 pl-6 py-4 italic text-gray-300 leading-relaxed">
               "{label.description}"
             </blockquote>
           </section>
@@ -86,7 +86,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
           <section>
             <h2 className="text-xl font-bold text-red-300 mb-4">The Money</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-semibold text-white">Advance</h3>
                 </div>
@@ -96,7 +96,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                 <p className="text-sm text-gray-400">Upfront payment (must be recouped)</p>
               </div>
 
-              <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-semibold text-white">Royalty Rate</h3>
                 </div>
@@ -106,7 +106,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                 <p className="text-sm text-gray-400">Industry average: 12-15%</p>
               </div>
 
-              <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-semibold text-white">Marketing Budget</h3>
                 </div>
@@ -116,7 +116,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                 <p className="text-sm text-gray-400">Per album promotion</p>
               </div>
 
-              <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-semibold text-white">Tour Support</h3>
                 </div>
@@ -126,7 +126,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                 <p className="text-sm text-gray-400">Live performance funding</p>
               </div>
 
-              <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-semibold text-white">Album Commitment</h3>
                 </div>
@@ -136,7 +136,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                 <p className="text-sm text-gray-400">Albums you must deliver</p>
               </div>
 
-              <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-semibold text-white">Contract Length</h3>
                 </div>
@@ -152,12 +152,12 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
           <section>
             <h2 className="text-xl font-bold text-red-300 mb-4">Contract Terms</h2>
             <div className="space-y-4">
-              <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-semibold text-white">Creative Control</h3>
                   <span className="text-lg font-bold text-white">{label.terms.creativeControl}%</span>
                 </div>
-                <div className="w-full bg-gray-600 rounded-full h-2 mb-2">
+                <div className="w-full bg-[#4D1F2A] rounded-full h-2 mb-2">
                   <div 
                     className="bg-gradient-to-r from-red-500 to-rose-500 h-2 rounded-full"
                     style={{ width: `${label.terms.creativeControl}%` }}
@@ -167,19 +167,19 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+                <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                   <h3 className="font-semibold text-white mb-2">Recoupment Rate</h3>
                   <p className="text-lg font-bold text-white">{label.terms.recoupmentRate}%</p>
                   <p className="text-sm text-gray-400">Percentage of your earnings that go toward paying back the advance and costs</p>
                 </div>
 
-                <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+                <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                   <h3 className="font-semibold text-white mb-2">Territories</h3>
                   <p className="text-lg font-bold text-white">{label.terms.territories.join(', ')}</p>
                   <p className="text-sm text-gray-400">Where the label can distribute your music</p>
                 </div>
 
-                <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+                <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                   <h3 className="font-semibold text-white mb-2">Cross-Collateralized</h3>
                   <p className={`text-lg font-bold ${label.terms.crossCollateralized ? 'text-red-400' : 'text-green-400'}`}>
                     {label.terms.crossCollateralized ? 'Yes' : 'No'}
@@ -192,7 +192,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                   </p>
                 </div>
 
-                <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+                <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-[#4D1F2A]">
                   <h3 className="font-semibold text-white mb-2">Option Clause</h3>
                   <p className={`text-lg font-bold ${label.terms.optionClause ? 'text-red-400' : 'text-green-400'}`}>
                     {label.terms.optionClause ? 'Yes' : 'No'}
@@ -263,7 +263,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
 
           {/* Calculator */}
           <section>
-            <div className="bg-gray-700/30 p-4 rounded-lg border border-gray-600">
+            <div className="bg-[#3D1820]/30 p-4 rounded-lg border border-gray-600">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-white">Earnings Calculator</h3>
                 <button 
@@ -284,7 +284,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                       type="number"
                       value={expectedStreams}
                       onChange={(e) => setExpectedStreams(Number(e.target.value))}
-                      className="w-full bg-gray-600 border border-gray-500 rounded px-3 py-2 text-white"
+                      className="w-full bg-[#4D1F2A] border border-gray-500 rounded px-3 py-2 text-white"
                       min="0"
                     />
                   </div>
@@ -306,7 +306,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
                     </div>
                   </div>
                   
-                  <div className="pt-2 border-t border-gray-600">
+                  <div className="pt-2 border-t border-[#4D1F2A]">
                     <p className="text-gray-400">Lifetime earnings after recoupment:</p>
                     <p className={`font-bold text-lg ${calculation.lifetimeEarnings > 0 ? 'text-green-400' : 'text-red-400'}`}>
                       {formatCurrency(calculation.lifetimeEarnings)}
@@ -327,7 +327,7 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
             </button>
             <button
               onClick={onDecline}
-              className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all duration-200"
+              className="w-full bg-[#3D1820] hover:bg-[#4D1F2A] text-white font-bold py-4 px-6 rounded-lg text-lg transition-all duration-200"
             >
               Walk Away
             </button>

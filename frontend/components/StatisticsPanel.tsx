@@ -30,7 +30,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
         <p className="text-gray-400 text-xs sm:text-sm">Week {gd.week}, Month {gd.month}, Year {gd.year}</p>
       </div>
 
-      <div className="bg-gray-700/30 p-3 sm:p-4 rounded-lg border border-gray-600">
+      <div className="bg-[#3D1820]/30 p-3 sm:p-4 rounded-lg border border-[#4D1F2A]">
         <h4 className="font-semibold text-sm sm:text-base text-white mb-2 sm:mb-3">Cash Trend (Recent)</h4>
         {cashTrend.length > 1 ? <MiniChart data={cashTrend} color="#10b981" width={320} height={80} showPositiveNegative={true} /> : <p className="text-xs sm:text-sm text-gray-400">Not enough data yet.</p>}
       </div>
@@ -40,10 +40,10 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
   return (
     <div className="text-gray-300">
       <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-        <button onClick={() => setActiveTab('current')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'current' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>Current</button>
-        <button onClick={() => setActiveTab('alltime')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'alltime' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>All-time</button>
-        <button onClick={() => setActiveTab('history')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'history' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>History</button>
-        <button onClick={() => setActiveTab('patterns')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'patterns' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}>Patterns</button>
+        <button onClick={() => setActiveTab('current')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'current' ? 'bg-red-600 text-white' : 'bg-[#3D1820] text-gray-300'}`}>Current</button>
+        <button onClick={() => setActiveTab('alltime')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'alltime' ? 'bg-red-600 text-white' : 'bg-[#3D1820] text-gray-300'}`}>All-time</button>
+        <button onClick={() => setActiveTab('history')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'history' ? 'bg-red-600 text-white' : 'bg-[#3D1820] text-gray-300'}`}>History</button>
+        <button onClick={() => setActiveTab('patterns')} className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm ${activeTab === 'patterns' ? 'bg-red-600 text-white' : 'bg-[#3D1820] text-gray-300'}`}>Patterns</button>
       </div>
 
       <div className="space-y-3 sm:space-y-4">
@@ -52,27 +52,27 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
         {activeTab === 'alltime' && (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Total Careers</div>
                 <div className="text-xl sm:text-2xl font-bold text-red-400">{stats.totalGamesPlayed}</div>
               </div>
-              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Total Weeks</div>
                 <div className="text-xl sm:text-2xl font-bold text-green-400">{stats.totalWeeksPlayed}</div>
               </div>
-              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Peak Cash</div>
                 <div className="text-lg sm:text-xl font-bold text-green-400">${stats.highestCash.toLocaleString()}</div>
               </div>
-              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Peak Fame</div>
                 <div className="text-xl sm:text-2xl font-bold text-yellow-400">{stats.highestFameReached}</div>
               </div>
-              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Achievements</div>
                 <div className="text-xl sm:text-2xl font-bold text-red-400">{stats.achievementsUnlocked}</div>
               </div>
-              <div className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+              <div className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
                 <div className="text-xs text-gray-400 mb-1">Projects</div>
                 <div className="text-xl sm:text-2xl font-bold text-blue-400">{stats.projectsReleased}</div>
               </div>
@@ -82,7 +82,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
 
         {activeTab === 'patterns' && (
           <div className="space-y-4">
-            <div className="bg-gray-700/30 p-3 sm:p-4 rounded-lg border border-gray-600">
+            <div className="bg-[#3D1820]/30 p-3 sm:p-4 rounded-lg border border-[#4D1F2A]">
               <h4 className="font-semibold text-sm sm:text-base text-white mb-3">Decision Patterns</h4>
               <div className="space-y-2 text-xs sm:text-sm">
                 <div className="flex justify-between">
@@ -111,7 +111,7 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
               <div className="text-center text-gray-400 py-6 sm:py-8 text-sm">No completed careers yet.</div>
             ) : (
               careers.slice().reverse().map(career => (
-                <div key={career.gameId} className="bg-gray-700/30 p-3 rounded-lg border border-gray-600">
+                <div key={career.gameId} className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-1 sm:gap-2">
                     <div className="min-w-0 flex-1">
                       <h4 className="font-semibold text-sm sm:text-base text-white truncate">{career.artistName}</h4>

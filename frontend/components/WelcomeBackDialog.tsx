@@ -8,7 +8,7 @@ interface WelcomeBackDialogProps {
 const WelcomeBackDialog: React.FC<WelcomeBackDialogProps> = ({ artistName, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
-      <div className="bg-gray-800 border-2 border-red-500 rounded-xl shadow-2xl w-full max-w-md p-8 text-center animate-fade-in">
+      <div className="bg-[#2D1115] border-2 border-red-500 rounded-xl shadow-2xl w-full max-w-md p-8 text-center animate-fade-in">
         <div className="mb-6">
           <h2 className="text-3xl font-bold text-red-300 mb-2">
             Welcome Back!

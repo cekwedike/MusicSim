@@ -33,11 +33,11 @@ const getTierColor = (tier: string) => {
 
 const getTierBadge = (tier: string) => {
   switch (tier) {
-    case 'entry': return 'bg-gray-600 text-white';
+    case 'entry': return 'bg-[#4D1F2A] text-white';
     case 'professional': return 'bg-blue-600 text-white';
     case 'expert': return 'bg-red-600 text-white';
     case 'elite': return 'bg-yellow-600 text-black';
-    default: return 'bg-gray-600 text-white';
+    default: return 'bg-[#4D1F2A] text-white';
   }
 };
 
@@ -96,13 +96,13 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
 
   return (
     <div className="text-gray-300">
-      <div className="flex gap-2 mb-3 sm:mb-4 border-b border-gray-700 pb-2">
+      <div className="flex gap-2 mb-3 sm:mb-4 border-b border-[#3D1820] pb-2">
         <button
           onClick={() => setActiveTab('achievements')}
           className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-t text-xs sm:text-base font-semibold transition-colors ${
             activeTab === 'achievements'
               ? 'bg-red-600 text-white'
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
           }`}
         >
           <span className="hidden xs:inline">Achievements</span>
@@ -113,7 +113,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
           className={`flex-1 sm:flex-none px-2 sm:px-4 py-2 rounded-t text-xs sm:text-base font-semibold transition-colors ${
             activeTab === 'staff'
               ? 'bg-red-600 text-white'
-              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
           }`}
         >
           <span className="hidden sm:inline">Staff Management</span>
@@ -176,7 +176,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                   className={`flex-1 px-2 sm:px-3 py-2 rounded text-sm sm:text-base font-medium transition-colors ${
                     hiringView === 'current'
                       ? 'bg-sky-600 text-white'
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
                   }`}
                 >
                   <span className="hidden sm:inline">Current Staff ({staff.length}/3)</span>
@@ -187,7 +187,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                   className={`flex-1 px-2 sm:px-3 py-2 rounded text-sm sm:text-base font-medium transition-colors ${
                     hiringView === 'hire'
                       ? 'bg-green-600 text-white'
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
                   }`}
                 >
                   <span className="hidden sm:inline">Hire New Staff</span>
@@ -250,7 +250,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                 className={`flex-1 px-2 sm:px-3 py-2 rounded font-medium text-xs sm:text-sm transition-colors ${
                                   playerStats.cash >= member.salary
                                     ? 'bg-green-600 hover:bg-green-700 text-white'
-                                    : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                                    : 'bg-[#4D1F2A] text-gray-400 cursor-not-allowed'
                                 }`}
                               >
                                 <span className="hidden sm:inline">Extend +6mo (${member.salary.toLocaleString()})</span>
@@ -262,7 +262,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                 className={`flex-1 px-2 sm:px-3 py-2 rounded font-medium text-xs sm:text-sm transition-colors ${
                                   playerStats.cash >= member.salary
                                     ? 'bg-green-600 hover:bg-green-700 text-white'
-                                    : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                                    : 'bg-[#4D1F2A] text-gray-400 cursor-not-allowed'
                                 }`}
                               >
                                 <span className="hidden sm:inline">Extend +12mo (${member.salary.toLocaleString()})</span>
@@ -286,7 +286,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                       </div>
                     ))
                   ) : (
-                    <div className="text-center py-8 sm:py-12 bg-gray-800/30 rounded-lg border border-gray-700 px-4">
+                    <div className="text-center py-8 sm:py-12 bg-[#2D1115]/30 rounded-lg border border-[#3D1820] px-4">
                       <BriefcaseIcon className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 text-gray-600" />
                       <p className="text-sm text-gray-400 mb-3">No staff hired yet.</p>
                       <button
@@ -311,7 +311,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                   </div>
 
                   {/* Current Cash Display */}
-                  <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
+                  <div className="bg-[#2D1115]/50 rounded-lg p-3 border border-[#3D1820]">
                     <p className="text-xs sm:text-sm text-gray-400">Your Cash</p>
                     <p className="text-xl sm:text-2xl font-bold text-green-400">${playerStats.cash.toLocaleString()}</p>
                   </div>
@@ -398,7 +398,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                         className={`flex-1 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors ${
                                           selectedDuration === 6
                                             ? 'bg-red-600 text-white'
-                                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                            : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
                                         }`}
                                       >
                                         <span className="hidden sm:inline">6 Months</span>
@@ -409,7 +409,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                         className={`flex-1 px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium transition-colors ${
                                           selectedDuration === 12
                                             ? 'bg-red-600 text-white'
-                                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                            : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
                                         }`}
                                       >
                                         <span className="hidden sm:inline">12 Months</span>
@@ -421,7 +421,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
 
                                 {/* Hire Button */}
                                 {alreadyHired ? (
-                                  <div className="p-2 bg-gray-700/50 rounded text-center">
+                                  <div className="p-2 bg-[#3D1820]/50 rounded text-center">
                                     <p className="text-xs sm:text-sm text-gray-400">Already hired this role</p>
                                   </div>
                                 ) : (
@@ -431,7 +431,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                                     className={`w-full px-3 sm:px-4 py-2 rounded text-xs sm:text-sm font-bold transition-colors ${
                                       canHire
                                         ? 'bg-green-600 hover:bg-green-700 text-white'
-                                        : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                                        : 'bg-[#4D1F2A] text-gray-400 cursor-not-allowed'
                                     }`}
                                   >
                                     {!affordable
@@ -444,7 +444,7 @@ const ManagementPanel: React.FC<ManagementPanelProps> = ({
                           })}
                         </div>
                       ) : (
-                        <div className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
+                        <div className="p-4 bg-[#2D1115]/30 rounded-lg border border-[#3D1820]">
                           <p className="text-sm text-gray-400">
                             No {role.toLowerCase()}s available at your current fame level.
                           </p>

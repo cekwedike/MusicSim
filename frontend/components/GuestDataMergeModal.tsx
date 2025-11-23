@@ -36,7 +36,7 @@ export const GuestDataMergeModal: React.FC<GuestDataMergeModalProps> = ({
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-[100] animate-fade-in">
-            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl p-6 w-full max-w-lg">
+            <div className="bg-[#2D1115] border border-gray-700 rounded-xl shadow-2xl p-6 w-full max-w-lg">
                 <h2 className="text-2xl font-bold text-red-300 mb-4">Welcome Back!</h2>
 
                 <p className="text-gray-300 mb-6">
@@ -140,7 +140,7 @@ export const GuestDataMergeModal: React.FC<GuestDataMergeModalProps> = ({
                     <button
                         onClick={handleConfirm}
                         disabled={isProcessing}
-                        className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                        className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-[#4D1F2A] disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
                     >
                         {isProcessing ? 'Processing...' : 'Confirm Choice'}
                     </button>
@@ -148,7 +148,7 @@ export const GuestDataMergeModal: React.FC<GuestDataMergeModalProps> = ({
                     {!isProcessing && (
                         <button
                             onClick={onClose}
-                            className="px-6 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                            className="px-6 bg-[#4D1F2A] hover:bg-[#3D1820] text-white font-bold py-3 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
                         >
                             Cancel
                         </button>

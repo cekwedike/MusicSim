@@ -300,7 +300,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                           w-full text-left p-4 rounded-lg transition-all duration-200 flex items-start gap-3
                           ${quizAnswers[questionIndex] === optionIndex
                             ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg scale-105'
-                            : 'bg-gray-600/50 text-gray-200 hover:bg-gray-600'
+                            : 'bg-[#4D1F2A]/50 text-gray-200 hover:bg-[#4D1F2A]'
                           }
                         `}
                       >
@@ -372,7 +372,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                             </span>
                           </div>
                         )}
-                        <div className="mt-3 p-3 bg-gray-900/50 rounded-lg">
+                        <div className="mt-3 p-3 bg-[#1A0A0F]/50 rounded-lg">
                           <p className="text-gray-300 text-sm leading-relaxed">
                             <strong className="text-red-400">Explanation:</strong> {question.explanation}
                           </p>
@@ -393,7 +393,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
               <button
                 onClick={handlePrevSection}
                 disabled={currentSection === 0}
-                className="bg-gray-600 hover:bg-gray-500 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-all duration-200 font-semibold flex items-center gap-2 min-w-[120px]"
+                className="bg-[#4D1F2A] hover:bg-gray-500 disabled:bg-[#3D1820] disabled:text-gray-500 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-all duration-200 font-semibold flex items-center gap-2 min-w-[120px]"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -416,7 +416,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
             <>
               <button
                 onClick={() => setShowQuiz(false)}
-                className="bg-gray-600 hover:bg-gray-500 text-white px-6 py-3 rounded-lg transition-all duration-200 font-semibold flex items-center gap-2 min-w-[120px]"
+                className="bg-[#4D1F2A] hover:bg-gray-500 text-white px-6 py-3 rounded-lg transition-all duration-200 font-semibold flex items-center gap-2 min-w-[120px]"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -441,7 +441,7 @@ const ModuleViewer: React.FC<ModuleViewerProps> = ({ module, onComplete, onClose
                   setShowQuiz(true);
                   setQuizAnswers([]);
                 }}
-                className="bg-gray-600 hover:bg-gray-500 text-white px-6 py-3 rounded-lg transition-all duration-200 font-semibold min-w-[140px]"
+                className="bg-[#4D1F2A] hover:bg-gray-500 text-white px-6 py-3 rounded-lg transition-all duration-200 font-semibold min-w-[140px]"
               >
                 Retake Quiz
               </button>

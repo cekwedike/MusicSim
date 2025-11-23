@@ -1620,11 +1620,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
                                     disabled={loadingSlotId === slot.id}
-                                    className="bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-red-500/10 group disabled:opacity-60 disabled:cursor-not-allowed relative"
+                                    className="bg-[#2D1115]/60 border border-[#3D1820] hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-red-500/10 group disabled:opacity-60 disabled:cursor-not-allowed relative"
                                 >
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
-                                        <div className="absolute inset-0 bg-gray-900/80 rounded-xl flex items-center justify-center">
+                                        <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
                                             <div className="flex items-center gap-2 text-red-300">
                                                 <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
                                                 <span className="text-sm font-medium">Loading...</span>
@@ -1654,7 +1654,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                                 <span className="text-gray-500">Progress</span>
                                                 <span className="text-red-300 font-medium">{slot.careerProgress}%</span>
                                             </div>
-                                            <div className="w-full bg-gray-700 rounded-full h-1">
+                                            <div className="w-full bg-[#3D1820] rounded-full h-1">
                                                 <div
                                                     className="bg-gradient-to-r from-red-700 to-rose-500 h-1 rounded-full transition-all duration-300"
                                                     style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
@@ -1664,11 +1664,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
                                         {/* Stats row */}
                                         <div className="grid grid-cols-2 gap-1.5 text-xs">
-                                            <div className="bg-gray-900/50 rounded p-1.5">
+                                            <div className="bg-[#1A0A0F]/50 rounded p-1.5">
                                                 <div className="text-gray-500 text-[10px]">Cash</div>
                                                 <div className="text-green-400 font-mono font-semibold text-xs">${slot.stats.cash.toLocaleString()}</div>
                                             </div>
-                                            <div className="bg-gray-900/50 rounded p-1.5">
+                                            <div className="bg-[#1A0A0F]/50 rounded p-1.5">
                                                 <div className="text-gray-500 text-[10px]">Fame</div>
                                                 <div className="text-yellow-400 font-semibold text-xs">{Math.round(slot.stats.fame)}</div>
                                             </div>
@@ -1695,11 +1695,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     key={slot.id}
                                     onClick={() => handleLoadSave(slot.id)}
                                     disabled={loadingSlotId === slot.id}
-                                    className="w-full bg-gray-800/60 border border-gray-700 hover:border-red-400 hover:bg-gray-800/80 text-left p-3 rounded-lg transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
+                                    className="w-full bg-[#2D1115]/60 border border-gray-700 hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                 >
                                     {/* Loading Overlay */}
                                     {loadingSlotId === slot.id && (
-                                        <div className="absolute inset-0 bg-gray-900/80 rounded-xl flex items-center justify-center">
+                                        <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
                                             <div className="flex items-center gap-2 text-red-300">
                                                 <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
                                                 <span className="text-sm font-medium">Loading...</span>
@@ -1733,7 +1733,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                                 <span className="text-gray-500">Career Progress</span>
                                                 <span className="text-red-300 font-medium">{slot.careerProgress}%</span>
                                             </div>
-                                            <div className="w-full bg-gray-700 rounded-full h-2">
+                                            <div className="w-full bg-[#3D1820] rounded-full h-2">
                                                 <div 
                                                     className="bg-gradient-to-r from-red-700 to-rose-500 h-2 rounded-full transition-all duration-300"
                                                     style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
@@ -2478,7 +2478,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const showDashboard = !['start', 'setup'].includes(status);
     
     return (
-        <div className="relative min-h-screen max-h-screen overflow-hidden flex flex-col bg-gray-900">
+        <div className="relative min-h-screen max-h-screen overflow-hidden flex flex-col bg-[#1A0A0F]">
             {/* Parallax Background */}
             <ParallaxBackground speed={0.2} opacity={0.15} />
 
@@ -2712,7 +2712,7 @@ const UserProfile: React.FC<{ onOpenLoginModal: () => void }> = ({ onOpenLoginMo
             <span className="text-gray-300 text-sm">Welcome, {user.username}!</span>
             <button
                 onClick={handleLogout}
-                className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-white rounded text-sm transition-colors"
+                className="px-3 py-1 bg-[#4D1F2A] hover:bg-[#3D1820] text-white rounded text-sm transition-colors"
             >
                 Logout
             </button>
@@ -2855,7 +2855,7 @@ const AuthenticatedApp: React.FC = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-900">
+            <div className="min-h-screen flex items-center justify-center bg-[#1A0A0F]">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
                     <p className="text-gray-300">Loading MusicSim...</p>
@@ -2875,7 +2875,7 @@ const AuthenticatedApp: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-900">
+        <div className="min-h-screen bg-[#1A0A0F]">
             {/* PWA Install Banner - shows across all pages */}
             <InstallBanner />
 

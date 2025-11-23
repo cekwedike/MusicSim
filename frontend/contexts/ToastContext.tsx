@@ -48,7 +48,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           <div key={t.id} className={`max-w-sm w-full px-4 py-3 rounded-lg shadow-lg border ${
             t.type === 'success' ? 'bg-green-600/95 border-green-700 text-white' :
             t.type === 'error' ? 'bg-red-600/95 border-red-700 text-white' :
-            'bg-gray-800/95 border-gray-700 text-white'
+            'bg-[#2D1115]/95 border-gray-700 text-white'
           }`}>
             <div className="flex items-start gap-3">
               <div className="flex-1 text-sm leading-tight">{t.message}</div>

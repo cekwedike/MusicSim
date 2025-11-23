@@ -44,13 +44,13 @@ const GameHistory: React.FC<GameHistoryProps> = ({ logs }) => {
   const sortedLogs = [...displayLogs].reverse(); // Show most recent first
 
   return (
-  <div className="game-history bg-gray-800 rounded-lg border border-gray-700 mb-1.5 mt-1.5 overflow-hidden">
+  <div className="game-history bg-[#2D1115] rounded-lg border border-gray-700 mb-1.5 mt-1.5 overflow-hidden">
       {/* Mobile: Collapsed button */}
       <div className="lg:hidden">
         {isMobileCollapsed ? (
           <button
             onClick={() => setIsMobileCollapsed(false)}
-            className="w-full flex items-center justify-between p-2 hover:bg-gray-700/50 transition-colors rounded-lg"
+            className="w-full flex items-center justify-between p-2 hover:bg-[#3D1820]/50 transition-colors rounded-lg"
           >
             <div className="flex items-center gap-1.5">
               <History className="w-3.5 h-3.5 text-red-400" />

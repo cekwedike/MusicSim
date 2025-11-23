@@ -101,7 +101,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
   return (
     <div className="h-full overflow-y-auto -mx-4 px-4 space-y-4">
       {/* Header */}
-      <div className="sticky top-0 bg-gray-800/95 backdrop-blur-md -mx-4 px-4 py-3 border-b border-red-500/30 z-10">
+      <div className="sticky top-0 bg-[#2D1115]/95 backdrop-blur-md -mx-4 px-4 py-3 border-b border-red-500/30 z-10">
         <p className="text-gray-300 text-xs leading-relaxed">
           Master the business side of music through interactive learning
         </p>
@@ -141,7 +141,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
           <div className="text-green-200 text-xs">Business Skills</div>
           
           {/* Tooltip */}
-          <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600">
+          <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-[#1A0A0F] text-white text-xs rounded-lg px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600">
             Business concepts mastered
             <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-3 border-transparent border-t-gray-900"></div>
           </div>
@@ -173,7 +173,7 @@ const LearningPanel: React.FC<LearningPanelProps> = ({ onOpenModule, playerKnowl
                 relative border rounded-lg overflow-hidden transition-all duration-300
                 ${isUnlocked
                   ? 'border-red-500/30 bg-gradient-to-br from-gray-700/50 to-gray-800/50 hover:border-red-500/60 cursor-pointer'
-                  : 'border-gray-700 bg-gray-800/30 opacity-60'
+                  : 'border-gray-700 bg-[#2D1115]/30 opacity-60'
                 }
                 ${isCompleted ? 'ring-2 ring-green-500/40' : ''}
                 ${isExpanded ? 'shadow-lg shadow-red-500/20' : ''}

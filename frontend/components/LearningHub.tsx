@@ -217,7 +217,7 @@ const LearningHub: React.FC<LearningHubProps> = ({ isOpen, onClose, onOpenModule
                     <div className="text-red-200 text-xs mt-1">Business Skills</div>
                     
                     {/* Tooltip */}
-                    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600">
+                    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-[#1A0A0F] text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 border border-gray-600">
                       Concepts mastered from completed courses
                       <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
                     </div>

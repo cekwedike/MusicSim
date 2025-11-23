@@ -12,7 +12,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
   return (
     <button
       onClick={toggleTheme}
-      className={`relative inline-flex items-center w-20 h-8 bg-gray-700 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
+      className={`relative inline-flex items-center w-20 h-8 bg-[#3D1820] rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
         theme === 'light' ? 'focus:ring-offset-white' : 'focus:ring-offset-gray-900'
       } ${className}`}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
@@ -21,7 +21,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
       {/* Toggle Track */}
       <div className={`absolute inset-0 rounded-full transition-colors duration-300 ${
         theme === 'dark' 
-          ? 'bg-gray-600' 
+          ? 'bg-[#4D1F2A]' 
           : 'bg-gradient-to-r from-yellow-400 to-orange-400'
       }`}>
         {/* Background Icons */}

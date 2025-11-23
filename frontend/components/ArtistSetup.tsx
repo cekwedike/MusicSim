@@ -50,7 +50,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                                     className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                                         isSelected 
                                             ? 'border-red-500 bg-red-500/10' 
-                                            : 'border-gray-600 bg-gray-800/50 hover:border-gray-500'
+                                            : 'border-gray-600 bg-[#2D1115]/50 hover:border-gray-500'
                                     }`}
                                 >
                                     <div className="text-center">
@@ -89,7 +89,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder={isAuthenticated ? user?.username : "e.g., The Cosmic Drifters"}
-                            className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+                            className="w-full p-3 bg-[#3D1820] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition"
                             required
                             readOnly={isAuthenticated}
                             title={isAuthenticated ? "Artist name is linked to your account username. Edit it in your profile settings." : "Enter your artist or band name"}
@@ -106,7 +106,7 @@ const ArtistSetup: React.FC<ArtistSetupProps> = ({ onSubmit }) => {
                             id="artist-genre"
                             value={genre}
                             onChange={(e) => setGenre(e.target.value)}
-                            className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+                            className="w-full p-3 bg-[#3D1820] border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition"
                             required
                         >
                             <option value="">Select a genre...</option>

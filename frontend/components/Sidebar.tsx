@@ -131,7 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         {/* Icon Bar and Expanded Panel Container */}
         <div className="flex flex-row flex-1 overflow-hidden">
         {/* Compact Sidebar with Icons + Labels on mobile, Icon-only on desktop */}
-        <div className="bg-gray-800/95 backdrop-blur-sm border-l border-gray-700 w-40 sm:w-44 lg:w-16 flex flex-col py-4 gap-2 shadow-xl overflow-y-auto">
+        <div className="bg-[#2D1115]/95 backdrop-blur-sm border-l border-[#3D1820] w-40 sm:w-44 lg:w-16 flex flex-col py-4 gap-2 shadow-xl overflow-y-auto">
         {buttons.map((button) => (
           <button
             key={button.id}
@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
               flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0
               ${activeView === button.id
                 ? 'bg-red-600 text-white'
-                : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                : 'text-gray-400 hover:text-white hover:bg-[#3D1820]'
               }
             `}
             aria-label={button.ariaLabel}
@@ -168,13 +168,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
             <div className="
               hidden lg:block
               absolute left-[-8px] top-1/2 -translate-y-1/2 -translate-x-full
-              bg-gray-900 text-white text-sm px-3 py-2 rounded-lg
+              bg-[#1A0A0F] text-white text-sm px-3 py-2 rounded-lg
               whitespace-nowrap opacity-0 group-hover:opacity-100
               pointer-events-none transition-opacity duration-200
               shadow-lg
             ">
               {button.label}
-              <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-gray-900"></div>
+              <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-[#1A0A0F]"></div>
             </div>
           </button>
         ))}
@@ -182,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         {/* Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-gray-700 flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0"
+          className="px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-[#3D1820] flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0"
           aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
         >
@@ -199,13 +199,13 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
           <div className="
             hidden lg:block
             absolute left-[-8px] top-1/2 -translate-y-1/2 -translate-x-full
-            bg-gray-900 text-white text-sm px-3 py-2 rounded-lg
+            bg-[#1A0A0F] text-white text-sm px-3 py-2 rounded-lg
             whitespace-nowrap opacity-0 group-hover:opacity-100
             pointer-events-none transition-opacity duration-200
             shadow-lg
           ">
             {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-            <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-gray-900"></div>
+            <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-[#1A0A0F]"></div>
           </div>
         </button>
 
@@ -216,7 +216,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       {/* Expanded Panel */}
       <div
         className={`
-          bg-gray-800/98 backdrop-blur-md border-l border-gray-700
+          bg-[#2D1115]/98 backdrop-blur-md border-l border-[#3D1820]
           transition-all duration-300 ease-in-out
           ${isExpanded && activeView ? 'w-[calc(100vw-10rem)] sm:w-80 md:w-96 lg:w-[26rem]' : 'w-0'}
           overflow-hidden shadow-2xl
@@ -238,7 +238,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
                     onMobileToggle?.(false);
                   }
                 }}
-                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700 rounded-lg"
+                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-[#3D1820] rounded-lg"
                 aria-label="Close panel"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

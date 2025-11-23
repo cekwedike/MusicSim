@@ -26,7 +26,7 @@ const StaffTerminationModal: React.FC<StaffTerminationModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-3 sm:p-4">
-      <div className="bg-gray-800 rounded-lg max-w-lg w-full border-2 border-red-600/50 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-[#2D1115] rounded-lg max-w-lg w-full border-2 border-red-600/50 shadow-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-red-600 to-rose-700 p-3 sm:p-4 rounded-t-lg">
           <div className="flex items-center justify-between">
@@ -47,7 +47,7 @@ const StaffTerminationModal: React.FC<StaffTerminationModalProps> = ({
         {/* Content */}
         <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
           {/* Staff Info */}
-          <div className="bg-gray-700/50 rounded-lg p-3 border border-gray-600">
+          <div className="bg-[#3D1820]/50 rounded-lg p-3 border border-gray-600">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-white">{staff.name}</h3>
@@ -72,7 +72,7 @@ const StaffTerminationModal: React.FC<StaffTerminationModalProps> = ({
               Financial Impact
             </h4>
             <div className="grid gap-2">
-              <div className="bg-gray-700/50 rounded-lg p-2.5 border border-red-600/30">
+              <div className="bg-[#3D1820]/50 rounded-lg p-2.5 border border-red-600/30">
                 <div className="flex items-center justify-between">
                   <span className="text-xs sm:text-sm text-gray-300">Severance Payment</span>
                   <span className="text-sm sm:text-base font-bold text-red-400">-${outcome.severance.toLocaleString()}</span>
@@ -87,7 +87,7 @@ const StaffTerminationModal: React.FC<StaffTerminationModalProps> = ({
               <TrendingDown className="w-4 h-4 text-yellow-400" />
               Emotional Impact
             </h4>
-            <div className="bg-gray-700/50 rounded-lg p-2.5 border border-yellow-600/30">
+            <div className="bg-[#3D1820]/50 rounded-lg p-2.5 border border-yellow-600/30">
               <div className="flex items-center justify-between">
                 <span className="text-xs sm:text-sm text-gray-300">Well-being Loss</span>
                 <span className="text-sm sm:text-base font-bold text-yellow-400">-{outcome.wellBeingLoss}</span>
@@ -104,7 +104,7 @@ const StaffTerminationModal: React.FC<StaffTerminationModalProps> = ({
                 {outcome.additionalEffects.map((effect, index) => (
                   <div
                     key={index}
-                    className="bg-gray-700/50 rounded-lg p-2.5 border border-gray-600"
+                    className="bg-[#3D1820]/50 rounded-lg p-2.5 border border-gray-600"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs sm:text-sm text-gray-300">{effect.label}</span>

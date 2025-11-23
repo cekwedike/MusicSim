@@ -60,7 +60,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
 
       {/* Dialog */}
       <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
-        <div className={`bg-gray-800 border ${config.border} rounded-lg shadow-2xl max-w-md w-full animate-scale-in`}>
+        <div className={`bg-[#2D1115] border ${config.border} rounded-lg shadow-2xl max-w-md w-full animate-scale-in`}>
           <style>{`
             @keyframes scale-in {
               from { transform: scale(0.95); opacity: 0; }

@@ -21,8 +21,8 @@ const colorClasses = {
 
 const StatDisplay: React.FC<StatDisplayProps> = ({ label, value, color, maxValue = 100, isDate = false }) => {
     const classes = colorClasses[color];
-    const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 flex flex-col justify-between shadow-lg border border-gray-700/50"
-                                  : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 flex flex-col justify-between shadow-lg border border-gray-700/50";
+    const containerClass = isDate ? "date-display bg-[#2D1115]/50 backdrop-blur-sm rounded-lg p-2 flex flex-col justify-between shadow-lg border border-[#3D1820]/50"
+                                  : "bg-[#2D1115]/50 backdrop-blur-sm rounded-lg p-2 flex flex-col justify-between shadow-lg border border-[#3D1820]/50";
 
     return (
         <div className={containerClass}>
@@ -36,7 +36,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ label, value, color, maxValue
             ) : (
                 <div>
                     <p className={`text-xs sm:text-base md:text-lg font-bold text-right ${classes.text}`}>{value}/{maxValue}</p>
-                    <div className="w-full bg-gray-700 rounded-full h-1 sm:h-1.5 mt-0.5 overflow-hidden">
+                    <div className="w-full bg-[#3D1820] rounded-full h-1 sm:h-1.5 mt-0.5 overflow-hidden">
                         <div
                             className={`bg-gradient-to-r ${classes.from} ${classes.to} h-1 sm:h-1.5 rounded-full transition-all duration-500 ease-out`}
                             style={{ width: `${Math.max(0, Math.min(100, (Number(value) / maxValue) * 100))}%` }}
@@ -64,11 +64,11 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
     return (
         <div className="mb-1.5 md:mb-2 mt-1.5">
             {/* Mobile: Collapsible view */}
-            <div className="lg:hidden bg-gray-800 rounded-lg border border-gray-700">
+            <div className="lg:hidden bg-[#2D1115] rounded-lg border border-[#3D1820]">
                 {isMobileCollapsed ? (
                     <button
                         onClick={() => setIsMobileCollapsed(false)}
-                        className="w-full flex items-center justify-between p-2 hover:bg-gray-700/50 transition-colors rounded-lg"
+                        className="w-full flex items-center justify-between p-2 hover:bg-[#3D1820]/50 transition-colors rounded-lg"
                     >
                         <div className="flex items-center gap-1.5">
                             <span className="text-xs font-bold text-white">Stats</span>

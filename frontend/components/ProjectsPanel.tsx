@@ -57,7 +57,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
   };
 
   return (
-    <div className="projects-panel h-full flex flex-col bg-gray-900 overflow-hidden">
+    <div className="projects-panel h-full flex flex-col bg-[#1A0A0F] overflow-hidden">
       {/* Header */}
       <div className="flex-shrink-0 bg-gradient-to-r from-red-600 to-rose-700 p-3 sm:p-4 border-b border-red-500/30">
         <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
@@ -91,7 +91,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                     {Math.floor((currentProject.progress / currentProject.requiredProgress) * 100)}%
                   </span>
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2 sm:h-2.5">
+                <div className="w-full bg-[#3D1820] rounded-full h-2 sm:h-2.5">
                   <div
                     className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 sm:h-2.5 rounded-full transition-all"
                     style={{ width: `${(currentProject.progress / currentProject.requiredProgress) * 100}%` }}
@@ -149,7 +149,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                   </div>
                 </div>
 
-                <div className="bg-gray-800 p-3 space-y-2">
+                <div className="bg-[#2D1115] p-3 space-y-2">
                   <p className="text-xs sm:text-sm text-gray-300">
                     {getProjectDescription(project.id)}
                   </p>
@@ -175,7 +175,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                         </button>
                         <button
                           onClick={() => setConfirmingProject(null)}
-                          className="flex-1 py-2 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded transition-colors text-xs sm:text-sm"
+                          className="flex-1 py-2 bg-[#4D1F2A] hover:bg-[#3D1820] text-white font-bold rounded transition-colors text-xs sm:text-sm"
                         >
                           Cancel
                         </button>
@@ -187,7 +187,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
                       disabled={currentProject !== null || !affordable}
                       className={`w-full py-2 rounded font-bold transition-colors text-xs sm:text-sm ${
                         currentProject
-                          ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                          ? 'bg-[#3D1820] text-gray-500 cursor-not-allowed'
                           : affordable
                           ? 'bg-red-600 hover:bg-red-700 text-white'
                           : 'bg-red-900/50 text-red-400 cursor-not-allowed'

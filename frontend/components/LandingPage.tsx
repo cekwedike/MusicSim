@@ -59,7 +59,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           }}
         >
           {/* Stock Image - Replace with actual image later */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-red-900 to-slate-900">
             <img
               src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1920&q=80"
               alt="Music Studio"
@@ -91,13 +91,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           <div className="mb-8">
             <div className="inline-block mb-6">
               <div className="flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full">
-                <Music className="w-5 h-5 text-purple-400" />
+                <Music className="w-5 h-5 text-red-400" />
                 <span className="text-sm font-medium text-gray-300">Industry Simulation Platform</span>
               </div>
             </div>
 
             <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight">
-              <span className="block mb-2 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+              <span className="block mb-2 bg-gradient-to-r from-white via-red-200 to-rose-200 bg-clip-text text-transparent">
                 MusicSim
               </span>
             </h1>
@@ -105,7 +105,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <p className="text-2xl md:text-4xl font-bold text-gray-200 mb-6 leading-tight">
               Navigate the Music Industry
               <br />
-              <span className="text-purple-400">From Bedroom to Billboard</span>
+              <span className="text-red-400">From Bedroom to Billboard</span>
             </p>
 
             <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -118,7 +118,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <button
               onClick={handleShowRegister}
-              className="group relative px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] min-w-[200px]"
+              className="group relative px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] min-w-[200px]"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Get Started
@@ -178,11 +178,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           {/* Features Grid */}
           <div className="grid md:grid-cols-3 gap-8 mb-20">
             {/* Feature 1 */}
-            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-purple-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-purple-600/0 group-hover:from-purple-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
+            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-red-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
               <div className="relative z-10">
-                <div className="w-14 h-14 bg-purple-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-600/30 transition-colors">
-                  <Target className="w-7 h-7 text-purple-400" />
+                <div className="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-600/30 transition-colors">
+                  <Target className="w-7 h-7 text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold mb-3">Realistic Scenarios</h3>
                 <p className="text-gray-400 leading-relaxed">
@@ -192,11 +192,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             </div>
 
             {/* Feature 2 */}
-            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-pink-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-pink-600/0 to-pink-600/0 group-hover:from-pink-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
+            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-rose-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-rose-600/0 to-rose-600/0 group-hover:from-rose-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
               <div className="relative z-10">
-                <div className="w-14 h-14 bg-pink-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-pink-600/30 transition-colors">
-                  <TrendingUp className="w-7 h-7 text-pink-400" />
+                <div className="w-14 h-14 bg-rose-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-rose-600/30 transition-colors">
+                  <TrendingUp className="w-7 h-7 text-rose-400" />
                 </div>
                 <h3 className="text-xl font-bold mb-3">Strategic Gameplay</h3>
                 <p className="text-gray-400 leading-relaxed">
@@ -206,11 +206,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             </div>
 
             {/* Feature 3 */}
-            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-cyan-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/0 to-cyan-600/0 group-hover:from-cyan-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
+            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-red-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
               <div className="relative z-10">
-                <div className="w-14 h-14 bg-cyan-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-600/30 transition-colors">
-                  <BarChart3 className="w-7 h-7 text-cyan-400" />
+                <div className="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-600/30 transition-colors">
+                  <BarChart3 className="w-7 h-7 text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold mb-3">Track Progress</h3>
                 <p className="text-gray-400 leading-relaxed">
@@ -221,7 +221,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           </div>
 
           {/* What You'll Learn Section */}
-          <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-500/20 rounded-3xl p-10 md:p-16">
+          <div className="bg-gradient-to-br from-red-900/20 to-rose-900/20 border border-red-500/20 rounded-3xl p-10 md:p-16">
             <div className="max-w-4xl mx-auto">
               <h3 className="text-3xl md:text-4xl font-black mb-8 text-center">
                 Master the Business of Music
@@ -229,8 +229,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
-                    <BookOpen className="w-6 h-6 text-purple-400" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-red-600/20 rounded-lg flex items-center justify-center">
+                    <BookOpen className="w-6 h-6 text-red-400" />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-2">Contract Negotiation</h4>
@@ -239,8 +239,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-pink-600/20 rounded-lg flex items-center justify-center">
-                    <Award className="w-6 h-6 text-pink-400" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-rose-600/20 rounded-lg flex items-center justify-center">
+                    <Award className="w-6 h-6 text-rose-400" />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-2">Revenue Streams</h4>
@@ -249,8 +249,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-cyan-600/20 rounded-lg flex items-center justify-center">
-                    <Mic className="w-6 h-6 text-cyan-400" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-red-600/20 rounded-lg flex items-center justify-center">
+                    <Mic className="w-6 h-6 text-red-400" />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-2">Career Building</h4>
@@ -259,8 +259,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
-                    <Trophy className="w-6 h-6 text-orange-400" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-rose-600/20 rounded-lg flex items-center justify-center">
+                    <Trophy className="w-6 h-6 text-rose-400" />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg mb-2">Industry Insights</h4>
@@ -286,7 +286,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={handleShowRegister}
-              className="group relative px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-lg font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(168,85,247,0.5)] min-w-[240px]"
+              className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-lg font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(220,38,38,0.5)] min-w-[240px]"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Create Free Account

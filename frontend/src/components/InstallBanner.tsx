@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Download, X } from 'lucide-react';
+import { Download, X, Share2 } from 'lucide-react';
 
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
@@ -8,6 +8,14 @@ type BeforeInstallPromptEvent = Event & {
 
 const DISMISS_KEY = 'musicsim_install_banner_dismissed';
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+// Detect if browser is Safari/iOS
+const isSafariOrIOS = (): boolean => {
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  return isIOS || isSafari;
+};
 
 const isAppInstalled = async (): Promise<boolean> => {
   // Check if running as PWA (installed app)
@@ -98,7 +106,9 @@ const InstallBanner: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
+  const [showSafariInstructions, setShowSafariInstructions] = useState(false);
   const bannerRef = useRef<HTMLDivElement | null>(null);
+  const isSafari = isSafariOrIOS();
 
   useEffect(() => {
     let unmounted = false;
@@ -141,7 +151,8 @@ const InstallBanner: React.FC = () => {
       const dismissed = await isBannerDismissed();
 
       // Show if forced (for testing) or if banner is not dismissed
-      if ((forced || !dismissed) && !unmounted) {
+      // For Safari/iOS, always show banner if not dismissed (they don't have beforeinstallprompt)
+      if ((forced || !dismissed || isSafariOrIOS()) && !unmounted) {
         setVisible(true);
       } else {
         setVisible(false);
@@ -167,11 +178,17 @@ const InstallBanner: React.FC = () => {
 
   const handleInstall = async (event?: React.MouseEvent) => {
     event?.stopPropagation();
-    
+
     if (isInstalling) return; // Prevent double-clicks
-    
+
+    // For Safari/iOS, show instructions instead of trying to install
+    if (isSafari && !deferredPrompt) {
+      setShowSafariInstructions(!showSafariInstructions);
+      return;
+    }
+
     setIsInstalling(true);
-    
+
     if (deferredPrompt) {
       try {
         // user clicks Install -> show native prompt
@@ -233,7 +250,7 @@ const InstallBanner: React.FC = () => {
       <style>{`
         .musicsim-install-slide { animation: slideUp 360ms cubic-bezier(.2,.8,.2,1); }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
-        
+
         /* Mobile touch optimizations */
         @media (max-width: 640px) {
           .musicsim-install-banner-button {
@@ -243,41 +260,65 @@ const InstallBanner: React.FC = () => {
         }
       `}</style>
 
-      <div className="musicsim-install-slide flex items-center justify-between bg-[#2D1115] dark:bg-[#2D1115] light:bg-white light:border-gray-300 border border-[#4D1F2A] shadow-lg rounded-xl p-2 sm:p-3 md:p-4">
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
-          <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 rounded-lg flex items-center justify-center">
-            <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+      <div className="musicsim-install-slide flex flex-col bg-[#2D1115] dark:bg-[#2D1115] light:bg-white light:border-gray-300 border border-[#4D1F2A] shadow-lg rounded-xl p-2 sm:p-3 md:p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+            <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-red-600 rounded-lg flex items-center justify-center">
+              <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            </div>
+
+            <div className="hidden sm:block">
+              <div className="text-white dark:text-white light:text-gray-900 font-semibold text-sm md:text-base">Install MusicSim</div>
+              <div className="text-gray-300 dark:text-gray-300 light:text-gray-600 text-xs md:text-sm">Take Your Music Journey With You. Play Anytime, Anywhere.</div>
+            </div>
+
+            <div className="block sm:hidden">
+              <div className="text-white dark:text-white light:text-gray-900 font-semibold text-sm">Install MusicSim</div>
+            </div>
           </div>
 
-          <div className="hidden sm:block">
-            <div className="text-white dark:text-white light:text-gray-900 font-semibold text-sm md:text-base">Install MusicSim</div>
-            <div className="text-gray-300 dark:text-gray-300 light:text-gray-600 text-xs md:text-sm">Take Your Music Journey With You. Play Anytime, Anywhere.</div>
-          </div>
+          <div className="ml-2 sm:ml-4 flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={handleInstall}
+              disabled={isInstalling}
+              className={`musicsim-install-banner-button flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform touch-manipulation ${isInstalling ? 'opacity-50 cursor-not-allowed' : ''}`}
+              aria-label="Install MusicSim"
+            >
+              {isSafari && !deferredPrompt ? (
+                <>
+                  <Share2 className="w-4 h-4" />
+                  <span className="hidden sm:inline">How to Install</span>
+                  <span className="sm:hidden text-xs">Install</span>
+                </>
+              ) : (
+                <>
+                  <span className="hidden sm:inline">{isInstalling ? 'Installing...' : 'Install'}</span>
+                  <span className="sm:hidden text-xs">{isInstalling ? 'Installing...' : 'Install'}</span>
+                </>
+              )}
+            </button>
 
-          <div className="block sm:hidden">
-            <div className="text-white dark:text-white light:text-gray-900 font-semibold text-sm">Install MusicSim</div>
+            <button
+              onClick={handleClose}
+              className="musicsim-install-banner-button ml-1 sm:ml-2 p-1.5 sm:p-2 rounded-full text-gray-300 dark:text-gray-300 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:bg-[#3D1820] dark:hover:bg-[#3D1820] light:hover:bg-gray-100 touch-manipulation"
+              aria-label="Close install banner"
+            >
+              <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </button>
           </div>
         </div>
 
-        <div className="ml-2 sm:ml-4 flex items-center gap-2 sm:gap-3">
-          <button
-            onClick={handleInstall}
-            disabled={isInstalling}
-            className={`musicsim-install-banner-button flex items-center gap-1 sm:gap-3 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform touch-manipulation ${isInstalling ? 'opacity-50 cursor-not-allowed' : ''}`}
-            aria-label="Install MusicSim"
-          >
-            <span className="hidden sm:inline">{isInstalling ? 'Installing...' : 'Install'}</span>
-            <span className="sm:hidden text-xs">{isInstalling ? 'Installing...' : 'Install'}</span>
-          </button>
-
-          <button
-            onClick={handleClose}
-            className="musicsim-install-banner-button ml-1 sm:ml-2 p-1.5 sm:p-2 rounded-full text-gray-300 dark:text-gray-300 light:text-gray-600 hover:text-white dark:hover:text-white light:hover:text-gray-900 hover:bg-[#3D1820] dark:hover:bg-[#3D1820] light:hover:bg-gray-100 touch-manipulation"
-            aria-label="Close install banner"
-          >
-            <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
-        </div>
+        {/* Safari/iOS Installation Instructions */}
+        {showSafariInstructions && isSafari && (
+          <div className="mt-3 pt-3 border-t border-[#4D1F2A] text-gray-300 dark:text-gray-300 light:text-gray-600">
+            <div className="text-sm font-semibold mb-2">To install on Safari:</div>
+            <ol className="text-xs space-y-1.5 list-decimal list-inside">
+              <li>Tap the <Share2 className="inline w-3 h-3 mx-0.5" /> <strong>Share</strong> button below</li>
+              <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+              <li>Tap <strong>"Add"</strong> in the top right corner</li>
+            </ol>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
   "short_name": "MusicSim",
   "description": "Learn the music business through an interactive simulation game",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#1f2937",
   "theme_color": "#dc2626",

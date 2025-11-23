@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Music, ChevronDown, ArrowRight } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -79,7 +79,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
         {/* Hero Content */}
         <div
-          className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8"
+          className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pb-24 lg:pb-0"
           style={{
             transform: `translateY(${parallaxHero}px)`,
             opacity: fadeOpacity,
@@ -88,10 +88,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
         >
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Main Content */}
-            <div className="text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-red-500/30 rounded-md bg-red-500/10">
-                <Music className="w-4 h-4 text-red-400" />
-                <span className="text-xs font-medium text-red-300 uppercase tracking-wider">Music Industry Simulation</span>
+            <div className="text-center lg:text-left">
+              <div className="mb-6">
+                <span className="text-sm font-semibold text-red-400 uppercase tracking-wider">Music Industry Simulation</span>
               </div>
 
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight">
@@ -105,13 +104,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                 <span className="block text-red-400 mt-2">From Bedroom to Billboard</span>
               </h2>
 
-              <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-xl leading-relaxed">
+              <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 An immersive business simulation where every decision shapes your career.
                 Learn contracts, revenue streams, and industry dynamics through realistic gameplay.
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
                 <button
                   onClick={handleShowRegister}
                   className="group relative px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-2"
@@ -129,7 +128,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               </div>
 
               {/* Guest Play & Theme */}
-              <div className="flex flex-wrap items-center gap-4 text-sm">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm">
                 <button
                   onClick={onPlayAsGuest}
                   className="text-gray-400 hover:text-white underline underline-offset-4 transition-colors"
@@ -165,8 +164,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             </div>
           </div>
 
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 lg:left-auto lg:right-8 lg:translate-x-0">
+          {/* Scroll Indicator - Only show on desktop */}
+          <div className="hidden lg:flex absolute bottom-12 right-8">
             <button
               onClick={scrollToContent}
               className="flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors animate-bounce"
@@ -186,7 +185,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Section Header */}
-          <div className="max-w-3xl mb-16">
+          <div className="max-w-3xl mb-16 text-center lg:text-left">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6">
               Why MusicSim?
             </h2>
@@ -198,7 +197,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
           {/* Features List */}
           <div className="space-y-12 mb-20">
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="grid lg:grid-cols-2 gap-8 items-start text-center lg:text-left">
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-white">Realistic Scenarios</h3>
                 <p className="text-gray-400 leading-relaxed">
@@ -206,7 +205,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                   Navigate contract negotiations, label deals, and financial management just like actual artists.
                 </p>
               </div>
-              <div className="lg:pl-12">
+              <div className="lg:pl-12 flex flex-col items-center lg:items-start">
                 <div className="h-1 w-24 bg-red-600 mb-4"></div>
                 <p className="text-sm text-gray-500 leading-relaxed">
                   Built on industry research and real artist experiences to provide the most accurate simulation possible.
@@ -214,7 +213,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               </div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="grid lg:grid-cols-2 gap-8 items-start text-center lg:text-left">
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-white">Strategic Gameplay</h3>
                 <p className="text-gray-400 leading-relaxed">
@@ -222,7 +221,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                   Each choice has consequences that compound over time.
                 </p>
               </div>
-              <div className="lg:pl-12">
+              <div className="lg:pl-12 flex flex-col items-center lg:items-start">
                 <div className="h-1 w-24 bg-rose-600 mb-4"></div>
                 <p className="text-sm text-gray-500 leading-relaxed">
                   Multiple difficulty modes adapt the challenge to your skill level and create unique experiences.
@@ -230,7 +229,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               </div>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="grid lg:grid-cols-2 gap-8 items-start text-center lg:text-left">
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-white">Track Your Progress</h3>
                 <p className="text-gray-400 leading-relaxed">
@@ -238,7 +237,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                   Build a legacy that reflects your unique approach to the industry.
                 </p>
               </div>
-              <div className="lg:pl-12">
+              <div className="lg:pl-12 flex flex-col items-center lg:items-start">
                 <div className="h-1 w-24 bg-red-600 mb-4"></div>
                 <p className="text-sm text-gray-500 leading-relaxed">
                   Career history tracking lets you review past decisions and learn from both successes and failures.

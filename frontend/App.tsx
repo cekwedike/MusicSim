@@ -836,7 +836,7 @@ function gameReducer(state: GameState, action: Action): GameState {
                     // Unlock after maintaining threshold for required weeks
                     if (fameThresholdWeeks >= requiredWeeks) {
                         contractEligibilityUnlocked = true;
-                        eventsThisWeek.push(`🎵 You've maintained ${requiredFame}+ Fame for ${requiredWeeks} weeks! Record labels are starting to notice you...`);
+                        eventsThisWeek.push(`You've maintained ${requiredFame}+ Fame for ${requiredWeeks} weeks! Record labels are starting to notice you...`);
                     }
                 } else {
                     // Reset counter if fame drops below threshold

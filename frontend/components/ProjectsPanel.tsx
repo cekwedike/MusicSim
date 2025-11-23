@@ -208,7 +208,7 @@ const ProjectsPanel: React.FC<ProjectsPanelProps> = ({
 
         {/* Info Box */}
         <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-3">
-          <h4 className="text-xs sm:text-sm font-bold text-blue-300 mb-1">💡 How Projects Work</h4>
+          <h4 className="text-xs sm:text-sm font-bold text-blue-300 mb-1">How Projects Work</h4>
           <ul className="text-xs text-blue-200 space-y-1">
             <li>• Make choices each week to increase progress & quality</li>
             <li>• Higher quality = more income when released</li>

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import type { PlayerStats, Project, GameDate } from '../types';
-import { CashIcon, FameIcon, WellBeingIcon, CalendarIcon, HypeIcon } from './icons/Icons';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface StatDisplayProps {
-    icon: React.ReactNode;
     label: string;
     value: number | string;
     color: 'green' | 'yellow' | 'sky' | 'red' | 'pink';
@@ -21,7 +19,7 @@ const colorClasses = {
 };
 
 
-const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, maxValue = 100, isDate = false }) => {
+const StatDisplay: React.FC<StatDisplayProps> = ({ label, value, color, maxValue = 100, isDate = false }) => {
     const classes = colorClasses[color];
     const containerClass = isDate ? "date-display bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 flex flex-col justify-between shadow-lg border border-gray-700/50"
                                   : "bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 flex flex-col justify-between shadow-lg border border-gray-700/50";
@@ -29,7 +27,6 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ icon, label, value, color, ma
     return (
         <div className={containerClass}>
             <div className="flex items-center space-x-1.5 mb-1">
-                <div className={`${classes.text} w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0`}>{icon}</div>
                 <span className="font-bold text-gray-300 text-xs sm:text-sm">{label}</span>
             </div>
             {label === 'Cash' ? (
@@ -74,7 +71,6 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                         className="w-full flex items-center justify-between p-2 hover:bg-gray-700/50 transition-colors rounded-lg"
                     >
                         <div className="flex items-center gap-1.5">
-                            <CashIcon />
                             <span className="text-xs font-bold text-white">Stats</span>
                             <span className="text-xs text-green-400">${stats.cash.toLocaleString()}</span>
                             <span className="text-xs text-gray-400">|</span>
@@ -95,12 +91,12 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                             </button>
                         </div>
                         <div className="player-stats grid grid-cols-2 gap-2">
-                            <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
-                            <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
-                            <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
-                            <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
+                            <StatDisplay label="Cash" value={stats.cash} color="green" />
+                            <StatDisplay label="Fame" value={stats.fame} color="yellow" />
+                            <StatDisplay label="Well-Being" value={stats.wellBeing} color="sky" />
+                            <StatDisplay label="Hype" value={stats.hype} color="pink" />
                             <div className="col-span-2">
-                                <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="red" isDate={true} />
+                                <StatDisplay label="Date" value={displayDate} color="red" isDate={true} />
                             </div>
                         </div>
                     </div>
@@ -110,11 +106,11 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
             {/* Desktop: Always visible */}
             <div className="hidden lg:block">
                 <div className="player-stats grid grid-cols-3 lg:grid-cols-5 gap-2">
-                    <StatDisplay icon={<CashIcon />} label="Cash" value={stats.cash} color="green" />
-                    <StatDisplay icon={<FameIcon />} label="Fame" value={stats.fame} color="yellow" />
-                    <StatDisplay icon={<WellBeingIcon />} label="Well-Being" value={stats.wellBeing} color="sky" />
-                    <StatDisplay icon={<HypeIcon />} label="Hype" value={stats.hype} color="pink" />
-                    <StatDisplay icon={<CalendarIcon />} label="Date" value={displayDate} color="red" isDate={true} />
+                    <StatDisplay label="Cash" value={stats.cash} color="green" />
+                    <StatDisplay label="Fame" value={stats.fame} color="yellow" />
+                    <StatDisplay label="Well-Being" value={stats.wellBeing} color="sky" />
+                    <StatDisplay label="Hype" value={stats.hype} color="pink" />
+                    <StatDisplay label="Date" value={displayDate} color="red" isDate={true} />
                 </div>
             </div>
         </div>

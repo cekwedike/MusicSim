@@ -32,7 +32,7 @@ export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
         willChange: 'transform'
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-red-900 to-slate-900">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1A0A0F] via-[#3D0A15] to-[#1A0A0F]">
         <img
           src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1920&q=80"
           alt="Music Studio Background"
@@ -41,7 +41,7 @@ export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
           loading="eager"
         />
       </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1A0A0F]/70 via-[#1A0A0F]/50 to-[#1A0A0F]"></div>
 
       {/* Noise texture overlay */}
       <div className="absolute inset-0 opacity-[0.015] pointer-events-none mix-blend-overlay">

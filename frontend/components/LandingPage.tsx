@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Music, BookOpen, Trophy, Users, TrendingUp, Award, Mic, ChevronDown, Zap, Target, BarChart3 } from 'lucide-react';
+import { Music, ChevronDown, ArrowRight } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -58,7 +58,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             willChange: 'transform'
           }}
         >
-          {/* Stock Image - Replace with actual image later */}
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-red-900 to-slate-900">
             <img
               src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1920&q=80"
@@ -67,7 +66,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               loading="eager"
             />
           </div>
-          {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black"></div>
         </div>
 
@@ -81,192 +79,207 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
         {/* Hero Content */}
         <div
-          className="relative z-10 max-w-7xl mx-auto px-6 text-center"
+          className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8"
           style={{
             transform: `translateY(${parallaxHero}px)`,
             opacity: fadeOpacity,
             willChange: 'transform, opacity'
           }}
         >
-          <div className="mb-8">
-            <div className="inline-block mb-6">
-              <div className="flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full">
-                <Music className="w-5 h-5 text-red-400" />
-                <span className="text-sm font-medium text-gray-300">Industry Simulation Platform</span>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Main Content */}
+            <div className="text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 border border-red-500/30 rounded-md bg-red-500/10">
+                <Music className="w-4 h-4 text-red-400" />
+                <span className="text-xs font-medium text-red-300 uppercase tracking-wider">Music Industry Simulation</span>
+              </div>
+
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+                <span className="block bg-gradient-to-r from-white via-red-200 to-rose-200 bg-clip-text text-transparent">
+                  MusicSim
+                </span>
+              </h1>
+
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-100 mb-6 leading-tight">
+                Navigate the Music Industry
+                <span className="block text-red-400 mt-2">From Bedroom to Billboard</span>
+              </h2>
+
+              <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-xl leading-relaxed">
+                An immersive business simulation where every decision shapes your career.
+                Learn contracts, revenue streams, and industry dynamics through realistic gameplay.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <button
+                  onClick={handleShowRegister}
+                  className="group relative px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-2"
+                >
+                  Get Started
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+
+                <button
+                  onClick={handleShowLogin}
+                  className="px-8 py-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm border-2 border-white/20 hover:border-white/40 text-white font-bold rounded-lg transition-all duration-300"
+                >
+                  Sign In
+                </button>
+              </div>
+
+              {/* Guest Play & Theme */}
+              <div className="flex flex-wrap items-center gap-4 text-sm">
+                <button
+                  onClick={onPlayAsGuest}
+                  className="text-gray-400 hover:text-white underline underline-offset-4 transition-colors"
+                >
+                  Continue as Guest
+                </button>
+                <span className="text-gray-700">|</span>
+                <ThemeToggle />
               </div>
             </div>
 
-            <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight">
-              <span className="block mb-2 bg-gradient-to-r from-white via-red-200 to-rose-200 bg-clip-text text-transparent">
-                MusicSim
-              </span>
-            </h1>
+            {/* Right Column - Stats/Features */}
+            <div className="hidden lg:grid grid-cols-2 gap-6">
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+                <div className="text-3xl font-black text-red-400 mb-2">Real-World</div>
+                <div className="text-sm text-gray-300">Authentic industry scenarios based on actual business dynamics</div>
+              </div>
 
-            <p className="text-2xl md:text-4xl font-bold text-gray-200 mb-6 leading-tight">
-              Navigate the Music Industry
-              <br />
-              <span className="text-red-400">From Bedroom to Billboard</span>
-            </p>
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+                <div className="text-3xl font-black text-rose-400 mb-2">Strategic</div>
+                <div className="text-sm text-gray-300">Every choice impacts your fame, finances, and career trajectory</div>
+              </div>
 
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-              An immersive business simulation where every decision shapes your career.
-              Learn contracts, revenue streams, and industry dynamics through gameplay.
-            </p>
-          </div>
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+                <div className="text-3xl font-black text-red-400 mb-2">Educational</div>
+                <div className="text-sm text-gray-300">Learn contract negotiation and revenue stream management</div>
+              </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <button
-              onClick={handleShowRegister}
-              className="group relative px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] min-w-[200px]"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Get Started
-                <Zap className="w-5 h-5" />
-              </span>
-            </button>
-
-            <button
-              onClick={handleShowLogin}
-              className="px-8 py-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm border-2 border-white/20 hover:border-white/40 text-white font-bold rounded-lg transition-all duration-300 min-w-[200px]"
-            >
-              Sign In
-            </button>
-          </div>
-
-          {/* Guest Play & Theme Toggle */}
-          <div className="flex items-center justify-center gap-4 mb-16">
-            <button
-              onClick={onPlayAsGuest}
-              className="text-sm text-gray-400 hover:text-white underline underline-offset-4 transition-colors"
-            >
-              Continue as Guest
-            </button>
-            <span className="text-gray-600">•</span>
-            <ThemeToggle />
+              <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+                <div className="text-3xl font-black text-rose-400 mb-2">Progressive</div>
+                <div className="text-sm text-gray-300">Track achievements and build your legacy over time</div>
+              </div>
+            </div>
           </div>
 
           {/* Scroll Indicator */}
-          <button
-            onClick={scrollToContent}
-            className="inline-flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors animate-bounce"
-            aria-label="Scroll to features"
-          >
-            <span className="text-sm font-medium">Explore Features</span>
-            <ChevronDown className="w-6 h-6" />
-          </button>
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 lg:left-auto lg:right-8 lg:translate-x-0">
+            <button
+              onClick={scrollToContent}
+              className="flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors animate-bounce"
+              aria-label="Scroll to content"
+            >
+              <span className="text-sm font-medium">Explore</span>
+              <ChevronDown className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
       <section
         id="features-section"
-        className="relative bg-gradient-to-b from-black via-slate-900 to-black py-24"
+        className="relative bg-gradient-to-b from-black via-slate-900 to-black py-20 sm:py-32"
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black mb-4">
+          <div className="max-w-3xl mb-16">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6">
               Why MusicSim?
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-400">
               Experience the music business from an artist's perspective.
-              Make decisions that matter. Build a sustainable career.
+              Make strategic decisions that matter and build a sustainable career in the industry.
             </p>
           </div>
 
-          {/* Features Grid */}
-          <div className="grid md:grid-cols-3 gap-8 mb-20">
-            {/* Feature 1 */}
-            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-red-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
-              <div className="relative z-10">
-                <div className="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-600/30 transition-colors">
-                  <Target className="w-7 h-7 text-red-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Realistic Scenarios</h3>
+          {/* Features List */}
+          <div className="space-y-12 mb-20">
+            <div className="grid lg:grid-cols-2 gap-8 items-start">
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-white">Realistic Scenarios</h3>
                 <p className="text-gray-400 leading-relaxed">
                   Face authentic industry challenges based on real-world market dynamics and business decisions.
+                  Navigate contract negotiations, label deals, and financial management just like actual artists.
+                </p>
+              </div>
+              <div className="lg:pl-12">
+                <div className="h-1 w-24 bg-red-600 mb-4"></div>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  Built on industry research and real artist experiences to provide the most accurate simulation possible.
                 </p>
               </div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-rose-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-rose-600/0 to-rose-600/0 group-hover:from-rose-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
-              <div className="relative z-10">
-                <div className="w-14 h-14 bg-rose-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-rose-600/30 transition-colors">
-                  <TrendingUp className="w-7 h-7 text-rose-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Strategic Gameplay</h3>
+            <div className="grid lg:grid-cols-2 gap-8 items-start">
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-white">Strategic Gameplay</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Balance creativity with commerce. Your choices impact fame, finances, and long-term sustainability.
+                  Balance creativity with commerce as you make decisions that impact your fame, finances, and long-term sustainability.
+                  Each choice has consequences that compound over time.
+                </p>
+              </div>
+              <div className="lg:pl-12">
+                <div className="h-1 w-24 bg-rose-600 mb-4"></div>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  Multiple difficulty modes adapt the challenge to your skill level and create unique experiences.
                 </p>
               </div>
             </div>
 
-            {/* Feature 3 */}
-            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-red-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
-              <div className="relative z-10">
-                <div className="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-600/30 transition-colors">
-                  <BarChart3 className="w-7 h-7 text-red-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Track Progress</h3>
+            <div className="grid lg:grid-cols-2 gap-8 items-start">
+              <div>
+                <h3 className="text-2xl font-bold mb-4 text-white">Track Your Progress</h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Monitor statistics, unlock achievements, and see how your decisions compound over time.
+                  Monitor detailed statistics, unlock achievements, and see how your strategic decisions compound over weeks and months.
+                  Build a legacy that reflects your unique approach to the industry.
+                </p>
+              </div>
+              <div className="lg:pl-12">
+                <div className="h-1 w-24 bg-red-600 mb-4"></div>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  Career history tracking lets you review past decisions and learn from both successes and failures.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* What You'll Learn Section */}
-          <div className="bg-gradient-to-br from-red-900/20 to-rose-900/20 border border-red-500/20 rounded-3xl p-10 md:p-16">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-black mb-8 text-center">
-                Master the Business of Music
-              </h3>
+          {/* Learning Outcomes */}
+          <div className="bg-gradient-to-br from-red-950/40 to-slate-950/40 border border-red-900/20 rounded-2xl p-8 sm:p-12 lg:p-16">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-12 text-center">
+              Master the Business of Music
+            </h3>
 
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-red-600/20 rounded-lg flex items-center justify-center">
-                    <BookOpen className="w-6 h-6 text-red-400" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-2">Contract Negotiation</h4>
-                    <p className="text-gray-400">Learn to evaluate deals, understand royalties, and protect your rights.</p>
-                  </div>
-                </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div>
+                <div className="text-red-400 font-bold text-lg mb-3">Contract Negotiation</div>
+                <p className="text-sm text-gray-400 leading-relaxed">
+                  Learn to evaluate deals, understand royalty structures, and protect your creative rights.
+                </p>
+              </div>
 
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-rose-600/20 rounded-lg flex items-center justify-center">
-                    <Award className="w-6 h-6 text-rose-400" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-2">Revenue Streams</h4>
-                    <p className="text-gray-400">Discover how artists earn money beyond streaming and sales.</p>
-                  </div>
-                </div>
+              <div>
+                <div className="text-rose-400 font-bold text-lg mb-3">Revenue Streams</div>
+                <p className="text-sm text-gray-400 leading-relaxed">
+                  Discover how artists earn money beyond streaming through touring, merchandise, and licensing.
+                </p>
+              </div>
 
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-red-600/20 rounded-lg flex items-center justify-center">
-                    <Mic className="w-6 h-6 text-red-400" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-2">Career Building</h4>
-                    <p className="text-gray-400">Build momentum from local shows to global recognition.</p>
-                  </div>
-                </div>
+              <div>
+                <div className="text-red-400 font-bold text-lg mb-3">Career Building</div>
+                <p className="text-sm text-gray-400 leading-relaxed">
+                  Build sustainable momentum from local performances to international recognition.
+                </p>
+              </div>
 
-                <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-rose-600/20 rounded-lg flex items-center justify-center">
-                    <Trophy className="w-6 h-6 text-rose-400" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg mb-2">Industry Insights</h4>
-                    <p className="text-gray-400">Gain knowledge from real-world examples and case studies.</p>
-                  </div>
-                </div>
+              <div>
+                <div className="text-rose-400 font-bold text-lg mb-3">Industry Insights</div>
+                <p className="text-sm text-gray-400 leading-relaxed">
+                  Gain knowledge from real-world examples and case studies of successful artists.
+                </p>
               </div>
             </div>
           </div>
@@ -274,33 +287,29 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
       </section>
 
       {/* Final CTA Section */}
-      <section className="relative bg-black py-24">
+      <section className="relative bg-black py-20 sm:py-32">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-black mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6">
             Ready to Start Your Journey?
           </h2>
-          <p className="text-xl text-gray-400 mb-10">
+          <p className="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
             Join MusicSim today and discover what it takes to succeed in the modern music industry.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={handleShowRegister}
-              className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-lg font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(220,38,38,0.5)] min-w-[240px]"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Create Free Account
-                <Users className="w-5 h-5" />
-              </span>
-            </button>
-          </div>
+          <button
+            onClick={handleShowRegister}
+            className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-lg font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(220,38,38,0.5)] inline-flex items-center gap-3"
+          >
+            Create Free Account
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
 
-          {/* Footer Info */}
-          <div className="mt-16 pt-8 border-t border-slate-800">
+          {/* Footer */}
+          <div className="mt-20 pt-8 border-t border-slate-800">
             <p className="text-gray-500 text-sm mb-4">
               An interactive educational platform for music business learning
             </p>
-            <div className="flex items-center justify-center gap-4 text-xs text-gray-600">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-gray-600">
               <span>Scenario-Based Learning</span>
               <span>•</span>
               <span>Real Industry Dynamics</span>

@@ -16,9 +16,17 @@ const Root = () => {
     });
   }, []);
 
+
   const handleUpdate = () => {
     setUpdateAvailable(false);
-    window.location.reload();
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      }, { once: true });
+    } else {
+      window.location.reload();
+    }
   };
 
   const handleDismiss = () => {

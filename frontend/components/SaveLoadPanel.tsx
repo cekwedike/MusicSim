@@ -78,7 +78,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
       await loadSaveSlots();
       console.log('[SaveLoadPanel] Save slots reloaded');
 
-      setActiveTab('load'); // Switch to load tab to see the new save
+      setActiveTab('load'); // Switch to load tab to see the new saves
 
       // Notify parent component to refresh the panel
       if (onSaveComplete) {

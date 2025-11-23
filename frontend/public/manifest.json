@@ -33,5 +33,7 @@
       "purpose": "any"
     }
   ],
-  "categories": ["education", "games", "entertainment"]
+  "categories": ["education", "games", "entertainment"],
+  "id": "/",
+  "related_applications": []
 }

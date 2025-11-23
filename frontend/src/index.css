@@ -542,7 +542,11 @@ html.light .text-gray-900 {
    COMPREHENSIVE LIGHT THEME FIXES
    ======================================== */
 
-/* Landing Page Light Theme Overrides */
+/* ========================================
+   COMPREHENSIVE LIGHT MODE OVERRIDES
+   ======================================== */
+
+/* Base body and background */
 html.light body {
   background: linear-gradient(135deg, #fef7f7 0%, #f9fafb 50%, #fff1f2 100%) !important;
   color: #1f2937 !important;
@@ -550,6 +554,38 @@ html.light body {
 
 html.light .bg-black {
   background-color: #ffffff !important;
+}
+
+html.light .bg-gray-900 {
+  background-color: #ffffff !important;
+}
+
+/* All gray backgrounds to white/light */
+html.light .bg-gray-800,
+html.light .bg-gray-700,
+html.light .bg-gray-600 {
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+/* Semi-transparent gray backgrounds */
+html.light .bg-gray-900\/95,
+html.light .bg-gray-900\/80,
+html.light .bg-gray-800\/95,
+html.light .bg-gray-800\/98,
+html.light .bg-gray-800\/80,
+html.light .bg-gray-800\/60,
+html.light .bg-gray-800\/50 {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Card backgrounds */
+html.light .bg-gray-700\/50,
+html.light .bg-gray-700\/30 {
+  background-color: rgba(249, 250, 251, 0.9) !important;
+  border-color: #e5e7eb !important;
 }
 
 html.light .bg-gradient-to-br.from-slate-900.via-red-900.to-slate-900 {
@@ -625,11 +661,11 @@ html.light .animate-bounce {
   background-color: transparent !important;
 }
 
-/* Hero Section Text Fixes */
-html.light .text-red-300 {
-  color: #dc2626 !important;
-}
+/* ========================================
+   TEXT COLOR FIXES FOR ALL PAGES
+   ======================================== */
 
+/* White text becomes dark in light mode */
 html.light .text-white {
   color: #1f2937 !important;
 }
@@ -646,12 +682,149 @@ html.light .text-white\/30 {
   color: #9ca3af !important;
 }
 
-html.light .text-gray-200 {
-  color: #1f2937 !important;
+html.light .hover\:text-white:hover {
+  color: #111827 !important;
 }
 
 html.light .hover\:text-white\/80:hover {
   color: #374151 !important;
+}
+
+/* Gray text becomes darker for readability */
+html.light .text-gray-50,
+html.light .text-gray-100,
+html.light .text-gray-200 {
+  color: #1f2937 !important;
+}
+
+html.light .text-gray-300 {
+  color: #374151 !important;
+  font-weight: 600 !important;
+}
+
+html.light .text-gray-400 {
+  color: #4b5563 !important;
+  font-weight: 500 !important;
+}
+
+html.light .text-gray-500 {
+  color: #6b7280 !important;
+}
+
+html.light .text-gray-600 {
+  color: #4b5563 !important;
+}
+
+html.light .text-gray-700 {
+  color: #374151 !important;
+}
+
+html.light .text-gray-800,
+html.light .text-gray-900 {
+  color: #1f2937 !important;
+}
+
+/* Red/accent colors stay vibrant */
+html.light .text-red-300,
+html.light .text-red-400 {
+  color: #dc2626 !important;
+}
+
+html.light .text-red-500 {
+  color: #b91c1c !important;
+}
+
+html.light .text-rose-400 {
+  color: #e11d48 !important;
+}
+
+/* ========================================
+   BORDER COLORS FOR ALL PAGES
+   ======================================== */
+
+html.light .border-gray-700,
+html.light .border-gray-600,
+html.light .border-gray-500 {
+  border-color: #d1d5db !important;
+}
+
+html.light .border-gray-800 {
+  border-color: #e5e7eb !important;
+}
+
+html.light .border-slate-700,
+html.light .border-slate-700\/50 {
+  border-color: #e5e7eb !important;
+}
+
+html.light .border-slate-800 {
+  border-color: #d1d5db !important;
+}
+
+/* ========================================
+   BUTTON AND HOVER STATES
+   ======================================== */
+
+html.light .hover\:bg-gray-700:hover,
+html.light .hover\:bg-gray-600:hover,
+html.light .hover\:bg-gray-800:hover {
+  background-color: #f3f4f6 !important;
+}
+
+html.light .hover\:bg-gray-700\/80:hover,
+html.light .hover\:bg-gray-700\/90:hover {
+  background-color: #f9fafb !important;
+}
+
+html.light .hover\:text-gray-300:hover {
+  color: #1f2937 !important;
+}
+
+html.light .hover\:border-gray-500:hover {
+  border-color: #9ca3af !important;
+}
+
+/* ========================================
+   MODALS AND OVERLAYS
+   ======================================== */
+
+/* Modal overlay backgrounds */
+html.light .bg-black\/75,
+html.light .bg-black\/50,
+html.light .bg-gray-900\/50 {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Modal content backgrounds */
+html.light .bg-gray-800.border.border-gray-700 {
+  background-color: white !important;
+  border-color: #d1d5db !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ========================================
+   FORMS AND INPUTS
+   ======================================== */
+
+html.light input,
+html.light textarea,
+html.light select {
+  background-color: white !important;
+  border-color: #d1d5db !important;
+  color: #1f2937 !important;
+}
+
+html.light input:focus,
+html.light textarea:focus,
+html.light select:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+  outline: none !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #9ca3af !important;
 }
 
 /* Main Headline Gradient Fix */

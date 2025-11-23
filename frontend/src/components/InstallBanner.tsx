@@ -9,7 +9,7 @@ type BeforeInstallPromptEvent = Event & {
 const DISMISS_KEY = 'musicsim_install_banner_dismissed';
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-const isAppInstalled = (): boolean => {
+const isAppInstalled = async (): Promise<boolean> => {
   // Check if running as PWA (installed app)
   if (window.matchMedia('(display-mode: standalone)').matches) {
     return true;
@@ -18,13 +18,40 @@ const isAppInstalled = (): boolean => {
   if ((window.navigator as any).standalone === true) {
     return true;
   }
+
+  // Check getInstalledRelatedApps API (Chrome/Edge)
+  if ('getInstalledRelatedApps' in navigator) {
+    try {
+      const relatedApps = await (navigator as any).getInstalledRelatedApps();
+      if (relatedApps && relatedApps.length > 0) {
+        return true;
+      }
+    } catch (e) {
+      // API not available or failed
+    }
+  }
+
+  // Check if app was previously marked as installed in localStorage
+  try {
+    const raw = localStorage.getItem(DISMISS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.p === true) {
+        return true;
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+
   return false;
 };
 
-const isBannerDismissed = (): boolean => {
+const isBannerDismissed = async (): Promise<boolean> => {
   try {
     // First check if app is actually installed via browser detection
-    if (isAppInstalled()) {
+    const installed = await isAppInstalled();
+    if (installed) {
       // Ensure localStorage is set to prevent showing banner again
       markAppInstalled();
       return true;
@@ -74,13 +101,16 @@ const InstallBanner: React.FC = () => {
   const bannerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Don't show if banner is dismissed
-    if (isBannerDismissed()) return;
-
     const onBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setVisible(true);
+
+      // Check if app is installed before showing
+      isBannerDismissed().then(dismissed => {
+        if (!dismissed) {
+          setVisible(true);
+        }
+      });
     };
 
     const onAppInstalled = () => {
@@ -95,13 +125,16 @@ const InstallBanner: React.FC = () => {
 
     // Show banner on startup (unless dismissed)
     // or if forced for development testing
-    const checkDisplayConditions = () => {
+    const checkDisplayConditions = async () => {
       const localStorage_forced = localStorage.getItem('musicsim_force_install_banner') === 'true';
       const url_forced = new URLSearchParams(window.location.search).get('showInstall') === '1';
       const forced = localStorage_forced || url_forced;
 
+      // Check if banner is dismissed
+      const dismissed = await isBannerDismissed();
+
       // Show if forced (for testing) or if banner is not dismissed
-      if (forced || !isBannerDismissed()) {
+      if (forced || !dismissed) {
         setVisible(true);
       }
     };

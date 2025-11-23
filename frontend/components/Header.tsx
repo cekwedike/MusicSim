@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
             <h1 className="hidden lg:block text-lg sm:text-xl md:text-2xl font-bold text-gradient">
                 MusicSim
             </h1>
-            {artistName ? (
+            {artistName && (
                 <div className="hidden lg:flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 md:gap-2 mt-0.5">
                     <p className="text-status-fame text-xs sm:text-sm md:text-base font-semibold tracking-wider truncate max-w-[200px] sm:max-w-none">Artist: {artistName}</p>
                     {difficulty && (
@@ -97,8 +97,6 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                         </span>
                     )}
                 </div>
-            ) : (
-                <p className="hidden lg:block text-muted mt-0.5 text-xs sm:text-sm md:text-sm">A Music Business Simulation</p>
             )}
 
             {/* Autosave Indicator */}

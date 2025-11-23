@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -113,10 +113,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
                 <button
                   onClick={handleShowRegister}
-                  className="group relative px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)] flex items-center justify-center gap-2"
+                  className="px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(220,38,38,0.4)]"
                 >
                   Get Started
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
 
                 <button
@@ -164,14 +163,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             </div>
           </div>
 
-          {/* Scroll Indicator - Only show on desktop */}
-          <div className="hidden lg:flex absolute bottom-12 right-8">
+          {/* Scroll Indicator - Desktop (centered) and Mobile (icon only) */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
             <button
               onClick={scrollToContent}
               className="flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors animate-bounce"
               aria-label="Scroll to content"
             >
-              <span className="text-sm font-medium">Explore</span>
+              <span className="hidden lg:block text-sm font-medium">Explore</span>
               <ChevronDown className="w-5 h-5" />
             </button>
           </div>
@@ -297,10 +296,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
           <button
             onClick={handleShowRegister}
-            className="group relative px-10 py-5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-lg font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(220,38,38,0.5)] inline-flex items-center gap-3"
+            className="px-10 py-5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-lg font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(220,38,38,0.5)]"
           >
-            Create Free Account
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            Start Your Career
           </button>
 
           {/* Footer */}

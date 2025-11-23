@@ -548,8 +548,67 @@ html.light body {
   color: #1f2937 !important;
 }
 
-html.light .bg-gradient-to-br.from-gray-900.via-red-900.to-black {
+html.light .bg-black {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-gradient-to-br.from-slate-900.via-red-900.to-slate-900 {
   background: linear-gradient(135deg, #fef7f7 0%, #f9fafb 50%, #fff1f2 100%) !important;
+}
+
+html.light .bg-gradient-to-b.from-black\/70.via-black\/50.to-black {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(249,250,251,0.5), rgba(255,255,255,1)) !important;
+}
+
+/* Landing Page Sections */
+html.light .bg-gradient-to-b.from-black.via-slate-900.to-black {
+  background: linear-gradient(to bottom, #ffffff 0%, #f9fafb 50%, #ffffff 100%) !important;
+}
+
+html.light .bg-black.py-20,
+html.light .bg-black.py-32 {
+  background-color: #f8fafc !important;
+}
+
+/* Feature Cards Light Mode */
+html.light .bg-gradient-to-br.from-slate-800\/60.to-slate-900\/60 {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: #e5e7eb !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light .border-slate-700\/50 {
+  border-color: #e5e7eb !important;
+}
+
+/* White/Transparent borders for light mode */
+html.light .border-white\/20,
+html.light .border-white\/40 {
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+html.light .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Border colors */
+html.light .border-slate-800 {
+  border-color: #e5e7eb !important;
+}
+
+html.light .border-red-900\/20 {
+  border-color: rgba(220, 38, 38, 0.2) !important;
+}
+
+/* Learning outcomes section */
+html.light .bg-gradient-to-br.from-red-950\/40.to-slate-950\/40 {
+  background: rgba(254, 242, 242, 0.8) !important;
+  border-color: rgba(220, 38, 38, 0.2) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* Hero Section Text Fixes */

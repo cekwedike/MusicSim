@@ -9,12 +9,26 @@ type BeforeInstallPromptEvent = Event & {
 const DISMISS_KEY = 'musicsim_install_banner_dismissed';
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-// Detect if browser is Safari/iOS
-const isSafariOrIOS = (): boolean => {
+// Detect browser types
+const getBrowserType = (): 'safari' | 'firefox' | 'chromium' | 'unknown' => {
   const ua = navigator.userAgent;
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
   const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-  return isIOS || isSafari;
+  const isFirefox = /Firefox/i.test(ua);
+  const isChromium = /Chrome|Chromium|Edg|OPR/i.test(ua);
+
+  if (isIOS || isSafari) return 'safari';
+  if (isFirefox) return 'firefox';
+  if (isChromium) return 'chromium';
+  return 'unknown';
+};
+
+const isSafariOrIOS = (): boolean => {
+  return getBrowserType() === 'safari';
+};
+
+const isFirefox = (): boolean => {
+  return getBrowserType() === 'firefox';
 };
 
 const isAppInstalled = async (): Promise<boolean> => {
@@ -106,9 +120,9 @@ const InstallBanner: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const [isInstalling, setIsInstalling] = useState(false);
-  const [showSafariInstructions, setShowSafariInstructions] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
   const bannerRef = useRef<HTMLDivElement | null>(null);
-  const isSafari = isSafariOrIOS();
+  const browserType = getBrowserType();
 
   useEffect(() => {
     let unmounted = false;
@@ -151,8 +165,10 @@ const InstallBanner: React.FC = () => {
       const dismissed = await isBannerDismissed();
 
       // Show if forced (for testing) or if banner is not dismissed
-      // For Safari/iOS, always show banner if not dismissed (they don't have beforeinstallprompt)
-      if ((forced || !dismissed || isSafariOrIOS()) && !unmounted) {
+      // For Safari/iOS and Firefox, always show banner if not dismissed (they don't have beforeinstallprompt)
+      const browserType = getBrowserType();
+      const needsManualInstall = browserType === 'safari' || browserType === 'firefox';
+      if ((forced || !dismissed || needsManualInstall) && !unmounted) {
         setVisible(true);
       } else {
         setVisible(false);
@@ -181,9 +197,9 @@ const InstallBanner: React.FC = () => {
 
     if (isInstalling) return; // Prevent double-clicks
 
-    // For Safari/iOS, show instructions instead of trying to install
-    if (isSafari && !deferredPrompt) {
-      setShowSafariInstructions(!showSafariInstructions);
+    // For Safari/iOS and Firefox, show instructions instead of trying to install
+    if ((browserType === 'safari' || browserType === 'firefox') && !deferredPrompt) {
+      setShowInstructions(!showInstructions);
       return;
     }
 
@@ -284,7 +300,7 @@ const InstallBanner: React.FC = () => {
               className={`musicsim-install-banner-button flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform touch-manipulation ${isInstalling ? 'opacity-50 cursor-not-allowed' : ''}`}
               aria-label="Install MusicSim"
             >
-              {isSafari && !deferredPrompt ? (
+              {(browserType === 'safari' || browserType === 'firefox') && !deferredPrompt ? (
                 <>
                   <Share2 className="w-4 h-4" />
                   <span className="hidden sm:inline">How to Install</span>
@@ -308,15 +324,34 @@ const InstallBanner: React.FC = () => {
           </div>
         </div>
 
-        {/* Safari/iOS Installation Instructions */}
-        {showSafariInstructions && isSafari && (
+        {/* Browser-specific Installation Instructions */}
+        {showInstructions && (
           <div className="mt-3 pt-3 border-t border-[#4D1F2A] text-gray-300 dark:text-gray-300 light:text-gray-600">
-            <div className="text-sm font-semibold mb-2">To install on Safari:</div>
-            <ol className="text-xs space-y-1.5 list-decimal list-inside">
-              <li>Tap the <Share2 className="inline w-3 h-3 mx-0.5" /> <strong>Share</strong> button below</li>
-              <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
-              <li>Tap <strong>"Add"</strong> in the top right corner</li>
-            </ol>
+            {browserType === 'safari' && (
+              <>
+                <div className="text-sm font-semibold mb-2">To install on Safari:</div>
+                <ol className="text-xs space-y-1.5 list-decimal list-inside">
+                  <li>Tap the <Share2 className="inline w-3 h-3 mx-0.5" /> <strong>Share</strong> button below</li>
+                  <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+                  <li>Tap <strong>"Add"</strong> in the top right corner</li>
+                </ol>
+              </>
+            )}
+            {browserType === 'firefox' && (
+              <>
+                <div className="text-sm font-semibold mb-2">To install on Firefox:</div>
+                <div className="text-xs space-y-1.5">
+                  <p><strong>On Android:</strong></p>
+                  <ol className="list-decimal list-inside ml-2 space-y-1">
+                    <li>Tap the three dots menu (⋮) at the top</li>
+                    <li>Tap <strong>"Install"</strong> or <strong>"Add to Home Screen"</strong></li>
+                    <li>Confirm by tapping <strong>"Add"</strong></li>
+                  </ol>
+                  <p className="mt-2"><strong>On Desktop:</strong></p>
+                  <p className="ml-2">Firefox desktop doesn't support PWA installation. Please use Chrome, Edge, or Opera.</p>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

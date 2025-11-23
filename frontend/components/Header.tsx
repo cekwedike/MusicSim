@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                     )}
 
                     {/* Save Success */}
-                    {(justSaved || (!autoSaveStatus?.isInProgress && autoSaveStatus?.lastSaveTime && autosaveAge === 0)) && (
+                    {justSaved && (
                         <div className="bg-semantic-success/20 border border-semantic-success rounded-lg px-2 sm:px-3 py-1 text-semantic-success text-xs sm:text-sm animate-fade-in">
                             Saved
                         </div>

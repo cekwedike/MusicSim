@@ -12,7 +12,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
   return (
     <button
       onClick={toggleTheme}
-      className={`relative inline-flex items-center w-16 h-8 bg-gray-700 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
+      className={`relative inline-flex items-center w-20 h-8 bg-gray-700 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
         theme === 'light' ? 'focus:ring-offset-white' : 'focus:ring-offset-gray-900'
       } ${className}`}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
@@ -37,7 +37,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
 
       {/* Toggle Thumb */}
       <div className={`relative w-6 h-6 bg-white rounded-full shadow-lg transform transition-transform duration-300 ease-in-out flex items-center justify-center ${
-        theme === 'dark' ? 'translate-x-1' : 'translate-x-9'
+        theme === 'dark' ? 'translate-x-1' : 'translate-x-[3.25rem]'
       }`}>
         {theme === 'dark' ? (
           <Moon className="w-3 h-3 text-gray-700" />

@@ -99,12 +99,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
                 </span>
               </h1>
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-100 mb-6 leading-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-6 leading-tight">
                 Navigate the Music Industry
                 <span className="block text-red-400 mt-2">From Bedroom to Billboard</span>
               </h2>
 
-              <p className="text-base sm:text-lg text-gray-300 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="text-base sm:text-lg text-white mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 An immersive business simulation where every decision shapes your career.
                 Learn contracts, revenue streams, and industry dynamics through realistic gameplay.
               </p>
@@ -130,11 +130,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm">
                 <button
                   onClick={onPlayAsGuest}
-                  className="text-gray-400 hover:text-white underline underline-offset-4 transition-colors"
+                  className="text-white hover:text-gray-200 transition-colors"
                 >
-                  Continue as Guest
+                  Continue As Guest
                 </button>
-                <span className="text-gray-700">|</span>
+                <span className="text-white/30">|</span>
                 <ThemeToggle />
               </div>
             </div>
@@ -143,31 +143,31 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <div className="hidden lg:grid grid-cols-2 gap-6">
               <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
                 <div className="text-3xl font-black text-red-400 mb-2">Real-World</div>
-                <div className="text-sm text-gray-300">Authentic industry scenarios based on actual business dynamics</div>
+                <div className="text-sm text-white">Authentic industry scenarios based on actual business dynamics</div>
               </div>
 
               <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
                 <div className="text-3xl font-black text-rose-400 mb-2">Strategic</div>
-                <div className="text-sm text-gray-300">Every choice impacts your fame, finances, and career trajectory</div>
+                <div className="text-sm text-white">Every choice impacts your fame, finances, and career trajectory</div>
               </div>
 
               <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
                 <div className="text-3xl font-black text-red-400 mb-2">Educational</div>
-                <div className="text-sm text-gray-300">Learn contract negotiation and revenue stream management</div>
+                <div className="text-sm text-white">Learn contract negotiation and revenue stream management</div>
               </div>
 
               <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
                 <div className="text-3xl font-black text-rose-400 mb-2">Progressive</div>
-                <div className="text-sm text-gray-300">Track achievements and build your legacy over time</div>
+                <div className="text-sm text-white">Track achievements and build your legacy over time</div>
               </div>
             </div>
           </div>
 
           {/* Scroll Indicator - Desktop (centered) and Mobile (icon only) */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+          <div className="absolute bottom-16 sm:bottom-20 lg:bottom-24 left-1/2 -translate-x-1/2">
             <button
               onClick={scrollToContent}
-              className="flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors animate-bounce"
+              className="flex flex-col items-center gap-2 text-white hover:text-gray-200 transition-colors animate-bounce"
               aria-label="Scroll to content"
             >
               <span className="hidden lg:block text-sm font-medium">Explore</span>
@@ -188,7 +188,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6">
               Why MusicSim?
             </h2>
-            <p className="text-lg sm:text-xl text-gray-400">
+            <p className="text-lg sm:text-xl text-white">
               Experience the music business from an artist's perspective.
               Make strategic decisions that matter and build a sustainable career in the industry.
             </p>
@@ -199,14 +199,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <div className="grid lg:grid-cols-2 gap-8 items-start text-center lg:text-left">
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-white">Realistic Scenarios</h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-white leading-relaxed">
                   Face authentic industry challenges based on real-world market dynamics and business decisions.
                   Navigate contract negotiations, label deals, and financial management just like actual artists.
                 </p>
               </div>
               <div className="lg:pl-12 flex flex-col items-center lg:items-start">
                 <div className="h-1 w-24 bg-red-600 mb-4"></div>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed">
                   Built on industry research and real artist experiences to provide the most accurate simulation possible.
                 </p>
               </div>
@@ -215,14 +215,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <div className="grid lg:grid-cols-2 gap-8 items-start text-center lg:text-left">
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-white">Strategic Gameplay</h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-white leading-relaxed">
                   Balance creativity with commerce as you make decisions that impact your fame, finances, and long-term sustainability.
                   Each choice has consequences that compound over time.
                 </p>
               </div>
               <div className="lg:pl-12 flex flex-col items-center lg:items-start">
                 <div className="h-1 w-24 bg-rose-600 mb-4"></div>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed">
                   Multiple difficulty modes adapt the challenge to your skill level and create unique experiences.
                 </p>
               </div>
@@ -231,14 +231,14 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <div className="grid lg:grid-cols-2 gap-8 items-start text-center lg:text-left">
               <div>
                 <h3 className="text-2xl font-bold mb-4 text-white">Track Your Progress</h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-white leading-relaxed">
                   Monitor detailed statistics, unlock achievements, and see how your strategic decisions compound over weeks and months.
                   Build a legacy that reflects your unique approach to the industry.
                 </p>
               </div>
               <div className="lg:pl-12 flex flex-col items-center lg:items-start">
                 <div className="h-1 w-24 bg-red-600 mb-4"></div>
-                <p className="text-sm text-gray-500 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed">
                   Career history tracking lets you review past decisions and learn from both successes and failures.
                 </p>
               </div>
@@ -254,28 +254,28 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
               <div>
                 <div className="text-red-400 font-bold text-lg mb-3">Contract Negotiation</div>
-                <p className="text-sm text-gray-400 leading-relaxed">
+                <p className="text-sm text-white leading-relaxed">
                   Learn to evaluate deals, understand royalty structures, and protect your creative rights.
                 </p>
               </div>
 
               <div>
                 <div className="text-rose-400 font-bold text-lg mb-3">Revenue Streams</div>
-                <p className="text-sm text-gray-400 leading-relaxed">
+                <p className="text-sm text-white leading-relaxed">
                   Discover how artists earn money beyond streaming through touring, merchandise, and licensing.
                 </p>
               </div>
 
               <div>
                 <div className="text-red-400 font-bold text-lg mb-3">Career Building</div>
-                <p className="text-sm text-gray-400 leading-relaxed">
+                <p className="text-sm text-white leading-relaxed">
                   Build sustainable momentum from local performances to international recognition.
                 </p>
               </div>
 
               <div>
                 <div className="text-rose-400 font-bold text-lg mb-3">Industry Insights</div>
-                <p className="text-sm text-gray-400 leading-relaxed">
+                <p className="text-sm text-white leading-relaxed">
                   Gain knowledge from real-world examples and case studies of successful artists.
                 </p>
               </div>
@@ -290,7 +290,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6">
             Ready to Start Your Journey?
           </h2>
-          <p className="text-lg sm:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-white mb-10 max-w-2xl mx-auto">
             Join MusicSim today and discover what it takes to succeed in the modern music industry.
           </p>
 
@@ -303,10 +303,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
 
           {/* Footer */}
           <div className="mt-20 pt-8 border-t border-slate-800">
-            <p className="text-gray-500 text-sm mb-4">
+            <p className="text-white/70 text-sm mb-4">
               An interactive educational platform for music business learning
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-gray-600">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-white/50">
               <span>Scenario-Based Learning</span>
               <span>•</span>
               <span>Real Industry Dynamics</span>

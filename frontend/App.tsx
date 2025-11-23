@@ -54,6 +54,7 @@ import ProfilePanel from './components/ProfilePanel';
 import SaveLoadPanel from './components/SaveLoadPanel';
 import { AudioPlayer } from './src/components/AudioPlayer';
 import UnlockNotification from './components/UnlockNotification';
+import ParallaxBackground from './components/ParallaxBackground';
 
 const generateInitialState = (artistName = '', artistGenre = '', difficulty: Difficulty = 'realistic'): GameState => {
     const settings = getDifficultySettings(difficulty);
@@ -2477,7 +2478,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const showDashboard = !['start', 'setup'].includes(status);
     
     return (
-        <div className="min-h-screen max-h-screen overflow-hidden flex flex-col bg-gray-900 bg-grid-gray-800/[0.2]">
+        <div className="relative min-h-screen max-h-screen overflow-hidden flex flex-col bg-gray-900">
+            {/* Parallax Background */}
+            <ParallaxBackground speed={0.2} opacity={0.15} />
+
              <style>{`.bg-grid-gray-800\\/\\[0\\.2\\] { background-image: linear-gradient(to right, rgba(55, 65, 81, 0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(55, 65, 81, 0.4) 1px, transparent 1px); background-size: 2.5rem 2.5rem; } .animate-fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }`}</style>
             {/* PWA Components */}
             <OfflineBanner isOnline={isOnline} />
@@ -2566,7 +2570,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
 
-            <div className={`flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
+            <div className={`relative z-10 flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
                 {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} />}
 
                 {/* History section right after stats */}

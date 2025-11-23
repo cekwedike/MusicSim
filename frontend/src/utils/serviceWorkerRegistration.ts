@@ -30,9 +30,18 @@ export function registerServiceWorker(onUpdateAvailable?: UpdateCallback) {
             const newWorker = registration.installing;
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // CRITICAL: Only show update prompt if:
+                // 1. New worker is installed
+                // 2. There's ALREADY an active controller (not first install)
+                // 3. The new worker is different from the active one
+                if (
+                  newWorker.state === 'installed' &&
+                  navigator.serviceWorker.controller &&
+                  registration.active &&
+                  registration.active !== newWorker
+                ) {
                   // New service worker available - notify app
-                  console.log('New version available!');
+                  console.log('[SW] New version available!');
                   if (updateAvailableCallback) {
                     updateAvailableCallback();
                   } else {

@@ -11,28 +11,11 @@ const Root = () => {
 
 
   useEffect(() => {
-    // Only show update modal if a new service worker is waiting (not on first load)
-    let updatePrompted = false;
+    // Register service worker and show update prompt only when there's a real update
     registerServiceWorker(() => {
-      if (!updatePrompted) {
-        setUpdateAvailable(true);
-        updatePrompted = true;
-      }
+      console.log('[App] Update callback triggered');
+      setUpdateAvailable(true);
     });
-
-    // Listen for SW_ACTIVATED message from service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'SW_ACTIVATED') {
-          if (!updatePrompted) {
-            setUpdateAvailable(true);
-            updatePrompted = true;
-          }
-        }
-      });
-    }
-    // Cleanup: reset flag on unmount
-    return () => { updatePrompted = false; };
   }, []);
 
 

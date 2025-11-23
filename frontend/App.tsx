@@ -2883,10 +2883,10 @@ const AuthenticatedApp: React.FC = () => {
 
             {/* Only show a single header, styled to match the app's color scheme */}
             {!showLanding && (isAuthenticated || guestMode) && (
-                <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 via-red-900 to-gray-900/90 backdrop-blur-sm border-b border-red-900/40">
+                <div className="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-sm">
                     <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <h1 className="text-xl font-bold text-gradient bg-gradient-to-r from-red-400 to-rose-500 bg-clip-text text-transparent">MusicSim</h1>
+                            <h1 className="text-xl font-bold text-white drop-shadow">MusicSim</h1>
                             {guestMode && (
                                 <span className="text-xs bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded border border-yellow-400/30 font-semibold tracking-wide">
                                     Guest Mode

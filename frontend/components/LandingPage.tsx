@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Music, BookOpen, Trophy, Play, Users, TrendingUp, Award, Headphones, Mic } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Music, BookOpen, Trophy, Users, TrendingUp, Award, Mic, ChevronDown, Zap, Target, BarChart3 } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -10,6 +10,18 @@ interface LandingPageProps {
 const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginMode, setLoginMode] = useState<'login' | 'register'>('login');
+  const [scrollY, setScrollY] = useState(0);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Parallax scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleShowLogin = () => {
     setLoginMode('login');
@@ -21,174 +33,288 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
     setShowLoginModal(true);
   };
 
+  const scrollToContent = () => {
+    const contentSection = document.getElementById('features-section');
+    contentSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Parallax transform calculations
+  const parallaxHero = scrollY * 0.5;
+  const parallaxImage = scrollY * 0.3;
+  const fadeOpacity = Math.max(1 - scrollY / 500, 0);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient orbs */}
-        <div className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-red-500 to-red-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-80 h-80 bg-gradient-to-r from-rose-500 to-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* Hero Section with Parallax */}
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      >
+        {/* Background Image with Parallax */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            transform: `translateY(${parallaxImage}px)`,
+            willChange: 'transform'
+          }}
+        >
+          {/* Stock Image - Replace with actual image later */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+            <img
+              src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1920&q=80"
+              alt="Music Studio"
+              className="w-full h-full object-cover opacity-40"
+              loading="eager"
+            />
+          </div>
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black"></div>
+        </div>
 
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(139,92,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
-      </div>
+        {/* Noise texture overlay */}
+        <div className="absolute inset-0 z-[1] opacity-[0.015] pointer-events-none mix-blend-overlay">
+          <div className="w-full h-full" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat'
+          }}></div>
+        </div>
 
-      {/* Hero Section */}
-      <div className="relative z-10">
-        {/* Main content container */}
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero */}
-          <div className="pt-12 sm:pt-16 pb-8 text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-full px-3 py-1.5 mb-4">
-              <Headphones className="w-3.5 h-3.5 text-red-400" />
-              <span className="text-red-300 text-xs font-medium">Interactive Music Business Learning</span>
+        {/* Hero Content */}
+        <div
+          className="relative z-10 max-w-7xl mx-auto px-6 text-center"
+          style={{
+            transform: `translateY(${parallaxHero}px)`,
+            opacity: fadeOpacity,
+            willChange: 'transform, opacity'
+          }}
+        >
+          <div className="mb-8">
+            <div className="inline-block mb-6">
+              <div className="flex items-center gap-3 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full">
+                <Music className="w-5 h-5 text-purple-400" />
+                <span className="text-sm font-medium text-gray-300">Industry Simulation Platform</span>
+              </div>
             </div>
 
-            {/* Main headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-3">
-              <span className="bg-gradient-to-r from-white via-red-200 to-rose-200 bg-clip-text text-transparent drop-shadow-lg">
+            <h1 className="text-6xl md:text-8xl font-black mb-6 tracking-tight">
+              <span className="block mb-2 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
                 MusicSim
               </span>
             </h1>
 
-            <p className="text-xl sm:text-2xl lg:text-3xl text-gray-300 font-bold mb-2 tracking-wide">
-              Master the Music Business
+            <p className="text-2xl md:text-4xl font-bold text-gray-200 mb-6 leading-tight">
+              Navigate the Music Industry
+              <br />
+              <span className="text-purple-400">From Bedroom to Billboard</span>
             </p>
 
-            <p className="text-sm sm:text-base text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6">
-              Navigate the complex world of music industry through immersive scenarios. Build your career,
-              make strategic decisions, and learn what it takes to succeed.
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+              An immersive business simulation where every decision shapes your career.
+              Learn contracts, revenue streams, and industry dynamics through gameplay.
             </p>
+          </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-lg mx-auto mb-4">
-              <button
-                onClick={handleShowRegister}
-                className="group w-full sm:w-auto bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-bold py-3 px-6 rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                <Play className="w-4 h-4" />
-                Start Your Journey
-              </button>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+            <button
+              onClick={handleShowRegister}
+              className="group relative px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] min-w-[200px]"
+            >
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                Get Started
+                <Zap className="w-5 h-5" />
+              </span>
+            </button>
 
-              <button
-                onClick={handleShowLogin}
-                className="group w-full sm:w-auto bg-gray-800/80 backdrop-blur-sm border-2 border-red-400/50 hover:border-red-400 text-red-200 hover:text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-700/80 transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                <Users className="w-4 h-4" />
-                Login
-              </button>
-            </div>
+            <button
+              onClick={handleShowLogin}
+              className="px-8 py-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm border-2 border-white/20 hover:border-white/40 text-white font-bold rounded-lg transition-all duration-300 min-w-[200px]"
+            >
+              Sign In
+            </button>
+          </div>
 
-            {/* Theme Toggle and Guest play combined */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10">
-              <ThemeToggle />
-              <button
-                onClick={onPlayAsGuest}
-                className="bg-gray-800/60 backdrop-blur-sm border border-gray-600/50 hover:border-gray-500 text-gray-300 hover:text-white font-medium py-2 px-5 rounded-lg transition-all duration-300 hover:bg-gray-700/60 flex items-center justify-center gap-2 text-sm"
-              >
-                <span>Try as Guest</span>
-              </button>
-            </div>
+          {/* Guest Play & Theme Toggle */}
+          <div className="flex items-center justify-center gap-4 mb-16">
+            <button
+              onClick={onPlayAsGuest}
+              className="text-sm text-gray-400 hover:text-white underline underline-offset-4 transition-colors"
+            >
+              Continue as Guest
+            </button>
+            <span className="text-gray-600">•</span>
+            <ThemeToggle />
+          </div>
+
+          {/* Scroll Indicator */}
+          <button
+            onClick={scrollToContent}
+            className="inline-flex flex-col items-center gap-2 text-gray-400 hover:text-white transition-colors animate-bounce"
+            aria-label="Scroll to features"
+          >
+            <span className="text-sm font-medium">Explore Features</span>
+            <ChevronDown className="w-6 h-6" />
+          </button>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section
+        id="features-section"
+        className="relative bg-gradient-to-b from-black via-slate-900 to-black py-24"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black mb-4">
+              Why MusicSim?
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Experience the music business from an artist's perspective.
+              Make decisions that matter. Build a sustainable career.
+            </p>
           </div>
 
           {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-20">
             {/* Feature 1 */}
-            <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-red-500/50 rounded-xl p-5 hover:bg-gray-800/50 transition-all duration-300">
-              <div className="mb-3 flex items-center justify-center w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg group-hover:shadow-red-500/25 transition-all duration-300">
-                <Music className="w-6 h-6 text-white" strokeWidth={2} />
+            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-purple-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-purple-600/0 group-hover:from-purple-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-purple-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-600/30 transition-colors">
+                  <Target className="w-7 h-7 text-purple-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Realistic Scenarios</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Face authentic industry challenges based on real-world market dynamics and business decisions.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Realistic Simulation</h3>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Experience authentic music industry challenges based on real-world situations and market dynamics.
-              </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-rose-500/50 rounded-xl p-5 hover:bg-gray-800/50 transition-all duration-300">
-              <div className="mb-3 flex items-center justify-center w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl shadow-lg group-hover:shadow-fuchsia-500/25 transition-all duration-300">
-                <TrendingUp className="w-6 h-6 text-white" strokeWidth={2} />
+            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-pink-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-600/0 to-pink-600/0 group-hover:from-pink-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-pink-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-pink-600/30 transition-colors">
+                  <TrendingUp className="w-7 h-7 text-pink-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Strategic Gameplay</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Balance creativity with commerce. Your choices impact fame, finances, and long-term sustainability.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">Strategic Decisions</h3>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Balance artistry with business. Every choice impacts your career, finances, and relationships.
-              </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="group bg-gray-900/50 backdrop-blur-sm border border-gray-700 hover:border-cyan-500/50 rounded-xl p-5 hover:bg-gray-800/50 transition-all duration-300">
-              <div className="mb-3 flex items-center justify-center w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl shadow-lg group-hover:shadow-cyan-500/25 transition-all duration-300">
-                <Award className="w-6 h-6 text-white" strokeWidth={2} />
-              </div>
-              <h3 className="text-lg font-bold text-white mb-2">Build Your Legacy</h3>
-              <p className="text-sm text-gray-300 leading-relaxed">
-                Track your progress, unlock achievements, and see how long you can sustain success.
-              </p>
-            </div>
-          </div>
-
-          {/* Stats or testimonials section */}
-          <div className="bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-2xl p-6 sm:p-8 mb-8">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                Learn What It Really Takes
-              </h2>
-              <p className="text-sm sm:text-base text-gray-300 max-w-2xl mx-auto">
-                Gain insights into contract negotiations, revenue streams, and the business decisions that make or break careers.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-red-500/20 rounded-lg mb-2">
-                  <BookOpen className="w-5 h-5 text-red-400" />
+            <div className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 hover:border-cyan-500/50 rounded-2xl p-8 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/0 to-cyan-600/0 group-hover:from-cyan-600/5 group-hover:to-transparent rounded-2xl transition-all duration-300"></div>
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-cyan-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-cyan-600/30 transition-colors">
+                  <BarChart3 className="w-7 h-7 text-cyan-400" />
                 </div>
-                <h3 className="text-base font-semibold text-white mb-1">Industry Education</h3>
-                <p className="text-xs text-gray-400">Real business concepts through gameplay</p>
-              </div>
-
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-fuchsia-500/20 rounded-lg mb-2">
-                  <Mic className="w-5 h-5 text-fuchsia-400" />
-                </div>
-                <h3 className="text-base font-semibold text-white mb-1">Career Building</h3>
-                <p className="text-xs text-gray-400">Start from zero and build your empire</p>
-              </div>
-
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-cyan-500/20 rounded-lg mb-2">
-                  <Trophy className="w-5 h-5 text-cyan-400" />
-                </div>
-                <h3 className="text-base font-semibold text-white mb-1">Achievement System</h3>
-                <p className="text-xs text-gray-400">Track progress and unlock milestones</p>
+                <h3 className="text-xl font-bold mb-3">Track Progress</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Monitor statistics, unlock achievements, and see how your decisions compound over time.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="text-center pb-8">
-            <p className="text-gray-400 text-sm mb-2">
-              An educational simulation of the modern music industry
+          {/* What You'll Learn Section */}
+          <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 border border-purple-500/20 rounded-3xl p-10 md:p-16">
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-3xl md:text-4xl font-black mb-8 text-center">
+                Master the Business of Music
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                    <BookOpen className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Contract Negotiation</h4>
+                    <p className="text-gray-400">Learn to evaluate deals, understand royalties, and protect your rights.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-pink-600/20 rounded-lg flex items-center justify-center">
+                    <Award className="w-6 h-6 text-pink-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Revenue Streams</h4>
+                    <p className="text-gray-400">Discover how artists earn money beyond streaming and sales.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-cyan-600/20 rounded-lg flex items-center justify-center">
+                    <Mic className="w-6 h-6 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Career Building</h4>
+                    <p className="text-gray-400">Build momentum from local shows to global recognition.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 bg-orange-600/20 rounded-lg flex items-center justify-center">
+                    <Trophy className="w-6 h-6 text-orange-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg mb-2">Industry Insights</h4>
+                    <p className="text-gray-400">Gain knowledge from real-world examples and case studies.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="relative bg-black py-24">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-5xl font-black mb-6">
+            Ready to Start Your Journey?
+          </h2>
+          <p className="text-xl text-gray-400 mb-10">
+            Join MusicSim today and discover what it takes to succeed in the modern music industry.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={handleShowRegister}
+              className="group relative px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-lg font-bold rounded-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_50px_rgba(168,85,247,0.5)] min-w-[240px]"
+            >
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                Create Free Account
+                <Users className="w-5 h-5" />
+              </span>
+            </button>
+          </div>
+
+          {/* Footer Info */}
+          <div className="mt-16 pt-8 border-t border-slate-800">
+            <p className="text-gray-500 text-sm mb-4">
+              An interactive educational platform for music business learning
             </p>
-            <div className="flex items-center justify-center gap-3 text-xs text-gray-500">
-              <span>Interactive Learning</span>
+            <div className="flex items-center justify-center gap-4 text-xs text-gray-600">
+              <span>Scenario-Based Learning</span>
               <span>•</span>
-              <span>Real Scenarios</span>
+              <span>Real Industry Dynamics</span>
               <span>•</span>
               <span>Career Progression</span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Login/Register Modal */}
       {showLoginModal && (
         <LoginModal
-          isOpen={showLoginModal}
-          onClose={() => setShowLoginModal(false)}
-          initialMode={loginMode}
+          {...({ isOpen: showLoginModal, onClose: () => setShowLoginModal(false), initialMode: loginMode } as any)}
         />
       )}
     </div>

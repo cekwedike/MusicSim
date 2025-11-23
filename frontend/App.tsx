@@ -2880,18 +2880,20 @@ const AuthenticatedApp: React.FC = () => {
             <InstallBanner />
 
             {/* Header with user info - only show when not on landing page */}
+
+            {/* Only show a single header, styled to match the app's color scheme */}
             {!showLanding && (isAuthenticated || guestMode) && (
-                <div className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
+                <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-gray-900 via-red-900 to-gray-900/90 backdrop-blur-sm border-b border-red-900/40">
                     <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <h1 className="text-xl font-bold text-red-300">MusicSim</h1>
+                            <h1 className="text-xl font-bold text-gradient bg-gradient-to-r from-red-400 to-rose-500 bg-clip-text text-transparent">MusicSim</h1>
                             {guestMode && (
-                                <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded border border-yellow-500/30">
+                                <span className="text-xs bg-yellow-600/20 text-yellow-300 px-2 py-1 rounded border border-yellow-400/30 font-semibold tracking-wide">
                                     Guest Mode
                                 </span>
                             )}
                             {isAuthenticated && user && (
-                                <span className="text-sm text-gray-400">
+                                <span className="text-sm text-gray-200 font-medium">
                                     {user.username}
                                 </span>
                             )}

@@ -164,7 +164,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           </div>
 
           {/* Scroll Indicator - Desktop (centered) and Mobile (icon only) */}
-          <div className="absolute bottom-2 sm:bottom-3 lg:bottom-4 left-1/2 -translate-x-1/2">
+          <div className="absolute bottom-2 sm:bottom-3 lg:bottom-12 left-1/2 -translate-x-1/2">
             <button
               onClick={scrollToContent}
               className="flex flex-col items-center gap-2 text-white hover:text-white/80 transition-colors animate-bounce"

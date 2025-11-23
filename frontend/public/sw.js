@@ -106,7 +106,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Background sync for offline saves (when connection restored)
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-game-saves') {
     console.log('[SW] Syncing offline saves...');
@@ -119,3 +118,9 @@ async function syncOfflineSaves() {
   // This will be implemented in the next step
   console.log('[SW] Sync completed');
 }
+// Listen for SKIP_WAITING message to activate new SW immediately
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});

@@ -612,11 +612,11 @@ html.light .bg-gradient-to-br.from-red-950\/40.to-slate-950\/40 {
 }
 
 /* Remove gray backgrounds from landing page buttons in light mode */
-html.light .text-white.hover\:text-gray-200 {
+html.light .text-white.hover\:text-white\/80 {
   background-color: transparent !important;
 }
 
-html.light button.text-white.hover\:text-gray-200 {
+html.light button.text-white.hover\:text-white\/80 {
   background-color: transparent !important;
   border: none !important;
 }
@@ -650,7 +650,7 @@ html.light .text-gray-200 {
   color: #1f2937 !important;
 }
 
-html.light .hover\:text-gray-200:hover {
+html.light .hover\:text-white\/80:hover {
   color: #374151 !important;
 }
 

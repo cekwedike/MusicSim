@@ -130,7 +130,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm">
                 <button
                   onClick={onPlayAsGuest}
-                  className="text-white hover:text-gray-200 transition-colors"
+                  className="text-white hover:text-white/80 transition-colors"
                 >
                   Continue As Guest
                 </button>
@@ -164,10 +164,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPlayAsGuest }) => {
           </div>
 
           {/* Scroll Indicator - Desktop (centered) and Mobile (icon only) */}
-          <div className="absolute bottom-16 sm:bottom-20 lg:bottom-24 left-1/2 -translate-x-1/2">
+          <div className="absolute bottom-4 sm:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2">
             <button
               onClick={scrollToContent}
-              className="flex flex-col items-center gap-2 text-white hover:text-gray-200 transition-colors animate-bounce"
+              className="flex flex-col items-center gap-2 text-white hover:text-white/80 transition-colors animate-bounce"
               aria-label="Scroll to content"
             >
               <span className="hidden lg:block text-sm font-medium">Explore</span>

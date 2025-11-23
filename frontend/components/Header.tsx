@@ -26,14 +26,14 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
 
     // Use new autosave status if provided, otherwise fall back to old system
     const isNewSystem = !!autoSaveStatus;
-    
+
     useEffect(() => {
         if (isNewSystem) {
             // Use new autosave status
             if (autoSaveStatus?.lastSaveTime) {
                 const ageMinutes = Math.floor((Date.now() - autoSaveStatus.lastSaveTime) / (1000 * 60));
                 setAutosaveAge(ageMinutes);
-                
+
                 // Show "Saved!" indicator for new saves
                 if (ageMinutes === 0) {
                     setJustSaved(true);
@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                 const age = getAutosaveAge();
                 setAutosaveAge(age);
             };
-            
+
             updateAutosaveAge();
             const interval = setInterval(updateAutosaveAge, 10000);
             return () => clearInterval(interval);
@@ -81,7 +81,10 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                 </h1>
             </div>
 
-            {/* Desktop Header - Show on large screens (removed for cleaner look) */}
+            {/* Desktop Header - Show on large screens */}
+            <h1 className="hidden lg:block text-lg sm:text-xl md:text-2xl font-bold text-gradient">
+                MusicSim
+            </h1>
             {artistName && (
                 <div className="hidden lg:flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 md:gap-2 mt-0.5">
                     <p className="text-status-fame text-xs sm:text-sm md:text-base font-semibold tracking-wider truncate max-w-[200px] sm:max-w-none">Artist: {artistName}</p>
@@ -115,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
 
                     {/* Save Error */}
                     {autoSaveStatus?.error && (
-                        <div className="bg-semantic-error/20 border border-semantic-error rounded-lg px-2 sm:px-3 py-1 text-semantic-error text-xs sm:text-sm cursor-pointer" 
+                        <div className="bg-semantic-error/20 border border-semantic-error rounded-lg px-2 sm:px-3 py-1 text-semantic-error text-xs sm:text-sm cursor-pointer"
                              title={`Save Error: ${autoSaveStatus.error}`}>
                             Save Failed
                         </div>

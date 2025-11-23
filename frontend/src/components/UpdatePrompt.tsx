@@ -17,7 +17,7 @@ const UpdatePrompt: React.FC<UpdatePromptProps> = ({ onUpdate, onDismiss }) => {
   };
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-gradient-to-br from-gray-900 via-red-900 to-gray-900 border border-red-700 rounded-xl shadow-2xl p-6 max-w-md mx-4 animate-fade-in">
+      <div className="bg-gray-900 border border-gray-800 rounded-xl shadow-2xl p-6 max-w-md mx-4 animate-fade-in">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-red-500 to-rose-500 rounded-lg flex items-center justify-center">
             <RefreshCw className="w-6 h-6 text-white" />
@@ -28,7 +28,7 @@ const UpdatePrompt: React.FC<UpdatePromptProps> = ({ onUpdate, onDismiss }) => {
               Update Available
             </h3>
             <p className="text-gray-200 text-sm mb-4">
-              A new version of MusicSim is available. Update now to get the latest features and improvements.
+              A new version of MusicSim is available. Please refresh to get the latest features and improvements.
             </p>
 
             <div className="flex gap-3">
@@ -49,7 +49,7 @@ const UpdatePrompt: React.FC<UpdatePromptProps> = ({ onUpdate, onDismiss }) => {
             </div>
 
             <p className="text-xs text-gray-400 mt-3">
-              You can update later from the settings menu
+              You can dismiss this and update later when prompted again.
             </p>
           </div>
         </div>

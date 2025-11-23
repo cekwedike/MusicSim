@@ -101,13 +101,13 @@ const InstallBanner: React.FC = () => {
   const bannerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    let unmounted = false;
     const onBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-
       // Check if app is installed before showing
       isBannerDismissed().then(dismissed => {
-        if (!dismissed) {
+        if (!dismissed && !unmounted) {
           setVisible(true);
         }
       });
@@ -130,12 +130,21 @@ const InstallBanner: React.FC = () => {
       const url_forced = new URLSearchParams(window.location.search).get('showInstall') === '1';
       const forced = localStorage_forced || url_forced;
 
+      // Check if app is installed (robust check)
+      const installed = await isAppInstalled();
+      if (installed && !unmounted) {
+        setVisible(false);
+        return;
+      }
+
       // Check if banner is dismissed
       const dismissed = await isBannerDismissed();
 
       // Show if forced (for testing) or if banner is not dismissed
-      if (forced || !dismissed) {
+      if ((forced || !dismissed) && !unmounted) {
         setVisible(true);
+      } else {
+        setVisible(false);
       }
     };
 
@@ -143,6 +152,7 @@ const InstallBanner: React.FC = () => {
     checkDisplayConditions();
 
     return () => {
+      unmounted = true;
       window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
       window.removeEventListener('appinstalled', onAppInstalled as EventListener);
     };

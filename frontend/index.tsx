@@ -9,11 +9,21 @@ import './src/index.css';
 const Root = () => {
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
+
   useEffect(() => {
     // Register service worker with update callback
     registerServiceWorker(() => {
       setUpdateAvailable(true);
     });
+
+    // Listen for SW_ACTIVATED message from service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'SW_ACTIVATED') {
+          setUpdateAvailable(true);
+        }
+      });
+    }
   }, []);
 
 

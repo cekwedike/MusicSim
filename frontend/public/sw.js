@@ -23,6 +23,15 @@ self.addEventListener('install', (event) => {
 });
 
 // Activate event - clean up old caches
+// Helper to notify all clients
+function notifyClients(message) {
+  self.clients.matchAll({ type: 'window' }).then((clients) => {
+    clients.forEach((client) => {
+      client.postMessage(message);
+    });
+  });
+}
+
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activating service worker...');
   event.waitUntil(
@@ -35,9 +44,11 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
+    }).then(() => {
+      self.clients.claim();
+      notifyClients({ type: 'SW_ACTIVATED' });
     })
   );
-  self.clients.claim();
 });
 
 // Fetch event - serve from cache, fallback to network
@@ -121,6 +132,8 @@ async function syncOfflineSaves() {
 // Listen for SKIP_WAITING message to activate new SW immediately
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+    self.skipWaiting().then(() => {
+      notifyClients({ type: 'SW_ACTIVATED' });
+    });
   }
 });

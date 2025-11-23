@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
     }, [autosaveAge, isNewSystem]);
 
     return (
-        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center border-b border-default/50 relative bg-primary/95 backdrop-blur-sm">
+        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center relative bg-primary/95 backdrop-blur-sm">
             {/* Mobile Menu Button */}
             {showMenuButton && (
                 <button
@@ -72,31 +72,6 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                 >
                     <Menu className="w-5 h-5" />
                 </button>
-            )}
-
-            {/* Mobile Header - Show on small screens */}
-            <div className="lg:hidden flex items-center justify-center">
-                <h1 className="text-lg sm:text-xl font-bold text-gradient">
-                    MusicSim
-                </h1>
-            </div>
-
-            {/* Desktop Header - Show on large screens */}
-            <h1 className="hidden lg:block text-lg sm:text-xl md:text-2xl font-bold text-gradient">
-                MusicSim
-            </h1>
-            {artistName && (
-                <div className="hidden lg:flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 md:gap-2 mt-0.5">
-                    <p className="text-status-fame text-xs sm:text-sm md:text-base font-semibold tracking-wider truncate max-w-[200px] sm:max-w-none">Artist: {artistName}</p>
-                    {difficulty && (
-                        <span
-                            className={`px-2 py-1 rounded-full text-xs font-bold ${getDifficultyColor(difficulty)} bg-secondary/50 border border-current whitespace-nowrap`}
-                            title={`Playing on ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)} difficulty`}
-                        >
-                            {getDifficultyIcon(difficulty)} {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
-                        </span>
-                    )}
-                </div>
             )}
 
             {/* Autosave Indicator */}

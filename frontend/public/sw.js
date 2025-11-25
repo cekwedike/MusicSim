@@ -1,5 +1,5 @@
 // Service Worker for MusicSim PWA
-const VERSION = '2.0.0'; // Increment this with each deployment
+const VERSION = '2.0.0'; // Auto-replaced during build with timestamp
 const CACHE_NAME = `musicsim-v${VERSION}`;
 const API_CACHE = `musicsim-api-v${VERSION}`;
 

@@ -1,10 +1,34 @@
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, Plugin } from 'vite';
+import fs from 'fs';
+
+// Plugin to auto-version the service worker
+function serviceWorkerVersion(): Plugin {
+  return {
+    name: 'service-worker-version',
+    writeBundle() {
+      const swPath = path.resolve(__dirname, 'dist/sw.js');
+      if (fs.existsSync(swPath)) {
+        let content = fs.readFileSync(swPath, 'utf-8');
+        // Generate version from timestamp
+        const version = `2.0.${Date.now()}`;
+        // Replace the VERSION constant
+        content = content.replace(
+          /const VERSION = ['"][\d.]+['"]/,
+          `const VERSION = '${version}'`
+        );
+        fs.writeFileSync(swPath, content, 'utf-8');
+        console.log(`✓ Service Worker versioned: ${version}`);
+      }
+    }
+  };
+}
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
       root: 'frontend',
+      plugins: [serviceWorkerVersion()],
       resolve: {
         alias: {
           '@': path.resolve(__dirname, 'frontend'),

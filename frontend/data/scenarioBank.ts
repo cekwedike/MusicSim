@@ -290,6 +290,7 @@ export const scenarioBank: Scenario[] = [
         title: "The Social Media Controversy",
         description: "An old, embarrassing photo of you surfaces online and goes viral. The media is having a field day. How do you respond?",
         conditions: { minFame: 30 },
+        once: true, // This scenario should only happen once per career
         choices: [
             {
                 text: "Lean into it with humor and self-awareness.",

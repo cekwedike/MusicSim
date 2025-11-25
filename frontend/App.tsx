@@ -422,15 +422,16 @@ function gameReducer(state: GameState, action: any): GameState {
             // 1. Apply staff bonuses (weekly)
             let bonusFame = 0;
             let bonusHype = 0;
-            let cashModifier = 1.0;
+            // Note: Cash bonuses from staff are intentionally NOT applied here to prevent
+            // exponential growth. Staff provide value through fame/hype bonuses and
+            // scenario outcomes, not through multiplying your total cash balance.
             newStaff.forEach(s => {
                 s.bonuses.forEach(b => {
                     if (b.stat === 'fame') bonusFame += b.value;
                     if (b.stat === 'hype') bonusHype += b.value;
-                    if (b.stat === 'cash') cashModifier += b.value / 100;
+                    // Cash multiplier removed - it was causing cash to double exponentially
                 });
             });
-            newStats.cash = Math.floor(newStats.cash * cashModifier);
 
             // Advance current date by random 3-7 days
             const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days

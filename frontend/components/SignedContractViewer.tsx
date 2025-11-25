@@ -25,11 +25,15 @@ export const SignedContractViewer: React.FC<SignedContractViewerProps> = ({
   };
 
   // Calculate contract duration
+  // Ensure dates are actual Date objects (they might be strings from localStorage)
+  const startDate = contractStartDate instanceof Date ? contractStartDate : new Date(contractStartDate);
+  const nowDate = currentDate instanceof Date ? currentDate : new Date(currentDate);
+
   const contractLengthYears = label.terms.contractLength;
-  const expiryDate = new Date(contractStartDate);
+  const expiryDate = new Date(startDate);
   expiryDate.setFullYear(expiryDate.getFullYear() + contractLengthYears);
 
-  const timeRemaining = expiryDate.getTime() - currentDate.getTime();
+  const timeRemaining = expiryDate.getTime() - nowDate.getTime();
   const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
   const monthsRemaining = Math.ceil(daysRemaining / 30);
   const yearsRemaining = Math.floor(monthsRemaining / 12);
@@ -81,7 +85,7 @@ export const SignedContractViewer: React.FC<SignedContractViewerProps> = ({
               <div>
                 <div className="text-gray-400">Signed On</div>
                 <div className="text-white font-semibold">
-                  {contractStartDate.toLocaleDateString('en-GB', {
+                  {startDate.toLocaleDateString('en-GB', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric'

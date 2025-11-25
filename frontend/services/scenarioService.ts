@@ -81,18 +81,8 @@ const getScenarioWeight = (scenario: Scenario, usedScenarioTitles: string[]): nu
         return Math.max(0.02, 0.3 / (count + 1));
     }
 
-    // Special handling for "Contract Renewal" - heavy cooldown
-    if (scenario.title === "Contract Renewal") {
-        // If never seen, normal weight
-        if (titleIndex === -1) return 1.0;
-
-        // If seen recently, apply much heavier penalty than normal scenarios
-        const scenariosAgo = usedScenarioTitles.length - titleIndex;
-        // Don't appear for at least 20 scenarios (roughly 5 months game time)
-        if (scenariosAgo < 20) return 0.001; // Almost impossible
-        if (scenariosAgo < 30) return 0.1;
-        return 1.0;
-    }
+    // Note: Contract Renewal scenario has been disabled in scenarioBank.ts
+    // No special weighting needed anymore
 
     // If never seen, full weight
     if (titleIndex === -1) return 1.0;

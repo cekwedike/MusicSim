@@ -38,6 +38,7 @@ export const scenarioBank: Scenario[] = [
         title: "Manager's Big Swing",
         description: "Your manager calls, ecstatic. 'I did it! I got you an opening slot for The Lumineers! The exposure will be insane!' The catch: it's unpaid and you have to fly to another city tomorrow.",
         conditions: { requiresStaff: ['Manager'] },
+        once: true, // This major opportunity should only happen once
         choices: [
             {
                 text: "Do it! This is a huge opportunity.",
@@ -73,6 +74,7 @@ export const scenarioBank: Scenario[] = [
         title: "Booker's Festival Slot",
         description: "Your booker pulled some strings and got you a slot at the 'Summer Haze' indie festival. It's a great chance to be seen.",
         conditions: { requiresStaff: ['Booker'], minFame: 30 },
+        once: true, // Major festival opportunity should only happen once
         choices: [
             {
                 text: "Play a crowd-pleasing set.",
@@ -94,6 +96,7 @@ export const scenarioBank: Scenario[] = [
         title: "Promoter's PR Stunt",
         description: "Your promoter has a wild idea: a surprise pop-up show on a subway platform. 'It'll be edgy, it'll get press!' they insist.",
         conditions: { requiresStaff: ['Promoter'] },
+        once: true, // Unique PR stunt should only happen once
         choices: [
             {
                 text: "Let's do it. What could go wrong?",
@@ -111,44 +114,19 @@ export const scenarioBank: Scenario[] = [
             }
         ]
     },
-     {
-        title: "Contract Renewal",
-        description: "Your manager's contract is up. They've done a good job, but are asking for a higher percentage. What do you do?",
-        conditions: { requiresStaff: ['Manager'] }, // Requires active manager
-        // Removed once: true - this can now repeat when staff contracts expire
-        choices: [
-            {
-                text: "Renew the contract. They're worth it.",
-                outcome: {
-                    text: "You agree to the new terms. Your manager is happy and immediately gets to work on your next big move.",
-                    cash: 0, fame: 0, wellBeing: 5, careerProgress: 0, hype: 0,
-                    renewStaff: 'Manager',
-                    lesson: {
-                        title: "Valuing Good Team Members",
-                        explanation: "Good managers are rare and valuable. If they've proven their worth, paying them fairly often costs less than finding and training replacements while losing momentum.",
-                        realWorldExample: "Many successful artists maintain long-term relationships with their managers, even paying higher rates, because the consistency and trust are worth more than saving money.",
-                        tipForFuture: "Calculate the full cost of change: lost time, relationship rebuilding, and potential missed opportunities often exceed higher fees.",
-                        conceptTaught: "Contract Basics"
-                    }
-                }
-            },
-            {
-                text: "Let them go. I'll find someone cheaper.",
-                outcome: {
-                    text: "You part ways with your manager. The administrative tasks immediately pile up, causing stress and costing you opportunities.",
-                    cash: 0, fame: -5, wellBeing: -15, careerProgress: -5, hype: -10,
-                    fireStaff: 'Manager',
-                    lesson: {
-                        title: "The Hidden Costs of Cheap Labor",
-                        explanation: "Cutting costs on key team members often backfires. Cheaper replacements may lack experience, relationships, or commitment, leading to missed opportunities that cost more than the savings.",
-                        realWorldExample: "Artists who frequently change managers to save money often struggle with consistency. Each new manager needs time to learn your career goals and rebuild industry relationships.",
-                        tipForFuture: "Invest in people who deliver results. The cheapest option is rarely the most cost-effective long-term.",
-                        conceptTaught: "Contract Basics"
-                    }
-                }
-            }
-        ]
-    },
+    // CONTRACT RENEWAL SCENARIO DISABLED
+    // This scenario is currently disabled because:
+    // 1. It has no proper trigger logic (appears even when contracts aren't expiring)
+    // 2. The renewStaff/fireStaff outcome actions are not implemented in the game logic
+    // 3. It conflicts with the staff management panel which handles contract extensions
+    // Staff contract management is handled through the Management Hub instead.
+    //
+    // {
+    //     title: "Contract Renewal",
+    //     description: "Your manager's contract is up. They've done a good job, but are asking for a higher percentage. What do you do?",
+    //     conditions: { requiresStaff: ['Manager'] },
+    //     choices: [...]
+    // },
 
     // --- LABEL SIGNING ---
     {

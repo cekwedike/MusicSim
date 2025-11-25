@@ -73,6 +73,14 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
 const getScenarioWeight = (scenario: Scenario, usedScenarioTitles: string[]): number => {
     const titleIndex = usedScenarioTitles.lastIndexOf(scenario.title);
 
+    // Special handling for "An Uneventful Week" - make it much less likely
+    if (scenario.title === "An Uneventful Week") {
+        // Count how many times it's appeared
+        const count = usedScenarioTitles.filter(t => t === "An Uneventful Week").length;
+        // Each appearance makes it less likely: 0.3, 0.15, 0.05, etc.
+        return Math.max(0.02, 0.3 / (count + 1));
+    }
+
     // If never seen, full weight
     if (titleIndex === -1) return 1.0;
 
@@ -129,7 +137,7 @@ const weightedRandomSelect = (scenarios: Scenario[], usedScenarioTitles: string[
  * @returns A new Scenario object.
  */
 export const getNewScenario = (state: GameState): Scenario => {
-    const { usedScenarioTitles } = state;
+    const { usedScenarioTitles, contractEligibilityUnlocked } = state;
 
     // Filter out scenarios marked as 'once' that have already been used
     const availableScenarios = scenarioBank.filter(s => {
@@ -141,6 +149,29 @@ export const getNewScenario = (state: GameState): Scenario => {
 
     // Get scenarios that fit the current game state
     const fittingScenarios = availableScenarios.filter(s => checkConditions(s, state));
+
+    // FORCE contract scenarios if eligible but hasn't seen one recently
+    if (contractEligibilityUnlocked && !state.currentLabel) {
+        // Check if player has seen a contract scenario in last 10 scenarios
+        const recent10 = usedScenarioTitles.slice(-10);
+        const hasRecentContract = recent10.some(title =>
+            title === "The Indie Label Offer" || title === "The Major Label Bidding War"
+        );
+
+        // If no recent contract offer, force one to appear
+        if (!hasRecentContract) {
+            const contractScenarios = fittingScenarios.filter(s =>
+                s.title === "The Indie Label Offer" || s.title === "The Major Label Bidding War"
+            );
+
+            if (contractScenarios.length > 0) {
+                // Prefer indie label first, then major
+                const indieOffer = contractScenarios.find(s => s.title === "The Indie Label Offer");
+                if (indieOffer) return indieOffer;
+                return contractScenarios[0];
+            }
+        }
+    }
 
     // If there are scenarios that fit, use weighted random selection to avoid repetition
     if (fittingScenarios.length > 0) {

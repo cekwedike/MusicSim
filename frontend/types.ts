@@ -326,6 +326,12 @@ export interface CareerHistory {
   peakCareerProgress: number;
 }
 
+export interface PendingContractOffer {
+  label: RecordLabel;
+  receivedWeek: number; // Week number when offer was received
+  expiresWeek: number; // Week number when offer expires
+}
+
 export interface GameState {
   status: 'start' | 'setup' | 'playing' | 'loading' | 'gameOver';
   playerStats: PlayerStats;
@@ -341,7 +347,7 @@ export interface GameState {
   achievements: Achievement[];
   currentProject: Project | null;
   unseenAchievements: string[];
-  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer' | 'contract' | 'signedContract' | 'statistics';
+  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer' | 'contract' | 'signedContract' | 'statistics' | 'offers';
   currentModule: LearningModule | null;
   playerKnowledge: PlayerKnowledge;
   lessonsViewed: string[];
@@ -353,6 +359,7 @@ export interface GameState {
   lastStaffPaymentDate: Date; // Track when we last paid staff (monthly)
   currentLabel: RecordLabel | null;
   contractStartDate: Date | null; // When the current contract was signed
+  pendingContractOffer: PendingContractOffer | null; // Contract offer waiting for review
   debtTurns: number;
   burnoutTurns: number;
   gameOverReason: 'debt' | 'burnout' | null;

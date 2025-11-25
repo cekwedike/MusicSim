@@ -72,10 +72,6 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
                 <div className="text-xs text-gray-400 mb-1">Achievements</div>
                 <div className="text-xl sm:text-2xl font-bold text-red-400">{stats.achievementsUnlocked}</div>
               </div>
-              <div className="bg-[#3D1820]/30 p-3 rounded-lg border border-gray-600">
-                <div className="text-xs text-gray-400 mb-1">Projects</div>
-                <div className="text-xl sm:text-2xl font-bold text-blue-400">{stats.projectsReleased}</div>
-              </div>
             </div>
           </div>
         )}
@@ -92,10 +88,6 @@ const StatisticsPanel: React.FC<StatisticsPanelProps> = ({ state }) => {
                 <div className="flex justify-between">
                   <span className="text-gray-400">Contracts Signed</span>
                   <span className="text-white font-semibold">{stats.contractsSigned}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Projects Released</span>
-                  <span className="text-white font-semibold">{stats.projectsReleased}</span>
                 </div>
               </div>
             </div>

@@ -19,14 +19,40 @@ const Root = () => {
   }, []);
 
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     setUpdateAvailable(false);
-    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
+
+    if ('serviceWorker' in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.getRegistration();
+
+        if (registration && registration.waiting) {
+          // Send skip waiting message to the waiting service worker
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+
+          // Set a timeout fallback in case controllerchange doesn't fire
+          const reloadTimeout = setTimeout(() => {
+            console.log('[App] Force reload after timeout');
+            window.location.reload();
+          }, 1000);
+
+          // Wait for the new service worker to take control
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            clearTimeout(reloadTimeout);
+            console.log('[App] Controller changed, reloading...');
+            window.location.reload();
+          }, { once: true });
+        } else {
+          // No waiting worker, just reload
+          console.log('[App] No waiting worker, force reload');
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('[App] Error during update:', error);
         window.location.reload();
-      }, { once: true });
+      }
     } else {
+      // No service worker support, just reload
       window.location.reload();
     }
   };

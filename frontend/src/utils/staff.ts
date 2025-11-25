@@ -20,8 +20,16 @@ export function hireStaffFromTemplate(template: StaffTemplate, contractDuration:
 
 export function updateStaffContractTime(staff: HiredStaff[], currentDate: Date): HiredStaff[] {
   return staff.map(s => {
+    // Ensure dates are Date objects (they might be strings from localStorage)
+    const expiryDate = s.contractExpiresDate instanceof Date
+      ? s.contractExpiresDate
+      : new Date(s.contractExpiresDate);
+    const nowDate = currentDate instanceof Date
+      ? currentDate
+      : new Date(currentDate);
+
     const monthsRemaining = Math.max(0, Math.ceil(
-      (s.contractExpiresDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24 * 30)
+      (expiryDate.getTime() - nowDate.getTime()) / (1000 * 60 * 60 * 24 * 30)
     ));
     return { ...s, monthsRemaining } as HiredStaff;
   });

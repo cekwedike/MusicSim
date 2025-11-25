@@ -57,7 +57,7 @@ These demonstrations showcase the complete gameplay experience, from initial art
 
 ```
 MusicSim/
-├── frontend/              # React + TypeScript + Vite (deployed to Vercel)
+├── frontend/              # React + TypeScript application source
 │   ├── components/        # Reusable UI components
 │   ├── services/          # API integration & game logic
 │   ├── data/              # Game content & configuration
@@ -67,35 +67,36 @@ MusicSim/
 │   ├── types/             # TypeScript type definitions
 │   ├── scripts/           # Build and utility scripts
 │   ├── public/            # Static assets and audio files
-│   └── src/               # Additional source files
-├── backend/               # Express.js + PostgreSQL (deployed to Render)
+│   ├── index.html         # HTML entry point
+│   └── index.tsx          # Application entry point
+├── backend/               # Express.js + PostgreSQL backend
 │   ├── routes/            # API endpoint definitions
 │   ├── models/            # Database schemas (Sequelize)
 │   ├── middleware/        # Express middleware
-│   ├── config/            # Configuration files (includes Supabase)
+│   ├── config/            # Configuration files (Supabase connection)
 │   ├── migrations/        # Database migration scripts
 │   ├── scripts/           # Database utilities
 │   ├── constants/         # Backend constants
 │   ├── utils/             # Utility functions
-│   └── public/            # Static files served by Express
-├── .github/               # GitHub workflows and templates
-├── dist/                  # Production build output
-├── Makefile               # CI/CD and development commands
-├── metadata.json          # Project metadata
-├── vercel.json            # Vercel deployment configuration
-├── render.yaml            # Render deployment configuration
+│   ├── server.js          # Express server entry point
+│   └── package.json       # Backend dependencies
+├── dist/                  # Production build output (generated)
+├── docs/                  # Documentation files
+├── .github/               # GitHub workflows and CI/CD
+│   └── workflows/         # Automated workflows
 ├── vite.config.ts         # Vite build configuration
 ├── tsconfig.json          # TypeScript configuration
 ├── tailwind.config.js     # Tailwind CSS configuration
-└── postcss.config.js      # PostCSS configuration
+├── postcss.config.js      # PostCSS configuration
+└── package.json           # Root package configuration
 ```
 
 ## Quick Start
 
 ### Prerequisites
-- **Node.js** (v16 or higher)
-- **npm** or **yarn**
-- **Supabase account** (managed PostgreSQL)
+- **Node.js** (v16 or higher recommended)
+- **npm** (comes with Node.js)
+- **Supabase account** (for backend database - optional for frontend-only development)
 
 ### Play Now (Fastest)
 ```bash
@@ -129,37 +130,41 @@ npm run install:backend
 #### 2. **Environment Configuration**
 Create environment files for API keys and configuration:
 
-**Frontend** (`.env.local`):
+**Frontend** (`frontend/.env.local`):
 ```env
 VITE_API_URL=http://localhost:3001
 ```
 
 **Backend** (`backend/.env`):
 ```env
-# Database (optional)
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=musicsim
-DB_USER=your_username
-DB_PASSWORD=your_password
+# Database - Supabase Connection
+DATABASE_URL=your_supabase_connection_string
 
 # JWT Secret
-JWT_SECRET=your_super_secret_jwt_key
+JWT_SECRET=your_super_secret_jwt_key_here
 
-# Environment
+# Server Configuration
 NODE_ENV=development
 PORT=3001
+
+# Optional: Session Secret
+SESSION_SECRET=your_session_secret_here
 ```
 
 #### 3. **Database Setup**
-For full backend features including user accounts and cloud saves, connect your backend to Supabase (managed PostgreSQL):
+For full backend features including user accounts and cloud saves:
 
-- Create a Supabase project and database.
-- Copy your Supabase connection string to `backend/.env` as `DATABASE_URL`.
-- Run migrations and initialization scripts as needed:
+1. Create a Supabase project at https://supabase.com
+2. Get your database connection string from project settings
+3. Add the connection string to `backend/.env` as `DATABASE_URL`
+4. Run migrations:
 ```bash
+# The database will be initialized automatically on first start
+npm run dev:backend
+
+# Or manually run migrations:
 cd backend
-npm run db:init
+npm run migrate
 ```
 
 #### 4. **Start Development**
@@ -184,10 +189,10 @@ npm run dev:backend   # Backend only (port 3001)
 
 ### Learning Features
 
--- **Learning Hub**: Access educational modules about the music industry
--- **Knowledge Tracking**: See what concepts you've mastered
--- **Progress Analytics**: Understand your learning journey
--- **Scenario Integration**: Apply learned concepts in gameplay
+- **Learning Hub**: Access educational modules about the music industry
+- **Knowledge Tracking**: See what concepts you've mastered
+- **Progress Analytics**: Understand your learning journey
+- **Scenario Integration**: Apply learned concepts in gameplay
 
 ### Account Benefits
 
@@ -204,22 +209,33 @@ npm run dev:backend   # Backend only (port 3001)
 
 ### Root Directory
 ```bash
-npm run dev              # Start both frontend & backend
-npm run dev:frontend     # Frontend development server
-npm run dev:backend      # Backend development server
+npm run dev              # Start both frontend & backend concurrently
+npm run dev:frontend     # Frontend development server only (port 5173)
+npm run dev:backend      # Backend development server only (port 3001)
 npm run build            # Build frontend for production
-npm run preview          # Preview production build
-npm start               # Start production servers
-npm run install:all     # Install all dependencies
+npm run preview          # Preview production build locally
+npm run test             # Run frontend tests with Vitest
+npm run test:ci          # Run tests with coverage
+npm start               # Start both servers in production mode
+npm run install:all      # Install all dependencies (root + backend)
+npm run install:backend  # Install backend dependencies only
+npm run security:audit   # Security audit for all packages
+npm run deps:check       # Check for outdated dependencies
+npm run clean            # Clean build artifacts and caches
 ```
 
 ### Backend Directory
 ```bash
-npm start               # Start production server
-npm run dev             # Start development server (nodemon)
-npm test               # Run API tests
-npm run db:init        # Initialize database
-npm run db:reset       # Reset database
+npm start                # Start production server with migrations
+npm run start:no-migrate # Start without running migrations
+npm run dev              # Start development server with nodemon
+npm test                 # Run backend API tests
+npm run test:ci          # Run tests with coverage
+npm run migrate          # Run database migrations
+npm run db:init          # Initialize database schema
+npm run db:reset         # Reset database (caution: deletes data)
+npm run db:status        # Check database connection
+npm run security:audit   # Security audit for backend packages
 ```
 
 ## API Documentation
@@ -240,36 +256,49 @@ npm run db:reset       # Reset database
 ## Testing
 
 ```bash
-# Backend API tests
-cd backend
-npm test
+# Frontend tests (Vitest)
+npm run test              # Run tests in watch mode
+npm run test:ci           # Run tests with coverage report
 
-# Test specific routes
-npm run test:auth       # Authentication endpoints
-npm run test:game       # Game state endpoints
-npm run test:analytics  # Analytics endpoints
+# Backend API tests (Jest)
+cd backend
+npm test                  # Run all backend tests
+npm run test:ci           # Run tests with coverage
+
+# Run all tests
+npm run ci:test           # Run both frontend and backend tests
 ```
 
 ## Deployment
 
-### Frontend (Vercel)
-```bash
-npm run build
-# Deploy `dist/` folder to Vercel
-```
+The application is deployed using the following infrastructure:
 
-### Backend (Render)
-```bash
-# Set environment variables in Render dashboard
-# Deploy backend/ folder, connect to Supabase database
-```
+### Frontend - Vercel
+1. Build the production bundle:
+   ```bash
+   npm run build
+   ```
+2. The `dist/` folder is automatically deployed to Vercel
+3. Environment variables (e.g., `VITE_API_URL`) are configured in Vercel dashboard
+4. Production URL: https://www.musicsim.net
 
-### Database (Supabase)
-- Managed PostgreSQL, connection string provided in Supabase project settings
+### Backend - Render
+1. Deployed directly from the `backend/` directory
+2. Environment variables configured in Render dashboard:
+   - `DATABASE_URL` (Supabase connection string)
+   - `JWT_SECRET`
+   - `NODE_ENV=production`
+   - `SESSION_SECRET`
+3. Migrations run automatically on deployment via `npm start`
+4. Backend API health check: `/api/health`
 
-### Deployment Verification
-- System is live and verified on Vercel (frontend), Render (backend), and Supabase (database) as of November 2025.
-- Health endpoint, authentication, save/load, and analytics features tested and confirmed functional in production.
+### Database - Supabase
+- Managed PostgreSQL database
+- Connection string available in Supabase project settings
+- Automatic backups and scaling included
+
+### Deployment Status
+The production system is verified and operational on Vercel (frontend), Render (backend), and Supabase (database). All core features including authentication, game saves, and analytics are functional.
 
 ## Contributing
 
@@ -280,11 +309,11 @@ npm run build
 5. **Create** a Pull Request
 
 ### Development Guidelines
-- **TypeScript**: Use TypeScript for all new frontend code
-- **Documentation**: Add JSDoc comments for all API endpoints
-- **Testing**: Include tests for new API endpoints
-- **Linting**: Follow ESLint configuration
-- **Git**: Use conventional commit messages
+- **TypeScript**: Use TypeScript for all frontend code
+- **Code Quality**: Write clean, maintainable code with clear naming
+- **Documentation**: Add JSDoc comments for API endpoints and complex functions
+- **Testing**: Include tests for new features and API endpoints
+- **Git Commits**: Use clear, descriptive commit messages
 
 ## License
 
@@ -292,13 +321,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- **React**: Frontend framework
-- **Vite**: Lightning-fast development server
-- **Node.js**: Backend runtime
-- **Supabase**: Managed PostgreSQL database
-- **Render**: Backend hosting
-- **Vercel**: Frontend hosting
-- **Swagger**: API documentation
+- **React**: UI framework for building the frontend
+- **Vite**: Fast build tool and development server
+- **TypeScript**: Type-safe development
+- **Node.js & Express**: Backend server runtime
+- **PostgreSQL**: Relational database (via Supabase)
+- **Supabase**: Managed database hosting
+- **Render**: Backend deployment platform
+- **Vercel**: Frontend deployment platform
+- **Sequelize**: Database ORM
+- **Vitest**: Frontend testing framework
+- **Jest**: Backend testing framework
+- **Tailwind CSS**: Utility-first CSS framework
 
 ## Support
 

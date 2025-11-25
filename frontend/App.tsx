@@ -95,6 +95,7 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         staffHiringUnlocked: false, // Unlocked at 10 fame or via scenario
         lastStaffPaymentDate: new Date(),
         currentLabel: null,
+        contractStartDate: null,
         currentLabelOffer: null,
         contractsViewed: [],
         debtTurns: 0,
@@ -871,8 +872,8 @@ function gameReducer(state: GameState, action: Action): GameState {
             };
         }
         case 'RESTART': {
-            // Record abandoned career if there was an active game
-            if (state.artistName) {
+            // Record abandoned career only if there was an active game that wasn't already recorded as game over
+            if (state.artistName && state.status !== 'gameOver') {
                 const gd = toGameDate(state.currentDate, state.startDate);
                 const totalWeeks = (gd.year - 1) * 48 + (gd.month - 1) * 4 + gd.week;
                 const updatedStats = recordGameEnd(state, state.statistics, 'abandoned');
@@ -964,7 +965,7 @@ function gameReducer(state: GameState, action: Action): GameState {
         case 'CLOSE_MODAL':
             return { ...state, modal: 'none', currentModule: null };
         case 'VIEW_CONTRACT':
-            return { ...state, modal: 'contract' };
+            return { ...state, modal: 'contract', lastOutcome: null };
         case 'SIGN_CONTRACT': {
             if (!state.currentLabelOffer) return state;
 
@@ -1005,15 +1006,23 @@ function gameReducer(state: GameState, action: Action): GameState {
                 hype: 15
             };
 
+            // Update statistics to track contract signing
+            const updatedStatistics = {
+                ...state.statistics,
+                contractsSigned: state.statistics.contractsSigned + 1
+            };
+
             return {
                 ...state,
                 playerStats: newStats,
                 currentLabel: state.currentLabelOffer,
+                contractStartDate: new Date(state.currentDate || new Date()),
                 currentLabelOffer: null,
                 modal: 'none',
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
                 lastOutcome: signOutcome,
+                statistics: updatedStatistics,
                 // legacy careerLog append removed; Date-based log added instead
                 logs: appendLogToArray(state.logs, createLog(`Signed with ${state.currentLabelOffer.name}! Received $${adjustedAdvance.toLocaleString()} advance.`, 'success', new Date(state.currentDate || new Date())))
             };
@@ -2571,7 +2580,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             )}
 
             <div className={`relative z-10 flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
-                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} />}
+                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}

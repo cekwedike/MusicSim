@@ -40,6 +40,7 @@ const getDefaultStatistics = (): GameStatistics => {
     highestHypeReached: 0,
     highestCareerProgressReached: 0,
     projectsReleased: 0,
+    contractsSigned: 0,
     firstGameDate: Date.now(),
     lastGameDate: Date.now(),
     favoriteGenre: '',

@@ -273,6 +273,7 @@ export interface GameStatistics {
   highestHypeReached: number;
   highestCareerProgressReached: number;
   projectsReleased: number;
+  contractsSigned: number;
   firstGameDate: number;
   lastGameDate: number;
   favoriteGenre: string;
@@ -351,6 +352,7 @@ export interface GameState {
   staffHiringUnlocked: boolean; // Whether player has unlocked the ability to hire staff
   lastStaffPaymentDate: Date; // Track when we last paid staff (monthly)
   currentLabel: RecordLabel | null;
+  contractStartDate: Date | null; // When the current contract was signed
   debtTurns: number;
   burnoutTurns: number;
   gameOverReason: 'debt' | 'burnout' | null;

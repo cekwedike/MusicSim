@@ -80,17 +80,19 @@ const getScenarioWeight = (scenario: Scenario, usedScenarioTitles: string[]): nu
     const scenariosAgo = usedScenarioTitles.length - titleIndex;
 
     // Weight based on recency:
-    // Just seen (1 ago): 0.1x weight
-    // 2 ago: 0.2x weight
-    // 3 ago: 0.3x weight
-    // 4-5 ago: 0.5x weight
-    // 6-7 ago: 0.7x weight
-    // 8+ ago: 1.0x weight (full weight)
-    if (scenariosAgo === 1) return 0.05; // Very unlikely to repeat immediately
-    if (scenariosAgo === 2) return 0.15;
-    if (scenariosAgo === 3) return 0.3;
-    if (scenariosAgo <= 5) return 0.5;
-    if (scenariosAgo <= 7) return 0.7;
+    // Just seen (1 ago): 0.01x weight (almost impossible)
+    // 2 ago: 0.05x weight
+    // 3 ago: 0.1x weight
+    // 4-5 ago: 0.2x weight
+    // 6-8 ago: 0.4x weight
+    // 9-10 ago: 0.6x weight
+    // 11+ ago: 1.0x weight (full weight)
+    if (scenariosAgo === 1) return 0.01; // Almost impossible to repeat immediately
+    if (scenariosAgo === 2) return 0.05;
+    if (scenariosAgo === 3) return 0.1;
+    if (scenariosAgo <= 5) return 0.2;
+    if (scenariosAgo <= 8) return 0.4;
+    if (scenariosAgo <= 10) return 0.6;
     return 1.0;
 };
 

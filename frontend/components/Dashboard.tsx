@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { PlayerStats, Project, GameDate, RecordLabel } from '../types';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
 
 interface StatDisplayProps {
     label: string;
@@ -48,7 +48,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ label, value, color, maxValue
     );
 }
 
-const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date, currentLabel?: RecordLabel | null, contractStartDate?: Date | null }> = ({ stats, project, date, currentDate, currentLabel, contractStartDate }) => {
+const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date, currentLabel?: RecordLabel | null, contractStartDate?: Date | null, onViewContract?: () => void }> = ({ stats, project, date, currentDate, currentLabel, contractStartDate, onViewContract }) => {
     const [isMobileCollapsed, setIsMobileCollapsed] = useState(true);
 
     const formatDate = (date: Date): string => {
@@ -143,15 +143,20 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
 
             {/* Contract Info - Always visible when active */}
             {contractInfo && (
-                <div className={`mt-2 bg-[#2D1115]/50 backdrop-blur-sm rounded-lg p-2 border ${
-                    contractInfo.isExpired
-                        ? 'border-red-600/50 bg-red-900/20'
-                        : contractInfo.isExpiringSoon
-                            ? 'border-yellow-600/50 bg-yellow-900/20'
-                            : 'border-blue-600/50 bg-blue-900/20'
-                }`}>
+                <button
+                    onClick={onViewContract}
+                    className={`mt-2 w-full bg-[#2D1115]/50 backdrop-blur-sm rounded-lg p-2 border transition-all duration-200 ${
+                        contractInfo.isExpired
+                            ? 'border-red-600/50 bg-red-900/20 hover:bg-red-900/30'
+                            : contractInfo.isExpiringSoon
+                                ? 'border-yellow-600/50 bg-yellow-900/20 hover:bg-yellow-900/30'
+                                : 'border-blue-600/50 bg-blue-900/20 hover:bg-blue-900/30'
+                    } ${onViewContract ? 'cursor-pointer hover:border-opacity-75' : 'cursor-default'}`}
+                    disabled={!onViewContract}
+                >
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
+                            <FileText className="w-3 h-3 text-gray-400" />
                             <span className="text-xs font-semibold text-gray-300">Contract:</span>
                             <span className="text-xs font-bold text-blue-300">{contractInfo.labelName}</span>
                         </div>
@@ -170,7 +175,12 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                             }
                         </div>
                     </div>
-                </div>
+                    {onViewContract && (
+                        <div className="text-[10px] text-gray-500 mt-1 text-center">
+                            Click to view contract details
+                        </div>
+                    )}
+                </button>
             )}
         </div>
     );

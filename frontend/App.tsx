@@ -37,6 +37,7 @@ const LearningPanel = lazy(() => import('./components/LearningPanel'));
 const ModuleViewer = lazy(() => import('./components/ModuleViewer'));
 // ContractViewer exports a named component; map it to `default` for React.lazy typing
 const ContractViewer = lazy(() => import('./components/ContractViewer').then(mod => ({ default: (mod as any).ContractViewer }))) as React.LazyExoticComponent<React.ComponentType<{ label: RecordLabel; onSign: () => void; onDecline: () => void }>>;
+const SignedContractViewer = lazy(() => import('./components/SignedContractViewer'));
 import ManagementPanel from './components/ManagementPanel';
 import StatisticsPanel from './components/StatisticsPanel';
 import SidebarAudioSettings from './components/SidebarAudioSettings';
@@ -231,7 +232,7 @@ function checkAchievements(state: GameState, newStats: PlayerStats): { achieveme
     return { achievements: unlockedAchievements, unseenAchievements: newUnseen };
 }
 
-function gameReducer(state: GameState, action: Action): GameState {
+function gameReducer(state: GameState, action: any): GameState {
     switch (action.type) {
         case 'START_SETUP':
             return { ...generateInitialState(), status: 'setup' };
@@ -966,6 +967,9 @@ function gameReducer(state: GameState, action: Action): GameState {
             return { ...state, modal: 'none', currentModule: null };
         case 'VIEW_CONTRACT':
             return { ...state, modal: 'contract', lastOutcome: null };
+        case 'VIEW_SIGNED_CONTRACT':
+            // View the currently signed contract (read-only mode)
+            return { ...state, modal: 'signedContract', lastOutcome: null };
         case 'SIGN_CONTRACT': {
             if (!state.currentLabelOffer) return state;
 
@@ -2580,7 +2584,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             )}
 
             <div className={`relative z-10 flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
-                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} />}
+                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} onViewContract={state.currentLabel ? () => dispatch({ type: 'VIEW_SIGNED_CONTRACT' }) : undefined} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
@@ -2622,10 +2626,20 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             )}
             {modal === 'contract' && state.currentLabelOffer && (
                 <Suspense fallback={<Loader text="Loading contract..." />}>
-                    <ContractViewer 
+                    <ContractViewer
                         label={state.currentLabelOffer}
                         onSign={handleSignContract}
                         onDecline={handleDeclineContract}
+                    />
+                </Suspense>
+            )}
+            {modal === 'signedContract' && state.currentLabel && state.contractStartDate && state.currentDate && (
+                <Suspense fallback={<Loader text="Loading contract..." />}>
+                    <SignedContractViewer
+                        label={state.currentLabel}
+                        contractStartDate={state.contractStartDate}
+                        currentDate={state.currentDate}
+                        onClose={() => dispatch({ type: 'CLOSE_MODAL' })}
                     />
                 </Suspense>
             )}

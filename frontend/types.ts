@@ -341,7 +341,7 @@ export interface GameState {
   achievements: Achievement[];
   currentProject: Project | null;
   unseenAchievements: string[];
-  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer' | 'contract' | 'statistics';
+  modal: 'none' | 'management' | 'saveload' | 'learning' | 'moduleViewer' | 'contract' | 'signedContract' | 'statistics';
   currentModule: LearningModule | null;
   playerKnowledge: PlayerKnowledge;
   lessonsViewed: string[];

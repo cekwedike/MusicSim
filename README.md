@@ -150,7 +150,6 @@ MusicSim/
 │   │   └── resetDatabase.js       # Database reset
 │   ├── tests/                     # Backend test suites
 │   ├── utils/                     # Utility functions
-│   ├── constants/                 # Backend constants
 │   ├── server.js                  # Express server entry point
 │   ├── package.json               # Backend dependencies
 │   └── .env                       # Environment variables (not in repo)
@@ -170,8 +169,6 @@ MusicSim/
 │
 ├── vite.config.ts                 # Vite build configuration
 ├── tsconfig.json                  # TypeScript compiler config
-├── tailwind.config.js             # Tailwind CSS config
-├── postcss.config.js              # PostCSS config
 ├── package.json                   # Root dependencies & scripts
 └── .env.local                     # Local environment variables (not in repo)
 ```

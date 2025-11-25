@@ -14,16 +14,23 @@ export function registerServiceWorker(onUpdateAvailable?: UpdateCallback) {
         .then((registration) => {
           console.log('SW registered:', registration);
 
-          // Check for updates every hour
+          // Check for updates every 30 minutes (more frequent for better mobile experience)
           setInterval(() => {
             registration.update();
-          }, 60 * 60 * 1000);
+          }, 30 * 60 * 1000);
 
           // Also check for updates when page becomes visible again
           document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
+              console.log('[SW] Page visible - checking for updates');
               registration.update();
             }
+          });
+
+          // Check for updates when app gains focus (especially important for PWAs)
+          window.addEventListener('focus', () => {
+            console.log('[SW] Window focused - checking for updates');
+            registration.update();
           });
 
           registration.addEventListener('updatefound', () => {

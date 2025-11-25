@@ -1878,11 +1878,33 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const isOnline = useOnlineStatus();
 
     const fetchNextScenario = useCallback(async (currentState: GameState) => {
-        const scenario = getNewScenario(currentState);
-        setTimeout(() => {
-            dispatch({ type: 'SCENARIO_LOADED', payload: scenario });
-        }, 500);
-
+        try {
+            const scenario = getNewScenario(currentState);
+            if (!scenario) {
+                console.error('[Game] No scenario returned from getNewScenario');
+                return;
+            }
+            setTimeout(() => {
+                dispatch({ type: 'SCENARIO_LOADED', payload: scenario });
+            }, 500);
+        } catch (error) {
+            console.error('[Game] Error loading scenario:', error);
+            // Fallback to a safe scenario
+            const fallbackScenario = {
+                title: "An Uneventful Week",
+                description: "Nothing major happens this week. You spend time on routine tasks.",
+                choices: [{
+                    text: "Continue",
+                    outcome: {
+                        text: "The week passes by quietly.",
+                        cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0
+                    }
+                }]
+            };
+            setTimeout(() => {
+                dispatch({ type: 'SCENARIO_LOADED', payload: fallbackScenario });
+            }, 500);
+        }
     }, []);
 
     // Background music management - random rotation handled by useAudioManager

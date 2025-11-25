@@ -52,34 +52,34 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose, onViewCon
 
                 {/* Educational Lesson Section */}
                 {hasLesson && (
-                    <div className="bg-gradient-to-r from-blue-900 to-red-900 rounded-lg p-2.5 sm:p-3 mb-3 border border-blue-700">
+                    <div className="bg-[#1a3a52] rounded-lg p-2.5 sm:p-3 mb-3 border border-[#2a5a7a]">
                         <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
-                            <h4 className="text-sm sm:text-base font-bold text-blue-200">{outcome.lesson.title}</h4>
+                            <h4 className="text-sm sm:text-base font-bold text-white">{outcome.lesson.title}</h4>
                         </div>
 
                         <div className="space-y-1.5 sm:space-y-2">
                             {/* Why this happened */}
                             <div>
-                                <h5 className="font-semibold text-blue-300 mb-1 text-xs sm:text-sm">Why This Happened:</h5>
-                                <p className="text-blue-100 text-xs sm:text-sm leading-snug">
+                                <h5 className="font-semibold text-gray-200 mb-1 text-xs sm:text-sm">Why This Happened:</h5>
+                                <p className="text-gray-100 text-xs sm:text-sm leading-snug">
                                     {outcome.lesson.explanation}
                                 </p>
                             </div>
 
                             {/* Real world example - hidden on mobile */}
                             {outcome.lesson.realWorldExample && (
-                                <div className="hidden sm:block bg-blue-800/50 rounded-md p-2">
-                                    <h5 className="font-semibold text-blue-300 mb-1 text-xs sm:text-sm">Real-World Example:</h5>
-                                    <p className="text-blue-100 text-xs sm:text-sm italic leading-snug">
+                                <div className="hidden sm:block bg-[#0f2a3f]/60 rounded-md p-2">
+                                    <h5 className="font-semibold text-gray-200 mb-1 text-xs sm:text-sm">Real-World Example:</h5>
+                                    <p className="text-gray-100 text-xs sm:text-sm italic leading-snug">
                                         {outcome.lesson.realWorldExample}
                                     </p>
                                 </div>
                             )}
 
                             {/* Tip for future */}
-                            <div className="bg-gradient-to-r from-yellow-800 to-orange-800 rounded-md p-2">
-                                <h5 className="font-semibold text-yellow-200 mb-1 text-xs sm:text-sm">Tip for Future:</h5>
-                                <p className="text-yellow-100 text-xs sm:text-sm leading-snug">
+                            <div className="bg-[#4a5a2a] rounded-md p-2 border border-[#6a7a4a]">
+                                <h5 className="font-semibold text-white mb-1 text-xs sm:text-sm">Tip for Future:</h5>
+                                <p className="text-gray-100 text-xs sm:text-sm leading-snug">
                                     {outcome.lesson.tipForFuture}
                                 </p>
                             </div>

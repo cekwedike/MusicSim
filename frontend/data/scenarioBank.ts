@@ -1510,7 +1510,7 @@ export const scenarioBank: Scenario[] = [
     },
     {
         title: "The Mental Health Crisis",
-        description: "You've been working non-stop - three albums in two years, constant touring, endless promotion. You're exhausted, anxious, and having panic attacks before shows. Your therapist says you need to take three months off completely. But you're at the peak of your career momentum. Your manager says: 'Three months off now could kill everything we've built. Your competitors won't rest.' Your family says 'push through it.' But you can barely get out of bed some mornings.",
+        description: "You've been working non-stop - constant recording, touring, endless promotion. The pace is relentless. You're exhausted, anxious, and having panic attacks before shows. Your therapist says you need to take three months off completely. But you're at the peak of your career momentum. Your manager says: 'Three months off now could kill everything we've built. Your competitors won't rest.' Your family says 'push through it.' But you can barely get out of bed some mornings.",
         conditions: { minFame: 50, maxWellBeing: 40, minCareerProgress: 40 },
         once: true,
         choices: [

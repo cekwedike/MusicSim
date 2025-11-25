@@ -81,6 +81,19 @@ const getScenarioWeight = (scenario: Scenario, usedScenarioTitles: string[]): nu
         return Math.max(0.02, 0.3 / (count + 1));
     }
 
+    // Special handling for "Contract Renewal" - heavy cooldown
+    if (scenario.title === "Contract Renewal") {
+        // If never seen, normal weight
+        if (titleIndex === -1) return 1.0;
+
+        // If seen recently, apply much heavier penalty than normal scenarios
+        const scenariosAgo = usedScenarioTitles.length - titleIndex;
+        // Don't appear for at least 20 scenarios (roughly 5 months game time)
+        if (scenariosAgo < 20) return 0.001; // Almost impossible
+        if (scenariosAgo < 30) return 0.1;
+        return 1.0;
+    }
+
     // If never seen, full weight
     if (titleIndex === -1) return 1.0;
 
@@ -152,9 +165,9 @@ export const getNewScenario = (state: GameState): Scenario => {
 
     // FORCE contract scenarios if eligible but hasn't seen one recently
     if (contractEligibilityUnlocked && !state.currentLabel) {
-        // Check if player has seen a contract scenario in last 10 scenarios
-        const recent10 = usedScenarioTitles.slice(-10);
-        const hasRecentContract = recent10.some(title =>
+        // Check if player has seen a contract scenario in last 5 scenarios (more aggressive)
+        const recent5 = usedScenarioTitles.slice(-5);
+        const hasRecentContract = recent5.some(title =>
             title === "The Indie Label Offer" || title === "The Major Label Bidding War"
         );
 

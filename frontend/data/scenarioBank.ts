@@ -114,8 +114,8 @@ export const scenarioBank: Scenario[] = [
      {
         title: "Contract Renewal",
         description: "Your manager's contract is up. They've done a good job, but are asking for a higher percentage. What do you do?",
-        conditions: { requiresStaff: ['Manager'] }, // Simplified condition, real logic in reducer
-        once: true, // This should be triggered by game logic, but flagged here
+        conditions: { requiresStaff: ['Manager'] }, // Requires active manager
+        // Removed once: true - this can now repeat when staff contracts expire
         choices: [
             {
                 text: "Renew the contract. They're worth it.",

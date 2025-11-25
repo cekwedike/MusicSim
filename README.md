@@ -237,7 +237,7 @@ npm run db:reset       # Reset database
 | `POST /api/career/complete` | Record career completion | Required |
 | `GET /api/analytics/overview` | User analytics dashboard | Required |
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Backend API tests
@@ -271,7 +271,7 @@ npm run build
 - System is live and verified on Vercel (frontend), Render (backend), and Supabase (database) as of November 2025.
 - Health endpoint, authentication, save/load, and analytics features tested and confirmed functional in production.
 
-## 🤝 Contributing
+## Contributing
 
 1. **Fork** the repository
 2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)

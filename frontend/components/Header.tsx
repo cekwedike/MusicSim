@@ -27,55 +27,45 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
     // Use new autosave status if provided, otherwise fall back to old system
     const isNewSystem = !!autoSaveStatus;
 
+    // Update autosave age and brief saved indicator when lastSaveTime changes
     useEffect(() => {
-        if (isNewSystem) {
-            // Use new autosave status
-            if (autoSaveStatus?.lastSaveTime) {
-                const ageMinutes = Math.floor((Date.now() - autoSaveStatus.lastSaveTime) / (1000 * 60));
-                setAutosaveAge(ageMinutes);
+        if (!isNewSystem) {
+            setAutosaveAge(null);
+            return;
+        }
 
-                // Show "Saved!" indicator for new saves
-                if (ageMinutes === 0) {
-                    setJustSaved(true);
-                    setTimeout(() => setJustSaved(false), 2000);
-                }
-            }
+        if (autoSaveStatus?.lastSaveTime != null) {
+            setAutosaveAge(getAutosaveAge());
+
+            // briefly show "Saved" indicator when a new save timestamp appears
+            setJustSaved(true);
+            const t = setTimeout(() => setJustSaved(false), 2000);
+            return () => clearTimeout(t);
         } else {
-            // Fall back to old system
-            const updateAutosaveAge = () => {
-                const age = getAutosaveAge();
-                setAutosaveAge(age);
-            };
-
-            updateAutosaveAge();
-            const interval = setInterval(updateAutosaveAge, 10000);
-            return () => clearInterval(interval);
+            setAutosaveAge(null);
         }
     }, [isNewSystem, autoSaveStatus?.lastSaveTime]);
 
-    // Show brief "Saved!" indicator when autosave happens (old system)
-    useEffect(() => {
-        if (!isNewSystem && autosaveAge === 0) {
-            setJustSaved(true);
-            setTimeout(() => setJustSaved(false), 2000);
-        }
-    }, [autosaveAge, isNewSystem]);
-
     return (
-        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center relative bg-primary/95 backdrop-blur-sm">
+        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center bg-gradient-to-r from-red-900 via-rose-900 to-red-900 relative backdrop-blur-sm">
             {/* Mobile Menu Button */}
             {showMenuButton && (
                 <button
                     onClick={onMenuClick}
-                    className="absolute top-2 sm:top-3 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-[#2D1115]/60 hover:bg-[#3D1820]/70 border border-gray-600/50 hover:border-gray-500 text-gray-300 hover:text-white transition-all duration-200 z-10"
+                    className="absolute top-2 sm:top-3 right-2 sm:right-4 lg:hidden p-2 rounded-lg bg-gray-800/60 hover:bg-gray-700/70 border border-gray-600/50 hover:border-gray-500 text-gray-300 hover:text-white transition-all duration-200 z-10"
                     aria-label="Open menu"
                 >
                     <Menu className="w-5 h-5" />
                 </button>
             )}
 
-            {/* Autosave Indicator */}
-            {artistName && (
+            {/* Mobile Header - Show on small screens */}
+            <div className="lg:hidden flex items-center justify-center">
+                <h1 className="text-lg sm:text-xl font-bold text-white drop-shadow">MusicSim</h1>
+            </div>
+
+            {/* Autosave / status overlay for the new system */}
+            {isNewSystem && (
                 <div className="absolute top-2 sm:top-3 left-2 sm:left-4 flex items-center gap-1 sm:gap-2">
                     {/* Saving in Progress */}
                     {autoSaveStatus?.isInProgress && (
@@ -85,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                     )}
 
                     {/* Save Success */}
-                    {justSaved && (
+                    {(justSaved || (!autoSaveStatus?.isInProgress && autoSaveStatus?.lastSaveTime && autosaveAge === 0)) && (
                         <div className="bg-semantic-success/20 border border-semantic-success rounded-lg px-2 sm:px-3 py-1 text-semantic-success text-xs sm:text-sm animate-fade-in">
                             Saved
                         </div>
@@ -93,8 +83,10 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
 
                     {/* Save Error */}
                     {autoSaveStatus?.error && (
-                        <div className="bg-semantic-error/20 border border-semantic-error rounded-lg px-2 sm:px-3 py-1 text-semantic-error text-xs sm:text-sm cursor-pointer"
-                             title={`Save Error: ${autoSaveStatus.error}`}>
+                        <div
+                            className="bg-semantic-error/20 border border-semantic-error rounded-lg px-2 sm:px-3 py-1 text-semantic-error text-xs sm:text-sm cursor-pointer"
+                            title={`Save Error: ${autoSaveStatus.error}`}
+                        >
                             Save Failed
                         </div>
                     )}

@@ -62,7 +62,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
     const displayDate = currentDate ? formatDate(currentDate) : `Y${date.year} M${date.month} W${date.week}`;
 
     return (
-        <div className="mb-1.5 md:mb-2 mt-1.5">
+        <div className="mb-1.5 md:mb-2 mt-1.5 pt-2 sm:pt-3 lg:pt-0">
             {/* Mobile: Collapsible view */}
             <div className="lg:hidden bg-[#2D1115] rounded-lg border border-[#3D1820]">
                 {isMobileCollapsed ? (

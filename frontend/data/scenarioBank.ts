@@ -3084,6 +3084,386 @@ export const scenarioBank: Scenario[] = [
                 }
             }
         ]
+    },
+
+    // --- BATCH 3: HIGH-STAKES SCENARIOS (10 scenarios with career-destroying potential) ---
+    {
+        title: "The Drug Dealer Investment Offer",
+        description: "A wealthy local figure offers to invest $50,000 in your music career - studio time, videos, promotion, everything you need. Your friend quietly warns you: 'That money comes from drug trade. Everyone knows it. If you take it, you're connected to him forever. When he goes down, you go down.' But $50,000 could make you a star overnight. Do you take dirty money?",
+        conditions: { minFame: 25, minCareerProgress: 18, maxCash: 5000, minFameByDifficulty: { beginner: 18, realistic: 25, hardcore: 32 } },
+        choices: [
+            {
+                text: "Accept the $50,000 investment",
+                outcome: {
+                    text: "You take the money. For 6 months, your career explodes - professional videos, radio rotation, billboard ads. You hit Fame 65 and $30K in cash. Then he gets arrested. Police investigate his finances. Your name appears in the case - you received $50,000 from a drug trafficker. Media destroys you. Brands drop you. Radio stations blacklist you. Your career is over. You're toxic. Prison isn't your only cell - public opinion imprisoned you too.",
+                    cash: -25000, fame: -55, wellBeing: -60, careerProgress: -70, hype: -80,
+                    lesson: {
+                        title: "Blood Money Career Death",
+                        explanation: "Money from illegal sources is career poison. When the source gets exposed, everyone connected falls. No explanation saves you - the association alone destroys reputations. Dirty money always comes with strings that strangle careers.",
+                        realWorldExample: "Numerous African and global artists have seen careers destroyed by connections to drug dealers, corrupt politicians, or money launderers. The short-term boost creates long-term catastrophe when authorities investigate.",
+                        tipForFuture: "Never accept money from illegal or questionable sources, no matter how much you need it. The origin of money matters as much as the amount. One bad investor can destroy decades of work.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Decline politely - find clean money",
+                outcome: {
+                    text: "You decline, saying you appreciate the offer but want to build independently. He's insulted but doesn't push. Your career grows slower - but clean. Six months later, he's arrested and everyone who took his money is publicly shamed. You dodged a career-ending bullet. Slower, cleaner growth saved your future.",
+                    cash: 0, fame: 6, wellBeing: 15, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Clean Money Patience",
+                        explanation: "Building slowly with clean money preserves your career long-term. Fast money from questionable sources creates catastrophic vulnerabilities. Patience and clean funding protect your future.",
+                        realWorldExample: "Artists who refuse dirty money struggle initially but survive industry purges that destroy those who took shortcuts. Clean careers withstand scrutiny; dirty money careers collapse overnight.",
+                        tipForFuture: "Vet your investors and money sources carefully. If you can't publicly explain where money came from, don't take it. Your reputation is worth more than any investment.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Sexual Assault Accusation Response",
+        description: "You're accused of sexual assault by someone you met after a show. They post their story on social media. It's gaining traction - 50K shares in 24 hours. You know you're innocent, but your lawyer says: 'We can't stop social media. This will define you unless you respond perfectly.' Your options: 1) Aggressive denial with counter-lawsuit threats, 2) Empathetic statement supporting survivors while denying this claim, 3) Say nothing and let lawyers handle it. Each approach has massive risks.",
+        conditions: { minFame: 45, minCareerProgress: 40, minFameByDifficulty: { beginner: 35, realistic: 45, hardcore: 55 } },
+        choices: [
+            {
+                text: "Aggressive denial - threaten to sue for defamation",
+                outcome: {
+                    text: "You post: 'These allegations are completely false. I'm suing for defamation and will expose the truth.' The internet explodes against you. Your aggressive response is seen as attacking a victim. Even people who believed you initially turn against you. Brands drop you within hours. Your aggressive defense made you look guilty. Your career is destroyed. Your lawyers say the defamation suit will take years and cost hundreds of thousands. You're finished.",
+                    cash: -15000, fame: -40, wellBeing: -70, careerProgress: -60, hype: -85,
+                    lesson: {
+                        title: "Aggressive Defense Backfire",
+                        explanation: "In sexual assault allegations, aggressive denial and legal threats against accusers are seen as intimidation tactics. The court of public opinion judges aggressive responses as guilt. Even innocent people must respond with careful empathy.",
+                        realWorldExample: "Many artists who responded aggressively to assault allegations saw their careers end regardless of truth. Public opinion turned against them for attacking alleged victims. The response matters as much as the truth.",
+                        tipForFuture: "If falsely accused, never attack the accuser publicly. Express empathy for survivors generally while calmly denying the specific claim. Aggression is career suicide in these situations.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Empathetic statement + denial of this specific claim",
+                outcome: {
+                    text: "You post: 'I deeply respect survivors and support their courage in speaking out. However, this specific allegation is false. I'm cooperating fully with any investigation to clear my name while respecting the process.' The response is mixed but not universally negative. Some support you, some doubt you. You lose 15% of your fanbase but retain your career. Your lawyers work quietly behind the scenes. Six months later, evidence proves your innocence. You rebuild slowly. You survived by responding carefully.",
+                    cash: -8000, fame: -12, wellBeing: -30, careerProgress: -15, hype: -25,
+                    lesson: {
+                        title: "Measured Crisis Response",
+                        explanation: "In serious allegations, showing empathy for the broader issue while calmly denying the specific claim is the least damaging approach. You acknowledge the seriousness without admitting guilt or attacking the accuser.",
+                        realWorldExample: "Artists who respond to allegations with measured, empathetic statements while denying specific claims fare better than those who attack or stay silent. The tone of response shapes public perception significantly.",
+                        tipForFuture: "Serious allegations require expert PR and legal guidance. Show empathy for the broader issue, deny the specific claim calmly, cooperate with investigations. Your response tone matters enormously.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Say nothing publicly - let lawyers handle it",
+                outcome: {
+                    text: "You post nothing. Your silence is interpreted as guilt. 'If he was innocent, he'd say something!' The narrative runs wild without your voice. Brands drop you. Shows are canceled. Your lawyer finally releases a statement three weeks later, but the damage is done. Your silence allowed the story to define you. By not speaking, you let others write your story. Your career is crippled.",
+                    cash: -10000, fame: -30, wellBeing: -50, careerProgress: -45, hype: -65,
+                    lesson: {
+                        title: "Silence Allows Narrative Control Loss",
+                        explanation: "In the social media age, silence in serious allegations is interpreted as guilt. While legal advice often recommends silence, public relations requires timely, careful response. You must speak to maintain some narrative control.",
+                        realWorldExample: "Many public figures who stayed silent during allegations found the narrative spiraled beyond control. While lawyers prefer silence, PR reality requires carefully crafted responses to prevent others from defining you.",
+                        tipForFuture: "Balance legal caution with PR necessity. You need both lawyers and PR experts for serious allegations. Complete silence surrenders narrative control and is often interpreted as admission.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Ponzi Scheme Partnership",
+        description: "A 'fintech company' wants you as brand ambassador - $40,000 for one year. They offer high-return investments to your fans: '20% monthly returns guaranteed!' Your financial advisor says: 'This is a Ponzi scheme. It will collapse. When it does, your fans will lose money and blame you.' But $40,000 is transformative. They say it's legit. Papers look real.",
+        conditions: { minFame: 35, minCareerProgress: 30, minFameByDifficulty: { beginner: 28, realistic: 35, hardcore: 42 } },
+        choices: [
+            {
+                text: "Take the $40,000 and promote the investment",
+                outcome: {
+                    text: "You become their ambassador. You post: 'I've invested in [Company] and so should you! 20% monthly returns!' Hundreds of your fans invest their savings - $2 million total. Eight months later, the scheme collapses. Your fans lose everything. They turn on you violently - death threats, lawsuits, public harassment. You're sued in a class action for $500,000. You're criminally investigated for fraud promotion. Your music career is over. You destroyed your fans and yourself.",
+                    cash: 40000, fame: -60, wellBeing: -80, careerProgress: -85, hype: -90,
+                    lesson: {
+                        title: "Ponzi Scheme Career Annihilation",
+                        explanation: "Promoting scams to your fans is career suicide and potentially criminal. When people lose money following your recommendation, they will destroy you. No amount of money is worth promoting investments you don't understand or that seem too good to be true.",
+                        realWorldExample: "Multiple celebrities and influencers have faced criminal charges and career destruction for promoting Ponzi schemes and fraudulent investments. Kim Kardashian, Floyd Mayweather, and DJ Khaled faced SEC charges for crypto scams.",
+                        tipForFuture: "Never promote financial products to fans unless you fully understand them and believe in them. If returns seem impossible, it's a scam. Your reputation for honesty is more valuable than any endorsement fee.",
+                        conceptTaught: "Predatory Deals"
+                    }
+                }
+            },
+            {
+                text: "Decline and warn your fans about the scheme",
+                outcome: {
+                    text: "You decline and post: 'I was approached by [Company] but something feels off. Be careful with any investment promising 20% monthly returns - that's usually a scam.' The company threatens to sue you. Three months later, they collapse and defraud thousands. Your fans thank you for the warning. You're seen as someone who protects their community. Your honesty strengthened your brand.",
+                    cash: 0, fame: 15, wellBeing: 20, careerProgress: 18, hype: 25,
+                    lesson: {
+                        title: "Protective Leadership",
+                        explanation: "Warning your fans about scams builds trust and positions you as protective of your community. Short-term loss of endorsement money is worth long-term trust and reputation as someone who looks out for fans.",
+                        realWorldExample: "Artists who warn fans about scams build reputations as trustworthy and protective. This loyalty is worth more than endorsement money and protects you from association when schemes collapse.",
+                        tipForFuture: "If something feels like a scam, say so publicly. Protecting your fans from fraud builds the kind of loyalty money can't buy. Be a shield for your community, not a funnel into scams.",
+                        conceptTaught: "Predatory Deals"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Political Endorsement Trap",
+        description: "The ruling political party offers you $75,000 to perform at their campaign rally and wear their party colors. Your country is deeply divided - the opposition accuses this party of corruption and human rights abuses. Half your fanbase supports them, half opposes them. Taking political sides could split your audience permanently. But $75,000 is life-changing money.",
+        conditions: { minFame: 50, minCareerProgress: 45, minFameByDifficulty: { beginner: 40, realistic: 50, hardcore: 60 } },
+        choices: [
+            {
+                text: "Accept $75,000 - perform at the rally",
+                outcome: {
+                    text: "You perform at the rally wearing their colors. Photos go viral. Half your fanbase is furious - they see you as supporting corruption. They organize boycotts. Radio stations owned by opposition supporters ban your music. You've lost 50% of your audience permanently. When the political tide shifts (parties lose power), the new government blacklists you too. You've become a political pawn. Your music career is now hostage to political fortunes. You're toxic to half the country forever.",
+                    cash: 75000, fame: -35, wellBeing: -45, careerProgress: -50, hype: -60,
+                    lesson: {
+                        title: "Political Endorsement Career Split",
+                        explanation: "Explicit political endorsements in divided countries permanently alienate portions of your audience. Music careers outlast political terms - tying yourself to one party makes you toxic when power shifts. Stay out of partisan politics.",
+                        realWorldExample: "Artists who endorse politicians in divided countries routinely lose half their audience and face blacklisting when political winds change. Nigerian, Kenyan, and Ugandan artists have all learned this the hard way.",
+                        tipForFuture: "Never explicitly endorse political parties, especially in deeply divided countries. Your music career must outlast any political term. Partisan politics splits audiences permanently.",
+                        conceptTaught: "strategic-neutrality"
+                    }
+                }
+            },
+            {
+                text: "Decline - maintain political neutrality",
+                outcome: {
+                    text: "You decline politely: 'I appreciate the offer but I prefer to keep my music separate from politics.' Both sides respect your neutrality. You keep your full audience. Some criticize you for not taking a stand, but you've protected your career from political volatility. When governments change, you're still performing. Neutrality preserved your longevity.",
+                    cash: 0, fame: 5, wellBeing: 10, careerProgress: 12, hype: 8,
+                    lesson: {
+                        title: "Strategic Political Neutrality",
+                        explanation: "Political neutrality protects artists from audience splits and political volatility. You can have personal political views without making public partisan endorsements. Your career longevity depends on not alienating large audience segments.",
+                        realWorldExample: "Long-lasting African artists like Fally Ipupa and Diamond Platnumz maintain political neutrality to preserve their pan-African and multi-demographic appeal. Political neutrality is career protection.",
+                        tipForFuture: "Keep partisan politics separate from your art. You can advocate for issues (education, health, corruption) without endorsing specific parties. Neutrality preserves your full audience.",
+                        conceptTaught: "strategic-neutrality"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Label Contract With Hidden Enslavement",
+        description: "A major label offers you a 3-album deal: $150,000 advance, professional production, international distribution. Your lawyer reads the fine print: 'They own your masters forever, 360-deal takes 30% of ALL your income (including tours, merch, brand deals), and you can't release music elsewhere for 10 years even if they drop you.' This is a golden cage. Take the money and lose control forever, or stay independent and struggle?",
+        conditions: { minFame: 40, minCareerProgress: 35, minFameByDifficulty: { beginner: 32, realistic: 40, hardcore: 50 } },
+        choices: [
+            {
+                text: "Sign the deal - take the $150,000 advance",
+                outcome: {
+                    text: "You sign. You get $150,000 upfront. They produce one album that does moderately well. Then they lose interest - no promotion, no marketing for albums 2 and 3. But you still owe them 2 albums and can't release music elsewhere. For 7 years, you're stuck. You can't put out music without their permission (they decline). They take 30% of your tour income even though they do nothing. Your career is frozen. The $150,000 cost you 7 years and your masters. You're enslaved by a contract.",
+                    cash: 150000, fame: -25, wellBeing: -60, careerProgress: -55, hype: -70,
+                    lesson: {
+                        title: "Contract Enslavement Reality",
+                        explanation: "Predatory label contracts can freeze careers for years. Advances seem huge but often cost you your career, your masters, and your freedom. 360-deals where labels take percentage of all income are especially exploitative. Read everything before signing.",
+                        realWorldExample: "Countless artists have been trapped in predatory label deals - TLC declared bankruptcy despite platinum albums, Prince fought Warner Bros for decades, African artists regularly get trapped in exploitative contracts with minimal support.",
+                        tipForFuture: "Never sign contracts giving away masters permanently or taking percentages of all income. Advances are loans, not gifts. Bad contracts are worse than no contracts. Hire experienced entertainment lawyers.",
+                        conceptTaught: "Predatory Deals"
+                    }
+                }
+            },
+            {
+                text: "Walk away - negotiate better terms or stay independent",
+                outcome: {
+                    text: "You tell them the terms are unacceptable. They refuse to negotiate. You walk away. For 2 years, you struggle independently. Then streaming revenue grows. You build a solid independent career keeping 100% of your masters and income. Five years later, you've earned more than the $150,000 advance would have paid, and you own everything. Patience and ownership beat fast money and enslavement.",
+                    cash: 0, fame: 8, wellBeing: 15, careerProgress: 20, hype: 12,
+                    lesson: {
+                        title: "Independence Over Enslavement",
+                        explanation: "Walking away from predatory deals preserves your long-term value. Independent careers are harder initially but give you control and ownership. You keep your masters and full income. Patience and ownership beat advances and servitude.",
+                        realWorldExample: "Artists like Chance the Rapper, Macklemore, and African artists like Burna Boy (initially independent) built successful careers without major label deals, keeping ownership and control.",
+                        tipForFuture: "Predatory contracts are career killers. If terms are bad, walk away. Independent paths are viable in the streaming era. Ownership is more valuable than advances. Never give up your masters.",
+                        conceptTaught: "Predatory Deals"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Tax Evasion Scheme",
+        description: "Your accountant suggests: 'We can hide income in offshore accounts and pay almost no taxes. Saves you $30,000/year. Everyone does it - audits are rare.' Your lawyer warns: 'If caught, it's prison time plus career destruction. Pay your taxes.' But $30,000 annually is massive savings. The government is corrupt anyway - why give them money?",
+        conditions: { minFame: 55, minCareerProgress: 50, minCash: 40000 },
+        choices: [
+            {
+                text: "Evade taxes using offshore accounts",
+                outcome: {
+                    text: "You hide income offshore for 3 years, saving $90,000 in taxes. Then the government launches an anti-corruption drive targeting wealthy tax evaders. Your accountant is arrested and cooperates with investigators. Your name is leaked to media. Public outrage is massive - you're a rich artist stealing from the people. You're arrested, charged with tax evasion, and ordered to pay $200,000 (back taxes + penalties + interest). Your reputation is destroyed. Brands drop you. You're seen as a thief. Career over. Prison time likely.",
+                    cash: -200000, fame: -70, wellBeing: -85, careerProgress: -80, hype: -90,
+                    lesson: {
+                        title: "Tax Evasion Career Annihilation",
+                        explanation: "Tax evasion is criminal and career-ending when exposed. Public opinion turns viciously against wealthy people who don't pay taxes. Penalties far exceed the savings. No career survives tax evasion scandals. Always pay your taxes.",
+                        realWorldExample: "Numerous celebrities have faced prison and career destruction for tax evasion: Wesley Snipes (prison), Lauryn Hill (prison), Shakira (charges), Lionel Messi (convicted). Tax evasion is not worth the risk.",
+                        tipForFuture: "Always pay your taxes legally. Use legal tax optimization strategies if needed, but never evade taxes. The risk is catastrophic, and no amount of savings is worth prison and career destruction.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Pay taxes legally - fire the corrupt accountant",
+                outcome: {
+                    text: "You fire the accountant and hire one who handles your taxes legally. You pay what you owe. When the government's anti-corruption drive hits, your name isn't on any list. Artists who evaded taxes are arrested and shamed publicly. You're clean. Your integrity protected you. The government later offers you a tax ambassador position for artists - paying taxes openly made you a role model.",
+                    cash: -30000, fame: 12, wellBeing: 20, careerProgress: 15, hype: 10,
+                    lesson: {
+                        title: "Tax Compliance Protection",
+                        explanation: "Paying taxes legally protects you from criminal liability and career destruction. When governments crack down on tax evasion, compliant taxpayers are safe. Legal tax payment is career insurance. Integrity has value.",
+                        realWorldExample: "Artists who pay taxes openly often become respected figures when governments pursue tax evaders. Tax compliance is boring but protective. Legal status is a competitive advantage when crackdowns happen.",
+                        tipForFuture: "Pay your taxes. Use legal strategies to minimize them if you want, but never evade. Tax compliance protects your career and reputation. When crackdowns happen, you're safe.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Plagiarism Accusation With Evidence",
+        description: "A smaller artist publicly accuses you of stealing their song. They post side-by-side videos showing your hit song and their unreleased demo from 2 years ago. The melodies are nearly identical. You didn't steal it - your producer gave you the beat. But the internet doesn't care about nuance. The evidence looks damning. 5 million views in 48 hours. Your response?",
+        conditions: { minFame: 48, minCareerProgress: 42 },
+        choices: [
+            {
+                text: "Deny everything - call it coincidence",
+                outcome: {
+                    text: "You post: 'This is pure coincidence. Songs have similar melodies all the time.' Music experts analyze both songs and confirm they're too similar to be coincidence. Your denial looks like gaslighting. The internet turns against you completely. Media coverage explodes - you're labeled a thief and liar. Streaming platforms start pulling your music. Your hit song is removed. Your career implodes. Denying obvious evidence made everything worse.",
+                    cash: -20000, fame: -50, wellBeing: -70, careerProgress: -65, hype: -80,
+                    lesson: {
+                        title: "Denial of Evidence Backfire",
+                        explanation: "Denying obvious evidence makes you look dishonest and compounds the original problem. When caught, admitting error and offering resolution is less damaging than denial. Gaslighting the victim and public destroys credibility completely.",
+                        realWorldExample: "Artists who deny obvious plagiarism face worse backlash than those who admit mistakes. Ed Sheeran, Robin Thicke, and others faced major consequences for plagiarism denials with strong evidence against them.",
+                        tipForFuture: "If caught in wrongdoing with strong evidence, don't deny it. Admit the mistake, compensate the wronged party, and show accountability. Denial of evidence is career suicide.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Investigate, admit fault, and compensate the artist",
+                outcome: {
+                    text: "You investigate and discover your producer gave you a beat they created from the other artist's demo without telling you. You post: 'I was unaware this melody was taken from another artist's work. This is my producer's fault, but I take responsibility. I'm removing the song, compensating the artist, and crediting them.' You pay them $50,000 and give co-writing credit. The situation resolves. You lose money and some reputation, but your honesty limited the damage. You survived by owning the mistake.",
+                    cash: -50000, fame: -15, wellBeing: -25, careerProgress: -10, hype: -20,
+                    lesson: {
+                        title: "Accountability Damage Control",
+                        explanation: "When caught in wrongdoing (even unknowingly), quick accountability, compensation, and correction limit damage. Admitting fault and making it right preserves more of your career than denial or fighting. Own mistakes fast.",
+                        realWorldExample: "Artists who quickly admit plagiarism mistakes and compensate the wronged parties face shorter scandals and keep more of their careers. Sam Smith admitted plagiarism to Tom Petty's estate and resolved it with credits and royalties.",
+                        tipForFuture: "If you're caught plagiarizing (knowingly or not), immediately admit fault, compensate the artist, and fix it. Quick accountability limits damage. Don't fight obvious wrongs - own them.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Blame the producer publicly and sue them",
+                outcome: {
+                    text: "You publicly throw your producer under the bus: 'My producer stole this melody and gave it to me without disclosure. I'm suing them.' The internet sees you as spineless - dodging responsibility by blaming someone else. Your producer fights back, leaking messages showing you knew about issues with the beat. Now you look like a liar AND someone who betrays collaborators. Your reputation is destroyed. No producer will work with you again. Your career is over.",
+                    cash: -35000, fame: -45, wellBeing: -60, careerProgress: -70, hype: -75,
+                    lesson: {
+                        title: "Blame-Shifting Reputation Destruction",
+                        explanation: "Publicly blaming collaborators to save yourself destroys your reputation in the industry. Even if they're at fault, throwing them under the bus makes you look weak and untrustworthy. No one will work with someone who betrays collaborators publicly.",
+                        realWorldExample: "Artists who publicly blame and sue their collaborators during scandals rarely recover their careers. The industry blacklists people who betray teams. Internal accountability is better than public blame-shifting.",
+                        tipForFuture: "Never publicly throw collaborators under the bus to save yourself. Take responsibility as the artist, handle disputes privately, and maintain industry relationships. Betraying teams destroys your career.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Dangerous Venue Collapse",
+        description: "You're about to perform at a festival. An engineer quietly tells you: 'The stage structure is unsafe - overloaded equipment, no safety inspections. If you perform and something collapses, people could die. I reported it but organizers won't cancel - they'll lose $500,000.' You're the headliner. If you cancel, you lose your $15,000 fee and face lawsuits. But people's lives might be at risk.",
+        conditions: { minFame: 52, minCareerProgress: 48, minFameByDifficulty: { beginner: 42, realistic: 52, hardcore: 62 } },
+        choices: [
+            {
+                text: "Perform - the organizers say it's safe",
+                outcome: {
+                    text: "You perform. Halfway through your set, part of the stage collapses. Five people die, dozens are injured. Video shows you were warned but performed anyway. You're criminally charged with negligence. Families sue you for millions. Your career ends instantly. You're seen as someone who valued $15,000 over human lives. Even if you avoid prison, you're morally destroyed. Your music career is over. Five families will never be whole again because you didn't cancel.",
+                    cash: 15000, fame: -80, wellBeing: -95, careerProgress: -90, hype: -95,
+                    lesson: {
+                        title: "Safety Over Everything",
+                        explanation: "Human life is always more valuable than performance fees or contractual obligations. If safety is genuinely questionable, cancel. No amount of money is worth people dying. You will be held morally and legally responsible if you proceed despite warnings.",
+                        realWorldExample: "Multiple concert disasters (Indiana State Fair stage collapse, Travis Scott's Astroworld) have destroyed careers and resulted in criminal charges. Artists who perform despite safety warnings face catastrophic consequences when disasters occur.",
+                        tipForFuture: "If credible safety concerns exist, cancel immediately regardless of financial costs. Document the concerns and your decision. Human life always comes first. Your career can't survive mass casualties.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Cancel immediately and explain publicly why",
+                outcome: {
+                    text: "You cancel and post: 'I was informed of serious safety concerns with the stage structure. I cannot in good conscience perform when lives may be at risk. I'm canceling my performance.' Organizers are furious. They sue you for $50,000. But an independent inspection the next day confirms the stage was dangerously unsafe. You're vindicated. People thank you for prioritizing safety over money. Your reputation for integrity grows. The lawsuit is dropped. You saved lives and your soul.",
+                    cash: -5000, fame: 20, wellBeing: 30, careerProgress: 25, hype: 15,
+                    lesson: {
+                        title: "Moral Courage Career Protection",
+                        explanation: "Prioritizing safety over money, even at financial cost, builds reputation for integrity. When you're vindicated, your moral courage becomes career asset. People want to work with artists who value human life.",
+                        realWorldExample: "Artists who cancel shows for genuine safety concerns and explain publicly are almost always vindicated and respected. Their careers benefit from demonstrating values. Safety-first reputations attract better opportunities.",
+                        tipForFuture: "Trust safety experts over event organizers with financial incentives. Cancel if safety is genuinely questionable. Document concerns. Your reputation for valuing human life is a career asset.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Substance Abuse Spiral Public Meltdown",
+        description: "You've been using cocaine heavily for 6 months to keep up with touring demands. You're dependent now. You're scheduled for a major televised performance - biggest opportunity of your career, 10 million viewers. But you're high and unstable. Your manager says: 'Go on stage or lose the career-making opportunity.' You're in no condition to perform. Go on high or cancel?",
+        conditions: { minFame: 58, minCareerProgress: 55, maxWellBeing: 30 },
+        choices: [
+            {
+                text: "Perform high - don't miss the opportunity",
+                outcome: {
+                    text: "You go on stage high. Midway through the performance, you forget lyrics, stumble, and have a visible breakdown on live TV. 10 million people watch you collapse. The video goes viral - 50 million views. You're rushed to hospital. Media reports confirm substance abuse. Your career implodes - shows canceled, sponsors flee, label drops you. You've become a cautionary tale. Rehab takes 6 months. You emerge to find your career dead. The industry has moved on. You're yesterday's tragic story.",
+                    cash: -40000, fame: -65, wellBeing: -80, careerProgress: -75, hype: -85,
+                    lesson: {
+                        title: "Public Meltdown Career Death",
+                        explanation: "Performing while visibly impaired on major platforms destroys careers instantly. The video lives forever. Substance abuse issues require treatment, not performance through them. No opportunity is worth a public meltdown that ends your career.",
+                        realWorldExample: "Numerous artists have suffered career-ending public breakdowns while performing impaired: Amy Winehouse's later performances, Britney Spears' 2007 VMAs, and many others. Public impairment becomes your legacy.",
+                        tipForFuture: "If you have substance issues, get treatment before major performances. No single opportunity is worth the risk of public collapse. Career-making moments become career-ending when you're visibly impaired.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Cancel and check into rehab immediately",
+                outcome: {
+                    text: "You cancel the performance and check into rehab, releasing a statement: 'I'm dealing with substance abuse issues and need treatment. I'm sorry to disappoint fans but I need to get healthy first.' Public reaction is sympathetic. You spend 90 days in treatment. When you return, you're clean and focused. The industry respects your honesty. You rebuild slowly but authentically. Three years later, you're bigger than before. Getting help saved your life and career.",
+                    cash: -25000, fame: -10, wellBeing: 50, careerProgress: -5, hype: -15,
+                    lesson: {
+                        title: "Seeking Help Saves Careers",
+                        explanation: "Publicly admitting substance issues and seeking treatment preserves more career than performing impaired. Audiences respect vulnerability and recovery. Treatment is career protection, not career ending. Honesty about struggles builds authenticity.",
+                        realWorldExample: "Artists like Demi Lovato, Robert Downey Jr., and Eminem rebuilt massive careers after publicly seeking substance abuse treatment. Recovery stories inspire loyalty and respect. Getting help is career-saving, not career-ending.",
+                        tipForFuture: "If you develop substance issues, seek treatment immediately and be honest about it. Don't perform through addiction - get help. Recovery is possible and respected. Your health enables your career.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Stolen Music Distribution Deal",
+        description: "A distributor offers you an 'exclusive' global distribution deal. They'll get your music on all platforms worldwide for just $500 upfront. Your current distributor charges 10% of royalties. This seems like a better deal. You sign. Three months later, you discover: they're not licensed distributors. They uploaded your music illegally using fake accounts. When platforms detect fraud, your entire catalog is removed from Spotify, Apple Music, everywhere. All your streaming history, playlists, algorithms - gone.",
+        conditions: { minFame: 30, minCareerProgress: 28, minCash: 2000 },
+        choices: [
+            {
+                text: "Sign with the unlicensed distributor - save money",
+                outcome: {
+                    text: "You sign and pay $500. Your music goes up on all platforms. For 3 months, everything seems fine. Then platforms detect the fraudulent accounts. Your entire catalog is removed. Worse: you're flagged in Spotify's and Apple's systems as associated with fraud. When you try to re-upload through legitimate distributors, you're blocked. Your artist profiles are banned. Years of streaming history, followers, playlist placements - all erased. You can't get your music back on platforms. The $500 savings cost you your entire digital career. You're blacklisted.",
+                    cash: 500, fame: -55, wellBeing: -70, careerProgress: -80, hype: -85,
+                    lesson: {
+                        title: "Fraud Distribution Career Destruction",
+                        explanation: "Unlicensed distributors who upload music fraudulently get artists permanently banned from streaming platforms. Once flagged for fraud, you can't recover your profiles or history. Saving money on distribution can cost you your entire digital presence forever.",
+                        realWorldExample: "Thousands of artists have been permanently banned from Spotify, Apple Music, and YouTube for using fraudulent distributors. Platform blacklists are permanent. Never use unlicensed distributors - the risk is career annihilation.",
+                        tipForFuture: "Only use licensed, verified distributors (DistroKid, TuneCore, CD Baby, Ditto, etc.). If a distribution deal seems too cheap, it's fraudulent. Platform bans are permanent - protect your digital presence.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Research them first - verify licensing",
+                outcome: {
+                    text: "You research them before signing. You discover they're not on Spotify's or Apple's official distributor lists. You ask for proof of licensing - they can't provide it. You decline. A month later, artists who signed with them have their catalogs removed and profiles banned. You dodged a career-ending bullet. Your 10% with a legitimate distributor is suddenly looking very cheap compared to permanent platform bans.",
+                    cash: 0, fame: 5, wellBeing: 15, careerProgress: 8, hype: 6,
+                    lesson: {
+                        title: "Distribution Due Diligence",
+                        explanation: "Always verify distributors are officially licensed by platforms before signing. Check Spotify's and Apple's official distributor lists. Unlicensed distributors cause permanent bans. Due diligence protects your digital career.",
+                        realWorldExample: "Smart artists only use verified distributors on official platform lists. The music industry is full of scam distributors who get artists banned. Five minutes of research can save your entire career.",
+                        tipForFuture: "Before choosing a distributor, verify they're on Spotify's, Apple's, and YouTube's official lists. Never use unlicensed distributors. Your digital presence is too valuable to risk on unverified services.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
     }
 ];
 

@@ -275,7 +275,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h4 className="font-semibold text-white text-base truncate">
-                          {slot.artistName}
+                          {getSaveName(slot.id)}
                         </h4>
                         {slot.id === 'auto' && (
                           <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
@@ -283,7 +283,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-300 mb-0.5">{getSaveName(slot.id)}</p>
+                      <p className="text-sm text-gray-300 mb-0.5">{slot.artistName}</p>
                       <p className="text-xs text-gray-400">{slot.genre}</p>
                     </div>
                   </div>

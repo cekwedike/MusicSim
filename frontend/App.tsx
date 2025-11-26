@@ -1734,13 +1734,13 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     )}
                                     
                                     <div className="space-y-2">
-                                        {/* Header with artist name and genre */}
+                                        {/* Header with save name (primary) and artist name (secondary) */}
                                         <div className="flex items-center justify-between">
                                             <div className="min-w-0 flex-1">
-                                                <div className="text-xs text-gray-500 mb-0.5">
+                                                <div className="font-bold text-base text-red-300 truncate group-hover:text-red-200 transition-colors">
                                                     {slot.slotName}
                                                 </div>
-                                                <div className="font-bold text-sm text-red-300 truncate group-hover:text-red-200 transition-colors">
+                                                <div className="text-sm text-gray-300 truncate mt-0.5">
                                                     {slot.artistName}
                                                 </div>
                                                 <div className="text-xs text-gray-400 capitalize">

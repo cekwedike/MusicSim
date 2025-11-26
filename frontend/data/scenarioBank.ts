@@ -3928,6 +3928,1293 @@ export const scenarioBank: Scenario[] = [
                 }
             }
         ]
+    },
+
+    // --- BATCH 5: LOW-RISK POSITIVE SCENARIOS (10 scenarios - opportunities & growth moments) ---
+    {
+        title: "The Community Radio Interview Opportunity",
+        description: "A local community radio station (20K weekly listeners) invites you for a 30-minute interview and live performance. They don't pay, but they'll promote the interview heavily and let you plug your upcoming shows. It's authentic community building vs waiting for bigger media opportunities. Your schedule is flexible this week.",
+        conditions: { minFame: 8, maxFame: 40 },
+        choices: [
+            {
+                text: "Accept the interview - build local community",
+                outcome: {
+                    text: "You do the interview. The hosts are genuine music lovers who ask thoughtful questions. Your performance is great. Local listeners call in with support. You gain 800 local followers and sell out your next local show (extra $600). Community radio connected you with real fans who actually come to shows. Grassroots building works.",
+                    cash: 600, fame: 4, wellBeing: 12, careerProgress: 6, hype: 10,
+                    lesson: {
+                        title: "Community Media Value",
+                        explanation: "Local community media builds genuine connections with audiences who become loyal fans. While reach is smaller than major media, engagement is higher. Local supporters attend shows, buy merch, and spread word authentically.",
+                        realWorldExample: "Many successful independent artists built careers through community radio and local media before mainstream attention. These early supporters remain core fanbases. Community building creates sustainable foundation.",
+                        tipForFuture: "Don't overlook community and local media. Smaller audiences with high engagement beat large audiences with low engagement. Build local before thinking global. Your community is your foundation.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Decline - wait for bigger opportunities",
+                outcome: {
+                    text: "You decline, hoping for bigger media. Months pass with no other interview offers. Meanwhile, artists who did the community radio show built local fanbases and are selling out shows. You realize you've been waiting for opportunities instead of taking available ones. Sometimes 20K engaged listeners beat waiting for millions of disengaged ones.",
+                    cash: 0, fame: 0, wellBeing: -5, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Opportunity Cost of Waiting",
+                        explanation: "Waiting for 'bigger' opportunities while declining available ones creates stagnation. Growth comes from taking opportunities at your current level, not waiting for opportunities at higher levels. Build momentum with what's available.",
+                        realWorldExample: "Many artists stagnate by declining 'small' opportunities while waiting for 'big' ones that never come. Successful artists take every legitimate opportunity to connect with audiences, regardless of size.",
+                        tipForFuture: "Take opportunities at your current level rather than waiting for opportunities at levels you haven't reached yet. Small platforms build toward bigger ones. Momentum comes from action, not waiting.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Production Workshop Teaching Offer",
+        description: "A youth center wants you to teach a weekend music production workshop to aspiring young artists (ages 16-22). They'll pay you $400 for two days. It's not huge money, but you'd be mentoring the next generation and giving back to your community. Plus, teaching often helps you learn. Worth your weekend?",
+        conditions: { minFame: 15, minCareerProgress: 12 },
+        choices: [
+            {
+                text: "Teach the workshop - mentor young artists",
+                outcome: {
+                    text: "You teach the workshop. The students are eager and talented. Teaching forces you to articulate techniques you use instinctively - you learn as much as they do. Three students become your interns, helping with social media and production. One becomes a talented collaborator. You earned $400, gained help, and built goodwill in your community. Giving back multiplied your resources.",
+                    cash: 400, fame: 3, wellBeing: 15, careerProgress: 5, hype: 6,
+                    lesson: {
+                        title: "Teaching Multiplies Knowledge",
+                        explanation: "Teaching forces you to articulate and refine your skills. Students often offer fresh perspectives and become collaborators or team members. Mentorship builds community goodwill and identifies emerging talent. Teaching benefits the teacher.",
+                        realWorldExample: "Many successful artists mentor young talent and build teams from workshop participants. Pharrell, Timbaland, and African producers like MasterKraft have mentored artists who became collaborators and friends.",
+                        tipForFuture: "Take teaching opportunities when they align with your schedule. Teaching clarifies your own knowledge, builds community relationships, and often identifies talented people to work with. Mentorship has mutual benefits.",
+                        conceptTaught: "community-building"
+                    }
+                }
+            },
+            {
+                text: "Decline - focus on your own career",
+                outcome: {
+                    text: "You decline to focus on your music. The weekend is productive - you finish two songs. But you miss the chance to connect with emerging talent and community. The youth center brings in another artist who gains local respect and three talented interns. Your solo productivity was good, but you missed relationship-building opportunities that compound over time.",
+                    cash: 0, fame: 1, wellBeing: 0, careerProgress: 3, hype: 2,
+                    lesson: {
+                        title: "Community Building Trade-offs",
+                        explanation: "Solo productivity is valuable, but community building and mentorship create opportunities that compound. Sometimes stepping away from your own work to help others returns more value through relationships, reputation, and unexpected collaborations.",
+                        realWorldExample: "Artists who engage in community mentorship often build stronger local support networks. While it takes time from personal projects, the relationships and goodwill create opportunities that solo work doesn't.",
+                        tipForFuture: "Balance solo productivity with community engagement. Teaching, mentoring, and community involvement build networks that create opportunities. Not everything valuable shows immediate ROI. Relationships compound.",
+                        conceptTaught: "community-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The DIY Music Video With Friends",
+        description: "You want a music video but can't afford a professional ($5,000+). Your friends offer to help make one for free - one has a decent camera, another does amateur editing, others will act in it. It won't be high-budget quality, but it could have authentic energy. Professional later or DIY now?",
+        conditions: { minFame: 12, maxCash: 8000 },
+        choices: [
+            {
+                text: "Make the DIY video with friends now",
+                outcome: {
+                    text: "You shoot a fun, energetic video with your friends. It's not Hollywood quality, but the authentic energy and creativity shine through. Fans love the realness - it gets 50K views in two weeks, way more than your previous content. The DIY aesthetic feels genuine. You spent $200 on props and food for the crew. Sometimes creativity beats budget.",
+                    cash: -200, fame: 8, wellBeing: 15, careerProgress: 10, hype: 20,
+                    lesson: {
+                        title: "DIY Authenticity Appeal",
+                        explanation: "Audiences often connect more with authentic, creative DIY content than overproduced professional videos lacking personality. Energy and creativity can compensate for production budget. Start with what you have rather than waiting for what you don't.",
+                        realWorldExample: "Many viral music videos are low-budget DIY productions. Childish Gambino's 'This Is America' was powerful through concept and performance, not budget. Tyler, The Creator's early videos were DIY and connected strongly with audiences.",
+                        tipForFuture: "Don't let lack of budget prevent you from creating. DIY videos with strong concepts and authentic energy often outperform expensive, soulless productions. Use what you have creatively.",
+                        conceptTaught: "creative-resourcefulness"
+                    }
+                }
+            },
+            {
+                text: "Save money for professional video later",
+                outcome: {
+                    text: "You decide to wait and save. Six months later, you have $5,000. You hire a professional crew. The video looks great but feels generic - the director doesn't really understand your vision. It gets 20K views. The amateur video your friends offered might have had more authentic energy. Professional doesn't always mean better.",
+                    cash: -5000, fame: 6, wellBeing: -5, careerProgress: 5, hype: 12,
+                    lesson: {
+                        title: "Budget vs Authenticity Balance",
+                        explanation: "Professional production doesn't guarantee better results if the vision and authenticity are lost. Sometimes waiting for professional quality means sacrificing the creative energy and timing that make content resonate. Balance matters more than budget.",
+                        realWorldExample: "Many artists' low-budget early videos outperform their later high-budget ones because they captured raw energy and authenticity. Professionalism can sometimes sand away the edges that made the art interesting.",
+                        tipForFuture: "Evaluate whether professional production will enhance or dilute your vision. Sometimes DIY captures something professional can't. Don't always assume more budget equals better result. Authenticity has value.",
+                        conceptTaught: "creative-resourcefulness"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Surprise Playlist Addition",
+        description: "You wake up to messages - a Spotify editorial playlist curator added your song to a 150K follower playlist without telling you! Your streams are jumping. The playlist is 'African Rising Stars' or 'Indie Hustle' depending on your genre. This is pure algorithmic luck meeting quality. How do you capitalize on this momentum?",
+        conditions: { minFame: 18, minCareerProgress: 15 },
+        choices: [
+            {
+                text: "Push marketing hard - capitalize on the momentum",
+                outcome: {
+                    text: "You immediately boost social media posts, run targeted ads to the playlist's audience, and engage heavily with new listeners. You spend $800 on ads but gain 5K followers and 150K streams. The algorithm sees the increased engagement and pushes your music further. Your song stays on the playlist for 6 weeks. You turned lucky placement into sustained growth. Strategic investment in momentum worked.",
+                    cash: -800, fame: 12, wellBeing: 10, careerProgress: 15, hype: 30,
+                    lesson: {
+                        title: "Momentum Capitalization",
+                        explanation: "When unexpected opportunities or algorithmic luck happens, capitalizing with strategic investment amplifies results. Momentum is temporary - investing during high-growth moments compounds gains. Luck creates opportunities; strategy converts them to results.",
+                        realWorldExample: "Artists who recognize momentum moments and invest in them see exponential growth. When songs go viral or get playlist placements, smart artists double down with ads, content, and engagement. Timing investment to momentum maximizes ROI.",
+                        tipForFuture: "When you get unexpected boosts (playlist adds, viral moments, press coverage), invest immediately in amplifying them. Momentum is temporary. Strategic spending during growth periods compounds results more than random spending.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Let it grow organically - just enjoy the moment",
+                outcome: {
+                    text: "You watch the numbers climb without intervening. You gain 2K followers and 80K streams over three weeks. It's nice growth, but when you're removed from the playlist, momentum stops. You wonder if you could have turned this into something bigger with strategic investment. Organic is good, but strategic amplification might have been better.",
+                    cash: 0, fame: 6, wellBeing: 12, careerProgress: 8, hype: 15,
+                    lesson: {
+                        title: "Organic Growth Limits",
+                        explanation: "Organic growth is valuable and sustainable, but strategic investment during momentum spikes can amplify results significantly. Purely organic approach during high-growth moments is missed opportunity for acceleration. Balance organic with strategic amplification.",
+                        realWorldExample: "Many artists let momentum moments pass without capitalizing. While organic growth is real, artists who strategically amplify during high-growth periods (with ads, content, engagement) typically achieve 2-3x the results of purely organic approaches.",
+                        tipForFuture: "Organic growth is foundation, but don't be purely passive during momentum moments. Strategic amplification during spikes can turn temporary boosts into permanent gains. Invest when you have momentum.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Thank the curator and build relationship",
+                outcome: {
+                    text: "You find the curator's contact and send a heartfelt thank you, sharing your artist story. They respond - they love supporting emerging artists. They add another of your songs to a different playlist. Over the next year, they become an advocate, including you in three more playlists. Building the relationship turned one placement into ongoing support. Gratitude and relationship building paid compound interest.",
+                    cash: 0, fame: 10, wellBeing: 15, careerProgress: 18, hype: 25,
+                    lesson: {
+                        title: "Curator Relationship Building",
+                        explanation: "Playlist curators are people who appreciate genuine connection and gratitude. Building real relationships with curators who support you can turn one-time placements into ongoing advocacy. Relationships compound more than single placements.",
+                        realWorldExample: "Artists who build genuine relationships with playlist curators often receive ongoing support across multiple playlists. Curators remember artists who are grateful, professional, and authentic. Relationships create sustained opportunities.",
+                        tipForFuture: "When curators support you, build genuine relationships through thoughtful gratitude and occasional updates. Don't spam or beg, but maintain authentic connections. Long-term curator relationships are more valuable than single placements.",
+                        conceptTaught: "relationship-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Unexpected Collaboration Request",
+        description: "An artist you admire (similar fame level, great reputation) DMs you: 'I love your sound. Want to collaborate on a track?' This could be a great creative partnership and cross-pollinate your fanbases. But collaborations take time and require chemistry. Do you commit your time to this?",
+        conditions: { minFame: 20, minCareerProgress: 16 },
+        choices: [
+            {
+                text: "Enthusiastically agree - make time for it",
+                outcome: {
+                    text: "You collaborate. The chemistry is amazing - you create a song better than either could have made alone. Both fanbases embrace it. You each gain 3K followers from the other's audience. More importantly, you've made a genuine friend and creative partner. Future collaborations are planned. The time investment created a valuable long-term relationship and great music.",
+                    cash: -500, fame: 8, wellBeing: 18, careerProgress: 12, hype: 20,
+                    lesson: {
+                        title: "Collaborative Chemistry Value",
+                        explanation: "Good collaborations create music neither artist could make alone while introducing each fanbase to the other. Creative partnerships compound over time through multiple projects and mutual support. Chemistry-based collaborations are career assets.",
+                        realWorldExample: "Many iconic musical partnerships began with organic collaboration requests - OutKast, Daft Punk, Black Star, African duos like P-Square. Great collaborations create legacies bigger than solo careers.",
+                        tipForFuture: "When artists you respect reach out for collaboration, prioritize it. Good creative partnerships compound through multiple projects and mutual fanbase sharing. Collaborative relationships are career multipliers.",
+                        conceptTaught: "collaboration-benefits"
+                    }
+                }
+            },
+            {
+                text: "Politely decline - stay focused on solo work",
+                outcome: {
+                    text: "You decline, citing time constraints. They collaborate with someone else. That song becomes a hit and launches both artists to new levels. You're still grinding alone. You realize collaboration isn't distraction from your career - it is your career. Missing this opportunity cost you growth, relationship, and creative chemistry. You chose isolation over multiplication.",
+                    cash: 0, fame: 1, wellBeing: -5, careerProgress: 2, hype: 0,
+                    lesson: {
+                        title: "Collaboration Opportunity Cost",
+                        explanation: "Excessive focus on solo work can cause you to miss collaboration opportunities that accelerate growth. Music careers are built through relationships and partnerships, not pure isolation. Saying no to good collaborators is saying no to growth.",
+                        realWorldExample: "Many successful artists attribute their growth to collaborations. Drake with 40, Rihanna with various producers, African artists' collaboration culture - partnerships accelerate careers. Pure solo focus often leads to slower growth.",
+                        tipForFuture: "Don't be so focused on solo work that you miss collaboration opportunities with respected peers. Partnerships multiply reach, creativity, and growth. Collaboration is career strategy, not distraction.",
+                        conceptTaught: "collaboration-benefits"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Fan Art Appreciation Post",
+        description: "A fan creates beautiful artwork inspired by your music and tags you. It's genuinely impressive - they clearly love your work. You could reshare it with credit (builds relationship), commission them for official artwork ($300), or just like it and move on. How do you respond to fan creativity?",
+        conditions: { minFame: 16, minHype: 10 },
+        choices: [
+            {
+                text: "Reshare with enthusiastic credit and praise",
+                outcome: {
+                    text: "You reshare their art with genuine praise: 'This is incredible! Thank you for this beautiful interpretation of my music.' The artist is thrilled. Your fans see you appreciate and amplify fan creativity. More fans create art, covers, and content inspired by your music. You've encouraged a creative community around your work. The culture of fan creativity grows organically. Free promotion through fan art.",
+                    cash: 0, fame: 4, wellBeing: 10, careerProgress: 5, hype: 12,
+                    lesson: {
+                        title: "Fan Creativity Encouragement",
+                        explanation: "Acknowledging and amplifying fan creativity encourages more fan engagement and content creation. Fans who feel appreciated become more loyal and active. User-generated content is authentic marketing that money can't buy. Appreciation costs nothing and multiplies engagement.",
+                        realWorldExample: "Artists who regularly appreciate and reshare fan content build stronger communities. Taylor Swift, BTS, and many African artists amplify fan creativity, which creates ecosystems of free content and deeper engagement.",
+                        tipForFuture: "Always acknowledge quality fan creativity with genuine appreciation and amplification. It costs nothing, makes fans feel valued, and encourages more fan-generated content. User creativity is free marketing.",
+                        conceptTaught: "fan-engagement"
+                    }
+                }
+            },
+            {
+                text: "Commission them for official artwork - pay $300",
+                outcome: {
+                    text: "You DM them: 'This is amazing. I'd love to commission you for my next single artwork. $300?' They're ecstatic - you've just validated their art financially and given them their first paid music work. The artwork they create is perfect. Other fans see you support fan artists. Your reputation for supporting community grows. $300 bought you art, goodwill, and stronger community relationships.",
+                    cash: -300, fame: 5, wellBeing: 15, careerProgress: 6, hype: 15,
+                    lesson: {
+                        title: "Paying Fan Creators Value",
+                        explanation: "Commissioning fan artists accomplishes multiple goals: you get authentic artwork, they get paid validation, and your community sees you support creators. Paying fans for quality work builds deep loyalty and attracts more creative fans. Community investment returns compound value.",
+                        realWorldExample: "Many artists hire fans for official work - album art, merch design, video animation. This builds incredibly loyal community members who become advocates. Paying fans fairly creates ambassadors.",
+                        tipForFuture: "When fans create quality work, consider commissioning them for official projects. It builds loyalty, supports your community, and often results in more authentic work than hiring disconnected professionals.",
+                        conceptTaught: "fan-engagement"
+                    }
+                }
+            },
+            {
+                text: "Just like it and move on",
+                outcome: {
+                    text: "You like the post but don't engage further. The fan is slightly disappointed - they hoped for more acknowledgment. They don't create more fan art. Other potential fan creators see minimal engagement and don't bother creating content. You missed opportunity to build creative community around your music. A simple reshare would have cost nothing and multiplied engagement.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Missed Fan Engagement",
+                        explanation: "Minimal engagement with quality fan creativity is missed opportunity. Fans want acknowledgment and connection. Small gestures like resharing and praising cost nothing but build loyalty and encourage more fan content. Passive engagement misses community-building opportunities.",
+                        realWorldExample: "Artists who minimally engage with fan creativity often have less active communities. Fans want to feel seen and appreciated. Artists who actively engage with fan content build vibrant, creative communities that organically promote their music.",
+                        tipForFuture: "Never just 'like and move on' when fans create quality content for you. Genuine acknowledgment and amplification cost nothing but create engaged communities. Small gestures have big impacts on fan loyalty.",
+                        conceptTaught: "fan-engagement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Local Business Soundtrack Deal",
+        description: "A popular local restaurant/café wants to license one of your songs for their in-store playlist. They'll pay $150 for a 1-year license. It's not huge money, but your music will play in their space daily, and they'll credit you on social media. Low-key exposure in your community. Worth licensing?",
+        conditions: { minFame: 12, minCareerProgress: 8 },
+        choices: [
+            {
+                text: "License the song for $150",
+                outcome: {
+                    text: "You license the song. For a year, hundreds of local people hear your music weekly while eating and drinking. Multiple customers Shazam your song and become fans. The restaurant tags you in posts, driving 500 new local followers. You book three shows from people who discovered you at that restaurant. The $150 paid for itself many times through local recognition and show bookings. Micro licensing works.",
+                    cash: 150, fame: 3, wellBeing: 8, careerProgress: 6, hype: 8,
+                    lesson: {
+                        title: "Local Licensing Value",
+                        explanation: "Small local licensing deals create consistent passive exposure in community spaces. People hear your music in relaxed settings, making positive associations. Local businesses become passive promoters. Small, consistent exposure compounds.",
+                        realWorldExample: "Many independent artists earn consistent income and local recognition through small business licensing - cafes, gyms, shops. These micro-deals add up and create local presence that translates to show attendance and word-of-mouth growth.",
+                        tipForFuture: "Don't overlook small licensing opportunities with local businesses. $150 might seem small, but consistent community exposure has value. Local presence translates to show attendance and organic growth.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Decline - hold out for bigger licensing deals",
+                outcome: {
+                    text: "You decline, thinking $150 is too small. A year passes with no other licensing offers. The restaurant uses another local artist's music, who gains local recognition and community support. You realize you were holding out for opportunities that don't exist yet at your level. Sometimes small opportunities lead to bigger ones. You chose waiting over doing.",
+                    cash: 0, fame: 0, wellBeing: -3, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Small Deal Value Recognition",
+                        explanation: "Holding out for 'bigger' deals while declining opportunities at your current level creates stagnation. Small deals appropriate for your level lead to bigger ones through momentum and relationship building. Growth comes from taking available opportunities.",
+                        realWorldExample: "Most successful licensing careers started with small local deals. Holding out for major brand deals while unknown is unrealistic. Artists build licensing portfolios through small opportunities that demonstrate value.",
+                        tipForFuture: "Take opportunities appropriate for your current level. Small licensing deals build portfolio, relationships, and momentum toward bigger deals. Waiting for opportunities you haven't earned yet creates stagnation.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Blog Feature Opportunity",
+        description: "An independent music blog (15K monthly readers, respected in your genre) wants to feature you. They need a 1,000-word artist profile from you, high-res photos, and exclusive early access to your next single. It's work to prepare, but the feature could reach engaged music fans. Worth the effort?",
+        conditions: { minFame: 14, minCareerProgress: 10 },
+        choices: [
+            {
+                text: "Provide everything - do the feature properly",
+                outcome: {
+                    text: "You spend 3 hours preparing a thoughtful artist profile, professional photos, and early access to your single. The blog publishes an excellent feature. You gain 1,200 new followers who actually engage with your content - they comment, save songs, and share. Three playlist curators discover you through the blog. Your next show sells 40 more tickets than usual. The 3 hours you invested returned significant engaged audience growth.",
+                    cash: 200, fame: 6, wellBeing: 8, careerProgress: 10, hype: 14,
+                    lesson: {
+                        title: "Quality Press Value",
+                        explanation: "Independent music blogs reach engaged, genre-specific audiences who actively discover music. While reach is smaller than mainstream media, engagement and conversion rates are higher. Investing effort in quality features pays off through engaged audience growth.",
+                        realWorldExample: "Many successful independent artists credit music blogs for early growth. Blogs like Pitchfork, The Fader, Okayplayer started as independent publications. Genre-specific blogs reach your actual audience more effectively than mainstream media.",
+                        tipForFuture: "Invest effort in legitimate independent music blog features. Their audiences are engaged music fans who actually listen and support artists. Quality over quantity - engaged niche audiences beat large disengaged ones.",
+                        conceptTaught: "press-strategy"
+                    }
+                }
+            },
+            {
+                text: "Half-effort it - send minimal info",
+                outcome: {
+                    text: "You send a brief bio and mediocre photos. The blog publishes a weak feature with your minimal content. It gets little traction - 200 new followers who don't engage much. The blog editors remember you were difficult to work with and don't feature you again. Your laziness cost you a relationship with a respected platform. Half-effort got half-results.",
+                    cash: 0, fame: 2, wellBeing: -3, careerProgress: 1, hype: 3,
+                    lesson: {
+                        title: "Effort Quality Correlation",
+                        explanation: "The effort you put into press opportunities directly correlates with results. Half-effort produces weak content that doesn't engage audiences or build media relationships. Full effort creates quality features that drive real results and build media partnerships.",
+                        realWorldExample: "Media outlets remember artists who are professional and provide quality materials versus those who are difficult and provide minimal content. Reputation spreads - your professionalism (or lack thereof) affects future opportunities.",
+                        tipForFuture: "When you commit to press opportunities, do them properly. Half-effort wastes everyone's time and damages your media relationships. Quality engagement with media builds lasting relationships that create ongoing opportunities.",
+                        conceptTaught: "press-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Studio Session Networking Chance",
+        description: "You're at a studio. Another artist is recording next door. During a break, they introduce themselves - they're working on an EP and seem talented. You could hang out, exchange contacts, and potentially build a relationship, or just finish your session and leave. Studio networking or stay focused?",
+        conditions: { minFame: 18, minCareerProgress: 14 },
+        choices: [
+            {
+                text: "Network and build the relationship",
+                outcome: {
+                    text: "You hang out and exchange contacts. They're cool and talented. You discover you have compatible vibes and similar audiences. Over the next year, you collaborate on two songs, share each other's music, and become genuine friends. They introduce you to their manager, who books you three shows. That random studio encounter created lasting professional relationship and opportunities. Networking compounds.",
+                    cash: 300, fame: 6, wellBeing: 12, careerProgress: 10, hype: 12,
+                    lesson: {
+                        title: "Organic Industry Networking",
+                        explanation: "Many valuable music industry relationships start through random encounters in studios, shows, and music spaces. Being open to genuine connections creates opportunities that formal networking events rarely do. Organic relationships based on mutual respect compound over time.",
+                        realWorldExample: "Countless musical partnerships and career opportunities started from random studio encounters. The music industry runs on relationships built organically through genuine mutual interest, not forced networking. Authentic connection creates opportunities.",
+                        tipForFuture: "Be open to genuine connections in music spaces. Random encounters in studios, shows, and creative spaces often lead to valuable relationships and opportunities. Organic networking beats forced networking.",
+                        conceptTaught: "relationship-building"
+                    }
+                }
+            },
+            {
+                text: "Stay focused on your session",
+                outcome: {
+                    text: "You politely acknowledge them but stay focused on your session. You finish efficiently. Later, you see that artist blow up - they're now way bigger than you. They're collaborating with artists you wish you could work with. You realize that studio encounter was a missed networking opportunity. Excessive focus on immediate tasks made you miss relationship-building. Efficiency isn't always optimal.",
+                    cash: 0, fame: 1, wellBeing: 0, careerProgress: 2, hype: 0,
+                    lesson: {
+                        title: "Relationship Building Priority",
+                        explanation: "Being so focused on immediate tasks that you miss relationship-building opportunities costs long-term potential. Music careers are built on relationships as much as craft. Balancing task focus with openness to connection matters. Pure efficiency misses serendipity.",
+                        realWorldExample: "Many artists regret being too focused on their own work to build relationships with peers who later became successful. The music industry rewards those who balance craft focus with genuine relationship building. Opportunities come through people.",
+                        tipForFuture: "Don't be so focused on tasks that you miss genuine connection opportunities. Music careers are relationship-based. Balance efficiency with openness to authentic networking. Serendipitous encounters often create the best opportunities.",
+                        conceptTaught: "relationship-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Home Studio Upgrade Decision",
+        description: "Your current home setup is basic but functional. A friend is selling professional studio monitors, an audio interface, and acoustic treatment for $1,200 (worth $3,000 new). It would significantly improve your production quality. But $1,200 is a lot. Upgrade your tools or keep working with what you have?",
+        conditions: { minFame: 20, minCareerProgress: 18, minCash: 2000 },
+        choices: [
+            {
+                text: "Buy the upgrade - invest in better tools",
+                outcome: {
+                    text: "You buy the equipment. The difference is immediately noticeable - your mixes sound cleaner, more professional. Producers and artists you send music to take you more seriously. You book three paid production jobs ($2,400 total) because your sound quality improved. The equipment paid for itself and elevated your craft. Investment in tools was investment in career quality.",
+                    cash: 1200, fame: 4, wellBeing: 10, careerProgress: 12, hype: 8,
+                    lesson: {
+                        title: "Tool Investment ROI",
+                        explanation: "Quality tools improve output quality, which creates better opportunities. Investment in proper equipment often pays for itself through increased professional opportunities and respect. Better tools enable better work. Strategic equipment investment is career investment.",
+                        realWorldExample: "Professional producers and artists invest in quality equipment because it improves output and attracts better opportunities. While you can start with basic tools, strategic upgrades at appropriate times accelerate career growth through quality improvement.",
+                        tipForFuture: "When you can afford strategic equipment upgrades (especially good deals on professional gear), invest. Better tools improve your work quality, which improves opportunities. Equipment investment pays dividends through career quality improvement.",
+                        conceptTaught: "career-investment"
+                    }
+                }
+            },
+            {
+                text: "Keep your current setup - save the money",
+                outcome: {
+                    text: "You keep your basic setup. Your production quality stays the same. Producers and labels you send music to mention the mix quality could be better. You miss production job opportunities because your sound isn't quite professional enough. Six months later, you regret not buying the equipment - you've lost more than $1,200 in missed opportunities. Penny-wise, pound-foolish.",
+                    cash: 0, fame: 1, wellBeing: -5, careerProgress: 3, hype: 2,
+                    lesson: {
+                        title: "Equipment Opportunity Cost",
+                        explanation: "Not investing in quality tools when affordable and necessary creates opportunity cost through limited output quality. While you save money short-term, you lose opportunities long-term. Strategic equipment investment prevents lost opportunities through quality limitations.",
+                        realWorldExample: "Many artists regret not upgrading equipment when they had good opportunities, losing production work and professional respect due to quality limitations. Strategic investment in tools at right times prevents more losses than the equipment costs.",
+                        tipForFuture: "Evaluate equipment purchases based on opportunity cost, not just price. If better tools would create opportunities worth more than their cost, buy them. Calculate long-term value, not just short-term expense.",
+                        conceptTaught: "career-investment"
+                    }
+                }
+            }
+        ]
+    },
+
+    // --- BATCH 6: MIXED SCENARIOS (10 scenarios - variety of situations) ---
+    {
+        title: "The Artist Name Trademark Issue",
+        description: "You discover another artist in a different country is using the same name as you. They registered the trademark first. A lawyer says you could fight it ($5,000+) or just rebrand now while you're still growing. Changing your name loses recognition you've built, but fighting might be expensive and uncertain. What do you do?",
+        conditions: { minFame: 24, minCareerProgress: 20, minFameByDifficulty: { beginner: 18, realistic: 24, hardcore: 30 } },
+        choices: [
+            {
+                text: "Rebrand now - change your artist name",
+                outcome: {
+                    text: "You change your name and announce it across all platforms. It's disorienting - you lose 15% of your followers who don't realize you changed names. But you avoid legal issues and the new name is actually more unique and memorable. Six months later, you've regained lost followers and built stronger branding. Early rebranding was less painful than it would be later.",
+                    cash: -800, fame: -6, wellBeing: -10, careerProgress: 8, hype: 5,
+                    lesson: {
+                        title: "Early Rebranding Advantage",
+                        explanation: "Rebranding early in your career is less disruptive than rebranding after major success. While you lose some recognition, you avoid legal issues and can build stronger, legally protected branding. The earlier you fix naming issues, the less costly they are.",
+                        realWorldExample: "Many artists have rebranded early to avoid trademark conflicts - Lady Gaga was Stefani Germanotta, Snoop Dogg has changed names multiple times, African artists often modify names for international markets. Early rebranding beats later legal battles.",
+                        tipForFuture: "Research trademark availability before investing heavily in a name. If conflicts exist, rebrand while you're still growing. The cost of rebranding increases exponentially with your fame level.",
+                        conceptTaught: "brand-protection"
+                    }
+                }
+            },
+            {
+                text: "Fight for your name - hire lawyers",
+                outcome: {
+                    text: "You spend $6,000 fighting the trademark. After 10 months, you lose - they had prior registration. You're forced to rebrand anyway after spending $6,000 and a year of stress. Now you're bigger, so the rebrand is more painful and confusing. You lost money, time, and still had to change your name. Fighting cost you everything rebranding would have cost, plus $6,000 and momentum.",
+                    cash: -6000, fame: -8, wellBeing: -25, careerProgress: -10, hype: -15,
+                    lesson: {
+                        title: "Legal Battle Risk Assessment",
+                        explanation: "Fighting trademark battles you're likely to lose wastes money and delays inevitable rebranding. If someone has prior registration, you'll probably lose. Accepting reality early costs less than fighting battles you can't win.",
+                        realWorldExample: "Many artists have wasted money fighting losing trademark battles. Prior registration usually wins. Artists who accept trademark realities early and rebrand strategically fare better than those who fight and lose.",
+                        tipForFuture: "If someone has clear prior trademark registration, don't waste money fighting. Rebrand strategically and early. Legal battles you'll lose cost more than strategic rebranding.",
+                        conceptTaught: "brand-protection"
+                    }
+                }
+            },
+            {
+                text: "Ignore it - operate in different markets",
+                outcome: {
+                    text: "You continue using your name, betting you operate in different geographic markets. For two years, it works fine. Then you try to expand internationally and face trademark infringement lawsuits. You're blocked from major markets and platforms. You're forced into expensive settlements and rebranding at the worst time - when you're trying to go global. Ignoring the problem made it catastrophic.",
+                    cash: -12000, fame: -20, wellBeing: -35, careerProgress: -25, hype: -30,
+                    lesson: {
+                        title: "Delayed Problems Compound",
+                        explanation: "Ignoring trademark conflicts doesn't make them disappear - it makes them worse. When you try to expand, dormant conflicts become active lawsuits at the worst possible time. Addressing issues early prevents catastrophic timing.",
+                        realWorldExample: "Artists who ignore trademark conflicts face lawsuits when they try to expand internationally or sign major deals. The problem surfaces at the worst time, causing maximum damage. Early resolution prevents catastrophic timing.",
+                        tipForFuture: "Don't ignore trademark conflicts hoping they'll disappear. They surface when you try to grow, causing maximum damage. Address naming issues early before they become career-limiting crises.",
+                        conceptTaught: "brand-protection"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Opening Act Opportunity",
+        description: "A major artist touring through your city needs an opening act. Their team offers you the slot - 20 minutes, 5,000-person venue, $500 payment. It's exposure to a large audience but you'd be performing for fans who came for someone else. Some artists get booed off as openers. Risk it or decline?",
+        conditions: { minFame: 28, minCareerProgress: 24 },
+        choices: [
+            {
+                text: "Accept the opening slot - take the exposure",
+                outcome: {
+                    text: "You perform as opener. The audience is polite but not your fans - mild applause, some phone scrolling. But 300 people Shazam your songs and become followers. Three playlist curators in attendance add your music. The headliner's team is impressed and offers you three more opening slots on their tour. Opening acts are about industry and future fans, not immediate crowd reaction. The long game worked.",
+                    cash: 500, fame: 8, wellBeing: 5, careerProgress: 12, hype: 15,
+                    lesson: {
+                        title: "Opening Act Long-Term Value",
+                        explanation: "Opening act success isn't measured by crowd reaction - it's measured by industry impressions, music discovery (Shazams), and future opportunities. Opening slots build toward headlining. Audiences won't love you immediately, but the right people notice.",
+                        realWorldExample: "Many headliners built careers opening for bigger artists. Burna Boy opened for others before headlining. Opening acts expose you to industry professionals and serious music fans who discover new artists. It's career investment.",
+                        tipForFuture: "Take legitimate opening slots for established artists. Don't expect crowd love - expect industry exposure and discovery opportunities. Opening acts are stepping stones to headlining.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            },
+            {
+                text: "Decline - only headline your own shows",
+                outcome: {
+                    text: "You decline, wanting to only perform for your own fans. A year passes - you're still playing 200-person venues. The artist who took the opening slot is now on tour as a co-headliner with the artist they opened for. Opening was a pathway they took and you didn't. Your pride kept you small. Headline status comes from opening act patience.",
+                    cash: 0, fame: 1, wellBeing: 0, careerProgress: 2, hype: 0,
+                    lesson: {
+                        title: "Career Progression Pathways",
+                        explanation: "Refusing to open for bigger artists because of pride limits growth. Most headliners started as openers. The pathway from opener to co-headliner to headliner is standard. Skipping steps doesn't work - you stay at your current level.",
+                        realWorldExample: "Almost every major touring artist opened for others first. Refusing opening slots out of pride is refusing the standard career progression. Artists who accept the opener pathway typically progress faster than those who don't.",
+                        tipForFuture: "Opening for established artists is part of normal career progression, not beneath you. Accept legitimate opening slots - they're stepping stones. Pride-based refusal of standard pathways slows growth.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Social Media Manager Hiring Decision",
+        description: "Managing your social media takes 15 hours weekly - you're overwhelmed. A professional social media manager offers services: $800/month for daily posting, engagement, and growth strategy. Your current following is 35K. Could hiring them free you to focus on music, or is $800 too much at your level?",
+        conditions: { minFame: 32, minCareerProgress: 28, minCash: 5000 },
+        choices: [
+            {
+                text: "Hire the social media manager for $800/month",
+                outcome: {
+                    text: "You hire them. They take over daily posting and engagement. Your follower growth accelerates from their expertise - 35K to 55K in 3 months. More importantly, you reclaim 15 hours weekly for music creation. You finish your album 2 months faster. The $2,400 (3 months) paid for itself through growth and creative productivity. Delegating was strategic.",
+                    cash: -2400, fame: 10, wellBeing: 20, careerProgress: 18, hype: 25,
+                    lesson: {
+                        title: "Strategic Task Delegation",
+                        explanation: "Hiring professionals for time-consuming tasks frees you to focus on your core skills. If $800/month social media management returns more through growth and creative productivity, it's worth it. Time is your most valuable resource - spend it wisely.",
+                        realWorldExample: "Successful artists delegate social media, admin, and management tasks to focus on creation and performance. Taylor Swift, Beyoncé, and major artists have teams because delegation scales careers. You can't do everything yourself and grow.",
+                        tipForFuture: "Evaluate hiring based on ROI and time value. If delegation returns more value than it costs (through growth and reclaimed creative time), hire. Your time should be spent on what only you can do.",
+                        conceptTaught: "team-building"
+                    }
+                }
+            },
+            {
+                text: "Keep managing it yourself - save the money",
+                outcome: {
+                    text: "You keep managing social media yourself. The 15 hours weekly continues draining you. Your music output suffers - you finish half the songs you planned. Your follower growth stagnates at 35K because you're too burned out to post consistently. After 6 months, you're exhausted and haven't grown. Saving $4,800 cost you creative output and growth. Time was more valuable than money.",
+                    cash: 0, fame: 2, wellBeing: -15, careerProgress: 4, hype: 3,
+                    lesson: {
+                        title: "Time Value Recognition",
+                        explanation: "Sometimes saving money costs more through lost productivity and opportunity. If managing social media prevents you from creating music and growing, the 'saved' money costs you more than hiring would. Recognize when your time is worth more than the money you're saving.",
+                        realWorldExample: "Many independent artists burn out trying to do everything themselves to save money. Those who strategically hire for time-consuming tasks often progress faster despite the expense. Time is often more valuable than the money saved.",
+                        tipForFuture: "Calculate the opportunity cost of doing everything yourself. If a task takes 15 hours weekly and prevents higher-value work, hiring might cost less than doing it yourself. Your creative time has value.",
+                        conceptTaught: "team-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Genre Pressure From Fans",
+        description: "You started making Afrobeats/Hip-Hop but you're inspired to experiment with electronic/alternative sounds. You release an experimental single. Your core fans are confused and some criticize: 'This isn't what we followed you for!' Do you stay true to artistic evolution or give fans what they expect?",
+        conditions: { minFame: 35, minCareerProgress: 30 },
+        choices: [
+            {
+                text: "Double down on experimentation - evolve your sound",
+                outcome: {
+                    text: "You release more experimental music. You lose 20% of your original fanbase who wanted you to stay the same. But you gain new fans who love the evolution. Three years later, your experimental phase is considered your best work. Critics respect your artistic courage. The fans who stayed are more devoted because they grew with you. Evolution was risky but rewarding.",
+                    cash: 0, fame: 8, wellBeing: 25, careerProgress: 22, hype: 18,
+                    lesson: {
+                        title: "Artistic Evolution Courage",
+                        explanation: "Artists who evolve lose some fans but gain new ones and critical respect. Staying creatively stagnant to please existing fans often leads to artistic death. Evolution is risky but necessary for long-term relevance and personal fulfillment.",
+                        realWorldExample: "Every major artist faced backlash for evolving - Kanye with 808s, Radiohead with Kid A, Burna Boy's sound evolution. Those who evolve thoughtfully become legends. Those who stay static become nostalgia acts.",
+                        tipForFuture: "Don't let fan expectations trap you creatively. Evolution loses some fans but gains new ones and prevents artistic stagnation. Artists who follow their creative instincts build legendary careers.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            },
+            {
+                text: "Return to your original sound - give fans what they want",
+                outcome: {
+                    text: "You abandon experimentation and return to your original sound. Fans are happy initially. But over time, you become bored and creatively unfulfilled. Your music feels repetitive. Critics call you one-dimensional. Five years later, you're making the same music while younger artists experiment and get attention. Playing it safe kept fans but killed your artistic growth.",
+                    cash: 500, fame: 5, wellBeing: -20, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Creative Stagnation Risk",
+                        explanation: "Letting fan expectations dictate your artistry leads to creative stagnation and long-term irrelevance. Short-term fan satisfaction isn't worth long-term artistic death. Artists who don't evolve become nostalgia acts, not legends.",
+                        realWorldExample: "Many artists trapped themselves by giving fans exactly what they wanted, becoming one-trick ponies. Artists who courage to evolve stay relevant decades longer. AC/DC vs. Radiohead - both successful, but evolution creates longevity.",
+                        tipForFuture: "Balance fan expectations with artistic growth. You can evolve gradually without abandoning your core, but never let fans trap you in creative stagnation. Your artistic fulfillment matters.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            },
+            {
+                text: "Blend both - gradual evolution while honoring roots",
+                outcome: {
+                    text: "You find middle ground - incorporating electronic elements into Afrobeats/Hip-Hop foundation rather than abandoning it completely. Fans appreciate the evolution that still feels like 'you.' You keep 90% of your fanbase while attracting new listeners. Critics praise your ability to evolve without alienating supporters. Gradual evolution was the smartest path.",
+                    cash: 300, fame: 12, wellBeing: 15, careerProgress: 18, hype: 22,
+                    lesson: {
+                        title: "Strategic Artistic Evolution",
+                        explanation: "You can evolve without completely abandoning what made fans love you. Gradual evolution that incorporates new elements into your foundation keeps existing fans while attracting new ones. Evolution doesn't require revolution.",
+                        realWorldExample: "Most successful artists evolve gradually - Drake incorporated dancehall, The Weeknd evolved from dark R&B to pop, Wizkid gradually internationalized. Gradual evolution brings fans along rather than alienating them.",
+                        tipForFuture: "You don't have to choose between artistic evolution and fan loyalty. Gradual incorporation of new influences into your foundation keeps fans while allowing growth. Evolution can be incremental.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Controversial Social Issue Statement",
+        description: "A major social issue is dominating conversations in your country - police brutality, political corruption, economic inequality. Fans are asking where you stand. Speaking out could alienate some audiences and sponsors, but silence feels complicit. Do you use your platform or stay neutral?",
+        conditions: { minFame: 45, minCareerProgress: 40, minFameByDifficulty: { beginner: 38, realistic: 45, hardcore: 52 } },
+        choices: [
+            {
+                text: "Speak out strongly - use your platform for justice",
+                outcome: {
+                    text: "You post a strong statement supporting justice and human rights. You lose two brand sponsors ($15,000) who don't want controversy. Some fans criticize you for 'being political.' But you gain respect from socially conscious audiences. Your core fanbase strengthens - they see you have values beyond music. Five years later, history vindicates your stance. Integrity was worth the cost.",
+                    cash: -15000, fame: 10, wellBeing: 20, careerProgress: 12, hype: 15,
+                    lesson: {
+                        title: "Platform Responsibility Values",
+                        explanation: "Using your platform for social justice has costs but builds respect and strengthens relationships with values-aligned audiences. Short-term financial losses from brands that want silence are worth long-term respect and alignment with values.",
+                        realWorldExample: "Artists like Fela Kuti, Kendrick Lamar, Beyoncé, Burna Boy use platforms for social justice despite commercial risks. Those remembered as legends had principles. Those who stayed silent for commercial safety are forgotten.",
+                        tipForFuture: "Decide whether you want to be remembered for music only or for standing for something. Speaking out has costs but builds legacy and strengthens values-aligned relationships. Integrity matters.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            },
+            {
+                text: "Stay completely silent - avoid all controversy",
+                outcome: {
+                    text: "You say nothing. You keep your sponsors and avoid controversy. But fans see your silence as complicity. Your most passionate supporters feel betrayed - you have a platform and won't use it for justice. You're seen as caring more about money than values. Ten years later, your silence during important moments defines you negatively. Playing it safe damaged your legacy.",
+                    cash: 5000, fame: 3, wellBeing: -25, careerProgress: 5, hype: 8,
+                    lesson: {
+                        title: "Silence as Statement",
+                        explanation: "Silence during important social moments is interpreted as choice to protect commercial interests over values. Fans remember who spoke up and who stayed silent. Complete neutrality during injustice is seen as complicity, not wisdom.",
+                        realWorldExample: "Artists who stayed silent during major social movements are remembered poorly. Muhammad Ali's courage vs. other athletes' silence. History judges those with platforms who stayed silent when speaking mattered.",
+                        tipForFuture: "Realize that silence is a choice that communicates values. Complete neutrality during injustice is interpreted as siding with power. Consider whether commercial safety is worth legacy damage.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            },
+            {
+                text: "Thoughtful statement - advocate without alienating",
+                outcome: {
+                    text: "You post a measured statement advocating for justice and human rights without attacking any specific group. You lose one cautious sponsor but keep most. Your statement is shared widely as an example of thoughtful celebrity advocacy. You gain respect across political divides for taking a stand without being inflammatory. Thoughtful courage was the optimal path.",
+                    cash: -3000, fame: 15, wellBeing: 18, careerProgress: 20, hype: 20,
+                    lesson: {
+                        title: "Thoughtful Advocacy Balance",
+                        explanation: "You can advocate for justice in ways that minimize unnecessary alienation while still taking meaningful stands. Thoughtful advocacy for universal values (justice, human rights) resonates across divides better than inflammatory statements. Wisdom and courage can coexist.",
+                        realWorldExample: "Artists like Common, John Legend, and African artists like 2Baba advocate thoughtfully for justice. They take stands without unnecessary inflammatory language. Thoughtful advocacy reaches more people and creates broader coalitions.",
+                        tipForFuture: "You can advocate without being unnecessarily divisive. Focus on universal values (justice, rights, dignity) rather than inflammatory attacks. Thoughtful courage often accomplishes more than aggressive statements.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Merchandise Quality Dilemma",
+        description: "You want to launch merch. Quality manufacturers cost $8,000 for 500 units (t-shirts, hoodies). Cheap manufacturers cost $2,500 for the same, but quality is questionable. You could sell good merch for $30 (profit $6,000) or cheap merch for $20 (profit $7,500). Quality vs profit margins?",
+        conditions: { minFame: 30, minCareerProgress: 26, minCash: 9000 },
+        choices: [
+            {
+                text: "Cheap manufacturer - maximize profit margins",
+                outcome: {
+                    text: "You choose cheap manufacturing. The merch sells well initially but quality complaints flood in - shirts shrink after one wash, prints crack, colors fade. Your reputation suffers. Fans feel ripped off and stop buying future merch. You made $7,500 once but destroyed your merch credibility. Cheap quality was expensive mistake.",
+                    cash: 7500, fame: -8, wellBeing: -15, careerProgress: -5, hype: -10,
+                    lesson: {
+                        title: "Quality vs Short-Term Profit",
+                        explanation: "Cheap merchandise damages your brand and prevents future merch sales. Quality products create satisfied customers who buy repeatedly. Short-term profit maximization through quality compromise destroys long-term revenue and reputation.",
+                        realWorldExample: "Artists with cheap merch face backlash and lose merch revenue streams. Artists known for quality merch (Kanye, Tyler the Creator, African artists with premium merch) build loyal customers who buy repeatedly.",
+                        tipForFuture: "Never compromise on merch quality for short-term profits. Your name is on the product - quality reflects on you. Build merch reputation through quality, not maximum margins. Repeat customers beat one-time sales.",
+                        conceptTaught: "brand-protection"
+                    }
+                }
+            },
+            {
+                text: "Quality manufacturer - build long-term reputation",
+                outcome: {
+                    text: "You invest in quality manufacturing. Fans rave about the merch quality - it holds up after washing, fits well, looks great. They buy more and recommend it. Your merch becomes part of your brand reputation. You make $6,000 initially but fans keep buying every new release. Year two merch revenue: $15,000. Quality was the long-term play.",
+                    cash: 6000, fame: 10, wellBeing: 12, careerProgress: 15, hype: 18,
+                    lesson: {
+                        title: "Quality Creates Repeat Business",
+                        explanation: "Quality merchandise creates satisfied customers who buy repeatedly and recommend to others. Lower margins per item but higher lifetime value through repeat purchases and word-of-mouth. Quality is long-term revenue strategy.",
+                        realWorldExample: "Artists with quality merch build sustainable revenue streams. Fans trust the brand and buy new releases. Quality merch becomes collectible and enhances artist brand. Premium quality creates premium perception.",
+                        tipForFuture: "Invest in quality merchandise. It costs more upfront but builds loyal customers who buy repeatedly. Quality merch enhances your brand and creates sustainable revenue. Margins matter less than lifetime value.",
+                        conceptTaught: "brand-protection"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Sync Licensing Opportunity",
+        description: "A TV show wants to license your song for a scene. They're offering $3,500 for worldwide perpetual rights. Your music supervisor friend says that's low - you should negotiate for $7,000+ or get residuals. But the show is popular and could give you exposure. Take the offer or risk them moving to another artist?",
+        conditions: { minFame: 26, minCareerProgress: 22 },
+        choices: [
+            {
+                text: "Accept $3,500 - take the exposure opportunity",
+                outcome: {
+                    text: "You accept $3,500. The song appears in a key emotional scene. Viewers Shazam it massively - you gain 10K followers and 200K streams. Three more sync opportunities come from supervisors who heard it on the show. Total sync revenue over the next year: $15,000. The 'low' initial offer led to multiple better opportunities. Exposure compounded.",
+                    cash: 3500, fame: 12, wellBeing: 8, careerProgress: 15, hype: 20,
+                    lesson: {
+                        title: "Sync Exposure Value",
+                        explanation: "Early sync placements aren't just about the fee - they're about exposure to music supervisors and audiences. One placement often leads to more as supervisors discover you. Sometimes taking 'low' offers creates pathways to better ones.",
+                        realWorldExample: "Many artists' sync careers started with lower-paying placements that led to better opportunities. Music supervisors network and share discoveries. One placement gets you into the sync ecosystem.",
+                        tipForFuture: "For first sync placements, consider exposure value beyond the fee. Sync supervisors discovering you can lead to many more placements. Building sync relationships matters as much as individual fees.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Negotiate for $7,000 - know your value",
+                outcome: {
+                    text: "You counter at $7,000. They meet you at $5,500. You earn $2,000 more for standing your ground. The placement still happens and brings exposure. Plus, you established reputation for knowing your value. Future sync supervisors respect that you negotiate professionally. Standing firm paid off without losing the opportunity.",
+                    cash: 5500, fame: 10, wellBeing: 12, careerProgress: 14, hype: 18,
+                    lesson: {
+                        title: "Professional Negotiation",
+                        explanation: "Professional negotiation often results in better terms without losing opportunities. Most initial offers have room for negotiation. Respectful counter-offers establish you as someone who values their work appropriately. Negotiation is expected and respected.",
+                        realWorldExample: "Professional artists negotiate sync fees. Initial offers are often negotiable. Music supervisors respect artists who know their value and negotiate professionally. It's expected business practice, not offensive.",
+                        tipForFuture: "Always negotiate sync offers respectfully. Initial offers usually have room for improvement. Negotiating establishes you as professional and knowledgeable. Don't leave money on table by accepting first offers.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            },
+            {
+                text: "Demand $7,000+ or walk away",
+                outcome: {
+                    text: "You refuse to budge from $7,000+. They use another artist's song instead. You never hear from them again. That show placement launches the other artist's sync career - they get 15 more placements. Your inflexibility cost you entry into the sync world. Demanding rather than negotiating lost everything. Rigidity beat potential.",
+                    cash: 0, fame: 0, wellBeing: -10, careerProgress: -3, hype: 0,
+                    lesson: {
+                        title: "Negotiation Flexibility",
+                        explanation: "Inflexible demands kill opportunities. Negotiation requires give-and-take. Being unwilling to compromise on first offers often means losing opportunities entirely. Flexibility in negotiation is strength, not weakness.",
+                        realWorldExample: "Artists who make inflexible demands often get replaced. Music supervisors have hundreds of options. Those who negotiate professionally get opportunities; those who make ultimatums get passed over.",
+                        tipForFuture: "Negotiate but stay flexible. Counter-offer professionally but be willing to meet in middle. Inflexible demands kill opportunities. Better to get something than nothing through unreasonable rigidity.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Creative Block Struggle",
+        description: "You haven't written anything good in 8 weeks. You're creatively blocked and frustrated. You have three options: Force yourself to keep creating (discipline approach), take a complete 4-week break to recharge (rest approach), or try creative exercises and collaboration to spark inspiration (exploration approach). How do you handle creative block?",
+        conditions: { minFame: 20, minCareerProgress: 16, maxWellBeing: 50 },
+        choices: [
+            {
+                text: "Force through it - discipline over inspiration",
+                outcome: {
+                    text: "You force yourself to create daily despite feeling uninspired. The work is mediocre and you know it. After 4 more weeks, you're burned out and the block is worse. You've created 15 bad songs that aren't usable. Forcing it made the problem worse. Your creative well needs refilling, not forcing dry. Discipline without wisdom is counterproductive.",
+                    cash: 0, fame: 0, wellBeing: -20, careerProgress: -5, hype: 0,
+                    lesson: {
+                        title: "Creative Block Force Backfire",
+                        explanation: "Forcing creativity when genuinely blocked often produces bad work and deepens the block. Creative energy needs replenishment, not extraction. Sometimes discipline means resting when forcing would make things worse.",
+                        realWorldExample: "Many artists have deepened creative blocks by forcing output. Writer's block, producer's block - they worsen with force. Artists who rest or explore new inputs typically break blocks faster than those who force.",
+                        tipForFuture: "When genuinely blocked, forcing often worsens it. Consider whether you need rest, new inputs, or exploration rather than discipline. Sometimes the disciplined choice is rest, not forcing.",
+                        conceptTaught: "creative-health"
+                    }
+                }
+            },
+            {
+                text: "Take 4-week complete break - rest and recharge",
+                outcome: {
+                    text: "You take 4 weeks completely off music. You read, watch films, spend time in nature, experience life. When you return, you're overflowing with ideas. You write 6 songs in 2 weeks - some of your best work. The break refilled your creative well. Sometimes the most productive thing is doing nothing productive. Rest was the answer.",
+                    cash: 0, fame: 3, wellBeing: 30, careerProgress: 12, hype: 8,
+                    lesson: {
+                        title: "Creative Rest Necessity",
+                        explanation: "Creative output requires input. Taking breaks to experience life, consume art, and rest refills creative wells. Constant output without input creates blocks. Strategic rest is productive investment in future creativity.",
+                        realWorldExample: "Many artists take extended breaks and return with their best work. Kendrick Lamar's multi-year gaps produce masterpieces. Frank Ocean's absences lead to brilliant albums. Creative rest isn't laziness - it's necessity.",
+                        tipForFuture: "When creatively blocked, consider taking real breaks. Experience life, consume art, rest your mind. Creative wells refill through new experiences and rest. Strategic breaks prevent burnout and restore inspiration.",
+                        conceptTaught: "creative-health"
+                    }
+                }
+            },
+            {
+                text: "Explore new creative approaches and collaborate",
+                outcome: {
+                    text: "You try new creative exercises - different instruments, different genres, collaborating with artists outside your usual circle. The exploration is fun and low-pressure. You don't create finished songs immediately, but you discover new techniques and perspectives. Two weeks later, these explorations spark three strong songs. Playful exploration unlocked what forcing couldn't.",
+                    cash: -600, fame: 5, wellBeing: 15, careerProgress: 10, hype: 10,
+                    lesson: {
+                        title: "Creative Block Through Play",
+                        explanation: "Creative blocks often break through playful exploration without pressure for finished output. Trying new approaches, collaborating differently, and experimenting can spark inspiration. Sometimes the path around the block is sideways, not through.",
+                        realWorldExample: "Artists often break blocks by playing with new sounds, genres, or collaborators. David Bowie constantly reinvented through exploration. African artists blend genres playfully. Creative play without pressure generates breakthroughs.",
+                        tipForFuture: "When blocked, try playful exploration without pressure for finished work. New instruments, genres, collaborators, or techniques can spark inspiration. Creative play is productive even without immediate output.",
+                        conceptTaught: "creative-health"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Video Viral Moment",
+        description: "Your music video is suddenly going viral on TikTok - 2M views in 48 hours. But it's going viral for the 'wrong' reasons - people are making memes of a funny/awkward moment, not appreciating the music. You're getting attention but being treated as a joke. Do you lean into the meme or try to redirect to the music?",
+        conditions: { minFame: 22, minCareerProgress: 18 },
+        choices: [
+            {
+                text: "Lean into the meme - embrace the humor",
+                outcome: {
+                    text: "You make TikToks embracing the meme, showing you can laugh at yourself. Your participation makes you likable and accessible. The meme attention converts to 20K followers and 300K song streams as people discover your actual music is good. Leaning into it turned joke attention into genuine fans. Humor and self-awareness won.",
+                    cash: 800, fame: 15, wellBeing: 10, careerProgress: 18, hype: 30,
+                    lesson: {
+                        title: "Viral Moment Adaptability",
+                        explanation: "Virality often happens for unexpected reasons. Artists who embrace unplanned viral moments with humor and self-awareness convert joke attention to genuine fans. Fighting viral moments makes them worse; embracing them makes them opportunities.",
+                        realWorldExample: "Lil Nas X turned 'Old Town Road' meme attention into superstardom. Many artists have embraced unexpected viral moments and converted them to career momentum. Self-awareness and humor make you likable.",
+                        tipForFuture: "If you go viral for unexpected reasons, embrace it with humor. Fighting viral moments is futile. Lean into them, show personality, and convert attention to genuine interest. Humor is humanizing.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Ignore the meme - focus on the music",
+                outcome: {
+                    text: "You post serious content trying to redirect attention to your music. The internet sees you as unable to take a joke. The meme dies quickly because you didn't feed it. You gain 3K followers from people who discovered your music, but you missed opportunity to convert millions of views to lasting attention. Ignoring it wasted the viral moment.",
+                    cash: 100, fame: 4, wellBeing: -5, careerProgress: 5, hype: 8,
+                    lesson: {
+                        title: "Viral Opportunity Recognition",
+                        explanation: "Viral moments are opportunities regardless of context. Ignoring them or fighting them wastes potential to convert attention to genuine interest. The path from viral to sustainable rarely matches plans. Adaptability matters.",
+                        realWorldExample: "Many artists missed opportunities by ignoring or fighting unexpected viral moments. Those who adapt to viral moments, even weird ones, typically convert them to career growth better than those who resist.",
+                        tipForFuture: "When unexpected virality happens, engage with it rather than ignoring or fighting it. Any attention can convert to genuine interest if you respond with personality. Adapt to opportunities even when unexpected.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Try to 'correct' the narrative - get defensive",
+                outcome: {
+                    text: "You post: 'This video wasn't meant to be a meme. Please appreciate the art and message.' The internet turns on you for being self-serious and unable to take a joke. Your defensiveness becomes the new meme. You go viral again - but now for being uptight. Defensive responses made everything worse. You lost control by trying to control it.",
+                    cash: 0, fame: -5, wellBeing: -20, careerProgress: -8, hype: -15,
+                    lesson: {
+                        title: "Defensive Viral Response Backfire",
+                        explanation: "Trying to control viral moments or getting defensive about how you're being perceived makes internet turn against you. Defensiveness amplifies mocking. You can't control viral moments - only respond to them with grace or humor.",
+                        realWorldExample: "Artists who get defensive about memes or viral moments typically face amplified mocking. The internet punishes self-seriousness and rewards humor. Defensive responses to virality always backfire.",
+                        tipForFuture: "Never get defensive about viral moments, even unflattering ones. The internet punishes defensiveness and rewards humor. You can't control virality - only respond gracefully. Humor beats defense every time.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Industry Showcase Performance",
+        description: "You're invited to perform at an industry showcase - record labels, managers, and media will attend. No payment, but networking opportunity. The catch: it's the same night as a paid show ($800) you've already booked. Cancel the paid show for industry exposure or honor your commitment and miss the showcase?",
+        conditions: { minFame: 24, minCareerProgress: 20, minCash: 1500 },
+        choices: [
+            {
+                text: "Cancel paid show - prioritize industry showcase",
+                outcome: {
+                    text: "You cancel the paid show (losing $800 and upsetting the venue). At the showcase, you perform well but no labels or managers approach you - they saw 20 artists that night. You traded a paid show and venue relationship for nothing concrete. The industry showcase didn't guarantee results. You burned a bridge for an uncertain opportunity.",
+                    cash: -800, fame: 2, wellBeing: -15, careerProgress: 3, hype: 5,
+                    lesson: {
+                        title: "Certain vs Uncertain Trade-offs",
+                        explanation: "Trading certain opportunities (paid shows, existing relationships) for uncertain ones (industry showcases with no guarantees) is risky. Industry events don't guarantee results. Breaking commitments for uncertain opportunities damages reputation.",
+                        realWorldExample: "Many artists cancel shows for industry opportunities that lead nowhere. Venues and promoters remember unreliability. Birds in hand (paid shows, relationships) often beat birds in bush (uncertain industry interest).",
+                        tipForFuture: "Don't break existing commitments for uncertain opportunities. Industry showcases don't guarantee anything. Honor commitments unless opportunities come with concrete offers. Reputation for reliability has value.",
+                        conceptTaught: "professionalism"
+                    }
+                }
+            },
+            {
+                text: "Honor the paid show - maintain professionalism",
+                outcome: {
+                    text: "You perform the paid show as committed. The venue appreciates your reliability and books you for three more dates. You miss the showcase but maintain your professional reputation. Two weeks later, one of the managers from the showcase reaches out - they heard about you and like your music. Professionalism attracted opportunity without breaking commitments.",
+                    cash: 800, fame: 5, wellBeing: 10, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Professional Reputation Value",
+                        explanation: "Honoring commitments builds reputation that creates opportunities. Industry professionals value reliability. Good artists are plentiful; reliable professional artists are rare. Your reputation opens doors that talent alone can't.",
+                        realWorldExample: "Artists known for professionalism and reliability get consistent work. Those who break commitments for better opportunities develop reputations that limit long-term opportunities. Venues, promoters, and industry remember.",
+                        tipForFuture: "Build reputation for reliability by honoring commitments. Don't chase every shiny opportunity if it means breaking existing commitments. Professional reputation is career asset that compounds.",
+                        conceptTaught: "professionalism"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Long-Distance Collaboration Challenge",
+        description: "An artist you respect from another country (Kenya/South Africa/US) wants to collaborate remotely. Time zones make communication hard. Sending files back and forth is slow and impersonal. You could fly there for 3 days ($1,200) to work in person, collaborate remotely over 2 months, or decline due to logistical challenges. Worth the effort?",
+        conditions: { minFame: 28, minCareerProgress: 24, minCash: 2500 },
+        choices: [
+            {
+                text: "Fly there for in-person session - invest $1,200",
+                outcome: {
+                    text: "You fly there for 3 intensive days. The in-person chemistry is electric - you create 4 songs together. Two become hits in both your markets. The face-to-face time built genuine friendship and creative partnership. Total cost: $1,200. Total value: career-making collaboration and lasting relationship. In-person investment paid massive dividends.",
+                    cash: -1200, fame: 18, wellBeing: 20, careerProgress: 25, hype: 35,
+                    lesson: {
+                        title: "In-Person Collaboration Value",
+                        explanation: "Remote collaboration is possible but in-person sessions create chemistry, efficiency, and relationships that digital can't match. Strategic travel for important collaborations often pays for itself through better results and stronger relationships.",
+                        realWorldExample: "Most legendary collaborations happened face-to-face. While technology enables remote work, in-person sessions create magic that Zoom can't. Artists who invest in face-time for important collaborations typically get better results.",
+                        tipForFuture: "For important collaborations, invest in in-person time when possible. The chemistry, efficiency, and relationship building justify travel costs. Remote is possible; in-person is often better for creating chemistry.",
+                        conceptTaught: "collaboration-strategy"
+                    }
+                }
+            },
+            {
+                text: "Collaborate remotely - save money and time",
+                outcome: {
+                    text: "You collaborate remotely over 2 months. Communication is frustrating due to time zones. The songs are good but don't have the magic you hoped for - something feels disconnected. You finish one decent song but the collaboration fizzles. Remote was efficient but lacked creative spark. You saved $1,200 but missed opportunity for something special.",
+                    cash: 0, fame: 5, wellBeing: -5, careerProgress: 6, hype: 8,
+                    lesson: {
+                        title: "Remote Collaboration Limitations",
+                        explanation: "Remote collaboration works but often lacks creative spark of in-person sessions. Time zones, communication delays, and lack of face-time limit chemistry. Sometimes saving money costs creative quality and relationship building.",
+                        realWorldExample: "Many remote collaborations produce functional but uninspired work. While technology enables connection, it doesn't fully replicate in-person creative energy. Artists report remote sessions are efficient but often lack magic.",
+                        tipForFuture: "Remote collaboration works for efficiency but consider in-person for special partnerships. Technology enables connection but doesn't replace face-to-face creative chemistry. Balance convenience with quality.",
+                        conceptTaught: "collaboration-strategy"
+                    }
+                }
+            }
+        ]
+    },
+
+    // --- BATCH 7: DIVERSE CAREER SITUATIONS (10 scenarios) ---
+    {
+        title: "The Radio Payola Proposition",
+        description: "A major radio DJ approaches you: 'Pay me $2,000 and I'll play your song in rotation for 2 months. Everyone does it - it's how you get airplay.' Radio exposure could reach 500K listeners, but payola is illegal and ethically questionable. Pay for play, hustle legitimately, or report it?",
+        conditions: { minFame: 30, minCareerProgress: 25, minCash: 3000, minFameByDifficulty: { beginner: 24, realistic: 30, hardcore: 38 } },
+        choices: [
+            {
+                text: "Pay the $2,000 - get the airplay",
+                outcome: {
+                    text: "You pay. Your song gets heavy rotation for 2 months. You gain 8K followers and $3,000 from increased streams and bookings. But word spreads in the industry that you paid for airplay. Other DJs expect payment now. Legit opportunities decline - people assume your success is bought, not earned. The $2,000 payment created a $2,000+ expectation everywhere. Payola trapped you.",
+                    cash: 1000, fame: 12, wellBeing: -15, careerProgress: 8, hype: 15,
+                    lesson: {
+                        title: "Payola Short-Term vs Long-Term",
+                        explanation: "Paying for airplay might bring immediate exposure but creates expectations that you'll pay for everything. It undermines organic opportunities and creates industry reputation that your success is bought. Shortcuts create long-term complications.",
+                        realWorldExample: "Payola has corrupted music industries globally. Artists who pay become trapped in pay-to-play cycles. Those who build organically might grow slower but build sustainable careers without constant payola expectations.",
+                        tipForFuture: "Avoid payola even when 'everyone does it.' It creates pay-to-play expectations that undermine organic opportunities. Build through legitimate promotion - it's slower but sustainable and ethical.",
+                        conceptTaught: "industry-ethics"
+                    }
+                }
+            },
+            {
+                text: "Decline and hustle legitimately - organic promotion",
+                outcome: {
+                    text: "You decline and focus on legitimate promotion - playlists, blogs, social media, smaller radio stations. Growth is slower but feels earned. Six months later, a major station picks up your song organically based on streaming numbers. You get airplay without paying. The organic path took longer but built sustainable momentum without ethical compromise. Legitimate hustle won.",
+                    cash: 0, fame: 8, wellBeing: 15, careerProgress: 14, hype: 12,
+                    lesson: {
+                        title: "Organic Growth Sustainability",
+                        explanation: "Legitimate promotion grows slower but builds sustainable career without ethical compromise or pay-to-play expectations. Organic growth creates opportunities based on merit, not payment. Long-term sustainability beats short-term payola shortcuts.",
+                        realWorldExample: "Artists who build organically often have longer careers than payola artists. Streaming and social media reduced payola's necessity. Artists like Chance the Rapper, Macklemore, and independent African artists proved organic paths work.",
+                        tipForFuture: "Focus on legitimate promotion channels - streaming, social media, organic radio. It's slower but sustainable and ethical. Modern tools reduce payola's necessity. Build on merit, not payments.",
+                        conceptTaught: "industry-ethics"
+                    }
+                }
+            },
+            {
+                text: "Report the DJ to station management",
+                outcome: {
+                    text: "You report the payola request. The DJ is fired. The station thanks you and starts playing your music as appreciation for exposing corruption. You become known as someone with integrity. However, other corrupt DJs blacklist you informally. You gain airplay from ethical stations but lose access to corrupt ones. Reporting had costs and benefits. Integrity was mixed bag.",
+                    cash: 0, fame: 5, wellBeing: 10, careerProgress: 6, hype: 8,
+                    lesson: {
+                        title: "Whistleblowing Consequences",
+                        explanation: "Reporting corruption has consequences - you might be rewarded by ethical actors but punished by corrupt ones. Whistleblowing is courageous but comes with career costs. Sometimes doing the right thing isn't rewarded as much as we hope.",
+                        realWorldExample: "Industry whistleblowers often face backlash even when they're right. Corrupt networks retaliate. Reporting corruption is ethical but rarely without cost. Consider whether you're prepared for potential retaliation before reporting.",
+                        tipForFuture: "Reporting corruption is ethical but comes with risks. Corrupt networks often retaliate. Be prepared for consequences - both positive (rewards from ethical actors) and negative (retaliation from corrupt ones).",
+                        conceptTaught: "industry-ethics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Festival Slot Dilemma",
+        description: "You're offered two festival slots on the same day: a small Afrobeats festival (1,500 people, your core audience, $600) or a large mainstream festival (10,000 people, mostly unfamiliar with your genre, $400). One builds deeper connection with your base; the other offers broader exposure. Which do you choose?",
+        conditions: { minFame: 26, minCareerProgress: 22 },
+        choices: [
+            {
+                text: "Small Afrobeats festival - deepen core fanbase",
+                outcome: {
+                    text: "You perform at the small festival. The crowd knows every word. You sell $800 in merch and gain 600 highly engaged followers. These fans become evangelists who promote you to others. Six months later, organic word-of-mouth from this dedicated base brings more growth than the mainstream exposure would have. Deepening your core multiplied reach. Depth beat breadth.",
+                    cash: 1400, fame: 6, wellBeing: 20, careerProgress: 12, hype: 15,
+                    lesson: {
+                        title: "Core Audience Deepening Value",
+                        explanation: "Deepening connection with core fans who evangelize for you often creates more sustainable growth than broad exposure to indifferent audiences. Passionate core fans multiply your reach through organic promotion. Depth creates breadth over time.",
+                        realWorldExample: "Many successful artists prioritized core audiences over mainstream exposure early on. Dedicated fans become promoters. Tyler the Creator, Burna Boy, and others built by serving core audiences deeply before expanding broadly.",
+                        tipForFuture: "Don't always chase biggest audience numbers. Deepening relationships with core fans who'll promote you creates sustainable growth. Passionate small audiences often generate more value than indifferent large ones.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Large mainstream festival - broad exposure",
+                outcome: {
+                    text: "You perform at the mainstream festival. Most attendees don't connect with your music - polite applause, minimal engagement. You gain 400 followers (4% conversion from 10,000 people) and sell $200 in merch. The broad exposure didn't convert because the audience wasn't pre-disposed to your genre. Exposure to wrong audience wasted opportunity. Breadth without fit failed.",
+                    cash: 600, fame: 4, wellBeing: -5, careerProgress: 5, hype: 8,
+                    lesson: {
+                        title: "Audience Fit Importance",
+                        explanation: "Large audiences don't guarantee results if they're not pre-disposed to your music. Targeted exposure to smaller, aligned audiences often converts better than broad exposure to mismatched audiences. Audience fit matters more than audience size.",
+                        realWorldExample: "Artists often chase big stages only to find indifferent audiences don't convert. Genre-specific festivals typically generate better results than generic large festivals where you're mismatched. Alignment beats size.",
+                        tipForFuture: "Prioritize audience fit over audience size. Smaller crowds aligned with your genre typically convert better than larger indifferent crowds. Targeted exposure beats broad misalignment.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Session Musician Side Income",
+        description: "A producer offers you steady session work - singing background vocals, writing hooks for other artists. $500-$800/week, reliable income, but takes 20 hours weekly away from your own music. Financial stability vs. creative focus - accept the session work or stay focused on your own career?",
+        conditions: { minFame: 18, minCareerProgress: 14, maxCash: 8000 },
+        choices: [
+            {
+                text: "Accept session work - financial stability",
+                outcome: {
+                    text: "You take the session work. The steady income ($2,400/month) relieves financial stress. You're less desperate, which makes you a better negotiator for your own opportunities. The session work also builds production relationships and skills. A year later, one producer you worked with offers to produce your album for free. Financial stability created unexpected opportunities and skill growth.",
+                    cash: 2400, fame: 3, wellBeing: 15, careerProgress: 8, hype: 5,
+                    lesson: {
+                        title: "Financial Stability Benefits",
+                        explanation: "Financial stability reduces desperation and improves decision-making. Side income can build relationships and skills while providing breathing room. Financial security makes you better negotiator and opens doors through professional relationships.",
+                        realWorldExample: "Many successful artists did session work before breaking through - Luther Vandross, Sheryl Crow, Anderson .Paak. Session work provides stability, skill development, and industry relationships that accelerate careers.",
+                        tipForFuture: "Don't dismiss session work as distraction from 'real' career. It provides stability, skills, and relationships that can accelerate your primary career. Financial security improves decision-making.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Decline - focus 100% on your own music",
+                outcome: {
+                    text: "You decline to focus completely on your music. Financial stress increases. You take desperate deals for quick cash - underpriced shows, bad contracts. Your financial desperation leads to poor decisions that cost you more than the session work would have paid. You finish more music but stress and bad deals hurt more than helped. Full focus without financial stability backfired.",
+                    cash: -1500, fame: 5, wellBeing: -20, careerProgress: 6, hype: 8,
+                    lesson: {
+                        title: "Financial Desperation Costs",
+                        explanation: "Financial desperation leads to poor decisions - underpriced deals, bad contracts, compromised negotiations. Sometimes diversifying income through side work (session work, teaching) prevents desperation decisions that cost more than side work takes.",
+                        realWorldExample: "Many artists make career-damaging decisions from financial desperation. Those with stable side income often make better long-term decisions. Financial security enables better career choices.",
+                        tipForFuture: "Financial stability enables better career decisions. If side work prevents desperation deals, the opportunity cost might be worth it. Desperation leads to bad deals that cost more than time.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Blog Feature Payment Request",
+        description: "A mid-size music blog (50K monthly readers) offers to feature you. Their rate: $350 for a full article and social media promotion. Your friend says it's pay-for-press and undermines credibility. But you need exposure. Pay for the feature, pitch them for organic coverage, or skip it?",
+        conditions: { minFame: 22, minCareerProgress: 18, minCash: 1500 },
+        choices: [
+            {
+                text: "Pay $350 for the feature",
+                outcome: {
+                    text: "You pay. The article gets published and shared to their 50K readers. You gain 800 new followers and 50K streams over the next month. The ROI is positive - $350 for measurable growth. Some purists criticize pay-for-press, but results matter. The article exposed you to audiences who became real fans. Strategic promotion spending worked.",
+                    cash: -350, fame: 8, wellBeing: 5, careerProgress: 10, hype: 12,
+                    lesson: {
+                        title: "Strategic Promotion Investment",
+                        explanation: "Paying for legitimate media features isn't inherently unethical if disclosed and the platform has real audience. It's promotion budget, like any advertising. The question is ROI and authenticity of the platform. Strategic spending on legitimate platforms can accelerate growth.",
+                        realWorldExample: "Many artists pay for promotion through ads, playlist pitching services, and media features. The line between ethical promotion spending and pay-for-play depends on disclosure and platform legitimacy. Effective promotion often requires budget.",
+                        tipForFuture: "Distinguish between ethical promotion spending (transparent, legitimate platforms) and unethical pay-for-play (fake credibility). Strategic promotion budget is normal business practice. Evaluate ROI and platform legitimacy.",
+                        conceptTaught: "marketing-strategy"
+                    }
+                }
+            },
+            {
+                text: "Pitch them for organic coverage - earn the feature",
+                outcome: {
+                    text: "You pitch your story professionally - press kit, streaming stats, unique angle. They're impressed and feature you organically. The earned coverage feels more credible and they become ongoing supporters. You didn't pay but got the same feature plus genuine editorial relationship. Pitching worked better than paying.",
+                    cash: 0, fame: 10, wellBeing: 15, careerProgress: 14, hype: 15,
+                    lesson: {
+                        title: "Earned Media Value",
+                        explanation: "Earned media (organic coverage from good pitching) is more credible than paid features and often builds ongoing relationships. Professional pitching with compelling stories can achieve paid-feature results without cost. Invest in pitching skills.",
+                        realWorldExample: "Artists with strong pitching skills get organic press that paid features can't match. Music bloggers want compelling stories - give them interesting angles and professional materials. Earned media often performs better than paid.",
+                        tipForFuture: "Before paying for features, try pitching professionally. Compelling stories, strong materials, and good angles often earn coverage. Earned media is more credible and builds relationships beyond single features.",
+                        conceptTaught: "marketing-strategy"
+                    }
+                }
+            },
+            {
+                text: "Skip it - focus on organic growth only",
+                outcome: {
+                    text: "You skip both paid and pitched features, focusing only on social media and organic word-of-mouth. Growth is very slow - you gain 200 followers over 3 months. Without any structured promotion (paid or organic pitching), you're invisible. Purely organic growth without promotion effort stagnates. Some promotion is necessary.",
+                    cash: 0, fame: 2, wellBeing: -5, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Promotion Necessity",
+                        explanation: "Completely avoiding promotion (both paid and organic outreach) limits growth severely. 'Build it and they will come' doesn't work. Some combination of organic pitching, paid promotion, and social media is necessary. Pure passivity stagnates careers.",
+                        realWorldExample: "Artists who refuse all promotion (idealistic approach) typically struggle. Modern music markets require active promotion - whether paid, organic pitching, or both. Visibility requires effort.",
+                        tipForFuture: "Don't be so purist about promotion that you do nothing. Combination of organic pitching and strategic paid promotion accelerates growth. Completely passive approaches rarely work in competitive markets.",
+                        conceptTaught: "marketing-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Copyright Strike Accusation",
+        description: "You receive a copyright strike on your song - another artist claims you stole their melody. You didn't intentionally copy anything, but there are some similarities. Fighting costs $3,000 in legal fees. Settling admits fault. Ignoring it means your music gets taken down. What do you do?",
+        conditions: { minFame: 28, minCareerProgress: 24, minCash: 4000 },
+        choices: [
+            {
+                text: "Fight it legally - hire lawyers for $3,000",
+                outcome: {
+                    text: "You hire lawyers. After reviewing both songs, they find the similarities are minimal and unintentional - common musical patterns used by many artists. Your lawyers counter-claim successfully. The false strike is removed and the accuser is warned. You spent $3,000 but protected your catalog and reputation. Fighting false claims was necessary.",
+                    cash: -3000, fame: 5, wellBeing: -10, careerProgress: 8, hype: 6,
+                    lesson: {
+                        title: "Copyright Defense Necessity",
+                        explanation: "Fighting false copyright claims protects your catalog and prevents emboldening false accusers. If you're confident you didn't infringe, legal defense (though expensive) protects your career and reputation. Capitulating to false claims sets bad precedent.",
+                        realWorldExample: "Many artists face false copyright claims from opportunistic accusers. Those who fight false claims typically win if claims are baseless. Legal defense is expensive but necessary for protecting work and deterring future false claims.",
+                        tipForFuture: "If copyright claims are false and you have evidence, fight them. Legal costs are painful but protect your catalog. Settling false claims encourages more false claims. Defend legitimate work.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Settle and pay them off - avoid legal battle",
+                outcome: {
+                    text: "You settle for $5,000 to make it go away. Word spreads that you settled, which many interpret as admission of guilt. Other opportunistic accusers target you, filing more copyright claims knowing you'll settle. The settlement opened floodgates. You pay $12,000 total over two years in settlements. Settling false claims created more false claims. Capitulation was expensive mistake.",
+                    cash: -12000, fame: -8, wellBeing: -25, careerProgress: -15, hype: -12,
+                    lesson: {
+                        title: "False Claim Settlement Risks",
+                        explanation: "Settling false copyright claims signals willingness to pay without fight, attracting more opportunistic claims. Each settlement encourages more accusers. Fighting false claims (though expensive initially) often costs less long-term than settling repeatedly.",
+                        realWorldExample: "Artists who settle copyright claims without fight often face repeated claims from opportunists. Those who fight false claims deter future ones. Settlements can create more problems than they solve if claims are baseless.",
+                        tipForFuture: "Don't settle obviously false copyright claims just to avoid legal costs. Settling attracts more opportunistic claims. Fight false claims to protect catalog and deter future claims. Short-term legal costs beat long-term settlement spiral.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Ignore it - let the song get taken down",
+                outcome: {
+                    text: "You ignore the claim. Your song is removed from all platforms. You lose $800/month in streaming revenue and promotional momentum. Fans can't find the song and assume you removed it. Six months later ($4,800 lost), you finally address it, but momentum is gone. Ignoring cost more than fighting would have. Passivity was most expensive option.",
+                    cash: -4800, fame: -10, wellBeing: -15, careerProgress: -12, hype: -18,
+                    lesson: {
+                        title: "Copyright Dispute Urgency",
+                        explanation: "Ignoring copyright disputes doesn't make them disappear - it forfeits your content and revenue. The opportunity cost of having music unavailable often exceeds legal defense costs. Address copyright issues immediately, even if expensive.",
+                        realWorldExample: "Artists who ignore copyright disputes lose revenue and momentum while music is unavailable. The longer you wait, the more you lose. Copyright disputes require immediate attention - ignoring them is most expensive option.",
+                        tipForFuture: "Never ignore copyright disputes. Address them immediately - either fight or settle, but don't let music stay unavailable while you do nothing. Lost revenue and momentum typically exceed legal costs.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Album vs Singles Strategy Debate",
+        description: "You have 12 completed songs. You can release them as an album (one moment, builds narrative, traditional approach) or as 12 singles over 12 months (constant content, algorithm-friendly, modern approach). Which release strategy serves you better at your career stage?",
+        conditions: { minFame: 32, minCareerProgress: 28 },
+        choices: [
+            {
+                text: "Release as album - traditional full project",
+                outcome: {
+                    text: "You release all 12 songs as an album. Initial streaming is strong (50K first week) but then drops sharply. After one week, the algorithm moves on and you have no content for months. Your 12 months of work gave you one week of visibility. Album format worked against streaming algorithms. You got artistic satisfaction but limited sustained momentum. Wrong format for current stage.",
+                    cash: 1500, fame: 8, wellBeing: 10, careerProgress: 10, hype: 12,
+                    lesson: {
+                        title: "Release Strategy Platform Fit",
+                        explanation: "Album releases work for established artists with devoted fans but struggle in streaming algorithms that favor consistent single releases. At early career stages, singles over time often perform better than album dumps. Match release strategy to your career stage and platform realities.",
+                        realWorldExample: "Many independent artists find singles-over-time strategy works better than albums for streaming growth. Established artists can release albums successfully; emerging artists often benefit from consistent single releases keeping them algorithm-visible.",
+                        tipForFuture: "Consider your career stage when choosing release strategy. If you're building audience, consistent singles might serve better than albums. Save album format for when you have devoted fanbase eager for full projects.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Release as singles - 12 months of content",
+                outcome: {
+                    text: "You release one single monthly for 12 months. Each release triggers algorithm promotion and keeps you visible. By month 12, you've accumulated 400K total streams and 8K followers - 10x the album strategy. Consistent visibility compounded. Streaming algorithms rewarded your consistent release schedule. Strategic format choice maximized results.",
+                    cash: 4000, fame: 18, wellBeing: 5, careerProgress: 22, hype: 28,
+                    lesson: {
+                        title: "Algorithm-Optimized Release Strategy",
+                        explanation: "Streaming algorithms favor consistent releases over content dumps. Singles spread over time keep you algorithm-visible and create multiple promotional moments. For growing artists, release frequency often matters more than release format.",
+                        realWorldExample: "Successful streaming artists often release singles consistently rather than albums. The algorithm rewards release frequency. Artists like Lil Nas X, viral TikTok artists, and streaming-focused musicians use consistent singles strategy effectively.",
+                        tipForFuture: "Use singles-over-time strategy for streaming growth. Each release triggers new algorithm promotion. Consistent visibility beats one-time album dump for growing audiences. Save albums for established fanbases.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Hybrid - release 4-song EPs quarterly",
+                outcome: {
+                    text: "You release three 4-song EPs across the year. Each EP creates promotional moment and gives listeners substantive project without overwhelming. You get 3 promotional cycles, algorithm benefits from consistency, and artistic satisfaction of cohesive projects. Total: 250K streams, 6K followers. The middle path worked well - consistency without sacrificing artistic cohesion.",
+                    cash: 3000, fame: 14, wellBeing: 12, careerProgress: 18, hype: 22,
+                    lesson: {
+                        title: "Hybrid Release Strategy Balance",
+                        explanation: "EPs released consistently provide middle ground between album artistic cohesion and singles algorithm optimization. Multiple promotional moments, substantive projects, and consistency. Often optimal compromise for independent artists.",
+                        realWorldExample: "Many artists use EP strategy successfully - The Weeknd's early mixtapes, Steve Lacy's EPs, African artists releasing EPs. Provides artistic cohesion of albums with consistency benefits of singles strategy.",
+                        tipForFuture: "Consider EP strategy as compromise between albums and singles. Provides multiple promotional moments, algorithm-friendly consistency, and artistic project cohesion. Often best of both approaches.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Mental Health Breaking Point",
+        description: "You're burning out - making music feels like obligation, not joy. Depression is setting in. Your therapist recommends taking 6 months off music entirely to recover. But momentum feels precious. Can you afford to stop? Do you prioritize mental health or push through for career momentum?",
+        conditions: { minFame: 35, minCareerProgress: 30, maxWellBeing: 40 },
+        choices: [
+            {
+                text: "Take 6 months off - prioritize mental health",
+                outcome: {
+                    text: "You take 6 months completely off. You do therapy, rest, rediscover why you loved music. When you return, you're creatively rejuvenated. You create your best work - 8 songs in 3 months. The break didn't kill your career; it saved it. Your music is better, your health is better. Momentum can be rebuilt; mental health can't be replaced. The break was career investment.",
+                    cash: 0, fame: 2, wellBeing: 50, careerProgress: 8, hype: 5,
+                    lesson: {
+                        title: "Mental Health Career Investment",
+                        explanation: "Mental health breaks aren't career abandonment - they're career investment. Burnout destroys creativity and quality. Time off to recover often leads to better work than forcing through exhaustion. Sustainable careers require mental health maintenance.",
+                        realWorldExample: "Many artists take mental health breaks and return stronger - Frank Ocean, Kendrick Lamar between albums, Kid Cudi's openness about mental health. Those who push through burnout often crash harder later. Mental health enables sustainable careers.",
+                        tipForFuture: "If you're genuinely burned out, take breaks. Forcing through severe burnout often produces poor work and health crises. Momentum can be rebuilt; mental health damage compounds. Prioritize sustainable health over unsustainable momentum.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Push through - maintain momentum at all costs",
+                outcome: {
+                    text: "You refuse to stop. You keep creating despite hating it. The work is lifeless - even you can tell. Your depression worsens. Eight months later, you have a complete breakdown and are forced to stop for a year. Pushing through burnout made everything worse. The momentum you protected collapsed anyway, but now with mental health crisis. Refusing rest cost more than resting would have.",
+                    cash: -2000, fame: -5, wellBeing: -50, careerProgress: -20, hype: -15,
+                    lesson: {
+                        title: "Burnout Forcing Backfire",
+                        explanation: "Forcing through severe burnout typically leads to worse crashes, poor work, and forced longer breaks. Ignoring mental health doesn't preserve momentum - it guarantees momentum loss through eventual crash. Early rest prevents catastrophic crashes.",
+                        realWorldExample: "Many artists crashed from ignoring burnout - breakdowns, hospitalizations, career-ending crises. Those who take breaks early typically recover faster than those who push until catastrophic failure. Your body eventually forces rest.",
+                        tipForFuture: "Don't force through severe burnout hoping to preserve momentum. Burnout crashes lose more momentum than planned breaks. Take breaks when needed - forced breaks from crashes are longer and more damaging than chosen breaks.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Scale back - reduce output but don't stop completely",
+                outcome: {
+                    text: "You reduce output to 20% - one song every 2 months, no touring. You do therapy weekly. The reduced pace allows recovery without complete stoppage. Your mental health improves gradually. The music you do create is higher quality. A year later, you're healthier and still relevant. Scaling back was the balanced solution. Moderation beat extremes.",
+                    cash: 500, fame: 4, wellBeing: 25, careerProgress: 10, hype: 8,
+                    lesson: {
+                        title: "Sustainable Pace Adjustment",
+                        explanation: "Sometimes the answer isn't all-or-nothing - reducing pace substantially can allow recovery while maintaining some momentum. Sustainable reduced output often beats unsustainable full output or complete stopping. Find pace that balances health and career.",
+                        realWorldExample: "Many artists adjust pace sustainably rather than choosing extremes. Reducing touring, output, or commitments while addressing mental health. Sustainable pace enables long careers. Balance beats extremes.",
+                        tipForFuture: "Consider pace reduction as middle path between pushing through and stopping completely. Sustainable reduced output can allow mental health recovery while maintaining career thread. Not all situations require all-or-nothing choices.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Ghost Producer Offer",
+        description: "A producer offers ghost production: They'll create tracks under your name for $800 each. You'd release music consistently without having to create it yourself. But it's deceptive - passing off others' work as yours. The music would be good and consistent. Does the deception matter if fans enjoy it?",
+        conditions: { minFame: 24, minCareerProgress: 20, minCash: 5000 },
+        choices: [
+            {
+                text: "Accept - use ghost production for consistency",
+                outcome: {
+                    text: "You release ghost-produced tracks under your name. They're good and fans enjoy them. For two years it works. Then a dispute with the producer leads to exposure - they reveal they made your music. Your fanbase feels betrayed. Your credibility collapses. Venues and collaborators distance themselves. The deception destroyed everything you built. Authenticity mattered more than you thought.",
+                    cash: -2400, fame: -25, wellBeing: -35, careerProgress: -40, hype: -45,
+                    lesson: {
+                        title: "Authenticity Career Foundation",
+                        explanation: "Building career on deception creates vulnerability to exposure that can destroy everything. Fans value authenticity - when deception is revealed, trust collapses and careers end. Short-term convenience isn't worth long-term existential risk.",
+                        realWorldExample: "Artists exposed for ghost production face career-ending scandals - Milli Vanilli is the most famous example. Fans forgive mistakes but rarely forgive systematic deception. Authenticity is career foundation that can't be faked.",
+                        tipForFuture: "Never build career on systematic deception like undisclosed ghost production. If exposed (and deception often is), it destroys everything. If you use collaborators, credit them. Authenticity is too important to risk.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            },
+            {
+                text: "Decline - create everything yourself, even if inconsistent",
+                outcome: {
+                    text: "You decline and create everything yourself. Output is inconsistent - some months you release nothing, sometimes three songs. But everything is authentic. Fans appreciate knowing it's genuinely your work. Your inconsistent but authentic catalog builds trust and credibility. When you do release, engagement is high because fans trust you. Authenticity created sustainable foundation.",
+                    cash: 0, fame: 8, wellBeing: 15, careerProgress: 12, hype: 10,
+                    lesson: {
+                        title: "Authentic Inconsistency Value",
+                        explanation: "Inconsistent but authentic output builds trust better than consistent but fraudulent output. Fans value authenticity and forgive inconsistency. Long-term credibility beats short-term consistency achieved through deception.",
+                        realWorldExample: "Artists with inconsistent output but authentic work maintain credibility - Frank Ocean's long gaps, D'Angelo's delays. Fans prefer authentic artists who release when they have something real to say over fraudulent consistency.",
+                        tipForFuture: "Prioritize authenticity over consistency. Inconsistent authentic output maintains credibility; consistent fraud risks career-ending exposure. Fans value realness over production schedules.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            },
+            {
+                text: "Collaborate openly - credit producers and work with them",
+                outcome: {
+                    text: "You work with the producer as credited collaborator rather than ghost producer. You co-create and openly credit them. This is transparent and ethical. The music is still high quality and consistent, but now it's honest collaboration. Fans respect the transparency. The producer becomes long-term creative partner. Honest collaboration worked better than deception.",
+                    cash: -800, fame: 12, wellBeing: 20, careerProgress: 18, hype: 15,
+                    lesson: {
+                        title: "Transparent Collaboration Model",
+                        explanation: "Working with producers and collaborators transparently achieves consistency and quality without deception. Credited collaboration is ethical and sustainable. Many successful artists openly collaborate with producers and writers. Transparency is strength.",
+                        realWorldExample: "Most successful artists collaborate openly with producers and writers - credited on every song. Beyoncé, Rihanna, Drake openly work with teams. Transparent collaboration is industry standard. It's ethical and effective.",
+                        tipForFuture: "If you need production help, collaborate openly with credited partners rather than ghost producers. Transparent collaboration is ethical, sustainable, and industry-standard. There's no shame in working with others if you're honest.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Streaming Manipulation Offer",
+        description: "A service offers to boost your streaming numbers: '10,000 guaranteed streams for $200. No bots - real accounts managed by us.' It would push you into playlist algorithms and make you look more popular. But it's artificial inflation that violates platform terms. Risk it or grow organically?",
+        conditions: { minFame: 20, minCareerProgress: 16, minCash: 1000 },
+        choices: [
+            {
+                text: "Buy the streams - boost your numbers",
+                outcome: {
+                    text: "You buy 10,000 streams. Initially it works - the algorithm notices and adds you to playlists. Two months later, Spotify's fraud detection flags your account. All your music is removed from playlists and your account is shadow-banned. Your real organic streams decrease because algorithm now distrusts you. The $200 destroyed your organic growth trajectory. Fraud detection caught you.",
+                    cash: -200, fame: -8, wellBeing: -20, careerProgress: -15, hype: -25,
+                    lesson: {
+                        title: "Streaming Fraud Detection Risk",
+                        explanation: "Platforms have sophisticated fraud detection that catches artificial streaming inflation. Getting caught results in penalties (playlist removal, shadow-bans) that damage organic growth. The risk far exceeds potential benefit. Fraud detection is getting better continuously.",
+                        realWorldExample: "Streaming platforms aggressively combat fraud. Artists caught with fake streams face penalties that damage legitimate growth. Platforms prioritize genuine engagement. Getting caught can derail careers. The risk isn't worth the temporary boost.",
+                        tipForFuture: "Never buy fake streams. Fraud detection is sophisticated and penalties severe. Artificial inflation risks your entire streaming presence. Build organically - it's slower but safe and sustainable.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Grow organically - no shortcuts",
+                outcome: {
+                    text: "You focus on organic growth - social media, playlisting legitimate pitching, collaborations. Growth is slow but real. Every follower and stream is genuine. A year later, you have 50K organic streams and algorithm trust. Your genuine engagement rates are higher than artists who bought streams. Organic growth created sustainable foundation. Patience beat fraud.",
+                    cash: 0, fame: 8, wellBeing: 10, careerProgress: 14, hype: 12,
+                    lesson: {
+                        title: "Organic Growth Sustainability",
+                        explanation: "Organic growth is slower but builds sustainable career on genuine engagement. Real fans convert to concerts, merch sales, and long-term support. Fake numbers provide nothing beyond temporary appearance. Real growth creates real career.",
+                        realWorldExample: "All lasting careers are built on organic growth. Artists with fake numbers are exposed eventually and have no real fanbase. Those who grow genuinely might grow slower but build sustainable careers with genuine supporters.",
+                        tipForFuture: "Resist temptation to buy fake engagement. Organic growth creates real career foundation. Fake numbers are empty metrics that don't convert to real support. Patience and authenticity build sustainable careers.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The International Touring Opportunity",
+        description: "You're offered a 3-week tour across 5 African countries (Ghana, Kenya, South Africa, Nigeria, Tanzania). The pay is $8,000 total but expenses will be $3,500. It's exposure to new markets but 3 weeks away from home and networking in your base. Build internationally or focus locally?",
+        conditions: { minFame: 40, minCareerProgress: 35, minCash: 6000, minFameByDifficulty: { beginner: 32, realistic: 40, hardcore: 48 } },
+        choices: [
+            {
+                text: "Take the tour - expand internationally",
+                outcome: {
+                    text: "You tour 5 countries over 3 weeks. Crowds are smaller than home but enthusiastic. You gain 5K followers across new markets and establish relationships with promoters in each country. A year later, those promoters book you again at higher rates. The tour was investment in international presence that compounds. Geographic diversification opened new revenue streams. International expansion paid off.",
+                    cash: 4500, fame: 15, wellBeing: 0, careerProgress: 22, hype: 25,
+                    lesson: {
+                        title: "International Market Development",
+                        explanation: "Early international touring builds relationships and presence in new markets that compound over time. Initial tours might break even or small profit, but they establish foundation for higher-paying return tours. Geographic diversification creates sustainability.",
+                        realWorldExample: "Most internationally successful African artists toured regionally before global success. Burna Boy, Wizkid, Davido built pan-African presence before worldwide fame. Regional touring creates foundation for international careers.",
+                        tipForFuture: "Don't be afraid to tour new markets even if initial profit is low. You're investing in relationships and presence that enable future higher-paying tours. Geographic diversification creates career resilience.",
+                        conceptTaught: "career-expansion"
+                    }
+                }
+            },
+            {
+                text: "Decline - focus on solidifying home market",
+                outcome: {
+                    text: "You focus on your home market. You do local shows and networking. Growth is solid locally but you remain geographically limited. Two years later, you're a solid local artist but haven't expanded beyond one market. The international opportunity you declined went to another artist who now tours globally. Geographic limitation capped your potential. Staying local was safe but limiting.",
+                    cash: 1500, fame: 6, wellBeing: 10, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Geographic Limitation Risks",
+                        explanation: "Focusing only on home market creates geographic vulnerability and limits growth potential. Artists who expand into multiple markets build resilience and higher ceilings. Safety of staying local often becomes career ceiling.",
+                        realWorldExample: "Artists who never expand geographically often plateau. Those who tour broadly (regionally, internationally) typically have longer sustainable careers. Geographic diversification creates opportunities and reduces dependence on single markets.",
+                        tipForFuture: "Don't let comfort in home market prevent geographic expansion. Touring new markets builds resilience and raises career ceiling. Geographic limitation often becomes career limitation. Expand when opportunities arise.",
+                        conceptTaught: "career-expansion"
+                    }
+                }
+            }
+        ]
     }
 ];
 

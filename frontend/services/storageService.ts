@@ -452,7 +452,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
               return {
                 id: save.slotName,
                 slotName: save.slotName,
-                artistName: save.artistName,
+                artistName: save.artistName, // Use current artistName from save
                 genre: save.genre,
                 date: gd,
                 currentDate: currentDate,
@@ -508,7 +508,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
       saveSlots.push({
         id: slotId,
         slotName: slotId,
-        artistName: state.artistName,
+        artistName: state.artistName, // Use current artistName from state
         genre: state.artistGenre,
         date: gdLocal,
         currentDate: state.currentDate,

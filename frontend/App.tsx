@@ -2372,6 +2372,11 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             sessionStorage.setItem('pendingLoadGame', JSON.stringify(gameState));
         } else {
             audioManager.playSound('buttonClick');
+            // Ensure audio is unlocked and resume music on load (especially important for PWA)
+            audioManager.unlockAudio();
+            if (!audioManager.audioState.isMusicMuted) {
+                audioManager.resumeMusic();
+            }
             dispatch({ type: 'LOAD_GAME', payload: gameState });
         }
     };

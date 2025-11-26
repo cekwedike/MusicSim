@@ -5569,7 +5569,7 @@ export const scenarioBank: Scenario[] = [
         ]
     },
     {
-        title: "The Career-Threatening Substance Addiction (RISK SCENARIO)",
+        title: "The Career-Threatening Substance Addiction",
         description: "Your success has brought parties, substance access, and enablers. What started as recreational use is becoming daily dependency. Your performances are suffering, health declining, and relationships damaged. Fans notice something's wrong. This is your wake-up call before it destroys everything. What do you do?",
         conditions: { minFame: 45, minCareerProgress: 40, maxWellBeing: 50, minFameByDifficulty: { beginner: 38, realistic: 45, hardcore: 55 } },
         choices: [
@@ -5935,7 +5935,7 @@ export const scenarioBank: Scenario[] = [
         ]
     },
     {
-        title: "The Major Career Mistake - Public Meltdown (RISK SCENARIO)",
+        title: "The Major Career Mistake - Public Meltdown",
         description: "You're exhausted and burned out. At a show, technical difficulties frustrate you and you have public meltdown - you berate the sound engineer harshly in front of the audience, smash equipment, and storm off stage. Video goes viral. Your reputation is damaged. How do you handle the aftermath?",
         conditions: { minFame: 38, minCareerProgress: 34, maxWellBeing: 45, minFameByDifficulty: { beginner: 30, realistic: 38, hardcore: 46 } },
         choices: [
@@ -6301,7 +6301,7 @@ export const scenarioBank: Scenario[] = [
         ]
     },
     {
-        title: "The Career Sabotage - Jealous Competitor (RISK SCENARIO)",
+        title: "The Career Sabotage - Jealous Competitor",
         description: "A jealous competitor is actively sabotaging you - spreading false rumors, sending fake cease-and-desist letters to your venues, creating fake social media accounts to damage your reputation. You have evidence. How do you handle malicious sabotage?",
         conditions: { minFame: 40, minCareerProgress: 36, minFameByDifficulty: { beginner: 32, realistic: 40, hardcore: 48 } },
         choices: [

@@ -115,7 +115,7 @@ export const useAudioManager = (): AudioManager => {
 
   // Preload critical sound effects
   useEffect(() => {
-    const criticalSounds: SoundEffect[] = ['buttonClick', 'buttonHover'];
+    const criticalSounds: SoundEffect[] = ['buttonClick'];
 
     criticalSounds.forEach((soundKey) => {
       if (!soundPoolRef.current.has(soundKey)) {

@@ -7,6 +7,7 @@ const API_CACHE = `musicsim-api-v${VERSION}`;
 const PRECACHE_URLS = [
   '/',
   '/manifest.json',
+  '/offline.html',
 ];
 
 // Helper to notify all clients
@@ -68,8 +69,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Skip cross-origin requests
+  // Skip cross-origin requests (except for same-origin with different port in dev)
   if (url.origin !== location.origin) {
+    // Allow fetch for development servers or CDN with proper CORS
     return;
   }
 
@@ -98,11 +100,13 @@ self.addEventListener('fetch', (event) => {
             if (cachedResponse) {
               return cachedResponse;
             }
-            // Return a custom offline page or error
-            return new Response('Offline - Please check your connection', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: new Headers({ 'Content-Type': 'text/plain' })
+            // Return offline page for navigation requests
+            return caches.match('/offline.html').then((offlinePage) => {
+              return offlinePage || new Response('Offline - Please check your connection', {
+                status: 503,
+                statusText: 'Service Unavailable',
+                headers: new Headers({ 'Content-Type': 'text/html' })
+              });
             });
           });
         })

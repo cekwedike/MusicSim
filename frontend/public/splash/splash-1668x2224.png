@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1668" height="2224" viewBox="0 0 1668 2224" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Maroon gradient background matching app theme -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A0A0F;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2D1115;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A0A0F;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Maroon glow -->
+    <radialGradient id="glowGradient">
+      <stop offset="0%" style="stop-color:#8B2635;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#7e2235;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#8B2635;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Accent gradient for icon ring -->
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#93334a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8B2635;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7e2235;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background with maroon gradient -->
+  <rect width="1668" height="2224" fill="url(#bgGradient)"/>
+  
+  <!-- Glow effect behind icon -->
+  <circle cx="834" cy="1049.45" r="333.6" fill="url(#glowGradient)"/>
+  <circle cx="834" cy="1049.45" r="250.2" fill="url(#glowGradient)"/>
+  
+  <!-- Decorative ring around icon -->
+  <circle cx="834" cy="1049.45" r="229.35000000000002" fill="none" stroke="url(#accentGradient)" stroke-width="4.17" opacity="0.3"/>
+  
+  <!-- App Icon from favicon directory -->
+  <image href="/android-chrome-512x512.png" 
+         x="625.5" 
+         y="840.95" 
+         width="417" 
+         height="417"/>
+  
+  <!-- App name with maroon theme -->
+  <text x="834" y="1383.0500000000002" 
+        font-family="Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" 
+        font-size="66.72" 
+        font-weight="900" 
+        fill="#ffffff" 
+        text-anchor="middle">MusicSim</text>
+  
+  <!-- Subtitle with muted maroon color -->
+  <text x="834" y="1487.3000000000002" 
+        font-family="Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif" 
+        font-size="31.275" 
+        font-weight="400" 
+        fill="#d8b4bc" 
+        text-anchor="middle">Music Business Simulation</text>
+</svg>

@@ -21,7 +21,10 @@
     "ci:test": "npm ci && cd backend && npm ci && cd .. && npm run test:ci && cd backend && npm test",
     "security:audit": "npm audit && cd backend && npm audit",
     "deps:check": "npm outdated && cd backend && npm outdated",
-    "clean": "rimraf dist && rimraf backend/node_modules/.cache"
+    "clean": "rimraf dist && rimraf backend/node_modules/.cache",
+    "pwa:check": "pwsh -File scripts/check-pwa.ps1",
+    "pwa:splash": "node frontend/scripts/generate-splash-screens.js",
+    "pwa:test": "npm run build && npm run preview"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.2",

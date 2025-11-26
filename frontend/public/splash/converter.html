@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Splash Screen Converter</title>
+  <style>
+    body { font-family: system-ui; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    .screen { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+    button { padding: 10px 20px; background: #dc2626; color: white; border: none; cursor: pointer; }
+    button:hover { background: #b91c1c; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>iOS Splash Screen Converter</h1>
+    <p>To convert SVG splash screens to PNG format:</p>
+    <ol>
+      <li>Use an online tool like <a href="https://cloudconvert.com/svg-to-png" target="_blank">CloudConvert</a></li>
+      <li>Or use ImageMagick: <code>convert splash.svg splash.png</code></li>
+      <li>Or use an online PWA asset generator like <a href="https://www.pwabuilder.com/imageGenerator" target="_blank">PWA Builder</a></li>
+    </ol>
+    
+    <h2>Recommended: Use PWA Asset Generator</h2>
+    <p>For best results, use the npm package <code>pwa-asset-generator</code>:</p>
+    <pre><code>npx pwa-asset-generator icon-512.png ./public/splash --splash-only --background "#1f2937"</code></pre>
+    
+    <h2>Or use this online tool:</h2>
+    <p><a href="https://progressier.com/pwa-splash-screen-generator" target="_blank">Progressive Web App Splash Screen Generator</a></p>
+  </div>
+</body>
+</html>

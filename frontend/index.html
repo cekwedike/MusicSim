@@ -7,21 +7,61 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     
     <!-- PWA Meta Tags -->
     <meta name="description" content="MusicSim - A Music Business Simulation. Learn the music industry through an interactive educational game." />
     <meta name="theme-color" content="#dc2626" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#dc2626" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1f2937" />
+    
+    <!-- Mobile Web App Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="MusicSim" />
+    
+    <!-- Apple iOS Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="MusicSim" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    
+    <!-- Windows Meta Tags -->
+    <meta name="msapplication-TileColor" content="#dc2626" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    
+    <!-- UC Mobile Browser -->
+    <meta name="full-screen" content="yes" />
+    <meta name="browsermode" content="application" />
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials" />
     
-    <!-- Apple Touch Icons -->
+    <!-- Apple Touch Icons - Multiple sizes for iOS -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- iOS Splash Screens - Various iPhone and iPad sizes -->
+    <!-- iPhone X, XS, 11 Pro, 12 mini, 13 mini (1125x2436) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <!-- iPhone XR, 11, 12, 12 Pro, 13, 13 Pro, 14 (828x1792) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <!-- iPhone XS Max, 11 Pro Max, 12 Pro Max, 13 Pro Max, 14 Plus (1242x2688) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <!-- iPhone 14 Pro (1179x2556) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <!-- iPhone 14 Pro Max (1290x2796) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <!-- iPad Mini, Air (1536x2048) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <!-- iPad Pro 10.5" (1668x2224) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <!-- iPad Pro 11" (1668x2388) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <!-- iPad Pro 12.9" (2048x2732) -->
+    <link rel="apple-touch-startup-image" href="/splash/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
     
     <title>MusicSim - A Music Business Simulation</title>
     <script src="https://cdn.tailwindcss.com"></script>

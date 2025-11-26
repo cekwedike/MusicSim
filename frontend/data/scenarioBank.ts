@@ -5215,6 +5215,407 @@ export const scenarioBank: Scenario[] = [
                 }
             }
         ]
+    },
+
+    // --- BATCH 8: POSITIVE GROWTH FOCUS (10 scenarios - 9 positive/neutral, 1 risky) ---
+    {
+        title: "The College Campus Tour Offer",
+        description: "A campus events coordinator wants to book you for a 5-university tour. $3,500 total, young audience, chance to sell merch and build student fanbase. College crowds are energetic and students become lifelong fans if they connect with you early. Good opportunity to grow?",
+        conditions: { minFame: 22, minCareerProgress: 18 },
+        choices: [
+            {
+                text: "Accept the college tour - build young fanbase",
+                outcome: {
+                    text: "You tour 5 campuses over 2 weeks. Students are incredibly engaged - they sing along, buy merch ($2,800 total), and post content everywhere. You gain 4K followers, mostly college-aged who become devoted fans. Three students start fan pages promoting you. College audiences became your evangelists. The young fanbase is growing your career organically through passionate support.",
+                    cash: 6300, fame: 12, wellBeing: 15, careerProgress: 18, hype: 25,
+                    lesson: {
+                        title: "College Audience Investment Value",
+                        explanation: "College students who discover you early often become lifelong fans. They're passionate, social media active, and create organic promotion. Building young devoted fanbase creates sustainable long-term career foundation. Student fans compound over time.",
+                        realWorldExample: "Many artists built careers through college touring - John Legend, Macklemore, Common, campus tours. Students who connect early remain fans for decades. College audiences are career investment with long-term returns.",
+                        tipForFuture: "Don't underestimate college touring. Students are passionate early adopters who become evangelists. Building young fanbase creates long-term sustainability. College shows are career investment, not just paychecks.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Negotiate for higher payment - $5,000 minimum",
+                outcome: {
+                    text: "You counter at $5,000. They have a fixed budget and book another artist instead. You miss the opportunity to build student fanbase. The artist who took it gains massive college following and becomes popular among young audiences. Your negotiation killed an opportunity that wasn't primarily about money - it was about audience building. You overvalued payment and undervalued exposure.",
+                    cash: 0, fame: 0, wellBeing: -5, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Opportunity Cost Recognition",
+                        explanation: "Some opportunities are more valuable for audience building than immediate payment. College tours build young fanbase worth more than higher fees elsewhere. Recognize when opportunity value exceeds payment amount. Strategic thinking beat short-term payment maximization.",
+                        realWorldExample: "Artists who negotiate college shows purely on payment often miss audience-building opportunities. Those who recognize strategic value of young audiences typically prioritize exposure over maximum fees for college markets.",
+                        tipForFuture: "Evaluate opportunities beyond immediate payment. College shows, festival slots, and audience-building opportunities might be more valuable than higher-paying alternatives. Strategic value sometimes exceeds monetary value.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Local Business Sponsorship",
+        description: "A local business owner who loves your music offers $500/month sponsorship - logo on your social media, mentions at shows, and wearing their branded merch at performances. It's authentic (you actually like their products) and $6,000/year helps a lot. Small local sponsorship - worth it?",
+        conditions: { minFame: 20, minCareerProgress: 16, maxCash: 12000 },
+        choices: [
+            {
+                text: "Accept the sponsorship - build local partnership",
+                outcome: {
+                    text: "You accept and promote them authentically. The owner becomes your biggest supporter - attends shows, promotes you to customers, introduces you to other business owners. You gain 3 more local sponsors through their network ($1,200/month total). Local business community becomes your support network. The authentic partnership created unexpected opportunities and financial stability. Local relationships multiplied.",
+                    cash: 6000, fame: 8, wellBeing: 15, careerProgress: 14, hype: 12,
+                    lesson: {
+                        title: "Local Partnership Network Effects",
+                        explanation: "Authentic local partnerships create network effects - one sponsor connects you to others. Local businesses who support you become promoters and connectors. Small sponsorships compound through relationship networks. Community support creates stability.",
+                        realWorldExample: "Many independent artists build careers on local business sponsorships that create community support networks. Local partnerships provide stability and introduce you to other opportunities. Community investment in artists creates mutual benefit.",
+                        tipForFuture: "Don't dismiss small local sponsorships. They create community support, financial stability, and network effects through business relationships. Local partnerships often lead to more opportunities through connections.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Decline - wait for bigger brand deals",
+                outcome: {
+                    text: "You decline, hoping for major brand sponsorships. A year passes - no major brands approach you. You could have earned $6,000 from the local business and built relationships. The small opportunity you declined could have provided stability while you grew. Waiting for perfect opportunities cost you real opportunities. Perfectionism was expensive.",
+                    cash: 0, fame: 2, wellBeing: -5, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Perfect Opportunity Fallacy",
+                        explanation: "Waiting for perfect opportunities often means missing good opportunities. Small legitimate opportunities provide value while you grow toward bigger ones. Perfectionism prevents progress. Taking good opportunities beats waiting indefinitely for perfect ones.",
+                        realWorldExample: "Many artists wait for major brand deals while declining smaller opportunities. Those who accept appropriate-sized opportunities build stability and relationships. Perfect opportunities are rare; good opportunities are available.",
+                        tipForFuture: "Don't let pursuit of perfect opportunities prevent accepting good ones. Small legitimate partnerships provide value and stability. Build with what's available rather than waiting indefinitely for ideal scenarios.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Teacher Side Hustle",
+        description: "Local parents want you to teach music lessons - voice, instruments, music production. $40/hour, 10 hours/week potential = $1,600/month. Teaching takes time but builds community reputation and provides steady income. Plus you'd be investing in next generation. Worth your time?",
+        conditions: { minFame: 18, minCareerProgress: 14, maxCash: 8000 },
+        choices: [
+            {
+                text: "Start teaching - share knowledge and earn",
+                outcome: {
+                    text: "You start teaching 10 hours weekly. Students are eager and grateful. Parents become your biggest fans - they attend shows and promote you everywhere. Your teaching builds community reputation as generous artist who invests in youth. Plus the $1,600/month provides financial breathing room. One talented student becomes your protégé and collaborator. Teaching enriched your career in unexpected ways.",
+                    cash: 4800, fame: 10, wellBeing: 20, careerProgress: 15, hype: 12,
+                    lesson: {
+                        title: "Teaching Multiple Benefits",
+                        explanation: "Teaching provides income, community reputation, devoted fans (students and parents), and sometimes collaborators. It builds local support network while providing financial stability. Teaching is career investment, not distraction. Multiple benefits compound.",
+                        realWorldExample: "Many successful artists teach - Herbie Hancock, Questlove, and countless musicians balance performing and teaching. Teaching builds community, provides income, and creates devoted supporters. It's respected career addition.",
+                        tipForFuture: "Consider teaching for multiple benefits beyond income. It builds community support, creates devoted fans, provides stability, and sometimes produces collaborators. Teaching enhances career rather than detracting from it.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Focus only on your music - no teaching",
+                outcome: {
+                    text: "You decline to focus exclusively on music. Financial stress increases without the supplemental income. You take desperate low-paying gigs to pay bills. The community reputation you could have built through teaching goes to another artist who becomes locally beloved. Full focus without financial stability created more stress and worse decisions. Teaching could have enabled better music focus.",
+                    cash: -1200, fame: 3, wellBeing: -10, careerProgress: 5, hype: 6,
+                    lesson: {
+                        title: "Financial Stability Enables Focus",
+                        explanation: "Sometimes side work enables better music focus by reducing financial desperation. Financial stress undermines creativity and leads to poor decisions. Strategic side income can improve music career by providing stability that enables better choices.",
+                        realWorldExample: "Many artists maintain side work for stability - session work, teaching, production for others. Financial security enables better career decisions. Artists with stability often make better creative choices than desperate artists.",
+                        tipForFuture: "Don't assume side work undermines music career. Strategic supplemental income often enables better music focus by reducing financial desperation. Stability improves decision-making and creativity.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Community Music Festival Headliner",
+        description: "Your hometown community festival wants you to headline. Payment is only $1,000 but it's your community - family, childhood friends, people who knew you before music. Opportunity to give back and celebrate with community that supported you. Meaningful beyond money?",
+        conditions: { minFame: 30, minCareerProgress: 26 },
+        choices: [
+            {
+                text: "Headline the community festival - give back",
+                outcome: {
+                    text: "You headline for your community. The show is emotional - people who knew you as a kid watching you perform on the big stage. Your community pride multiplies. Local media covers it heavily. Community members promote you to everyone they know. The goodwill and emotional fulfillment was worth more than money. Your community becomes your most devoted promotional army. Giving back created unexpected returns.",
+                    cash: 1000, fame: 8, wellBeing: 30, careerProgress: 12, hype: 18,
+                    lesson: {
+                        title: "Community Investment Returns",
+                        explanation: "Performing for your community at below-market rate creates goodwill and devoted support that money can't buy. Community members who see you give back become your most passionate promoters. Emotional fulfillment and relationship strengthening have career value.",
+                        realWorldExample: "Most successful artists perform for their communities at reduced rates - homecoming shows, local festivals. Community support creates foundation. Artists who give back build loyal bases that support careers for decades.",
+                        tipForFuture: "Don't price yourself out of community opportunities. Performing for people who supported you early creates goodwill worth more than maximum payment. Community investment is career investment.",
+                        conceptTaught: "community-building"
+                    }
+                }
+            },
+            {
+                text: "Decline - only do higher-paying shows now",
+                outcome: {
+                    text: "You decline, saying your rate is now $3,000 minimum. Community members feel you've forgotten where you came from. Family and childhood friends are disappointed. Local support for you cools significantly. Two years later, you wish you had that hometown support and goodwill. Pricing yourself out of community damaged relationships money can't repair. Maximizing payment cost you something more valuable.",
+                    cash: 0, fame: 2, wellBeing: -15, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Community Relationship Value",
+                        explanation: "Pricing yourself out of community opportunities damages relationships and support worth more than payment differences. Community goodwill is career asset that money can't buy. Some opportunities are about relationships, not payment maximization.",
+                        realWorldExample: "Artists who abandon communities for higher payments often regret it. Community support is foundation many successful careers are built on. Those who maintain community connections have stronger, more sustainable support than those who price out.",
+                        tipForFuture: "Make exceptions for genuine community opportunities. The goodwill, relationships, and support are worth more than payment differences. Don't let success make you forget community that supported you.",
+                        conceptTaught: "community-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Podcast Interview Series Opportunity",
+        description: "A podcaster wants to do a 4-episode series about your music journey. No payment, but it's long-form storytelling that builds deep connection with listeners. The podcast has 15K loyal listeners. Time investment for relationship building - worth it?",
+        conditions: { minFame: 24, minCareerProgress: 20 },
+        choices: [
+            {
+                text: "Do the podcast series - tell your story",
+                outcome: {
+                    text: "You do 4 episodes sharing your journey deeply. Listeners connect with your story and become devoted fans. You gain 2K highly engaged followers who feel like they know you personally. The podcast episodes become content you share for years. Deep storytelling created devoted fanbase that casual content couldn't. Long-form connection built stronger relationships than quick exposure.",
+                    cash: 0, fame: 10, wellBeing: 15, careerProgress: 16, hype: 20,
+                    lesson: {
+                        title: "Long-Form Storytelling Value",
+                        explanation: "Long-form content that tells your story deeply creates stronger fan connections than quick exposure. Podcasts, documentaries, and in-depth content build devoted fans who feel personal connection. Deep engagement beats broad shallow exposure.",
+                        realWorldExample: "Artists who do podcast tours often build devoted fanbases - Joe Rogan Effect, Drink Champs, podcast appearances create deep engagement. Listeners who hear your full story become more devoted than those who hear one song.",
+                        tipForFuture: "Invest in long-form storytelling opportunities even without payment. Podcasts, documentaries, and in-depth interviews build devoted fans through deep connection. Quality of engagement matters more than quantity.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Decline - focus only on paid media",
+                outcome: {
+                    text: "You decline, only doing paid press. You get some paid features but they're shallow and don't build deep connections. Your fanbase stays superficial - people who know your music but don't connect with your story. A year later, your engagement rates are low despite decent follower count. No deep connection means weak support. Surface-level fans don't become devoted supporters.",
+                    cash: 500, fame: 4, wellBeing: 0, careerProgress: 5, hype: 6,
+                    lesson: {
+                        title: "Superficial vs Deep Engagement",
+                        explanation: "Only pursuing paid press often results in superficial coverage that doesn't build deep fan connections. Free long-form storytelling can create more devoted fans than paid shallow features. Depth of engagement matters more than payment.",
+                        realWorldExample: "Artists with devoted fanbases typically invested in long-form storytelling - podcasts, documentaries, in-depth interviews. Surface-level paid press creates awareness but not devotion. Deep storytelling builds real relationships.",
+                        tipForFuture: "Don't only chase paid media. Unpaid long-form storytelling often builds deeper fan connections than paid shallow coverage. Invest in opportunities that let you share your story deeply.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The YouTube Cover Artist Collaboration",
+        description: "A YouTuber with 200K subscribers wants to cover your song on their channel. They'll link to your music and credit you fully. No payment either way, just cross-promotion. Their audience discovers new artists through covers. Good exposure opportunity?",
+        conditions: { minFame: 20, minCareerProgress: 16 },
+        choices: [
+            {
+                text: "Encourage the cover - welcome cross-promotion",
+                outcome: {
+                    text: "You enthusiastically support the cover. They make a great version that gets 80K views. Their description links to your original and praises your work. You gain 3K subscribers and 150K streams from people discovering you through the cover. You engage with their audience in comments, converting viewers to fans. Cross-promotion worked beautifully. Collaboration multiplied both your audiences.",
+                    cash: 0, fame: 12, wellBeing: 10, careerProgress: 15, hype: 22,
+                    lesson: {
+                        title: "Cover Cross-Promotion Benefits",
+                        explanation: "Encouraging covers creates cross-promotion opportunities that expose you to new audiences. YouTubers and content creators covering your music authentically bring their audiences to you. Supporting covers builds relationships and amplifies reach.",
+                        realWorldExample: "Many songs became hits through covers - Lewis Capaldi, Billie Eilish, and others got massive exposure from cover artists. Supporting covers rather than blocking them creates collaborative growth. Covers amplify original artists.",
+                        tipForFuture: "Encourage covers from legitimate content creators. Covers expose you to their audiences and create authentic cross-promotion. Collaboration beats protection for independent artists building audiences.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Request payment - charge them licensing fee",
+                outcome: {
+                    text: "You ask for $200 licensing fee. They can't afford it and cover a different artist instead. You miss exposure to 200K subscribers. The defensive approach to your rights cost you promotional opportunity. The artist they covered instead gains the exposure you could have had. Overprotecting rights prevented growth opportunity.",
+                    cash: 0, fame: 0, wellBeing: -5, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Rights Protection vs Promotion Balance",
+                        explanation: "At early career stages, encouraging organic covers often provides more value than protecting rights strictly. Exposure from legitimate covers can accelerate growth. Balance rights protection with promotional benefits. Strategic generosity often serves you better than strict protection.",
+                        realWorldExample: "Independent artists who encourage covers often grow faster than those who strictly protect rights. Major artists can demand payment; emerging artists benefit from organic promotion. Stage-appropriate strategy matters.",
+                        tipForFuture: "Consider career stage when deciding on cover permissions. When building audience, allowing covers often provides more value than licensing fees. Strategic generosity can accelerate growth.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Production Workshop Teaching",
+        description: "A youth center asks you to teach a weekend music production workshop to teens from underserved communities. Payment is $400 but it's about impact - teaching young people who can't afford professional lessons. Giving back to next generation through skills sharing?",
+        conditions: { minFame: 26, minCareerProgress: 22 },
+        choices: [
+            {
+                text: "Teach the workshop - invest in youth",
+                outcome: {
+                    text: "You teach 20 teenagers music production over a weekend. They're incredibly grateful and inspired. Three become serious producers and credit you as mentor. Parents and the community see you as artist who gives back. Local media covers it. The goodwill creates community support and opportunities. One teen you taught becomes your future collaborator. Teaching created unexpected relationships and fulfillment. Impact was worth more than maximum payment.",
+                    cash: 400, fame: 8, wellBeing: 25, careerProgress: 12, hype: 10,
+                    lesson: {
+                        title: "Youth Investment Multiple Returns",
+                        explanation: "Teaching underserved youth creates community goodwill, potential future collaborators, personal fulfillment, and sometimes unexpected career opportunities. Impact work builds reputation as artist who cares beyond self-interest. Multiple forms of return exceed direct payment.",
+                        realWorldExample: "Many successful artists teach underserved youth - Pharrell, Chance the Rapper, and others invest in next generation. Teaching builds legacy, community support, and sometimes discovers talent. Impact work creates returns beyond payment.",
+                        tipForFuture: "Take opportunities to teach and give back to underserved communities. The goodwill, relationships, fulfillment, and unexpected opportunities often exceed payment differences. Impact work is career and legacy investment.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            },
+            {
+                text: "Decline - not enough payment for your time",
+                outcome: {
+                    text: "You decline saying your rate is higher. Another artist teaches it and gains community reputation as generous and caring. You're seen as artist who only cares about money. The community support and goodwill you could have built goes to someone else. Maximizing payment cost you community perception and relationships. Your rate calculation missed intangible value.",
+                    cash: 0, fame: 1, wellBeing: -5, careerProgress: 2, hype: 3,
+                    lesson: {
+                        title: "Impact Work Intangible Value",
+                        explanation: "Some opportunities provide value beyond payment - community goodwill, personal fulfillment, reputation as caring artist. Declining impact work for payment reasons misses intangible returns. Public perception of generosity has career value.",
+                        realWorldExample: "Artists known for giving back build stronger community support than those who maximize every payment. Community service creates perception of caring artist worth supporting. Intangible returns have real career value.",
+                        tipForFuture: "Don't evaluate every opportunity purely on payment. Impact work with underserved communities builds reputation, goodwill, and relationships worth more than rate differences. Strategic generosity serves career.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Instagram Live Performance Series",
+        description: "You decide to do a weekly Instagram Live performance series - 30 minutes every Friday, acoustic sets, fan interaction. No immediate payment, but builds engaged audience and provides consistent content. Commitment of time for community building - worth the investment?",
+        conditions: { minFame: 22, minCareerProgress: 18 },
+        choices: [
+            {
+                text: "Start the weekly series - build engaged community",
+                outcome: {
+                    text: "You commit to weekly Friday performances for 3 months. Fans start anticipating it - Friday becomes 'your night.' Your engaged viewership grows from 200 to 2,000 per stream. Fans in comments become community who know each other. The consistent presence builds devoted following. People send tips ($600 total), buy merch, and become your evangelists. Consistent community building created devoted fanbase.",
+                    cash: 600, fame: 10, wellBeing: 15, careerProgress: 16, hype: 20,
+                    lesson: {
+                        title: "Consistent Content Community Building",
+                        explanation: "Consistent scheduled content (weekly shows, regular releases) builds anticipation and community. Fans who show up regularly become devoted supporters. Consistency creates habits and relationships that sporadic content can't. Committed presence builds devoted audiences.",
+                        realWorldExample: "Artists with consistent series build devoted fanbases - quarantine live streams, regular YouTube shows, weekly releases. Consistency creates anticipation and community. Fans become part of routine and develop deeper connections.",
+                        tipForFuture: "Consider consistent content series for community building. Weekly shows, regular releases, or scheduled content creates anticipation and devoted following. Consistency builds stronger relationships than sporadic content.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Only do occasional performances - no regular schedule",
+                outcome: {
+                    text: "You perform occasionally when you feel like it. Viewership varies wildly - sometimes 50, sometimes 300. No community forms because there's no consistency to build habits around. Fans don't know when to expect you. Your sporadic presence doesn't build the devoted following that consistency would. Casual approach created casual results. No commitment meant no committed audience.",
+                    cash: 100, fame: 3, wellBeing: 5, careerProgress: 5, hype: 6,
+                    lesson: {
+                        title: "Consistency vs Sporadic Engagement",
+                        explanation: "Sporadic content doesn't build anticipation or community. Fans can't form habits around inconsistent presence. Consistency is what transforms casual viewers into devoted community. Commitment from artists generates commitment from audiences.",
+                        realWorldExample: "Artists with sporadic presence struggle to build devoted communities. Those with consistent schedules build anticipation and habit-based engagement. Fans commit to artists who commit to consistency.",
+                        tipForFuture: "If you want devoted community, provide consistent presence. Sporadic content gets sporadic engagement. Commitment to schedule builds audience commitment to you. Consistency is community-building foundation.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Vinyl Record Small Batch Release",
+        description: "A small local record store wants to press 100 vinyl records of your EP to sell in their store. You'd pay $800 for pressing, they'd sell them for $25 each ($2,500 total revenue, you get 70% = $1,750). Net profit: $950, but also physical product and collector item for devoted fans. Worth the investment?",
+        conditions: { minFame: 28, minCareerProgress: 24, minCash: 2000 },
+        choices: [
+            {
+                text: "Press the vinyl - create physical product",
+                outcome: {
+                    text: "You press 100 vinyl records. They sell out in 3 weeks. Fans love having physical collector item. The store promotes you heavily because you're local artist they stock. Other stores see the success and ask to carry your vinyl too. The physical product creates credibility and collector value digital doesn't provide. You make $950 profit plus expanded relationships with record stores. Tangible product created intangible benefits.",
+                    cash: 950, fame: 10, wellBeing: 12, careerProgress: 14, hype: 18,
+                    lesson: {
+                        title: "Physical Product Value Proposition",
+                        explanation: "Physical products create collector value, retail relationships, and credibility that digital-only presence doesn't provide. Vinyl, CDs, and physical merch build deeper fan connections through tangible ownership. Physical presence in stores creates legitimacy and discovery opportunities.",
+                        realWorldExample: "Independent artists with physical products often build stronger devoted fanbases than digital-only artists. Record stores promote artists they stock. Physical products create collector culture and deeper fan investment.",
+                        tipForFuture: "Consider small-batch physical products even in digital age. Vinyl, cassettes, physical merch create collector value and retail relationships. Physical products serve devoted fans and create store presence.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Stay digital-only - avoid upfront costs",
+                outcome: {
+                    text: "You decline and stay digital-only. It's lower risk but you miss opportunity to serve devoted fans who want physical products. Fans ask repeatedly where they can buy physical music - you have nothing to offer. Collectors who would have bought vinyl at $25 aren't interested in $1 streaming. You saved $800 upfront but missed $950 profit and fan satisfaction. Risk aversion cost you opportunity.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Risk Aversion Opportunity Cost",
+                        explanation: "Avoiding all upfront investment prevents opportunities with positive ROI. Some investments serve devoted fans who want to support you beyond streaming. Risk aversion sometimes costs more than calculated risks. Strategic investment enables revenue streams risk-avoidance prevents.",
+                        realWorldExample: "Artists who avoid all upfront investment often miss opportunities to serve devoted fans. Physical products, merch, and fan experiences require investment but create revenue and satisfaction. Calculated risks enable growth.",
+                        tipForFuture: "Don't let risk aversion prevent positive-ROI opportunities. Devoted fans want ways to support you beyond streaming. Strategic small investments create revenue streams and fan satisfaction. Calculate risks rather than avoiding them entirely.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Licensing for Indie Film",
+        description: "An independent filmmaker wants to license your song for their film's emotional climax scene. Budget is tight - they offer $800 upfront plus screen credit. The film is going to festivals and could get your music heard by industry professionals. Exposure opportunity at indie rates?",
+        conditions: { minFame: 24, minCareerProgress: 20 },
+        choices: [
+            {
+                text: "License the song - support indie film and get exposure",
+                outcome: {
+                    text: "You license the song for $800. The film gets into 8 festivals and wins 3 awards. Your song in the emotional climax is praised by reviewers. Three music supervisors contact you about future placements because they saw the film. The $800 indie placement led to $12,000 in future sync deals. Supporting independent film paid off through relationships and future opportunities. Initial fee was just the beginning.",
+                    cash: 800, fame: 10, wellBeing: 10, careerProgress: 16, hype: 15,
+                    lesson: {
+                        title: "Indie Film Sync Opportunities",
+                        explanation: "Independent film placements provide festival exposure and music supervisor attention that often leads to better opportunities. Supporting indie projects at lower rates builds relationships and credibility in sync world. First placements open doors to more lucrative ones.",
+                        realWorldExample: "Many successful sync careers started with indie films at low rates. Festival circuits expose music to supervisors and industry professionals. Supporting indie filmmakers often leads to long-term relationships and better opportunities.",
+                        tipForFuture: "Don't dismiss indie film offers because budgets are low. Festival exposure and music supervisor attention create pathways to better sync deals. Supporting independent art builds relationships that benefit careers.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Negotiate for higher fee - minimum $3,000",
+                outcome: {
+                    text: "You counter at $3,000. The indie filmmaker can't afford it and uses another artist's song. That artist gets the festival exposure and music supervisor attention. The relationships and opportunities you could have built go to someone else. Pricing yourself out of indie film eliminated an entry point to the sync world. Maximum payment killed opportunity.",
+                    cash: 0, fame: 0, wellBeing: -5, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Entry Point Opportunity Value",
+                        explanation: "Some low-paying opportunities are valuable entry points to industries or relationships. Indie films, small placements, and relationship-building opportunities shouldn't always be evaluated purely on payment. Entry points create pathways to better opportunities.",
+                        realWorldExample: "Sync professionals often start with indie films at low rates. Those placements lead to relationships that enable higher-paying opportunities. Pricing out of entry points prevents industry access entirely.",
+                        tipForFuture: "Recognize entry point opportunities versus exploitation. Legitimate indie films at festival-bound projects are entry points worth accepting at lower rates. They create pathways and relationships that lead to better opportunities.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Career-Threatening Substance Addiction (RISK SCENARIO)",
+        description: "Your success has brought parties, substance access, and enablers. What started as recreational use is becoming daily dependency. Your performances are suffering, health declining, and relationships damaged. Fans notice something's wrong. This is your wake-up call before it destroys everything. What do you do?",
+        conditions: { minFame: 45, minCareerProgress: 40, maxWellBeing: 50, minFameByDifficulty: { beginner: 38, realistic: 45, hardcore: 55 } },
+        choices: [
+            {
+                text: "Enter rehab - take 90 days to recover",
+                outcome: {
+                    text: "You check into rehab for 90 days. You cancel shows ($15,000 lost) and disappear from public. Fans worry but mostly support you. You get sober, work through trauma, and learn coping skills. When you return, you're healthier and create your most honest music. Fans respect your vulnerability and courage. Addressing addiction saved your career and life. Recovery was career investment disguised as career interruption.",
+                    cash: -15000, fame: 5, wellBeing: 60, careerProgress: 15, hype: 10,
+                    lesson: {
+                        title: "Addiction Recovery Career Saving",
+                        explanation: "Addressing addiction early saves careers and lives. Taking time for recovery is investment in sustainable future. Fans and industry respect artists who address problems honestly. Ignoring addiction guarantees career destruction; addressing it enables recovery and comeback.",
+                        realWorldExample: "Many artists recovered from addiction and returned stronger - Robert Downey Jr., Eminem, Kendrick Lamar's honesty about it. Those who ignore addiction typically crash catastrophically. Recovery enables sustainable careers; denial ensures destruction.",
+                        tipForFuture: "If you're struggling with addiction, get help immediately. Recovery interrupts career briefly; addiction destroys it permanently. Fans and industry respect honesty and recovery. Addressing problems early prevents catastrophic crashes.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Try to quit on your own - maintain appearances",
+                outcome: {
+                    text: "You try quitting without professional help while maintaining career appearances. It's incredibly hard. You relapse multiple times. Performance quality suffers. After 6 months, you're worse and everyone knows something's wrong. You finally enter rehab anyway but now with damaged reputation and worse addiction. DIY recovery attempt cost 6 months and made everything worse. Professional help earlier would have been better.",
+                    cash: -8000, fame: -8, wellBeing: -15, careerProgress: -12, hype: -20,
+                    lesson: {
+                        title: "Professional Help Necessity",
+                        explanation: "Addiction requires professional treatment. DIY recovery attempts usually fail and delay necessary treatment. Maintaining appearances while struggling makes everything worse. Early professional intervention works better than delayed treatment after failed attempts.",
+                        realWorldExample: "Most successful recovery stories involve professional treatment. DIY attempts typically fail because addiction requires medical and psychological support. Those who get professional help early typically fare better than those who delay.",
+                        tipForFuture: "Don't try recovering from serious addiction alone. Professional treatment works; DIY attempts usually fail and delay effective help. Appearances aren't worth health. Get proper treatment immediately.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Ignore it and keep using - it's not that bad yet",
+                outcome: {
+                    text: "You convince yourself it's not serious and keep using. Six months later, you're in crisis - overdose scare, public meltdown, hospitalization. Career in shambles, health destroyed, reputation damaged beyond repair. Record deals cancelled, shows blacklisted. You eventually get sober but the damage is permanent. Denial cost you almost everything. Early intervention could have prevented catastrophic destruction. Ignoring addiction was career suicide.",
+                    cash: -50000, fame: -35, wellBeing: -70, careerProgress: -60, hype: -80,
+                    lesson: {
+                        title: "Addiction Denial Catastrophe",
+                        explanation: "Ignoring addiction leads to catastrophic crashes that destroy careers, health, and lives. Problems don't resolve themselves - they escalate. Early intervention prevents career-ending disasters. Denial is most expensive choice possible.",
+                        realWorldExample: "History is full of artists destroyed by ignored addiction - careers ended, lives lost. Those who addressed problems early typically survived; those in denial typically crashed catastrophically. Addiction requires immediate action.",
+                        tipForFuture: "Never ignore serious substance problems. They always escalate. Early intervention prevents catastrophic crashes. If you recognize a problem, act immediately. Denial doesn't make problems disappear - it makes them fatal.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            }
+        ]
     }
 ];
 

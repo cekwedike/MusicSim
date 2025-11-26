@@ -3464,6 +3464,470 @@ export const scenarioBank: Scenario[] = [
                 }
             }
         ]
+    },
+
+    // --- BATCH 4: MIXED SCENARIOS (10 scenarios - moderate to high stakes) ---
+    {
+        title: "The Regional Rivalry Beef",
+        description: "An artist from a rival city/region disses you on a track, claiming you're fake and your music is trash. They have 80K followers vs your 50K. Your fans are demanding you respond. Social media is blowing up. A diss track could boost your visibility but escalate into real violence - your regions have actual tension. Your manager says: 'Ignore it and look weak, or respond and risk things getting dangerous.'",
+        conditions: { minFame: 28, minCareerProgress: 22, minFameByDifficulty: { beginner: 22, realistic: 28, hardcore: 35 } },
+        choices: [
+            {
+                text: "Release a hard diss track - defend your reputation",
+                outcome: {
+                    text: "You drop a brutal diss track. Your fans love it - you gain 15K followers. But his fans are furious. Online beef becomes offline tension. Someone from his city confronts your DJ at a show - a fight breaks out. Three people are hospitalized. Police investigate. You're blamed for inciting violence through music. Shows in his region ban you. The beef cost more than it gained.",
+                    cash: -5000, fame: 10, wellBeing: -25, careerProgress: -5, hype: 20,
+                    lesson: {
+                        title: "Beef Escalation Risks",
+                        explanation: "Musical beef can escalate to real-world violence, especially with regional tensions. Short-term visibility gains aren't worth violence, legal issues, and market access loss. Some battles aren't worth fighting.",
+                        realWorldExample: "Hip-hop beefs have resulted in deaths (Biggie, Tupac), career damage, and market blacklisting. Regional rivalries in Africa (Kenya, Nigeria, South Africa) have similarly escalated from music to violence.",
+                        tipForFuture: "Assess whether beef will escalate beyond music. If real regional tensions exist, responding with aggression risks violence. Consider whether temporary hype is worth potential tragedy.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Release a competitive track but no direct disses",
+                outcome: {
+                    text: "You release a track showcasing your skills without directly dissing them. You prove your talent without escalating. Neutral observers respect your maturity. You gain 8K followers and keep the moral high ground. His fans can't rally around defending him because you didn't attack. Smart play - you elevated yourself without creating enemies.",
+                    cash: -800, fame: 8, wellBeing: 10, careerProgress: 10, hype: 15,
+                    lesson: {
+                        title: "Competitive Without Combative",
+                        explanation: "You can respond to challenges by demonstrating your skills without direct attacks. This shows confidence without escalating conflict. You prove superiority through quality, not insults. Strategic maturity beats aggressive reaction.",
+                        realWorldExample: "Many successful artists respond to disses with elevated content rather than direct attacks. Kendrick Lamar's 'Control' verse challenged peers without specific beef. Quality responses beat aggressive ones long-term.",
+                        tipForFuture: "When challenged, you can respond with skill demonstrations rather than direct attacks. This shows confidence and maturity while avoiding escalation. Rise above rather than descend to the level of attacks.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Ignore completely - focus on your work",
+                outcome: {
+                    text: "You post nothing and continue making music. Initially, some fans call you weak. But after two weeks, everyone forgets about the diss - it was designed to bait you into giving him attention. By ignoring him, you denied him the publicity he wanted. His diss track flops. You keep growing while he stays stagnant. Silence was the ultimate power move.",
+                    cash: 0, fame: 5, wellBeing: 15, careerProgress: 8, hype: 5,
+                    lesson: {
+                        title: "Strategic Silence Power",
+                        explanation: "Not all challenges deserve responses. Often, rivals diss you to gain attention from your larger platform. Ignoring them denies them the publicity they need. Silence can be the most powerful response when someone is trying to provoke you.",
+                        realWorldExample: "Many major artists ignore smaller artists' diss tracks because responding would give them attention. Drake, Jay-Z, and Beyoncé regularly ignore disses from smaller artists, denying them the publicity.",
+                        tipForFuture: "Evaluate whether responding gives them more than it gives you. If they're seeking attention through provocation, silence denies them what they want. Not every diss deserves a response.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Unauthorized Sample Lawsuit",
+        description: "You're served papers - a lawsuit for $200,000. An artist claims you sampled their song without permission. You don't remember sampling anything, but your producer might have used a loop that contained their work. The case is weak but fighting it costs $30,000 in legal fees. You could settle for $25,000, fight for $30,000+, or offer them royalty splits going forward.",
+        conditions: { minFame: 38, minCareerProgress: 32, minCash: 10000 },
+        choices: [
+            {
+                text: "Settle immediately for $25,000",
+                outcome: {
+                    text: "You settle. The case ends quickly. You pay $25,000 and sign an NDA. It's expensive but resolved. However, word spreads in the industry that you'll pay settlements to avoid fights. Three months later, another 'sample lawsuit' arrives from someone else - they see you as an easy target. Your quick settlement created a pattern that invites opportunistic lawsuits.",
+                    cash: -25000, fame: -3, wellBeing: -10, careerProgress: 2, hype: -5,
+                    lesson: {
+                        title: "Settlement Invitation Pattern",
+                        explanation: "While settlements end disputes quickly, paying weak claims makes you a target for opportunistic lawsuits. Word spreads that you settle easily. Fighting at least some weak claims deters future opportunistic suits.",
+                        realWorldExample: "Artists and companies known for quick settlements attract more lawsuits. Patent trolls and copyright opportunists target those with patterns of settling. Sometimes fighting weak claims is strategic deterrent.",
+                        tipForFuture: "Assess each case individually. Don't create patterns of settling weak claims - you'll invite more. Sometimes fighting expensive battles deters cheaper future ones. Reputation for fighting matters.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Fight the lawsuit - spend $30,000 on lawyers",
+                outcome: {
+                    text: "You hire lawyers and fight. The case drags for 8 months. Discovery reveals your producer unknowingly used a loop pack that contained their sample. Technically, you're liable. You lose and pay $180,000 plus your $30,000 legal fees. Total cost: $210,000. Fighting the weak case made it worse because you were technically wrong. You should have settled.",
+                    cash: -210000, fame: -10, wellBeing: -35, careerProgress: -15, hype: -20,
+                    lesson: {
+                        title: "Legal Battle Risk Assessment",
+                        explanation: "Fighting lawsuits makes sense when you're clearly right. When liability is possible, settlements are often cheaper than fighting and losing. Legal victories require being right on the facts - if you're liable, settlements are safer.",
+                        realWorldExample: "Many artists spend more fighting sample cases than settlements would have cost, then lose anyway. Robin Thicke spent millions fighting 'Blurred Lines' plagiarism, lost, and paid even more. Weak cases to fight are those you can win.",
+                        tipForFuture: "Before fighting, assess your actual liability honestly. If you might be technically wrong, settle. Fight cases you can win. Expensive legal battles that you lose are worst-case scenarios.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Offer 5% royalty split going forward + small payment",
+                outcome: {
+                    text: "You offer them 5% of future royalties on the song plus $5,000 now. They accept - they get ongoing income instead of a one-time payout. You pay less upfront and the song stays up. This creative solution costs less than settlement or fighting while giving them fair compensation. Both parties benefit.",
+                    cash: -5000, fame: 2, wellBeing: 5, careerProgress: 5, hype: 3,
+                    lesson: {
+                        title: "Creative Dispute Resolution",
+                        explanation: "Royalty splits can resolve sample disputes more affordably than settlements or lawsuits. Original artists get ongoing income, you pay less upfront, and everyone benefits from the song's success. Creative solutions often beat adversarial approaches.",
+                        realWorldExample: "Many sample disputes are resolved through retroactive royalty splits rather than lawsuits. This approach is increasingly common and often satisfies both parties better than lump sum settlements.",
+                        tipForFuture: "When facing sample or copyright claims, consider royalty split offers. They're often cheaper than settlements while giving original creators fair ongoing compensation. Both sides can win.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Ghost Producer Secret",
+        description: "You've been working with a ghost producer - they make your beats, you pay them flat fees, and you take full production credit. It's common practice. They now want credit and producer royalties on your hit song (2M streams). They threaten to expose that you don't make your own beats. Your 'producer' image is part of your brand. Give them credit or protect the illusion?",
+        conditions: { minFame: 42, minCareerProgress: 38, minHype: 30 },
+        choices: [
+            {
+                text: "Pay them more - keep the secret",
+                outcome: {
+                    text: "You pay them $15,000 to stay quiet. They agree. But six months later, they approach you again with the same threat for another song. You're now being blackmailed repeatedly. You pay another $10,000. This pattern continues - you're trapped in a cycle of hush payments. Your secret is expensive to maintain and they have all the power.",
+                    cash: -25000, fame: 0, wellBeing: -30, careerProgress: 5, hype: 10,
+                    lesson: {
+                        title: "Blackmail Never Ends",
+                        explanation: "Paying people to keep secrets creates ongoing blackmail relationships. Once you pay once, they know they can extract more. Secrets maintained through payments are expensive and unsustainable. You become permanently vulnerable.",
+                        realWorldExample: "Countless artists and public figures have been trapped in ongoing blackmail relationships over secrets. The payment never ends - it just gets more expensive. Secrets are leverage that grows more costly over time.",
+                        tipForFuture: "Don't create secrets that can be used for blackmail. If you use ghost producers, be upfront about it or structure contracts that prevent future claims. Secrets become expensive liabilities.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Give them proper credit and royalties",
+                outcome: {
+                    text: "You credit them properly and give them producer royalties. Your fans learn you don't make all your own beats. Some are disappointed, but most don't care - many artists work with producers. You're seen as honest. Your relationship with the producer becomes professional and healthy. Other talented producers now want to work with you because you credit collaborators fairly. Honesty paid off.",
+                    cash: -3000, fame: -5, wellBeing: 15, careerProgress: 12, hype: 5,
+                    lesson: {
+                        title: "Transparency in Collaboration",
+                        explanation: "Most audiences accept that artists collaborate with producers and writers. Being honest about collaborations is less damaging than fans believe. Crediting collaborators properly builds better professional relationships and attracts more talent.",
+                        realWorldExample: "Many successful artists openly work with producers and writers. Drake, Rihanna, and most pop stars credit their collaborators. Fans care more about honesty than whether you make every beat yourself.",
+                        tipForFuture: "Credit collaborators honestly. Fans value authenticity more than solo genius myths. Proper credits attract better collaborators and prevent future disputes. Transparency beats secrets.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Refuse and dare them to expose you",
+                outcome: {
+                    text: "You refuse to pay. They expose you on social media with receipts. Your 'producer artist' image collapses. Fans feel deceived. You lose 20K followers and credibility. Media coverage focuses on the deception, not the music. You're labeled fake. The exposure damaged your brand significantly. Protecting an unsustainable secret backfired - you should have been honest from the start.",
+                    cash: 0, fame: -20, wellBeing: -40, careerProgress: -18, hype: -30,
+                    lesson: {
+                        title: "Unsustainable Secrets Cost More When Exposed",
+                        explanation: "Secrets that require ongoing maintenance will eventually be exposed. The damage from exposure is worse than voluntary transparency. Deceptive branding that gets exposed causes more harm than honest branding from the start.",
+                        realWorldExample: "Artists exposed for ghost producers, ghost writers, or fake skills suffer worse damage than those who are upfront. Milli Vanilli's career ended when their lip-syncing was exposed. Honesty prevents catastrophic exposure.",
+                        tipForFuture: "Don't build your brand on lies that can be exposed. Unsustainable secrets will eventually come out. Be honest about collaborations from the start - the exposure damage is always worse than transparency.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Venue Deposit Scam",
+        description: "You're organizing your first headlining concert. A venue wants $8,000 deposit to book the space (capacity 2,000). They say ticket sales will cover it. Your friend warns: 'I've heard of promoters who book venues, collect the deposit from artists, then cancel claiming 'permit issues' and disappear with the money.' But this venue has good reviews online. Trust them or demand protections?",
+        conditions: { minFame: 32, minCareerProgress: 28, minCash: 10000 },
+        choices: [
+            {
+                text: "Pay the $8,000 deposit - trust their reviews",
+                outcome: {
+                    text: "You pay $8,000. Two weeks before the show, they cancel: 'Permit issues, we'll refund you in 30 days.' 30 days pass - no refund. You call - number disconnected. You've been scammed. The good reviews were fake. You lost $8,000 and have no venue. You have to cancel, refund ticket buyers, and damage your reputation. Trust cost you everything.",
+                    cash: -8000, fame: -15, wellBeing: -35, careerProgress: -20, hype: -25,
+                    lesson: {
+                        title: "Deposit Scam Reality",
+                        explanation: "Venue deposit scams are common - fake reviews, fake venues, or venues that collect deposits then cancel with excuses. Never pay large deposits without insurance, contracts, and verification. Online reviews can be fabricated.",
+                        realWorldExample: "Thousands of artists lose money annually to venue deposit scams. Fake venues, unlicensed promoters, and deposit scammers are widespread in the music industry. Verification and contracts are essential.",
+                        tipForFuture: "Never pay large venue deposits without: verified business registration, contract with refund terms, insurance, and independent reviews. If it feels risky, demand protections or walk away.",
+                        conceptTaught: "Predatory Deals"
+                    }
+                }
+            },
+            {
+                text: "Demand escrow or payment milestones",
+                outcome: {
+                    text: "You propose: 'Let's use escrow - deposit held by third party until the show happens.' They refuse and become defensive: 'Don't you trust us?' Their resistance confirms your suspicion - this was a scam. You walk away. Later, you learn three artists lost money to the same 'venue.' Your caution saved you $8,000. You find a legitimate venue with proper contracts.",
+                    cash: -3000, fame: 8, wellBeing: 15, careerProgress: 12, hype: 15,
+                    lesson: {
+                        title: "Escrow and Payment Protection",
+                        explanation: "Legitimate businesses accept escrow or milestone payments. Those who refuse or get defensive are usually scams. Payment protection mechanisms reveal who's honest. Resistance to reasonable protections is a red flag.",
+                        realWorldExample: "Professional venues and promoters accept escrow, deposits held by ticketing platforms, or milestone payments. Those who insist on direct large upfront payments without protections are often scammers.",
+                        tipForFuture: "Always propose payment protections (escrow, milestones, insurance) for large deposits. Legitimate businesses accept protections; scammers resist. Their reaction tells you everything.",
+                        conceptTaught: "Predatory Deals"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Streaming Farm Temptation",
+        description: "Your latest single has only 5K streams after 2 weeks. You're discouraged. A service offers: '100K guaranteed streams for $600. Real accounts, looks completely organic, Spotify can't detect it.' Many artists you know use them. Your manager says it's risky but common. Boost your numbers artificially or accept organic growth?",
+        conditions: { minFame: 22, minCash: 1000, maxHype: 20 },
+        choices: [
+            {
+                text: "Buy the 100K streams for $600",
+                outcome: {
+                    text: "You buy the streams. Your count jumps to 105K. For three weeks, it looks good. Then Spotify's fraud detection flags your song. All your music is removed from Spotify - not just this song, your entire catalog. Your artist profile is deleted. You're blacklisted. Years of legitimate work erased because you bought fake streams for one song. The $600 cost you your Spotify career permanently.",
+                    cash: -600, fame: -35, wellBeing: -50, careerProgress: -60, hype: -70,
+                    lesson: {
+                        title: "Stream Fraud Permanent Ban",
+                        explanation: "Spotify, Apple Music, and YouTube detect stream farms and permanently ban artists. You lose not just the fake streams but your entire catalog and profile. Platform bans are career-destroying. No amount of fake streams is worth permanent blacklisting.",
+                        realWorldExample: "Spotify removes 40,000+ songs daily for artificial streaming. Artists caught using stream farms lose their entire catalogs permanently. Platform bans are career killers. The risk vastly exceeds any reward.",
+                        tipForFuture: "Never buy fake streams, followers, or engagement. Platforms detect it and the punishment is permanent blacklisting. Build slowly with real fans. Your platform presence is too valuable to risk.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Accept organic growth - keep building",
+                outcome: {
+                    text: "You decline the fake streams. Your song stays at 5K for a month. Then it gets added to a small playlist. Growth accelerates - 15K, 30K, 60K. After three months, you're at 120K real streams. The algorithm recognized your real engagement and pushed your music. Slow and real beat fast and fake. Plus, you kept your account safe.",
+                    cash: 0, fame: 8, wellBeing: 10, careerProgress: 10, hype: 18,
+                    lesson: {
+                        title: "Organic Growth Algorithm Benefits",
+                        explanation: "Platform algorithms reward genuine engagement over fake numbers. Real listeners save songs, share them, and return. This signals quality to algorithms. Organic growth is slower but compounds better and carries no risk.",
+                        realWorldExample: "Virally successful artists almost always have organic growth stories. Algorithms detect and promote songs with genuine engagement. Fake streams don't trigger algorithmic promotion - real listening does.",
+                        tipForFuture: "Trust organic growth. Platforms reward real engagement with algorithmic promotion. Focus on making music people genuinely want to listen to and share. Real growth compounds; fake growth gets deleted.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Manager Embezzlement Discovery",
+        description: "You're reviewing finances and notice discrepancies. Your manager has been paying themselves 40% of your income instead of the 20% in your contract. Over 2 years, they've taken an extra $35,000. Confronting them could explode the relationship. You need them for bookings and industry connections. But they've been stealing from you.",
+        conditions: { minFame: 45, minCareerProgress: 40, minCash: 15000, minFameByDifficulty: { beginner: 38, realistic: 45, hardcore: 52 } },
+        choices: [
+            {
+                text: "Confront them - demand the money back",
+                outcome: {
+                    text: "You confront them with the evidence. They deny it initially, then admit it: 'I needed the money, I was helping you grow.' You demand repayment and fire them. They refuse to pay and turn the industry against you, telling promoters you're 'difficult' and 'ungrateful.' Bookings dry up. You lost your manager, $35,000, and industry relationships. Being right didn't protect you from the consequences.",
+                    cash: -35000, fame: -10, wellBeing: -30, careerProgress: -25, hype: -20,
+                    lesson: {
+                        title: "Manager Split Consequences",
+                        explanation: "Confronting manager theft is right but has consequences - lost relationships, industry blacklisting, and coordinated retaliation. Managers have industry connections that can damage you. Being right doesn't always win.",
+                        realWorldExample: "Many artists who fire managers for embezzlement face industry retaliation. Managers talk to each other and promoters. Some artists can't get new representation after firing managers who then trash their reputations.",
+                        tipForFuture: "Document everything. Consider whether confrontation or quiet replacement is smarter. Sometimes transitioning away quietly preserves more value than confrontation. Pick battles you can win.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Document everything and transition quietly to new management",
+                outcome: {
+                    text: "You document the theft but say nothing. You find new management and transition gradually: 'Thanks for everything, I'm trying a new direction.' You leave professionally without accusations. Once you're secure with new management, you sue the old manager with your evidence. You win a $35,000 judgment. You got justice without industry drama. Strategic patience won.",
+                    cash: 25000, fame: 5, wellBeing: 10, careerProgress: 15, hype: 8,
+                    lesson: {
+                        title: "Strategic Manager Transition",
+                        explanation: "Securing new support before confronting theft gives you leverage and protection. Once you're safe, you can pursue justice without career risk. Strategic timing beats emotional confrontation. Document, transition, then act.",
+                        realWorldExample: "Smart artists document issues, secure new representation, then address grievances from positions of strength. Taylor Swift waited until she had new deals before publicly fighting her old label. Timing matters.",
+                        tipForFuture: "When facing manager issues, secure new representation first. Once safe, address wrongdoing from position of strength. Don't confront from vulnerability. Document everything, transition safely, then seek justice.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Let it go - avoid the drama and keep the relationship",
+                outcome: {
+                    text: "You decide it's not worth the fight. You adjust the contract going forward to prevent more theft but say nothing about the past. Three years later, you discover they're still taking extra money - they just got better at hiding it. You've lost another $50,000. Your tolerance taught them they can steal without consequences. You should have acted when you first discovered it.",
+                    cash: -85000, fame: 0, wellBeing: -40, careerProgress: -10, hype: -5,
+                    lesson: {
+                        title: "Theft Tolerance Escalation",
+                        explanation: "Ignoring theft signals that stealing has no consequences. Thieves interpret tolerance as permission to continue. Addressing theft early limits losses. Ignoring it costs more over time as theft escalates.",
+                        realWorldExample: "Artists who ignore financial theft by managers or business partners typically lose more over time. Thieves who face no consequences just get better at stealing. Early action prevents long-term losses.",
+                        tipForFuture: "Address theft immediately. Tolerance isn't kindness - it's enabling more theft. Boundaries matter. If someone steals from you once and faces no consequences, they'll steal again. Act on evidence.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Video Director Hostage Situation",
+        description: "You paid a director $8,000 for a music video. They filmed it but now won't release the raw footage unless you pay an additional $5,000 for 'editing and color grading' - costs not in your original agreement. They're holding your footage hostage. You could pay, fight legally, or hire someone else and reshoot.",
+        conditions: { minFame: 30, minCareerProgress: 25, minCash: 6000 },
+        choices: [
+            {
+                text: "Pay the extra $5,000 - get your footage",
+                outcome: {
+                    text: "You pay the ransom. They deliver the footage with minimal editing. You've paid $13,000 total for what should have cost $8,000. Word spreads that you'll pay extra when pressured. Other contractors start pulling similar moves - 'Oh, this will cost extra that we didn't mention.' You've trained your industry to exploit you.",
+                    cash: -5000, fame: 3, wellBeing: -15, careerProgress: 2, hype: 8,
+                    lesson: {
+                        title: "Hostage Payment Pattern",
+                        explanation: "Paying ransom for services you already purchased creates a pattern where contractors know they can extract more. You become known as someone who pays extra when pressured. This invites ongoing exploitation.",
+                        realWorldExample: "Artists who pay hostage demands from contractors face repeat situations. The industry learns who can be pressured for extra payments. Setting boundaries early prevents pattern exploitation.",
+                        tipForFuture: "Don't pay hostage demands. Fight them legally or walk away. Paying teaches contractors they can extort you. Establish boundaries - even if this project suffers, future ones will benefit.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Sue them for breach of contract",
+                outcome: {
+                    text: "You sue. After 4 months and $4,000 in legal fees, you win and get the footage plus compensation. Total cost: $4,000 + time. You've sent a message to the industry: don't try to extort you. Future contractors see you'll fight. No one tries this again. Your willingness to fight saved you money long-term.",
+                    cash: -4000, fame: 5, wellBeing: -10, careerProgress: 8, hype: 5,
+                    lesson: {
+                        title: "Legal Boundary Enforcement",
+                        explanation: "Fighting hostage situations costs money short-term but establishes boundaries that save money long-term. When industry sees you'll fight, exploitation attempts decrease. Legal action is sometimes strategic investment.",
+                        realWorldExample: "Artists who fight contractor extortion attempts establish reputations for having boundaries. Future contractors work professionally because they know exploitation won't work. Fighting once prevents many future attempts.",
+                        tipForFuture: "When contractors hold work hostage, consider legal action as boundary-setting investment. Short-term legal costs can prevent long-term exploitation pattern. Reputation for fighting matters.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Walk away - reshoot with new director",
+                outcome: {
+                    text: "You walk away from the $8,000 and hire a new director for another $8,000. Total cost: $16,000 for one video. It's expensive, but the new video is better and you established you won't be extorted. The original director never releases your footage - they were bluffing about having anything usable. Walking away was expensive but prevented ongoing hostage patterns.",
+                    cash: -8000, fame: 5, wellBeing: -5, careerProgress: 6, hype: 12,
+                    lesson: {
+                        title: "Walk Away Power",
+                        explanation: "Sometimes walking away from sunk costs is cheaper than continued engagement with bad actors. Starting over with better partners beats trying to salvage bad relationships. Sunk cost fallacy keeps you trapped with exploiters.",
+                        realWorldExample: "Many artists restart projects with new contractors rather than fighting with extortionists. Clean starts with good partners often produce better results than salvaging bad situations.",
+                        tipForFuture: "Don't let sunk costs trap you with bad contractors. Walking away and starting over is sometimes cheaper and produces better results. Cut losses with bad actors decisively.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Retirement vs Comeback Pressure",
+        description: "You're 3 years into your career. You're tired - constant touring, social media pressure, financial stress. You're thinking about taking a 2-year break or even retiring. But your team says: 'If you disappear now, fans will forget you. The algorithm will forget you. You'll never come back.' Your wellbeing is suffering. Stay visible and burn out, or take time off and risk irrelevance?",
+        conditions: { minFame: 50, minCareerProgress: 45, maxWellBeing: 40, minFameByDifficulty: { beginner: 42, realistic: 50, hardcore: 58 } },
+        choices: [
+            {
+                text: "Take 2 years off completely - prioritize mental health",
+                outcome: {
+                    text: "You announce a hiatus and disappear. For 2 years, you rest, recover, and rediscover why you loved music. When you return, your team was partially right - you've lost 40% of your audience and algorithmic momentum. But you're healthy and creative again. You rebuild with authenticity. Three years post-return, you're bigger than before you left. The break saved your career by saving you.",
+                    cash: -15000, fame: -20, wellBeing: 60, careerProgress: -15, hype: -30,
+                    lesson: {
+                        title: "Strategic Career Breaks",
+                        explanation: "Long breaks cost momentum but prevent burnout that ends careers. You can rebuild audience; you can't rebuild health after complete collapse. Strategic rest is career investment. Better to lose 40% and rebuild than lose 100% to burnout.",
+                        realWorldExample: "Many artists take breaks and return successfully: Adele took years off between albums, Kendrick Lamar spaces albums with years between them, African artists like Fally Ipupa have taken breaks. Sustainable careers require rest.",
+                        tipForFuture: "Career longevity requires breaks. You'll lose some audience, but burnout loses everything. Plan breaks strategically, announce them properly, and return refreshed. Audiences forgive absences more than they forgive burnout collapse.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Push through - maintain visibility at all costs",
+                outcome: {
+                    text: "You keep grinding. Six months later, you have a complete mental breakdown. You're hospitalized for exhaustion and depression. You're forced to cancel 9 months of obligations. The unplanned, dramatic collapse does far more damage than a planned break would have. You lost more audience through breakdown than you would have through rest. Your body forced the break you wouldn't take voluntarily.",
+                    cash: -25000, fame: -35, wellBeing: -60, careerProgress: -40, hype: -55,
+                    lesson: {
+                        title: "Forced Breaks Worse Than Planned Breaks",
+                        explanation: "Ignoring burnout doesn't prevent breaks - it just makes them unplanned and catastrophic. Collapses cause more damage than planned rest. Your body will force breaks if you won't take them voluntarily. Planned rest beats forced collapse.",
+                        realWorldExample: "Artists who push through burnout warnings typically collapse publicly and dramatically. Demi Lovato, Kid Cudi, and countless others have had public breakdowns from refusing to rest. Forced breaks are more damaging than planned ones.",
+                        tipForFuture: "When your body and mind signal need for rest, listen. Planned breaks preserve more career value than breakdowns. You can't outwork burnout - it always wins. Rest strategically or collapse catastrophically.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Reduce schedule by 60% - semi-hiatus compromise",
+                outcome: {
+                    text: "You cut touring by 60%, reduce social media, and focus on creating music you love. You lose some momentum but stay visible. After a year, you're healthier and your work is better. Your smaller but more intentional output builds stronger connection with fans. Quality over quantity worked. You found sustainable balance without full disappearance.",
+                    cash: -8000, fame: -8, wellBeing: 30, careerProgress: 10, hype: -10,
+                    lesson: {
+                        title: "Sustainable Career Pacing",
+                        explanation: "You don't have to choose between burnout and disappearance. Reducing output to sustainable levels preserves presence while protecting health. Quality, intentional work beats exhausted quantity. Balance is possible.",
+                        realWorldExample: "Many successful artists maintain careers through intentional pacing rather than constant output. Frank Ocean, SZA, and others release infrequently but meaningfully. Sustainable pacing extends careers.",
+                        tipForFuture: "Don't see it as binary: burnout or retirement. You can reduce output to sustainable levels. Do less but do it better. Protect your health while maintaining presence. Sustainable careers beat burnout or disappearance.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Collaborative Album Profit Split",
+        description: "You and another artist created a collaborative album together - equal work, equal creative input. Now it's time to split the profits ($80,000 so far). They claim they deserve 60% because they have more followers and brought more fans. You contributed equally. 50/50 split or fight for fair distribution?",
+        conditions: { minFame: 40, minCareerProgress: 35, minCash: 20000 },
+        choices: [
+            {
+                text: "Accept 40% to keep the peace",
+                outcome: {
+                    text: "You accept 40% ($32,000). You get less for equal work. Word spreads that you accepted unfair terms. Future collaborators see you as someone who'll accept less. You've devalued yourself. The extra $8,000 they took could have been yours. Your tolerance for unfairness became your brand.",
+                    cash: 32000, fame: 3, wellBeing: -15, careerProgress: 5, hype: 10,
+                    lesson: {
+                        title: "Fair Split Self-Valuation",
+                        explanation: "Accepting unfair splits to avoid conflict teaches the industry you undervalue yourself. Equal work deserves equal pay. Your willingness to accept less becomes known and repeated. Defend fair compensation even when uncomfortable.",
+                        realWorldExample: "Artists who accept unfair splits find themselves repeatedly offered unfair terms. The industry tests boundaries and exploits those who don't defend their value. Fair compensation requires defending it.",
+                        tipForFuture: "Equal work means equal split. Don't accept less because someone has more followers - you both created the work equally. Defend your value even in uncomfortable negotiations. Your precedent matters.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            },
+            {
+                text: "Demand 50/50 - fight for equal split",
+                outcome: {
+                    text: "You insist on 50/50 for equal work. They resist but eventually agree. You get $40,000 (your fair share). The relationship is strained but professional. Future collaborators know you demand fair terms. You've established you value your work appropriately. The difficult conversation was worth $8,000 and your self-respect.",
+                    cash: 40000, fame: 5, wellBeing: 10, careerProgress: 12, hype: 15,
+                    lesson: {
+                        title: "Negotiation Boundary Setting",
+                        explanation: "Demanding fair compensation might strain relationships but establishes boundaries that protect you long-term. Being difficult about fairness is actually being professional about value. Uncomfortable negotiations beat comfortable exploitation.",
+                        realWorldExample: "Artists who consistently demand fair splits establish reputations for professionalism and self-respect. This actually attracts better collaborators who value fairness. Boundaries are attractive to good partners.",
+                        tipForFuture: "Fight for fair terms even when it's uncomfortable. Short-term tension is worth long-term respect. Those who resent you demanding fairness aren't good partners anyway. Value yourself appropriately.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            },
+            {
+                text: "Propose 45/55 compromise - meet in the middle",
+                outcome: {
+                    text: "You propose 45/55 ($36,000 for you). They agree. It's not perfectly fair, but it's better than 40/60 and resolves quickly. You both compromise. The relationship stays positive. Future collaboration is possible. Sometimes partial fairness beats fighting for perfect fairness. Pragmatic compromise worked.",
+                    cash: 36000, fame: 4, wellBeing: 0, careerProgress: 8, hype: 12,
+                    lesson: {
+                        title: "Pragmatic Negotiation Compromise",
+                        explanation: "Perfect fairness isn't always achievable. Strategic compromise can preserve relationships while getting closer to fair terms. Sometimes 45/55 is better than fighting for 50/50 or accepting 40/60. Pragmatism has value.",
+                        realWorldExample: "Many successful collaborations use compromise splits that both parties can accept. 45/55 or 55/45 deals are common when both sides have different leverage. Workable deals beat perfect deals that don't happen.",
+                        tipForFuture: "Know when to compromise and when to fight. If 45/55 resolves the issue and preserves the relationship, it might be smarter than fighting for 50/50. Choose battles strategically.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Sponsor Conflict of Interest",
+        description: "You have a 2-year endorsement deal with Brand A (energy drink, pays you $2,000/month). Now Brand B (beverage company) offers you a one-time $50,000 deal. But your Brand A contract has a non-compete clause - no other beverage endorsements. Breaking it risks lawsuit ($100,000 penalty) and industry blacklisting. Honor your contract or take the bigger money?",
+        conditions: { minFame: 48, minCareerProgress: 42, minCash: 30000 },
+        choices: [
+            {
+                text: "Break the contract - take Brand B's $50,000",
+                outcome: {
+                    text: "You sign with Brand B. Brand A immediately sues you for $100,000 breach of contract. You lose the case. You pay $100,000 in penalties plus your own legal fees ($20,000). Net result: you're down $70,000 from the Brand B deal that paid $50,000. Plus, you're now known in the industry as someone who breaks contracts. Other brands won't work with you. The breach cost you everything.",
+                    cash: -70000, fame: -25, wellBeing: -40, careerProgress: -35, hype: -30,
+                    lesson: {
+                        title: "Contract Breach Catastrophic Cost",
+                        explanation: "Breaking contracts for better deals triggers lawsuits, penalties, and industry blacklisting. Breach penalties often exceed the new deal's value. Your reputation for honoring contracts matters enormously. One breach can cost you all future deals.",
+                        realWorldExample: "Athletes, artists, and influencers who break endorsement contracts face massive lawsuits and industry blacklisting. Nike, Adidas, and major brands share breach information. One violation destroys your endorsement career.",
+                        tipForFuture: "Never break endorsement contracts for better deals. Penalties exceed rewards and you lose industry trust permanently. Honor commitments or negotiate releases. Breach is career suicide.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Honor Brand A contract - decline Brand B",
+                outcome: {
+                    text: "You decline Brand B's offer, explaining you're under contract. They respect your integrity. Brand A hears about this and rewards your loyalty with a contract extension at $3,500/month. Over the next 3 years, this adds up to $63,000 - more than Brand B's $50,000 one-time offer. Honoring contracts paid off. Plus, you're known as reliable - more brands want to work with you.",
+                    cash: 21000, fame: 10, wellBeing: 15, careerProgress: 20, hype: 15,
+                    lesson: {
+                        title: "Contract Honor Rewards",
+                        explanation: "Honoring contracts builds reputation for reliability that attracts better, longer-term deals. Brands reward loyalty. Your reputation for keeping commitments is worth more than any single opportunity. Integrity compounds.",
+                        realWorldExample: "Athletes and artists known for honoring contracts get better, longer deals. LeBron's loyalty to Nike over decades created billionaire status. Contract honor is a competitive advantage that pays long-term.",
+                        tipForFuture: "Honor your contracts even when better offers appear. Your reputation for reliability attracts premium long-term deals that exceed short-term opportunities. Integrity is a career asset.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Negotiate with Brand A for early termination",
+                outcome: {
+                    text: "You approach Brand A honestly: 'I have a larger offer but I respect our contract. Can we discuss early termination or adjustment?' They appreciate your honesty. You agree to a $10,000 buyout. You pay $10,000, end the Brand A deal, take Brand B's $50,000. Net gain: $40,000. You handled it professionally - both brands respect you. Honesty and negotiation beat breaching or missing opportunities.",
+                    cash: 40000, fame: 8, wellBeing: 10, careerProgress: 15, hype: 18,
+                    lesson: {
+                        title: "Honest Contract Negotiation",
+                        explanation: "Many contracts can be renegotiated or bought out through honest conversation. Approaching current partners transparently about better opportunities often results in mutually acceptable solutions. Communication beats breach or missed chances.",
+                        realWorldExample: "Professional athletes and artists regularly negotiate contract modifications when circumstances change. Honest, respectful negotiation preserves relationships while allowing flexibility. Most brands prefer buyouts to breaches.",
+                        tipForFuture: "When better opportunities conflict with current contracts, approach current partners honestly about negotiating changes. Buyouts, early termination, or adjustment are often possible. Communication beats secretive breach.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            }
+        ]
     }
 ];
 

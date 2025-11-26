@@ -5616,6 +5616,738 @@ export const scenarioBank: Scenario[] = [
                 }
             }
         ]
+    },
+
+    // --- BATCH 9: POSITIVE OPPORTUNITIES (10 scenarios - 9 positive/neutral, 1 risky) ---
+    {
+        title: "The Music Festival Workshop Leader",
+        description: "A music festival asks you to lead a 2-hour workshop on 'Building Music Career from Scratch' for aspiring artists. Payment is $600 plus full festival access. You'd be sharing your journey and knowledge with next generation. Teaching opportunity at a festival?",
+        conditions: { minFame: 28, minCareerProgress: 24 },
+        choices: [
+            {
+                text: "Lead the workshop - share your knowledge",
+                outcome: {
+                    text: "You lead the workshop. 40 aspiring artists attend, deeply grateful for your insights. Three become your interns/collaborators. Festival organizers are impressed and book you for three more festivals as workshop leader and performer. Your reputation as generous artist who invests in others grows. The $600 workshop created $5,000 in future bookings and meaningful relationships. Teaching multiplied opportunities.",
+                    cash: 600, fame: 10, wellBeing: 20, careerProgress: 16, hype: 14,
+                    lesson: {
+                        title: "Teaching Reputation Building",
+                        explanation: "Leading workshops builds reputation as generous expert willing to share knowledge. Festival organizers value artists who contribute beyond performing. Teaching creates relationships with aspiring artists who become collaborators and supporters. Generosity compounds into opportunities.",
+                        realWorldExample: "Many successful artists teach workshops at festivals - Questlove, 9th Wonder, African producers. Workshop leaders are valued beyond performers because they contribute to community. Teaching builds lasting reputation and relationships.",
+                        tipForFuture: "Accept workshop opportunities at industry events. Teaching builds reputation, creates relationships, and often leads to more bookings. Being valued for knowledge sharing, not just performing, creates diverse opportunities.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            },
+            {
+                text: "Decline - focus only on performing",
+                outcome: {
+                    text: "You decline the workshop to focus on performing only. You attend the festival as spectator but don't build the relationships workshop would have created. The artist who leads the workshop gains reputation as generous teacher and gets booked for multiple festivals. Your performer-only approach limited your value proposition. Single-dimension focus limited opportunities.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Multi-Dimensional Artist Value",
+                        explanation: "Artists who offer multiple value propositions (performing, teaching, speaking) create more opportunities than one-dimensional performers. Diversifying what you offer increases bookings and reputation. Single-skill focus limits opportunities.",
+                        realWorldExample: "Most sustainable careers involve multiple value propositions - performing, producing, teaching, speaking. Artists who only perform compete with thousands; those who teach, speak, and mentor create unique value.",
+                        tipForFuture: "Develop multiple value propositions beyond performing. Teaching, speaking, and knowledge-sharing create opportunities performing alone doesn't. Multi-dimensional artists build more sustainable careers.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Nonprofit Fundraiser Concert",
+        description: "A nonprofit fighting youth homelessness asks you to headline their fundraiser concert. Payment is $800 (below your rate) but the cause is meaningful and media coverage will be substantial. 500 attendees including donors and community leaders. Mission-driven opportunity?",
+        conditions: { minFame: 32, minCareerProgress: 28 },
+        choices: [
+            {
+                text: "Headline the fundraiser - support the cause",
+                outcome: {
+                    text: "You perform for $800 (below your usual $1,500 rate). The audience is deeply moved. Media covers it extensively. Three wealthy donors become your supporters - one sponsors your next tour ($3,000). Community leaders see you as artist with values. The fundraiser raises $15,000 for homeless youth. Your below-rate performance created goodwill, media, and opportunities worth far more than the rate difference. Values-driven work attracted values-aligned support.",
+                    cash: 800, fame: 12, wellBeing: 25, careerProgress: 18, hype: 16,
+                    lesson: {
+                        title: "Cause Alignment Opportunity Creation",
+                        explanation: "Performing for meaningful causes at reduced rates creates goodwill, media coverage, and relationships with values-aligned supporters. Mission-driven work attracts mission-driven support. The intangible returns (reputation, relationships, media) often exceed payment differences.",
+                        realWorldExample: "Artists who support causes authentically build devoted support from values-aligned audiences. Benefit concerts create media coverage and relationships with philanthropic communities. Cause alignment builds sustainable support networks.",
+                        tipForFuture: "Support causes you authentically care about even at reduced rates. The goodwill, media, and relationships with values-aligned supporters create returns beyond payment. Authentic cause work builds meaningful support.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            },
+            {
+                text: "Decline - maintain your rate standards",
+                outcome: {
+                    text: "You decline because the $800 is below your $1,500 rate. Another artist performs and gains the media coverage and community goodwill. The donor relationships and values-aligned support you could have built go to someone else. Strict rate maintenance cost you intangible opportunities worth more than the $700 difference. Rate protection prevented mission-aligned growth.",
+                    cash: 0, fame: 1, wellBeing: 0, careerProgress: 2, hype: 3,
+                    lesson: {
+                        title: "Rate Flexibility Strategic Value",
+                        explanation: "Inflexible rate standards prevent mission-aligned opportunities that create intangible value. Strategic rate flexibility for authentic causes often creates returns (media, relationships, reputation) exceeding payment differences. Not every opportunity should be evaluated purely on rate.",
+                        realWorldExample: "Successful artists make strategic exceptions for causes they care about. The relationships and reputation built through authentic cause work often create more value than strict rate maintenance. Strategic flexibility enables mission-aligned growth.",
+                        tipForFuture: "Be strategically flexible with rates for authentic causes. Mission-aligned work creates intangible returns often worth more than rate differences. Don't let rate standards prevent values-aligned opportunities.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The TikTok Trend Participation",
+        description: "Your song is being used in a TikTok trend but hasn't fully gone viral yet. You could participate - make your own TikToks with the trend, engage with users, and amplify it. Or let it happen organically without your involvement. Active participation vs. organic growth?",
+        conditions: { minFame: 26, minCareerProgress: 22 },
+        choices: [
+            {
+                text: "Participate actively - amplify the trend",
+                outcome: {
+                    text: "You create TikToks participating in the trend. Your involvement excites users - 'The actual artist is doing it!' Your participation makes the trend explode - 2M videos created, 50M views total. You gain 15K followers and 500K streams. Active participation in the trend multiplied its impact. Your engagement with fans made you likable and accessible. Participation amplified organic momentum.",
+                    cash: 1500, fame: 18, wellBeing: 15, careerProgress: 22, hype: 35,
+                    lesson: {
+                        title: "Trend Amplification Through Participation",
+                        explanation: "Artists who actively participate in trends around their music amplify organic momentum. Engagement shows you're accessible and in tune with fans. Participating in your own trends multiplies their impact through your involvement. Active engagement beats passive observation.",
+                        realWorldExample: "Lil Nas X amplified 'Old Town Road' by actively participating in memes. Artists who engage with trends around their music typically accelerate them. Participation shows you're fun and accessible, building stronger fan connections.",
+                        tipForFuture: "When organic trends emerge around your music, participate actively. Your involvement excites fans and amplifies trends. Engagement and accessibility build stronger connections than distant observation.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Let it happen organically - don't interfere",
+                outcome: {
+                    text: "You stay hands-off, letting the trend develop organically. It grows modestly - 200K videos, 5M views. Fans wonder why you're not participating. The trend peters out after 2 weeks. You gain 3K followers. Your absence from the trend limited its potential. Fans wanted to engage with you but you weren't there. Passivity underutilized organic opportunity.",
+                    cash: 300, fame: 6, wellBeing: 5, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Passive Trend Approach Limitations",
+                        explanation: "Staying passive during organic trends limits their potential. Fans want artist engagement during trends around their music. Your presence amplifies and extends trends. Passivity leaves potential unrealized. Active engagement maximizes organic opportunities.",
+                        realWorldExample: "Artists who stay passive during trends often watch them fizzle when participation could have amplified them. Active artists who engage with organic trends typically maximize their impact. Presence matters.",
+                        tipForFuture: "Don't be passive when organic trends emerge. Fans want your participation. Active engagement amplifies trends and shows you're accessible. Maximize organic opportunities through involvement.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Streaming Playlist Curator Relationship",
+        description: "You've built relationship with an independent playlist curator (150K followers). They offer to add you to 5 playlists in exchange for you promoting their playlists to your audience. Mutual promotion, no money exchanged. Collaborative relationship building?",
+        conditions: { minFame: 24, minCareerProgress: 20 },
+        choices: [
+            {
+                text: "Accept mutual promotion - build relationship",
+                outcome: {
+                    text: "You promote their playlists and they add you to 5 playlists. You gain 80K streams and 2K followers from playlist exposure. The curator becomes long-term supporter who continues adding your new releases. The mutual promotion relationship compounds over time. Collaboration created sustainable playlist support that keeps giving. Relationship-based approach worked better than transactional.",
+                    cash: 0, fame: 10, wellBeing: 10, careerProgress: 15, hype: 18,
+                    lesson: {
+                        title: "Curator Relationship Building",
+                        explanation: "Building relationships with playlist curators through mutual promotion creates ongoing support. Curators who like you personally continue supporting new releases. Relationship approach creates sustainable playlist presence transactional approaches can't match.",
+                        realWorldExample: "Independent artists who build curator relationships get ongoing playlist support. Transactional approaches are one-time; relationship approaches compound. Curators support artists they have relationships with long-term.",
+                        tipForFuture: "Build relationships with playlist curators through authentic engagement and mutual promotion. Relationship-based approach creates ongoing support. Invest in curator relationships, not just one-time placements.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Decline - only work with official Spotify playlists",
+                outcome: {
+                    text: "You decline, wanting only official Spotify playlist placements. You never get on official playlists because competition is fierce. Meanwhile, the curator relationship you declined could have given you consistent independent playlist presence. Perfectionism about playlist type prevented any playlist success. Waiting for ideal blocked good opportunities.",
+                    cash: 0, fame: 2, wellBeing: -5, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Platform Perfectionism Limitation",
+                        explanation: "Waiting for 'perfect' playlist placements (official Spotify) often means missing good placements (quality independent curators). Independent curators with engaged audiences provide real value. Perfectionism prevents progress. Good opportunities beat perfect unavailable ones.",
+                        realWorldExample: "Most independent artists never get official Spotify playlists. Those who build independent curator networks get substantial streaming from quality curators. Independent playlists from engaged curators provide real growth.",
+                        tipForFuture: "Don't dismiss independent curators waiting for official playlists. Quality independent curators provide real value and are more accessible. Build network of curator relationships rather than waiting for perfect placements.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Behind-The-Scenes Content Series",
+        description: "You decide to create a behind-the-scenes content series - showing your creative process, studio sessions, songwriting, daily life. No immediate monetization, but builds deeper fan connection. Time investment in transparency for community building?",
+        conditions: { minFame: 30, minCareerProgress: 26 },
+        choices: [
+            {
+                text: "Create BTS series - build deeper connection",
+                outcome: {
+                    text: "You consistently share behind-the-scenes content for 6 months. Fans love seeing your creative process and human side. Your engagement rates double - followers feel like they know you personally. Devoted fanbase strengthens significantly. When you release new music, your deeply connected fans promote it passionately. BTS content created devoted evangelists who drive organic growth. Transparency built unshakeable fan relationships.",
+                    cash: 0, fame: 12, wellBeing: 15, careerProgress: 18, hype: 22,
+                    lesson: {
+                        title: "Transparency Community Building",
+                        explanation: "Behind-the-scenes content that shows your creative process and human side builds deep fan connections. Fans who feel like they know you personally become devoted evangelists. Transparency transforms casual followers into committed supporters. Authenticity builds unshakeable relationships.",
+                        realWorldExample: "Artists with strong BTS content (Casey Neistat, MKBHD, music documentaries) build devoted fanbases. Fans who see creative process feel invested in artist's journey. Transparency creates psychological ownership and devotion.",
+                        tipForFuture: "Invest in behind-the-scenes content even without immediate monetization. Showing creative process and authenticity builds devoted fans who become evangelists. Transparency is powerful community-building tool.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Keep creative process private - only share finished work",
+                outcome: {
+                    text: "You only share finished songs, never showing creative process. Fans appreciate the music but don't feel personal connection. Your relationship with fans stays surface-level. When challenges arise, fans aren't deeply invested enough to support you through them. Lack of transparency prevented deep relationships. Distance kept fans casual rather than devoted. Privacy cost you community depth.",
+                    cash: 0, fame: 4, wellBeing: 5, careerProgress: 6, hype: 8,
+                    lesson: {
+                        title: "Privacy vs Connection Trade-off",
+                        explanation: "Keeping creative process completely private prevents deep fan connections. Fans who only see finished products don't feel invested in your journey. Some vulnerability and transparency builds relationships privacy prevents. Balance privacy with community building.",
+                        realWorldExample: "Artists who share nothing but finished work typically have weaker fan relationships than those who show process. Documentary content and BTS access create devoted fans. Complete privacy prevents devotion-level relationships.",
+                        tipForFuture: "Share some creative process and behind-the-scenes even if uncomfortable. Transparency builds devoted fans who feel invested. Complete privacy prevents deep relationships that sustain long-term careers.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Blog Guest Post Opportunity",
+        description: "A respected music blog invites you to write guest post about your journey, challenges, and lessons learned. No payment but your byline, bio, and links to your music. Platform to share your story with their 80K readers. Writing opportunity for exposure?",
+        conditions: { minFame: 22, minCareerProgress: 18 },
+        choices: [
+            {
+                text: "Write the guest post - share your story",
+                outcome: {
+                    text: "You write thoughtful 1,500-word post about your independent artist journey. The blog's audience resonates deeply - 12K people read it. You gain 1,500 followers who feel like they know your story. Multiple media outlets see it and request interviews. The guest post positioned you as thoughtful artist with perspective beyond music. Written storytelling created opportunities and devoted fans. Your voice beyond music built credibility.",
+                    cash: 0, fame: 10, wellBeing: 15, careerProgress: 14, hype: 16,
+                    lesson: {
+                        title: "Written Storytelling Platform",
+                        explanation: "Guest posts and written content let you share story in depth text allows. Readers who engage with written content often become devoted fans because text creates deeper understanding. Writing positions you as thoughtful artist with perspective. Multiple content formats reach different audiences.",
+                        realWorldExample: "Many artists write guest posts, essays, and articles that build audiences beyond music fans. Thoughtful writing positions artists as interesting people, not just musicians. Written platforms reach audiences music alone doesn't.",
+                        tipForFuture: "Take opportunities to write guest posts and share perspectives in text. Written content reaches different audiences and builds perception as thoughtful artist. Use multiple content formats to reach diverse audiences.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Decline - focus only on music content",
+                outcome: {
+                    text: "You decline, preferring to only share music content. You miss opportunity to reach blog's 80K readers with your story. The artist who writes the guest post builds audience and credibility through thoughtful writing. Your music-only approach limited your reach to music platforms. Single-format focus prevented cross-platform growth. Limiting yourself to music content prevented diverse audience building.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Multi-Format Content Value",
+                        explanation: "Limiting yourself to music content prevents reaching audiences that engage through other formats (writing, speaking, video essays). Multi-format presence builds diverse audience. Single-format focus limits reach and positioning. Diversify content to maximize audience building.",
+                        realWorldExample: "Successful artists use multiple content formats - music, writing, video, speaking. Each format reaches different audiences. Music-only artists compete with millions; multi-format artists create unique positioning.",
+                        tipForFuture: "Don't limit yourself to music content alone. Writing, speaking, and other formats reach audiences music doesn't. Multi-format presence builds broader, more sustainable career foundation.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Local Radio Interview Series",
+        description: "Local radio station wants you for recurring monthly segment - 20-minute interviews about music, life, and local scene. No payment but 20K weekly listeners and positioning as local scene voice. Regular radio presence building?",
+        conditions: { minFame: 24, minCareerProgress: 20 },
+        choices: [
+            {
+                text: "Accept monthly radio slot - build local presence",
+                outcome: {
+                    text: "You do monthly radio interviews for a year. You become familiar voice to 20K weekly listeners. Local recognition grows significantly - people recognize you at stores and events. The recurring presence positions you as local music scene ambassador. Local businesses and events book you consistently because radio presence made you household name locally. Regular presence created local celebrity status. Consistency built recognition.",
+                    cash: 0, fame: 12, wellBeing: 12, careerProgress: 16, hype: 18,
+                    lesson: {
+                        title: "Recurring Media Presence Value",
+                        explanation: "Recurring media appearances build familiarity and recognition one-time appearances can't match. Regular presence makes you familiar voice/face in community. Consistency creates household recognition that occasional appearances don't. Regular media builds local celebrity.",
+                        realWorldExample: "Local artists with recurring radio/TV slots build strong local recognition. Consistency makes you familiar rather than occasional. Local celebrities typically have recurring media presence, not just one-time appearances.",
+                        tipForFuture: "Value recurring media opportunities over one-time appearances. Regular presence builds familiarity and household recognition. Consistency creates local celebrity status that occasional appearances can't match.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Decline - only do paid media appearances",
+                outcome: {
+                    text: "You decline unpaid radio, only doing paid appearances. Paid media opportunities are rare. You never build the consistent local presence that makes you household name. The recurring exposure you declined could have made you local celebrity. Strict payment requirements prevented recognition-building. Payment focus cost you presence and familiarity.",
+                    cash: 0, fame: 3, wellBeing: 0, careerProgress: 4, hype: 5,
+                    lesson: {
+                        title: "Recognition vs Payment Priority",
+                        explanation: "At certain career stages, regular unpaid media presence builds more value (recognition, familiarity, bookings) than occasional paid appearances. Recognition often converts to income better than strict payment requirements. Strategic unpaid presence often pays more than direct payment.",
+                        realWorldExample: "Most local celebrities built recognition through regular unpaid media before commanding payment. Recognition creates opportunities that strict payment requirements prevent. Strategic presence often serves artists better than payment demands.",
+                        tipForFuture: "Don't let payment requirements prevent recognition-building opportunities. Regular unpaid presence often creates more income (through bookings and opportunities) than strict payment policies. Build recognition first.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Collaborative Album Feature Opportunity",
+        description: "An artist you respect is working on collaborative album and wants you for one track. No payment but split streaming revenue and cross-promotion to both audiences. Collaboration with 50K-follower artist. Mutual growth opportunity?",
+        conditions: { minFame: 28, minCareerProgress: 24 },
+        choices: [
+            {
+                text: "Collaborate - create together and cross-promote",
+                outcome: {
+                    text: "You create an amazing track together. When released, both your audiences discover each other. You gain 4K of their followers; they gain some of yours. The collaboration song gets 200K streams (you earn $700 from your share). More importantly, the relationship leads to three more collaborations and touring together. Collaboration created mutual growth and lasting partnership. Cross-promotion multiplied both audiences.",
+                    cash: 700, fame: 12, wellBeing: 15, careerProgress: 18, hype: 22,
+                    lesson: {
+                        title: "Collaborative Growth Strategy",
+                        explanation: "Collaborating with peer-level artists creates cross-promotion that exposes both artists to new audiences. Mutual growth through collaboration often exceeds individual promotion efforts. Partnerships multiply reach. Collaboration is audience-building strategy, not just creative choice.",
+                        realWorldExample: "Successful artists collaborate strategically with peers - features, joint tours, collaborative projects. Each collaboration exposes artists to partner's audience. Wizkid, Burna Boy, and global artists built through strategic collaborations.",
+                        tipForFuture: "Seek collaborations with peer-level artists for mutual audience growth. Cross-promotion multiplies both artists' reach. Strategic collaboration is powerful audience-building tool beyond creative benefits.",
+                        conceptTaught: "collaboration-strategy"
+                    }
+                }
+            },
+            {
+                text: "Decline - only do collaborations if paid upfront",
+                outcome: {
+                    text: "You decline because there's no upfront payment. The artist collaborates with someone else. That collaboration exposes the other artist to 50K new potential fans and creates lasting partnership. Your payment requirement prevented mutual growth opportunity. Transactional thinking cost you relationship and audience growth. Payment focus killed opportunity.",
+                    cash: 0, fame: 1, wellBeing: -5, careerProgress: 2, hype: 3,
+                    lesson: {
+                        title: "Collaboration Transactional Mindset Limits",
+                        explanation: "Requiring upfront payment for peer collaborations prevents mutual growth opportunities. Revenue-share collaborations with peers often create more long-term value than upfront payments. Transactional thinking limits relationship-building and audience growth.",
+                        realWorldExample: "Most successful artist collaborations involve revenue sharing, not upfront payments. Peer collaborations are mutual investments, not transactions. Artists who require payment for peer collabs typically collaborate less and grow slower.",
+                        tipForFuture: "Don't require upfront payment for peer-level collaborations. Revenue-share arrangements align incentives for mutual promotion. Collaboration is investment in mutual growth, not transaction to maximize immediate payment.",
+                        conceptTaught: "collaboration-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Street Performance Experiment",
+        description: "You decide to do street performance in busy downtown area - acoustic set, tip jar, genuine music. No booking, no stage, just raw connection with passersby. Some might see it as 'beneath' you but others see it as authentic connection. Return to roots?",
+        conditions: { minFame: 30, minCareerProgress: 26 },
+        choices: [
+            {
+                text: "Do street performance - connect authentically",
+                outcome: {
+                    text: "You perform on the street for 2 hours. People stop, listen, tip ($180 collected). Some ask for photos and social media. Video of your street performance goes semi-viral - 'Successful artist still connects with street-level audiences.' The authenticity builds respect. People see you as grounded artist who hasn't forgotten raw music connection. Street performance humanized you and created viral moment. Authenticity resonated.",
+                    cash: 180, fame: 10, wellBeing: 20, careerProgress: 12, hype: 18,
+                    lesson: {
+                        title: "Authentic Connection Grounding",
+                        explanation: "Successful artists who still do street-level performance show they haven't lost touch with raw music connection. Authenticity and groundedness build respect. Willingness to perform anywhere shows you value music over status. Authentic connection resonates more than status maintenance.",
+                        realWorldExample: "Famous artists who do surprise street performances (Ed Sheeran, Alicia Keys, Justin Bieber) create viral moments and show groundedness. Audiences respect artists who haven't lost touch with raw music. Authenticity beats status.",
+                        tipForFuture: "Don't let success make you too status-conscious to do raw street performance. Authenticity and willingness to perform anywhere builds respect. Show you value music connection over status maintenance.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            },
+            {
+                text: "Decline - you're beyond street performance now",
+                outcome: {
+                    text: "You consider street performance beneath your current level. You only perform at proper venues. Fans notice some artists at your level still do street performances for authentic connection - you don't. Over time, you're seen as artist who values status over music connection. Your perceived groundedness decreases. Status consciousness created perception of disconnection from roots. Image consciousness cost authenticity.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Status Consciousness Authenticity Trade-off",
+                        explanation: "Being too status-conscious to do raw street-level performance signals you value image over music connection. Fans respect artists who'll perform anywhere out of love for music. Status maintenance can cost authenticity perception. Groundedness requires occasional return to roots.",
+                        realWorldExample: "Artists who become too status-conscious lose authenticity perception. Those who still do street performances, small venues, and raw connection maintain groundedness. Fans notice and respect artists who haven't outgrown authentic connection.",
+                        tipForFuture: "Maintain willingness to perform in raw, unpolished contexts even as you grow. Groundedness and authentic music connection matter more than status maintenance. Don't outgrow street-level authentic performance.",
+                        conceptTaught: "artistic-integrity"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Major Career Mistake - Public Meltdown (RISK SCENARIO)",
+        description: "You're exhausted and burned out. At a show, technical difficulties frustrate you and you have public meltdown - you berate the sound engineer harshly in front of the audience, smash equipment, and storm off stage. Video goes viral. Your reputation is damaged. How do you handle the aftermath?",
+        conditions: { minFame: 38, minCareerProgress: 34, maxWellBeing: 45, minFameByDifficulty: { beginner: 30, realistic: 38, hardcore: 46 } },
+        choices: [
+            {
+                text: "Issue immediate genuine apology - take accountability",
+                outcome: {
+                    text: "Within 24 hours, you post genuine video apology. You take full accountability, apologize to the sound engineer publicly, and explain you were burned out (not an excuse, just context). You promise to seek help for burnout and do better. The engineer accepts your apology publicly. Fans appreciate your accountability. The quick, genuine response contains the damage. Most people forgive you. Immediate accountability saved your reputation. Genuine contrition worked.",
+                    cash: -2000, fame: -5, wellBeing: -10, careerProgress: -5, hype: -8,
+                    lesson: {
+                        title: "Crisis Accountability Response",
+                        explanation: "When you make public mistake, immediate genuine apology and accountability contain damage. Taking responsibility without excuses, showing genuine contrition, and committing to change enable forgiveness. Quick authentic response prevents crisis from destroying career. Accountability saves reputation.",
+                        realWorldExample: "Public figures who quickly take genuine accountability for mistakes typically recover. Those who delay, make excuses, or blame others face worse consequences. Will Smith's Oscars apology, celebrity accountability moments - quick genuine contrition enables recovery.",
+                        tipForFuture: "If you make public mistake, apologize immediately and genuinely. Take full accountability without excuses. Show genuine contrition and commitment to change. Quick authentic apology contains crises that delays and defensiveness amplify.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Stay silent - wait for it to blow over",
+                outcome: {
+                    text: "You stay silent hoping it blows over. The silence is interpreted as lack of remorse. Media coverage intensifies. Fans turn against you. Venues cancel bookings. Two weeks later, the damage is severe. You finally apologize but it feels forced and too late. Silent approach made everything worse. Delayed response looked like you only apologized when forced. Avoidance amplified the crisis exponentially.",
+                    cash: -8000, fame: -18, wellBeing: -30, careerProgress: -25, hype: -35,
+                    lesson: {
+                        title: "Crisis Silence Amplification",
+                        explanation: "Staying silent during public crisis is interpreted as lack of accountability or remorse. Silence allows negative narrative to dominate. Delayed apologies look forced rather than genuine. Quick response contains crises; silence amplifies them. Avoidance makes problems worse.",
+                        realWorldExample: "Public figures who stay silent during crises typically face worse outcomes than those who respond quickly. Silence looks like arrogance or lack of remorse. Kevin Hart's Oscar hosting, celebrity silence during crises - delayed responses feel forced.",
+                        tipForFuture: "Never stay silent during public crisis. Silence amplifies damage and makes eventual response look forced. Address problems immediately with genuine accountability. Quick response is crisis management foundation.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Blame others - defend your reaction as justified",
+                outcome: {
+                    text: "You post defending yourself, blaming technical issues and incompetent engineer. Public turns completely against you - you look entitled and abusive. The engineer shares their side, making you look worse. Bookings cancelled, sponsors drop you. Defending your behavior instead of taking accountability destroyed your career. Lack of accountability and blaming others was career-ending. Defensiveness catastrophically backfired.",
+                    cash: -25000, fame: -40, wellBeing: -50, careerProgress: -50, hype: -60,
+                    lesson: {
+                        title: "Defensive Crisis Response Catastrophe",
+                        explanation: "Defending indefensible behavior and blaming others during public crisis destroys reputation completely. Public wants accountability, not excuses. Defensiveness and blame look like entitlement and lack of character. Taking no accountability is career-ending response. Defensiveness amplifies crises catastrophically.",
+                        realWorldExample: "Public figures who defend bad behavior and blame others typically face career-ending consequences. Accountability enables redemption; defensiveness prevents it. PR disasters multiply when subjects refuse accountability and blame others.",
+                        tipForFuture: "Never defend indefensible behavior or blame others during crisis. Public wants accountability. Defensiveness destroys careers. When you're wrong, admit it immediately and genuinely. Accountability is only path to redemption.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+
+    // --- BATCH 10: FINAL SCENARIOS (10 scenarios - 9 positive/neutral, 1 risky) ---
+    {
+        title: "The Music Mentorship Program Launch",
+        description: "You're invited to start a music mentorship program - work with 5 aspiring artists quarterly, providing guidance, feedback, and industry insights. $1,200 quarterly payment plus fulfillment of helping next generation. Teaching and legacy building?",
+        conditions: { minFame: 35, minCareerProgress: 30 },
+        choices: [
+            {
+                text: "Launch the mentorship program - invest in next generation",
+                outcome: {
+                    text: "You mentor 5 aspiring artists. The experience is fulfilling - watching them grow, sharing lessons, preventing mistakes you made. Three of your mentees become successful and credit you publicly. Your reputation as generous mentor builds industry respect. Mentorship creates legacy beyond your own music. The mentees become part of your network and collaborators. Teaching multiplied your impact and created lasting relationships.",
+                    cash: 1200, fame: 12, wellBeing: 30, careerProgress: 18, hype: 14,
+                    lesson: {
+                        title: "Mentorship Legacy Building",
+                        explanation: "Mentoring next generation creates legacy beyond your own work. Mentees who succeed credit you, building reputation as generous leader. Teaching prevents others from making your mistakes, multiplying your positive impact. Mentorship is legacy investment that compounds through others' success.",
+                        realWorldExample: "Many legendary artists are remembered as much for mentorship as music - Quincy Jones, Dr. Dre, African producers mentoring next generation. Mentors build legacy through mentees' success. Teaching creates impact that outlasts individual careers.",
+                        tipForFuture: "As you gain experience, invest in mentoring next generation. Your lessons prevent others' mistakes and multiply your positive impact. Mentorship builds legacy and creates network of grateful collaborators.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Decline - focus only on your own career",
+                outcome: {
+                    text: "You decline to focus exclusively on your music. You never build mentorship legacy. Years later, you wish you'd helped next generation. Other artists who mentored are remembered for both their music and their generosity. Your focus on self prevented legacy building through others. Individual focus limited your long-term impact and fulfillment.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 4, hype: 5,
+                    lesson: {
+                        title: "Self-Focus Legacy Limitation",
+                        explanation: "Focusing only on individual career prevents legacy building through helping others. Artists remembered most fondly typically invested in next generation. Self-focus limits impact to your own work; mentorship multiplies impact through others. Legacy requires investing beyond self.",
+                        realWorldExample: "Most legendary artists invested in next generation - they're remembered for mentorship as much as music. Those who only focused on themselves typically have narrower legacies. Generosity builds lasting reputation.",
+                        tipForFuture: "Don't be so self-focused you never invest in others. Mentorship builds legacy that outlasts individual achievements. Help next generation - it multiplies your impact and creates meaningful fulfillment.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Documentary Participation",
+        description: "A filmmaker is creating documentary about independent music careers and wants to follow you for 6 months. No payment but significant exposure - festival circuit, streaming platforms. Your story becomes part of larger narrative about independent artistry. Documentary opportunity?",
+        conditions: { minFame: 32, minCareerProgress: 28 },
+        choices: [
+            {
+                text: "Participate in documentary - share your journey",
+                outcome: {
+                    text: "You allow filmmaker to document your journey for 6 months. The documentary premieres at film festivals and gets streaming distribution. Your segment resonates deeply - viewers connect with your authentic struggle and success. You gain 8K followers from people who saw the doc. Media requests increase. The documentary positioned you as face of independent music hustle. Long-form storytelling created devoted fans and credibility.",
+                    cash: 0, fame: 15, wellBeing: 20, careerProgress: 22, hype: 25,
+                    lesson: {
+                        title: "Documentary Long-Form Impact",
+                        explanation: "Documentaries create deep connection through long-form authentic storytelling. Viewers who watch your full journey become devoted fans. Documentary participation positions you as important voice in larger narrative. Long-form content builds credibility and devoted following.",
+                        realWorldExample: "Artists featured in music documentaries typically gain devoted fans and credibility - 'Searching for Sugar Man', '20 Feet from Stardom', African music docs. Documentary subjects become authorities. Long-form storytelling creates impact short content can't.",
+                        tipForFuture: "Participate in legitimate documentaries even without payment. Long-form storytelling builds devoted fans and positions you as important voice. Documentary participation is career investment through deep authentic storytelling.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Decline - too invasive and no payment",
+                outcome: {
+                    text: "You decline due to privacy concerns and no payment. The documentary features other artists who gain exposure and credibility. Your story could have reached festival audiences and streaming platforms but you declined. Privacy protection cost you positioning opportunity. The exposure you declined elevated artists who participated. Privacy cost visibility.",
+                    cash: 0, fame: 1, wellBeing: 5, careerProgress: 2, hype: 3,
+                    lesson: {
+                        title: "Privacy vs Visibility Trade-off",
+                        explanation: "Documentary participation requires vulnerability but creates deep connection and credibility. Complete privacy protection prevents opportunities for authentic storytelling and positioning. Balance privacy with strategic vulnerability that builds career. Some exposure requires openness.",
+                        realWorldExample: "Artists who allow documentary access typically gain more than those who maintain complete privacy. Vulnerability creates connection. Those who never let cameras in miss storytelling opportunities that build careers through authentic narrative.",
+                        tipForFuture: "Consider documentary opportunities despite privacy concerns. Strategic vulnerability builds connection and credibility. Complete privacy prevents authentic storytelling opportunities. Balance privacy with career-building openness.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Fan Meet-and-Greet Series",
+        description: "You decide to do monthly free meet-and-greets at local coffee shop - 2 hours, 30 fans, photos and conversation. No payment but deep fan connection. Time investment in community building and fan appreciation?",
+        conditions: { minFame: 28, minCareerProgress: 24 },
+        choices: [
+            {
+                text: "Host monthly meet-and-greets - build deep fan relationships",
+                outcome: {
+                    text: "You host monthly meet-and-greets for a year. The 360 fans who attend (30/month x 12) become your most devoted supporters. They promote you passionately, buy everything you release, and bring friends to shows. The direct personal connection transformed casual fans into evangelists. Meeting fans face-to-face built relationships streaming can't create. Personal connection created devoted army.",
+                    cash: 0, fame: 10, wellBeing: 25, careerProgress: 18, hype: 20,
+                    lesson: {
+                        title: "Personal Fan Connection Power",
+                        explanation: "Direct face-to-face interaction with fans creates devotion digital interaction can't match. Fans who meet you personally become evangelists who promote you passionately. Personal connection transforms casual supporters into devoted army. Time investment in fans creates returns through passionate advocacy.",
+                        realWorldExample: "Artists who do meet-and-greets build devoted fanbases. Taylor Swift's secret sessions, K-pop fan meetings - personal connection creates unshakeable loyalty. Fans who've met artists personally become most devoted supporters.",
+                        tipForFuture: "Invest time in personal fan interactions. Meet-and-greets, small gatherings, personal connection builds devotion streaming can't create. Fans who meet you become evangelists. Personal connection is powerful fan-building tool.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Only interact with fans digitally - protect your time",
+                outcome: {
+                    text: "You keep all fan interaction digital. Your relationship with fans stays distant - they follow you but don't feel personal connection. When challenges arise, fans aren't devoted enough to support you strongly. Distance prevented the devoted evangelical fanbase personal connection creates. Protecting time prevented depth. Efficiency cost connection.",
+                    cash: 0, fame: 3, wellBeing: 5, careerProgress: 5, hype: 6,
+                    lesson: {
+                        title: "Digital Distance Limitation",
+                        explanation: "Only digital fan interaction prevents deep connection that creates devoted supporters. Face-to-face connection builds loyalty digital can't match. Time efficiency through digital-only approach prevents devoted fanbase that sustains careers. Personal connection requires time investment.",
+                        realWorldExample: "Artists with only digital fan interaction typically have weaker relationships than those who meet fans personally. Digital-only approach is efficient but prevents depth. Most devoted fanbases include personal connection component.",
+                        tipForFuture: "Don't rely solely on digital fan interaction. Invest time in personal meet-and-greets and face-to-face connection. Personal interaction builds devotion digital can't create. Balance efficiency with connection depth.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Charity Single Collaboration",
+        description: "Multiple artists are creating charity single for humanitarian cause (hunger relief, education, disaster relief). You're invited to contribute - no payment, all proceeds to charity. High-profile collaboration with 20 artists, media attention, cause alignment. Participate?",
+        conditions: { minFame: 30, minCareerProgress: 26 },
+        choices: [
+            {
+                text: "Join the charity single - contribute to the cause",
+                outcome: {
+                    text: "You contribute to the charity single. The song raises $100K for the cause and gets media coverage. You're associated with high-profile collaboration and humanitarian work. Your participation shows values beyond self-interest. Fans respect your involvement in meaningful cause. The collaboration introduces you to other artists and creates ongoing relationships. Charity work built reputation and valuable connections.",
+                    cash: 0, fame: 12, wellBeing: 25, careerProgress: 16, hype: 18,
+                    lesson: {
+                        title: "Charity Collaboration Multiple Benefits",
+                        explanation: "Charity collaborations provide impact (helping cause), visibility (media coverage), reputation (values-driven artist), and relationships (collaboration with other artists). Charitable work creates multiple forms of value beyond payment. Values-driven work attracts values-aligned supporters.",
+                        realWorldExample: "Charity singles and collaborations build artist reputations - 'We Are the World', 'Do They Know It's Christmas', African humanitarian projects. Charity work shows values and creates media attention and artist relationships.",
+                        tipForFuture: "Participate in legitimate charity collaborations. They provide impact, visibility, reputation, and relationships. Charitable work attracts values-aligned supporters and builds perception as artist who cares beyond self-interest.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            },
+            {
+                text: "Decline - only do paid work",
+                outcome: {
+                    text: "You decline because there's no payment. The charity single succeeds without you. Artists who participated are praised for humanitarian values. You're seen as artist who only works for payment, not causes. The relationship-building and reputation benefits go to participants. Payment focus cost you values-based positioning and collaborative relationships. Transactional thinking limited opportunities.",
+                    cash: 0, fame: 1, wellBeing: -5, careerProgress: 2, hype: 3,
+                    lesson: {
+                        title: "Transactional Charity Approach Costs",
+                        explanation: "Only doing paid work and declining charity causes positions you as purely transactional. Values-driven opportunities create reputation and relationships payment-only approach prevents. Charitable work attracts support transactional approach can't. Some opportunities' value exceeds payment.",
+                        realWorldExample: "Artists who only work for payment develop reputations as purely commercial. Those who participate in charity work build perception as caring beyond self-interest. Values-driven work attracts passionate supporters transactional approach doesn't.",
+                        tipForFuture: "Don't be purely transactional about work. Participate in legitimate charity causes even without payment. Values-driven work builds reputation and attracts supporters transactional approach can't access.",
+                        conceptTaught: "social-responsibility"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Production Tutorial Content",
+        description: "You decide to create YouTube tutorial series teaching music production skills you've learned. No immediate monetization but builds positioning as expert and serves community. Time investment in educational content creation?",
+        conditions: { minFame: 26, minCareerProgress: 22 },
+        choices: [
+            {
+                text: "Create tutorial series - teach and share knowledge",
+                outcome: {
+                    text: "You create 12 production tutorials over 6 months. The series gets 150K total views. You gain 3K subscribers who see you as expert and generous teacher. Students who learn from you become devoted supporters. Brands offer sponsorships for tutorial content ($2,000). Educational content positioned you as authority and created new revenue stream. Teaching built credibility and opportunities beyond music.",
+                    cash: 2000, fame: 12, wellBeing: 20, careerProgress: 18, hype: 15,
+                    lesson: {
+                        title: "Educational Content Authority Building",
+                        explanation: "Creating educational content positions you as expert and generous teacher. Tutorial content builds authority, attracts devoted learners as fans, and creates sponsorship opportunities. Teaching what you know multiplies your value proposition beyond music creation. Educational content is positioning strategy.",
+                        realWorldExample: "Producer-artists who teach online build strong authority - Busy Works Beats, Simon Servida, production YouTubers. Educational content creates devoted audiences and positions creators as experts. Teaching builds careers beyond just creating.",
+                        tipForFuture: "Create educational content teaching what you know. Tutorials position you as expert, serve community, and attract devoted supporters. Teaching builds authority and creates opportunities beyond music creation alone.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Keep knowledge private - only create music content",
+                outcome: {
+                    text: "You only share finished music, never teaching process or skills. You miss opportunity to build authority and serve learning community. Other artists who teach build expert positioning and devoted followings. Your music-only approach limited your positioning to artist-only. Single-content-type focus prevented authority building and teaching-based opportunities. Knowledge hoarding limited impact.",
+                    cash: 0, fame: 3, wellBeing: 5, careerProgress: 5, hype: 6,
+                    lesson: {
+                        title: "Knowledge Sharing vs Hoarding",
+                        explanation: "Hoarding knowledge prevents authority building and serving community. Sharing what you know positions you as expert and attracts devoted learners. Knowledge sharing multiplies impact - teaching one person helps many through them. Generosity with knowledge builds authority and opportunities.",
+                        realWorldExample: "Artists who teach generously build stronger authority than those who hoard knowledge. YouTube educator-artists often have more sustainable careers than music-only creators. Knowledge sharing positions you as expert worth following.",
+                        tipForFuture: "Share knowledge generously through tutorials and educational content. Teaching positions you as expert and serves community. Knowledge sharing builds authority and creates opportunities hoarding prevents.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Festival Volunteer Organizing",
+        description: "Local music festival needs volunteer help with organizing - artist liaison, stage management support, community coordination. 15 hours over festival weekend, no payment but deep festival industry networking and behind-scenes experience. Volunteer to learn and network?",
+        conditions: { minFame: 20, minCareerProgress: 16 },
+        choices: [
+            {
+                text: "Volunteer - learn festival operations and network",
+                outcome: {
+                    text: "You volunteer 15 hours across the weekend. You learn festival operations, meet artists, managers, and organizers. The relationships you build lead to three festival bookings over the next year. Festival director remembers your help and becomes advocate. Volunteering provided industry education and valuable relationships. The unpaid work created paid opportunities and insider knowledge. Service created reciprocal support.",
+                    cash: 0, fame: 6, wellBeing: 15, careerProgress: 14, hype: 10,
+                    lesson: {
+                        title: "Volunteer Industry Networking",
+                        explanation: "Volunteering at industry events creates relationships and insider knowledge paid attendance can't provide. Service-oriented approach builds goodwill and reciprocal support. Working behind-scenes teaches operations and creates connections that lead to opportunities. Strategic volunteering is career investment.",
+                        realWorldExample: "Many successful music industry professionals started volunteering at festivals and events. Behind-scenes work creates relationships and knowledge attendance doesn't provide. Service orientation builds reciprocal support from industry insiders.",
+                        tipForFuture: "Volunteer at industry events to build relationships and learn operations. Behind-scenes service creates connections attendance can't match. Strategic volunteering is career investment through networking and education.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            },
+            {
+                text: "Only attend as performer - no volunteering",
+                outcome: {
+                    text: "You only attend festivals when booked as performer. You never build behind-scenes relationships volunteer work creates. Your industry network grows slowly compared to artists who volunteer. The insider knowledge and goodwill volunteering builds never develops. Transactional approach prevented relationship-building and learning opportunities. Payment-only mindset limited network growth.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 4, hype: 5,
+                    lesson: {
+                        title: "Transactional Industry Approach Limits",
+                        explanation: "Only participating in industry when paid prevents relationship-building and learning opportunities volunteering provides. Service orientation builds goodwill and insider knowledge transactional approach can't access. Some career-building activities don't involve immediate payment.",
+                        realWorldExample: "Artists with strong industry networks typically invested unpaid time volunteering and serving. Those who only participate when paid develop slower networks. Service orientation builds reciprocal relationships transactional approaches prevent.",
+                        tipForFuture: "Don't be purely transactional about industry participation. Volunteer time strategically to build relationships and learn. Service orientation creates goodwill and opportunities transactional mindset prevents.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Livestream Concert Series Launch",
+        description: "You decide to launch monthly livestream concert series - full 60-minute performances, free for fans, optional tips/donations. Building digital audience through consistent performances. Time investment in digital presence?",
+        conditions: { minFame: 28, minCareerProgress: 24 },
+        choices: [
+            {
+                text: "Launch monthly livestream series - build digital community",
+                outcome: {
+                    text: "You do monthly livestream concerts for a year. Each stream averages 800 viewers. Total tips collected: $3,600. More importantly, you build devoted digital community that attends consistently. International fans who can't attend physical shows become devoted supporters. Livestreams expanded your reach beyond geographic limitations. Digital community became sustainable support base. Consistent virtual presence built global audience.",
+                    cash: 3600, fame: 14, wellBeing: 18, careerProgress: 20, hype: 22,
+                    lesson: {
+                        title: "Digital Community Geographic Expansion",
+                        explanation: "Livestream performances build audiences beyond geographic limitations. Fans globally can attend virtually, creating international support base. Consistent livestreams create digital community that provides sustainable support. Virtual presence expands reach physical presence alone can't achieve.",
+                        realWorldExample: "Artists who embraced livestreaming built global audiences - pandemic proved virtual performances work. Consistent livestreams create devoted digital communities. Geographic expansion through digital performance creates sustainability.",
+                        tipForFuture: "Launch consistent livestream series to build digital community beyond geographic limits. Virtual performances expand reach and create devoted international support. Digital presence complements physical presence.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Only do in-person shows - no livestreaming",
+                outcome: {
+                    text: "You only perform in-person, never livestreaming. Your audience stays geographically limited to where you can physically reach. International fans who would support you virtually never get access. Your reach stays local/regional while artists who livestream build global audiences. Physical-only approach limited geographic expansion. Digital-averse strategy prevented global community building.",
+                    cash: 0, fame: 3, wellBeing: 5, careerProgress: 5, hype: 6,
+                    lesson: {
+                        title: "Physical-Only Geographic Limitation",
+                        explanation: "Only doing physical performances limits audience to geographic reach. Livestreaming expands potential audience globally. Physical-only approach prevents digital community building. Geographic limitation becomes career ceiling without virtual presence.",
+                        realWorldExample: "Artists who only perform physically have geographically limited audiences. Those who embrace livestreaming build international communities. Physical-only approach is increasingly limiting in digital age. Geographic expansion requires digital presence.",
+                        tipForFuture: "Don't limit yourself to physical performances. Livestreaming expands reach globally and builds digital community. Physical-only approach prevents geographic expansion virtual presence enables.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Fan-Funded Album Pre-Sale",
+        description: "You want to record album but need $5,000 for studio time. You offer pre-sale: fans pay $15 now for album + exclusive content when released. Need 334 fans to pre-order. Community-funded creation or traditional approach?",
+        conditions: { minFame: 30, minCareerProgress: 26, minCash: 2000 },
+        choices: [
+            {
+                text: "Launch pre-sale campaign - community-funded creation",
+                outcome: {
+                    text: "You launch pre-sale campaign. 400 fans pre-order ($6,000 total). The campaign proves fan support and funds the album. Fans who pre-ordered feel invested in the project and promote it passionately. The album releases with built-in audience of 400 committed supporters. Community funding created both money and committed fanbase. Pre-buyers became evangelists because they invested first.",
+                    cash: 6000, fame: 12, wellBeing: 20, careerProgress: 22, hype: 25,
+                    lesson: {
+                        title: "Community-Funded Creation Benefits",
+                        explanation: "Pre-sales and crowdfunding prove demand and create invested fanbase. Fans who fund projects become evangelists who promote passionately. Community funding provides both money and committed audience. Investment creates psychological ownership and passionate support.",
+                        realWorldExample: "Many successful independent albums were crowdfunded - fans feel ownership and promote passionately. Kickstarter, Patreon, pre-sales create invested communities. Amanda Palmer, Chance the Rapper models - community funding builds devoted support.",
+                        tipForFuture: "Consider community funding through pre-sales or crowdfunding. It proves demand, provides funds, and creates invested fanbase who promote passionately. Fans who invest early become devoted evangelists.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Save money slowly - self-fund when able",
+                outcome: {
+                    text: "You wait to save $5,000 yourself. It takes 10 months. By the time you record, momentum has cooled. You release without pre-built audience investment. The album does okay but doesn't have devoted pre-buyers promoting it. Self-funding took longer and missed community investment opportunity. Waiting cost momentum and community evangelism. Independence prevented community ownership.",
+                    cash: -5000, fame: 6, wellBeing: 5, careerProgress: 10, hype: 12,
+                    lesson: {
+                        title: "Self-Funding vs Community Investment",
+                        explanation: "Self-funding maintains independence but misses community investment and evangelism opportunities. Community funding creates committed supporters who promote passionately. Sometimes community investment provides more than money - it creates devoted fanbase. Balance independence with community involvement.",
+                        realWorldExample: "Self-funded projects maintain control but miss community devotion crowdfunding creates. Artists who embrace community funding often build stronger supporter relationships. Independence has value but so does community investment.",
+                        tipForFuture: "Consider community funding even if you could self-fund. Pre-sales and crowdfunding create invested supporters beyond just money. Community investment builds devotion self-funding doesn't create.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Industry Conference Speaking",
+        description: "You're invited to speak on panel about independent music careers at industry conference. 500 attendees including artists, managers, labels. No payment but positioning as industry voice and networking. Speaking opportunity?",
+        conditions: { minFame: 34, minCareerProgress: 30 },
+        choices: [
+            {
+                text: "Accept speaking invitation - share insights",
+                outcome: {
+                    text: "You speak on the panel. Your insights resonate - audience sees you as thoughtful industry voice. Three managers approach you about representation. Media quotes you in articles about independent music. The speaking engagement positioned you as authority beyond just artist. Industry sees you as leader with valuable perspective. Speaking built credibility and opened management opportunities. Thought leadership created career opportunities.",
+                    cash: 0, fame: 12, wellBeing: 18, careerProgress: 20, hype: 16,
+                    lesson: {
+                        title: "Thought Leadership Positioning",
+                        explanation: "Speaking at industry events positions you as authority and thought leader beyond artist identity. Sharing insights builds credibility and attracts professional opportunities. Thought leadership creates perception as industry voice worth listening to. Speaking builds positioning music alone doesn't.",
+                        realWorldExample: "Artists who speak at conferences build authority - they're seen as industry leaders, not just musicians. Speaking positions you as expert and attracts professional opportunities. Thought leadership differentiates you from artist-only positioning.",
+                        tipForFuture: "Accept speaking opportunities at industry events. Sharing insights positions you as thought leader and authority. Speaking builds credibility and creates opportunities performing alone doesn't provide.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            },
+            {
+                text: "Decline - uncomfortable with public speaking",
+                outcome: {
+                    text: "You decline due to public speaking discomfort. Another artist speaks and gains thought leader positioning. The credibility and management opportunities you could have built go to someone else. Comfort-zone protection prevented authority building and career advancement. Avoiding discomfort cost positioning opportunity. Fear limited growth.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: 3, hype: 4,
+                    lesson: {
+                        title: "Comfort Zone Growth Limitation",
+                        explanation: "Staying in comfort zone prevents growth opportunities. Public speaking discomfort is common but overcoming it builds career. Avoiding discomfort prevents authority building and thought leadership positioning. Growth requires discomfort. Comfort protection limits opportunities.",
+                        realWorldExample: "Most successful people faced fears to grow - public speaking is common fear but necessary skill. Those who overcome speaking anxiety build authority; those who avoid it miss positioning opportunities. Growth requires discomfort tolerance.",
+                        tipForFuture: "Don't let fear prevent growth opportunities. Public speaking anxiety is normal but overcomable. Accept speaking opportunities despite discomfort - they build authority and create career advancement. Push through comfort zones.",
+                        conceptTaught: "career-advancement"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Career Sabotage - Jealous Competitor (RISK SCENARIO)",
+        description: "A jealous competitor is actively sabotaging you - spreading false rumors, sending fake cease-and-desist letters to your venues, creating fake social media accounts to damage your reputation. You have evidence. How do you handle malicious sabotage?",
+        conditions: { minFame: 40, minCareerProgress: 36, minFameByDifficulty: { beginner: 32, realistic: 40, hardcore: 48 } },
+        choices: [
+            {
+                text: "Address publicly with evidence - expose the sabotage",
+                outcome: {
+                    text: "You post calmly exposing the sabotage with receipts - screenshots, evidence. You don't attack, just show facts. The competitor is exposed and loses credibility entirely. Industry and fans rally around you. Your transparency and evidence-based approach builds respect. The saboteur's career suffers from exposure. Calm, factual public addressing with evidence protected your reputation and exposed malicious behavior. Truth-telling worked.",
+                    cash: 0, fame: 8, wellBeing: -10, careerProgress: 10, hype: 12,
+                    lesson: {
+                        title: "Evidence-Based Exposure Defense",
+                        explanation: "When maliciously sabotaged, calm public exposure with evidence protects reputation and exposes saboteur. Don't attack emotionally - present facts. Evidence-based defense builds credibility while exposing malicious behavior. Truth-telling with receipts is powerful defense.",
+                        realWorldExample: "Public figures who calmly present evidence of sabotage typically win public support. Emotional attacks look bad; factual evidence works. James Charles, YouTuber drama - evidence-based defense protects reputation.",
+                        tipForFuture: "If maliciously sabotaged, present evidence calmly and factually. Don't attack emotionally - show receipts. Evidence-based public defense exposes saboteurs and protects your reputation. Truth with proof is powerful defense.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Handle privately - legal action and industry reporting",
+                outcome: {
+                    text: "You handle privately through lawyers and industry reports. Legal action stops the sabotage. Industry organizations blacklist the saboteur. Your private handling prevents public drama. The problem is resolved without spectacle. Professional private handling protected you without creating public conflict. Mature approach worked without drama. Legal channels resolved it appropriately.",
+                    cash: -3000, fame: 5, wellBeing: -5, careerProgress: 8, hype: 6,
+                    lesson: {
+                        title: "Professional Private Conflict Resolution",
+                        explanation: "Some conflicts resolve better privately through legal and industry channels. Private handling prevents public drama while still protecting you. Professional approach through proper channels often works better than public exposure. Maturity sometimes means private resolution.",
+                        realWorldExample: "Many industry conflicts resolve privately through lawyers and professional channels. Not everything needs public exposure. Professional private handling often resolves issues without creating spectacles. Maturity shows in conflict handling.",
+                        tipForFuture: "Consider private professional resolution before public exposure. Legal and industry channels often resolve conflicts effectively without drama. Professional private handling can protect you while maintaining dignity.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            },
+            {
+                text: "Ignore and rise above - don't acknowledge",
+                outcome: {
+                    text: "You try ignoring it and rising above. The sabotage continues unchecked. Venues believe fake cease-and-desists and cancel bookings. False rumors spread without counter-narrative. Your silence is interpreted as guilt or weakness. Six months later, significant damage is done. Ignoring malicious sabotage doesn't make it stop - it allows it to succeed. Rising above worked against you. Inaction enabled destruction.",
+                    cash: -8000, fame: -15, wellBeing: -25, careerProgress: -20, hype: -25,
+                    lesson: {
+                        title: "Sabotage Inaction Consequence",
+                        explanation: "Ignoring active sabotage doesn't make it stop - it allows it to succeed unchecked. Malicious actors don't stop when ignored - they escalate. Some situations require action, not inaction. Rising above works for criticism, not sabotage. Active threats require active defense.",
+                        realWorldExample: "Public figures who ignore active sabotage typically suffer more damage than those who address it. Ignoring sabotage isn't strength - it's allowing destruction. Active malice requires active defense, not passive hoping.",
+                        tipForFuture: "Don't ignore active sabotage. Address it through public evidence or private legal action. Inaction allows malicious behavior to succeed. Some situations require defense, not rising above. Protect yourself actively.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
     }
 ];
 

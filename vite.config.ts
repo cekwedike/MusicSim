@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
         outDir: '../dist',
         emptyOutDir: true,
         manifest: true,
-        chunkSizeWarningLimit: 600, // Increase threshold slightly to reduce warnings
+        chunkSizeWarningLimit: 700, // Increase threshold to accommodate scenario data growth
         rollupOptions: {
           output: {
             manualChunks: (id) => {
@@ -69,6 +69,15 @@ export default defineConfig(({ mode }) => {
               }
               
               // Application code splitting
+              // Separate large data files (scenarioBank is large)
+              if (id.includes('/data/scenarioBank')) {
+                return 'scenario-data';
+              }
+              
+              if (id.includes('/data/') || id.includes('/constants/')) {
+                return 'data';
+              }
+              
               // Components that are likely to be used together
               if (id.includes('/components/')) {
                 if (id.includes('Modal') || id.includes('Dialog')) {
@@ -89,11 +98,6 @@ export default defineConfig(({ mode }) => {
               // Services and utilities
               if (id.includes('/services/') || id.includes('/utils/')) {
                 return 'services';
-              }
-              
-              // Data and constants
-              if (id.includes('/data/') || id.includes('/constants/')) {
-                return 'data';
               }
               
               // Contexts

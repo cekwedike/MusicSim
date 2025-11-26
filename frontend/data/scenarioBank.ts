@@ -2053,6 +2053,615 @@ export const scenarioBank: Scenario[] = [
                 }
             }
         ]
+    },
+    {
+        title: "The Spotify Playlist Pitch",
+        description: "A playlist curator with 500K followers on Spotify reaches out. They'll add your song to their playlist for $800. Your manager says: 'Playlist placements are how songs blow up now. This could get you 100K streams.' But paying for playlist placement violates Spotify's terms - if caught, your music gets taken down. Other artists say everyone does it and Spotify turns a blind eye.",
+        conditions: { minFame: 15, minCash: 1000 },
+        choices: [
+            {
+                text: "Pay for the placement - it's how the game works",
+                outcome: {
+                    text: "You pay $800 and get added to the playlist. Your streams jump by 50K in the first week. The algorithm picks up the momentum and pushes your song further. You gained visibility, but you're now part of a pay-to-play system. If Spotify ever cracks down, you could lose everything.",
+                    cash: -800, fame: 8, wellBeing: -5, careerProgress: 4, hype: 20,
+                    lesson: {
+                        title: "Playlist Economy Reality",
+                        explanation: "Playlist placements drive modern music discovery, but paid placements create an unfair system where money matters more than quality. While common practice, it's risky and perpetuates inequality in music.",
+                        realWorldExample: "Many African artists pay for playlist placements to compete with artists backed by major labels. Spotify periodically removes songs and bans curators caught in pay-for-play schemes.",
+                        tipForFuture: "Paid placements can boost visibility short-term, but focus on building genuine fan relationships that don't depend on gaming algorithms. Organic growth is more sustainable.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Decline and pitch them your music organically",
+                outcome: {
+                    text: "You send them your music without payment, hoping they'll add it based on quality. They never respond. Your song doesn't get the playlist boost. You maintained your integrity, but you're competing against artists who paid. The playing field isn't level.",
+                    cash: 0, fame: 1, wellBeing: 5, careerProgress: 0, hype: -5,
+                    lesson: {
+                        title: "The Organic Growth Challenge",
+                        explanation: "Playing by the rules feels right, but when competitors pay for advantages, organic growth becomes harder. You're fighting an uphill battle against a pay-to-win system.",
+                        realWorldExample: "Artists who refuse to pay for placements often find their music buried under paid promotions. The system rewards those willing to pay, not necessarily those making the best music.",
+                        tipForFuture: "If you choose organic growth, invest heavily in direct fan engagement and touring. Build a fanbase that doesn't depend on playlist algorithms.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Report them to Spotify for violating terms",
+                outcome: {
+                    text: "You report the curator to Spotify. A month later, the playlist gets taken down and the curator banned. Other curators hear about it and blacklist you. You've been labeled a snitch. Your moral stand has consequences - now legitimate curators won't work with you either. The industry remembers.",
+                    cash: 0, fame: -5, wellBeing: -10, careerProgress: -3, hype: -15,
+                    lesson: {
+                        title: "The Whistleblower Cost",
+                        explanation: "Reporting industry corruption can have severe career consequences. The music industry often punishes whistleblowers more than wrongdoers. Fighting the system from inside is risky.",
+                        realWorldExample: "Artists who've reported industry corruption often face blacklisting and reduced opportunities. The industry protects its own, even when practices are clearly wrong.",
+                        tipForFuture: "Changing corrupt systems often requires collective action, not individual reports. Consider whether you're willing to pay the career cost of being a whistleblower.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Mobile Money Split",
+        description: "You performed at a club in Lagos/Kigali and the promoter wants to pay you via mobile money (MTN MoMo/Airtel Money). They're offering ₦50,000 ($60 USD). Problem: the transfer limit is ₦30,000 per day, so they'll send it in two transactions over two days. Your friend warns: 'Once they send the first payment, they might ghost you on the second one. Get cash only.' The promoter insists mobile money is safer and more convenient.",
+        conditions: { minFame: 5, maxFame: 35 },
+        choices: [
+            {
+                text: "Accept mobile money - trust the promoter",
+                outcome: {
+                    text: "They send the first ₦30,000 immediately. You wait for the second payment. Three days pass. They stop responding to your calls. You've been scammed out of ₦20,000 ($24). It's a expensive lesson about payment terms in Africa's cash-based entertainment economy.",
+                    cash: 36, fame: 2, wellBeing: -15, careerProgress: 1, hype: 5,
+                    lesson: {
+                        title: "Mobile Money Payment Risks",
+                        explanation: "Mobile money is convenient but creates vulnerabilities when payments are split. Without legal contracts and recourse, trust-based systems favor those in power. Always secure full payment upfront or use escrow.",
+                        realWorldExample: "Many African artists have been scammed through split mobile money payments. Promoters exploit transaction limits and lack of legal recourse to underpay performers.",
+                        tipForFuture: "For split payments, demand half upfront in cash before performing, then the rest via mobile money. Never perform without securing significant payment first.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Demand full cash payment before performing",
+                outcome: {
+                    text: "You insist on cash upfront. The promoter is offended, saying you don't trust them. They grudgingly pay in cash. You perform and leave with your full ₦50,000 ($60). Other artists at the venue whisper that you're 'difficult to work with.' But you got paid in full.",
+                    cash: 60, fame: 3, wellBeing: 0, careerProgress: 2, hype: 8,
+                    lesson: {
+                        title: "Payment Security First",
+                        explanation: "Protecting your earnings isn't being difficult - it's being professional. Artists who demand proper payment are labeled 'difficult,' but those who don't often get scammed. Choose financial security over reputation.",
+                        realWorldExample: "Successful African artists learn quickly: cash before performance or walk away. The ones who don't establish boundaries end up working for free.",
+                        tipForFuture: "Your reputation for being 'difficult' fades. Your reputation for being 'easy to scam' sticks forever. Demand respect through payment terms.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Instagram Algorithm Change",
+        description: "Instagram's algorithm just changed. Your posts that used to get 50K views now get 3K. Engagement is down 94%. A social media consultant offers to 'fix your algorithm' for $1,200/month. They promise to restore your reach through 'strategic posting and engagement tactics.' Other artists say it's a scam. Some say it works.",
+        conditions: { minFame: 25, minHype: 20 },
+        choices: [
+            {
+                text: "Hire the social media consultant",
+                outcome: {
+                    text: "You pay $1,200 and they start 'optimizing' your account. Your reach stays the same. After three months and $3,600 spent, you realize they're just posting at 'optimal times' and using trending hashtags - things you could've Googled for free. You've been sold basic advice dressed as expertise.",
+                    cash: -3600, fame: 2, wellBeing: -10, careerProgress: 0, hype: 5,
+                    lesson: {
+                        title: "Social Media Snake Oil",
+                        explanation: "Most 'algorithm experts' sell common knowledge as secret expertise. Algorithm changes hurt everyone equally. There's no magic fix - just consistent, authentic content and adaptation to platform changes.",
+                        realWorldExample: "Countless artists waste thousands on social media consultants who deliver basic tactics available in free YouTube tutorials. The 'algorithm secrets' industry thrives on creator desperation.",
+                        tipForFuture: "When platforms change algorithms, everyone suffers. Don't pay for 'secrets' - invest time learning free resources and testing strategies yourself.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Adapt your content strategy yourself",
+                outcome: {
+                    text: "You study successful artists' current strategies, experiment with different content types (Reels, Stories, behind-the-scenes), and post more consistently. After two months, your reach partially recovers to 20K views. It's not what it was, but you've adapted without spending thousands on 'experts.' You learned the platform yourself.",
+                    cash: 0, fame: 4, wellBeing: 5, careerProgress: 3, hype: 12,
+                    lesson: {
+                        title: "Platform Adaptation Skills",
+                        explanation: "Learning platform skills yourself is more valuable than paying consultants. Algorithms change constantly - the skill of adapting is more important than any single strategy. Build your own expertise.",
+                        realWorldExample: "Artists like Burna Boy and Tems adapted to TikTok and Instagram changes by experimenting themselves. They built internal teams that understand platforms, rather than relying on expensive consultants.",
+                        tipForFuture: "Invest time in understanding platforms yourself. The ability to adapt to changes is more valuable than any consultant's 'secrets.' Learn, test, iterate.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Streaming Fraud Scheme",
+        description: "A 'digital promoter' offers you 500K Spotify streams for $400. They use bot farms and click farms to inflate your numbers. 'Spotify can't tell the difference,' they claim. The inflated numbers could attract real label attention. But if caught, Spotify deletes your entire catalog and blacklists you permanently. The temptation is real - your competitors are probably doing it.",
+        conditions: { minFame: 12, minCash: 500 },
+        choices: [
+            {
+                text: "Buy the fake streams - everyone's doing it",
+                outcome: {
+                    text: "Your streams jump from 10K to 510K overnight. For two weeks, you feel like you've made it. Then Spotify's fraud detection flags your account. All your music gets removed. Your artist profile is deleted. Years of work erased. You're blacklisted. Your music career on Spotify is over. Trying to game the system cost you everything.",
+                    cash: -400, fame: -30, wellBeing: -35, careerProgress: -20, hype: -50,
+                    lesson: {
+                        title: "Streaming Fraud Consequences",
+                        explanation: "Platforms are getting better at detecting fake streams. The short-term boost isn't worth permanent blacklisting. Fake numbers don't translate to real fans, real money, or sustainable careers. The fraud always catches up.",
+                        realWorldExample: "Spotify regularly purges millions of fake-streamed songs. Artists lose not just fake streams but their entire catalogs. African artists have lost years of work to fraud detection systems.",
+                        tipForFuture: "Never buy fake streams, followers, or engagement. Platforms can detect it, and the punishment is career-ending. Build slowly and authentically.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Reject the offer and build organically",
+                outcome: {
+                    text: "You turn down the fake streams. Your numbers stay modest but real. You focus on live shows, social media, and genuine fan engagement. Growth is slow - 10K this month, 15K next month. But every stream is real. Every fan actually listened. Your foundation is solid, not fraudulent.",
+                    cash: 0, fame: 3, wellBeing: 10, careerProgress: 4, hype: 8,
+                    lesson: {
+                        title: "Organic Growth Integrity",
+                        explanation: "Real streams from real fans are more valuable than fake numbers. Algorithms reward engagement, not just streams. Authentic growth builds sustainable careers and protects you from platform purges.",
+                        realWorldExample: "Artists with organic followings survive algorithm changes and platform purges. Fraudulent artists get wiped out overnight. Slow, real growth always beats fast, fake growth.",
+                        tipForFuture: "Your numbers might be smaller, but they're real. Real fans buy tickets, merch, and tell friends. Fake streams do nothing but put you at risk.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Data Bundle Dilemma",
+        description: "You want to release your music video on YouTube, but internet data is expensive in your market. A professional upload in 1080p costs ₦3,000 ($3.60) in data just to upload. A fan offers to upload it for you using their unlimited WiFi at work. Or you could upload a lower-quality 480p version for ₦800 ($0.96). Quality matters, but so does budget.",
+        conditions: { minFame: 8, maxFame: 30, maxCash: 5000 },
+        choices: [
+            {
+                text: "Pay ₦3,000 for full 1080p quality upload",
+                outcome: {
+                    text: "You buy data and upload the full HD video. It looks professional and sharp. Western audiences with fast internet appreciate the quality. But many African fans on slow mobile networks can't stream it smoothly. The video buffers constantly for your core audience. You optimized for the wrong market.",
+                    cash: -3.6, fame: 4, wellBeing: -2, careerProgress: 2, hype: 10,
+                    lesson: {
+                        title: "Infrastructure-Aware Content Strategy",
+                        explanation: "High quality content is meaningless if your audience can't access it. In markets with slow, expensive internet, lower-quality accessible content often performs better than high-quality inaccessible content.",
+                        realWorldExample: "Many African artists upload multiple versions: HD for international fans, compressed for local fans. Understanding your audience's internet infrastructure is crucial for reach.",
+                        tipForFuture: "Know your audience's technical reality. If they're on mobile data, optimize for that. Accessibility beats quality when infrastructure is a barrier.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Upload 480p - optimize for your audience's reality",
+                outcome: {
+                    text: "You upload a compressed 480p version. It loads instantly on mobile data. Your local fanbase watches and shares it easily. Your video goes viral locally because everyone can actually watch it. International viewers complain about quality, but you're building where your audience actually is. Smart optimization.",
+                    cash: -0.96, fame: 8, wellBeing: 5, careerProgress: 4, hype: 20,
+                    lesson: {
+                        title: "Accessible Content Strategy",
+                        explanation: "Optimizing for your actual audience's conditions is smarter than chasing international standards your local fans can't access. Viral content needs to be accessible first, high-quality second.",
+                        realWorldExample: "Many successful African artists prioritize compressed, mobile-friendly content over HD. Their videos go viral locally while HD competitors struggle with reach. Accessibility wins.",
+                        tipForFuture: "Design for your audience's reality, not your aspirations. If they're on slow mobile data, give them content that works on slow mobile data.",
+                        conceptTaught: "audience-building"
+                    }
+                }
+            },
+            {
+                text: "Let the fan upload it from their work WiFi",
+                outcome: {
+                    text: "Your fan uploads it in HD using their work's internet. The upload is free, and quality is great. A week later, your video gets flagged and removed - YouTube detected it was uploaded from a corporate network flagged for spam/bots. Your music video is gone. Free solutions often have hidden costs.",
+                    cash: 0, fame: -5, wellBeing: -10, careerProgress: -2, hype: -15,
+                    lesson: {
+                        title: "Free Help Hidden Costs",
+                        explanation: "Borrowing resources (WiFi, equipment, software) can backfire when platforms detect unusual activity. Professional infrastructure, even if expensive, protects your content from removal or bans.",
+                        realWorldExample: "Videos uploaded from flagged networks or shared accounts often get removed. Artists lose content and opportunities when trying to save money on infrastructure.",
+                        tipForFuture: "Some corners shouldn't be cut. Upload infrastructure is one. Pay for legitimate access to protect your content from platform removals.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Language Controversy",
+        description: "A Western music blog wants to interview you, but they insist you do the interview in English. Your English is functional but not fluent. You could do it in your native language (Yoruba/Kinyarwanda/Lingala) and they'll translate, but they say 'translations don't capture personality.' Your manager says: 'Just do it in English, even if you struggle. International media wants English.' This feels like erasure.",
+        conditions: { minFame: 20, minCareerProgress: 15 },
+        choices: [
+            {
+                text: "Do the interview in English despite discomfort",
+                outcome: {
+                    text: "You struggle through the interview in English. Your answers are shorter and less nuanced than they'd be in your language. The blog publishes it, but you sound stiff and less charismatic than you actually are. You've accommodated their language barrier, not yours. International readers don't see the real you.",
+                    cash: 0, fame: 5, wellBeing: -10, careerProgress: 3, hype: 10,
+                    lesson: {
+                        title: "Linguistic Accommodation Costs",
+                        explanation: "Speaking in a non-native language for interviews often results in lost nuance, personality, and authenticity. The burden of translation shouldn't always fall on non-English speakers when they're the ones being interviewed about their art.",
+                        realWorldExample: "Many African artists feel pressure to conduct international interviews in English, resulting in less compelling interviews than they'd give in their native languages. Some media outlets now embrace translation to capture authentic voices.",
+                        tipForFuture: "Your voice matters more than the language it's in. Consider whether the opportunity is worth diluting your authentic self. Some outlets will respect translation.",
+                        conceptTaught: "cultural-identity"
+                    }
+                }
+            },
+            {
+                text: "Insist on your language with translation",
+                outcome: {
+                    text: "You tell them you'll do the interview in your native language or not at all. They initially resist, then agree. The interview is amazing - you're articulate, funny, deep. The translation captures your personality. The article goes viral for its authenticity. Your boldness paid off.",
+                    cash: 0, fame: 12, wellBeing: 15, careerProgress: 6, hype: 25,
+                    lesson: {
+                        title: "Linguistic Sovereignty",
+                        explanation: "Insisting on your linguistic comfort can produce better content and demonstrate cultural confidence that audiences respect. Translation technology is good enough that language shouldn't be a barrier to authentic storytelling.",
+                        realWorldExample: "Artists like Burna Boy have done major international interviews in Pidgin English with subtitles. The authenticity resonated more than perfect English would have. Cultural confidence is attractive.",
+                        tipForFuture: "Your authentic voice in your language is more compelling than a diluted voice in someone else's language. Don't shrink yourself for others' convenience.",
+                        conceptTaught: "cultural-identity"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Studio Time Exchange",
+        description: "A producer offers you free studio time if you promote their production services on your social media (30K followers). They want 3 posts tagging their studio. Studio time usually costs $100/hour, and they're offering 8 hours ($800 value). But your followers might see it as selling out or spam. Is the trade worth your audience's trust?",
+        conditions: { minFame: 18, minHype: 15, maxCash: 1500 },
+        choices: [
+            {
+                text: "Accept the trade - promote the studio",
+                outcome: {
+                    text: "You post about the studio three times. Several followers comment 'Are you getting paid for this?' and 'Stop with the ads.' You lose 500 followers who see you as a sellout. The studio time is good, but your audience feels used. You've traded trust for free studio access.",
+                    cash: 0, fame: 1, wellBeing: -5, careerProgress: 3, hype: -10,
+                    lesson: {
+                        title: "Audience Trust as Currency",
+                        explanation: "Your audience's trust is valuable. Trading promotional posts for services can make them feel like they're just an advertising platform to you, not a genuine community. Maintain the line between content and ads.",
+                        realWorldExample: "Artists who constantly do promotional trades often see engagement and follower counts drop. Audiences value authenticity over promotional partnerships. Protect your credibility carefully.",
+                        tipForFuture: "If you do promotional trades, be transparent ('Thanks to [Studio] for the opportunity') and limit frequency. Your audience's trust is worth more than free studio time.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            },
+            {
+                text: "Decline and pay for studio time yourself",
+                outcome: {
+                    text: "You pay the $100 for studio time you can afford (1 hour instead of 8). Your social media stays authentic and promotional-free. Your audience respects that you don't spam them. Progress is slower, but your relationship with fans is intact. Quality over quantity.",
+                    cash: -100, fame: 2, wellBeing: 10, careerProgress: 1, hype: 5,
+                    lesson: {
+                        title: "Authentic Audience Relationships",
+                        explanation: "Slower progress with audience trust beats faster progress with audience resentment. Your followers are people, not advertising impressions to trade. Maintain authenticity even when it costs money.",
+                        realWorldExample: "Artists with strong, organic followings often refuse promotional trades to protect their credibility. Their smaller but more engaged audiences drive more sustainable careers than large, resentful audiences.",
+                        tipForFuture: "Your audience relationship is a long-term asset. Don't trade it for short-term free services. Invest in maintaining their trust and they'll support you for years.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Copyright Strike Misunderstanding",
+        description: "You uploaded a cover of a popular song to YouTube. You disclosed it's a cover and don't monetize the video. Still, you get a copyright strike. The original rights holder is demanding $500 or they'll escalate to full channel deletion. Your lawyer says fighting it costs $2,000. Many artists just pay the $500 and move on. But it feels like extortion.",
+        conditions: { minFame: 15, minCareerProgress: 10, minFameByDifficulty: { beginner: 10, realistic: 15, hardcore: 22 } },
+        choices: [
+            {
+                text: "Pay the $500 to resolve it quickly",
+                outcome: {
+                    text: "You pay the $500. The strike is removed. Your channel is safe. But you've learned that even non-monetized covers can result in expensive takedowns. The music industry's rights system doesn't care about your intentions - only about their revenue. It's an expensive lesson.",
+                    cash: -500, fame: 0, wellBeing: -8, careerProgress: 1, hype: 0,
+                    lesson: {
+                        title: "Copyright Reality Check",
+                        explanation: "Copyright law favors rights holders, not artists doing covers. Even non-commercial use can trigger expensive takedowns. Understanding copyright is crucial for avoiding costly mistakes. Fair use is narrower than most artists think.",
+                        realWorldExample: "Thousands of African artists have faced copyright strikes for covers and samples. The system is automated and aggressive. Not monetizing doesn't protect you - you need explicit permission or licenses.",
+                        tipForFuture: "Before uploading covers, get mechanical licenses or use platforms designed for covers (like Harry Fox Agency). Prevention is cheaper than resolution.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Fight it - hire a lawyer",
+                outcome: {
+                    text: "You hire a lawyer for $2,000 to fight the claim. After 6 months of legal back-and-forth, you win. The strike is removed and you're vindicated. But you spent $2,000 and six months of stress to fight a $500 claim. You won the battle but lost financially. Was it worth it on principle?",
+                    cash: -2000, fame: 3, wellBeing: -15, careerProgress: 2, hype: 5,
+                    lesson: {
+                        title: "Legal Battles Cost-Benefit",
+                        explanation: "Winning on principle is satisfying, but legal battles are expensive and time-consuming. Sometimes paying an unfair settlement is financially smarter than fighting. Calculate the true cost of being right.",
+                        realWorldExample: "Many artists spend more fighting copyright claims than the claims themselves cost. Legal victories don't always mean financial victories. Choose battles based on long-term strategy, not anger.",
+                        tipForFuture: "Assess legal battles rationally: Will winning cost more than losing? Is the principle worth the financial and emotional cost? Sometimes you have to swallow unfair treatment.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Remove the video and accept the strike",
+                outcome: {
+                    text: "You remove the video and accept the strike on your channel. Your channel is limited for 3 months. You can't upload during that time. The 3 months of silence kills your momentum. Your audience forgets about you. By the time the strike expires, you've lost 5,000 subscribers and your engagement is dead. The 'free' option cost you the most.",
+                    cash: 0, fame: -8, wellBeing: -10, careerProgress: -5, hype: -20,
+                    lesson: {
+                        title: "Copyright Strike Hidden Costs",
+                        explanation: "Copyright strikes freeze your ability to grow. The momentum loss and audience attrition during strike periods often costs more than paying the settlement. Sometimes paying is the cheapest option.",
+                        realWorldExample: "Artists who accept strikes and can't upload for months often lose their algorithmic momentum permanently. The 'free' option of accepting strikes is often the most expensive long-term choice.",
+                        tipForFuture: "Channel strikes have compounding costs through lost momentum and audience. Often, paying to resolve quickly is the smartest financial decision, even if it feels unfair.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The TikTok Viral Moment Decision",
+        description: "Your song is going viral on TikTok - 50K videos using your audio in 3 days. A TikTok marketing agency offers to 'amplify the trend' for $1,500, promising to get influencers to use your sound and push it to 500K videos. Your friend warns: 'Viral trends are organic. Forcing it kills authenticity.' Do you let it grow naturally or invest to push it further?",
+        conditions: { minFame: 18, minHype: 25 },
+        choices: [
+            {
+                text: "Pay $1,500 to amplify the trend",
+                outcome: {
+                    text: "The agency gets influencers to use your sound, but their videos feel forced and inauthentic. TikTok's algorithm detects the coordinated behavior and suppresses your audio. The trend dies. You spent $1,500 to kill your own organic virality. Forced amplification backfired.",
+                    cash: -1500, fame: 2, wellBeing: -10, careerProgress: -2, hype: -15,
+                    lesson: {
+                        title: "Organic Virality vs Paid Amplification",
+                        explanation: "Viral trends thrive on authenticity. When platforms detect coordinated inauthentic behavior, they suppress content. Forcing virality often kills it. Let organic trends breathe and ride the wave naturally.",
+                        realWorldExample: "Many artists have killed their own viral TikTok trends by hiring agencies to 'boost' them. TikTok's algorithm is sophisticated enough to detect inauthentic coordination and punishes it.",
+                        tipForFuture: "When something goes viral organically, don't interfere. Ride the wave, engage authentically, and let it run its course. Forced amplification usually backfires.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Let it grow organically and engage with creators",
+                outcome: {
+                    text: "You let the trend grow naturally while engaging with creators using your sound. You comment on videos, duet creators, and show appreciation. The trend grows to 200K videos over two weeks. It's not the 500K promised by the agency, but it's real. Real fans emerge from the trend. Organic wins.",
+                    cash: 0, fame: 15, wellBeing: 10, careerProgress: 8, hype: 40,
+                    lesson: {
+                        title: "Authentic Viral Engagement",
+                        explanation: "Organic viral moments create real fans when you engage authentically. Responding to creators, showing appreciation, and participating in your own trend builds community. Authenticity scales better than paid amplification.",
+                        realWorldExample: "Artists who engage authentically with their TikTok trends (like Lil Nas X with 'Old Town Road') turn viral moments into sustainable careers. Paid amplification creates numbers, not fans.",
+                        tipForFuture: "When you go viral, engage with it genuinely. Comment, duet, show love to creators. Turn virality into community, not just numbers.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Festival No-Show Crisis",
+        description: "You're booked for a major festival, but your flight got canceled due to weather. The festival is in 12 hours, 400 miles away. Options: 1) Charter a private car for $800 and arrive exhausted, 2) Skip it and lose your $2,000 performance fee plus damage your reputation, or 3) Beg the festival to reschedule your slot to tomorrow (unlikely). Your management contract might hold you liable for lost festival revenue ($10,000+). What do you do?",
+        conditions: { minFame: 35, minCareerProgress: 30 },
+        choices: [
+            {
+                text: "Charter the car for $800 - honor the commitment",
+                outcome: {
+                    text: "You hire a car and drive through the night. You arrive exhausted, 30 minutes before your slot. The performance is rough - you're tired and your voice is strained. But you showed up. The festival respects your commitment. Your reputation for professionalism is intact, even if the performance wasn't your best.",
+                    cash: -800, fame: 8, wellBeing: -20, careerProgress: 5, hype: 10,
+                    lesson: {
+                        title: "Professionalism Under Crisis",
+                        explanation: "Showing up despite obstacles builds your reputation for reliability. Festivals remember artists who honor commitments even when it's difficult. Sometimes a rough performance beats a no-show for career longevity.",
+                        realWorldExample: "Artists who consistently show up despite travel disasters build reputations for professionalism that lead to more bookings. Festival organizers value reliability over perfection.",
+                        tipForFuture: "When emergencies threaten commitments, exhaust all options to honor them. Your reputation for showing up matters more than one perfect performance.",
+                        conceptTaught: "career-professionalism"
+                    }
+                }
+            },
+            {
+                text: "Skip it - prioritize your wellbeing and safety",
+                outcome: {
+                    text: "You decide driving through the night isn't safe. You call the festival and explain. They're furious - they can't fill your slot on short notice. You lose your $2,000 fee and they threaten to blacklist you from their festival network. Your agent gets angry calls from other promoters. Was your safety worth the career damage?",
+                    cash: -2000, fame: -10, wellBeing: 10, careerProgress: -8, hype: -20,
+                    lesson: {
+                        title: "The Cost of Cancellations",
+                        explanation: "No-shows, even for legitimate reasons, damage your industry reputation significantly. Promoters network closely and blacklist unreliable artists. Sometimes protecting yourself costs you professionally.",
+                        realWorldExample: "Artists who cancel shows, even for good reasons, often find future bookings dry up. The live music industry values reliability above almost everything. One cancellation can cost you dozens of future opportunities.",
+                        tipForFuture: "Build a reputation for reliability early in your career. When emergencies happen, work harder than you think possible to honor commitments. Industry memory is long.",
+                        conceptTaught: "career-professionalism"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Remix Rights Negotiation",
+        description: "A major DJ wants to remix your song and release it commercially. They're offering you 20% of remix revenue. Your lawyer says you should get 50% since it's your song. The DJ argues their production work and fanbase will drive most of the success. Industry standard varies wildly (20-50%). If you push too hard, they might walk away and remix someone else's song instead.",
+        conditions: { minFame: 28, minCareerProgress: 20 },
+        choices: [
+            {
+                text: "Accept 20% - secure the collaboration",
+                outcome: {
+                    text: "You accept 20%. The remix becomes huge - 2 million streams. You earn $1,600 from your 20% share while the DJ earns $6,400. The remix introduces you to their fanbase and you gain 10K new followers. The collaboration was worth more than the money, but watching them earn 4x more from your song stings.",
+                    cash: 1600, fame: 12, wellBeing: -5, careerProgress: 8, hype: 30,
+                    lesson: {
+                        title: "Exposure vs Equity Trade-offs",
+                        explanation: "Sometimes accepting less money for exposure and collaboration is strategically smart, especially early in your career. But it establishes a precedent that you undervalue your work. Balance immediate opportunity with long-term respect.",
+                        realWorldExample: "Many African artists accept low percentages on remixes with established DJs/producers. Some of these collaborations launch careers, others just leave artists feeling exploited while others profit.",
+                        tipForFuture: "Early career, exposure matters. Mid-career, start demanding fair equity. Know when you're building and when you're being underpaid. Adjust your negotiation stance as you grow.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Negotiate for 40% - find middle ground",
+                outcome: {
+                    text: "You counter with 40%. After some back and forth, you settle at 35%. The DJ agrees but is less enthusiastic. The remix still happens and does well (1 million streams), earning you $2,800 (vs $1,600 at 20%). You stood up for your value and got paid more fairly. Negotiation works when you're willing to find middle ground.",
+                    cash: 2800, fame: 10, wellBeing: 10, careerProgress: 10, hype: 25,
+                    lesson: {
+                        title: "Effective Negotiation Strategy",
+                        explanation: "Asking for middle ground shows you value yourself while respecting the other party's contribution. Most negotiations settle between initial positions. Starting high but being flexible gets you better deals than immediately accepting first offers.",
+                        realWorldExample: "Successful artists rarely accept first offers. They negotiate toward fair middle ground. The willingness to walk away (but preference to find agreement) gives you negotiating power.",
+                        tipForFuture: "Never accept the first offer without negotiating. Propose something higher but be willing to compromise. Most deals settle in the middle. Know your minimum acceptable terms before negotiating.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Demand 50% - it's your song",
+                outcome: {
+                    text: "You insist on 50/50. The DJ walks away, saying you don't understand the remix market. They remix another artist's song instead. That remix goes platinum while you watch from the sidelines. You held your ground on principle, but you lost a massive opportunity. Your lawyer apologizes - they should have advised 40% as realistic.",
+                    cash: 0, fame: 0, wellBeing: -15, careerProgress: -5, hype: 0,
+                    lesson: {
+                        title: "Overvaluation Risk",
+                        explanation: "Knowing your value is important, but overestimating it kills opportunities. In collaborations, both parties need to feel the split is fair. Rigid demands without market awareness leave you with nothing.",
+                        realWorldExample: "Artists who demand unrealistic splits often watch opportunities go to more flexible collaborators. Understanding market standards while negotiating upward is smarter than rigid demands.",
+                        tipForFuture: "Research market standards before negotiating. Ask for more than the initial offer, but don't price yourself out of opportunities. Flexibility is a negotiation tool, not weakness.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Music Video Sponsorship Offer",
+        description: "A local telecom company wants to sponsor your music video for $5,000. In exchange, their logo must appear for 3 seconds in the video and you must mention them in promotional posts. Your creative team says the logo will ruin the video's aesthetic. But $5,000 could fund a much better video than your $2,000 budget allows. Artistic integrity vs budget upgrade?",
+        conditions: { minFame: 22, minCareerProgress: 15, minCash: 3000 },
+        choices: [
+            {
+                text: "Accept the sponsorship - upgrade the video quality",
+                outcome: {
+                    text: "You accept the $5,000 and include their logo. The video looks incredible - professional cameras, lighting, locations. But comments focus on the sponsorship: 'Sellout!' The amazing quality gets overshadowed by the 3-second logo. Your fans feel like they're watching an ad, not art. The video underperforms despite its quality.",
+                    cash: 5000, fame: 5, wellBeing: -8, careerProgress: 4, hype: 10,
+                    lesson: {
+                        title: "Sponsorship Integration Challenges",
+                        explanation: "Visible sponsorships in creative content can undermine artistic credibility and audience connection. Even brief brand appearances can make audiences feel they're being sold to rather than experiencing art.",
+                        realWorldExample: "Many artists have struggled with balancing sponsorship money and artistic integrity. Audiences increasingly resent obvious brand integration, especially in music videos meant to be artistic expressions.",
+                        tipForFuture: "If you take sponsorships, integrate them subtly and organically. A logo slapped into art feels like a sellout. Consider behind-the-scenes sponsorships that fund content without appearing in it.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            },
+            {
+                text: "Decline - maintain creative control",
+                outcome: {
+                    text: "You turn down the $5,000 and make a $2,000 video. It's lower budget but creatively pure. Your fans love it for its authenticity and artistic vision. It goes more viral than your previous higher-budget videos because there's no corporate interference. Sometimes constraints force better creativity. Artistic integrity paid off.",
+                    cash: -2000, fame: 10, wellBeing: 15, careerProgress: 8, hype: 30,
+                    lesson: {
+                        title: "Creative Purity Value",
+                        explanation: "Audiences often connect more with authentic, lower-budget art than polished corporate content. Creative freedom and authenticity can be more valuable than production budget. Don't underestimate the power of artistic integrity.",
+                        realWorldExample: "Some of the most viral African music videos were low-budget but authentic. Videos like 'Ye' by Burna Boy succeeded on creativity and authenticity, not massive budgets.",
+                        tipForFuture: "Don't let lack of budget paralyze you. Great ideas beat big budgets. Maintain creative control and work within your means. Authenticity resonates more than polish.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Cross-Border Collaboration Complication",
+        description: "An artist from another African country wants to collaborate. You're Nigerian, they're Kenyan. Both your fan bases are excited. Problem: international money transfers are expensive and slow. They want to split production costs ($2,000 total) but transferring $1,000 to Kenya costs $180 in fees and takes 5 days via bank. Western Union is faster but costs $220. Crypto transfer costs $15 but neither of you have experience with it.",
+        conditions: { minFame: 25, minCash: 2500 },
+        choices: [
+            {
+                text: "Use bank transfer despite fees - traditional method",
+                outcome: {
+                    text: "You send $1,000 via bank, paying $180 in fees. It takes 5 days. The delay pushes back the recording session, costing momentum. After fees, you've spent $1,180 for your $1,000 share. Cross-border African collaboration is expensive thanks to colonial banking infrastructure that routes money through European banks. Frustrating but familiar.",
+                    cash: -1180, fame: 8, wellBeing: -10, careerProgress: 5, hype: 18,
+                    lesson: {
+                        title: "Intra-African Financial Infrastructure Failures",
+                        explanation: "Africa's financial infrastructure still routes most cross-border transactions through Western intermediaries, creating high fees and delays for African-to-African transactions. This colonial legacy makes pan-African collaboration expensive.",
+                        realWorldExample: "African artists pay 10-20% in fees for cross-border collaborations that would cost 1-2% in Western markets. This infrastructure barrier limits pan-African creative partnerships and reinforces regional silos.",
+                        tipForFuture: "Advocate for better intra-African payment systems. Consider mobile money, cryptocurrency, or in-person cash exchanges for collaborations when possible. The current system is extractive.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Try cryptocurrency - learn new tech",
+                outcome: {
+                    text: "You both learn to use USDC (stablecoin) and transfer money for just $15 in fees. It arrives in 10 minutes. The low fees and speed blow your minds. You've discovered a way around the extractive banking system. The learning curve was steep, but now you have a tool for all future international collaborations. Technology freed you from legacy systems.",
+                    cash: -1015, fame: 9, wellBeing: 5, careerProgress: 8, hype: 20,
+                    lesson: {
+                        title: "Financial Technology Liberation",
+                        explanation: "Cryptocurrency and blockchain technology can bypass exploitative legacy financial systems. While they have learning curves and risks, they offer African creators tools to collaborate globally without excessive fees or intermediaries.",
+                        realWorldExample: "Growing numbers of African artists use cryptocurrency for cross-border payments to avoid bank fees. This technological adoption is one way to route around colonial infrastructure that extracts wealth.",
+                        tipForFuture: "Invest time learning financial technologies that reduce dependency on extractive systems. Crypto, mobile money, and peer-to-peer platforms can save you thousands over your career.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Soundalike Accusation",
+        description: "A bigger artist's fans are accusing you of copying their style - similar beat patterns, vocal delivery, even similar ad-libs. The accusations are spreading on social media. Legally, you're fine (you can't copyright a style). But the court of public opinion is harsh. Do you address it, ignore it, or lean into it?",
+        conditions: { minFame: 20, minHype: 15 },
+        choices: [
+            {
+                text: "Address it publicly - defend your originality",
+                outcome: {
+                    text: "You post a statement defending your creativity and explaining your influences. The other artist's fans attack you harder, calling you defensive. You've amplified the controversy. More people now think you copied. Engaging with online controversies rarely works - you've made it worse. The internet remembers your 'defense' as an admission.",
+                    cash: 0, fame: -5, wellBeing: -15, careerProgress: -2, hype: -10,
+                    lesson: {
+                        title: "The Streisand Effect",
+                        explanation: "Publicly defending yourself against online accusations often amplifies the controversy. More people learn about the accusation through your defense than would have seen the original claim. Sometimes silence is the best response.",
+                        realWorldExample: "Many artists have made soundalike controversies worse by addressing them. The internet rarely rewards defensive explanations. Letting controversies die through silence often works better than feeding them with responses.",
+                        tipForFuture: "Most online controversies burn out in 48 hours if ignored. Responding extends their lifespan and legitimizes them. Only address accusations when silence would be interpreted as admission.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            },
+            {
+                text: "Ignore it completely - let your work speak",
+                outcome: {
+                    text: "You post nothing and keep releasing music. After a week, the controversy fades - people move on to new drama. Your fans defend you without prompting. Six months later, no one remembers the accusation. Your continued output of original work proved the claims wrong better than any statement could have. Silence won.",
+                    cash: 0, fame: 4, wellBeing: 10, careerProgress: 5, hype: 8,
+                    lesson: {
+                        title: "Strategic Silence",
+                        explanation: "Not every accusation deserves a response. Letting your body of work speak for itself is often more effective than defending yourself. Consistency over time beats any single explanation.",
+                        realWorldExample: "Most successful artists ignore soundalike accusations and let their evolving artistry prove their originality. The ones who engage defensively often damage themselves more than the accusations did.",
+                        tipForFuture: "When accused of copying, respond by creating more original work, not by writing defensive statements. Let your output be your defense.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            },
+            {
+                text: "Lean into it with humor - make it your brand",
+                outcome: {
+                    text: "You post: 'If I'm copying [Artist], I'm doing a great job because my version is also fire 🔥' The humor diffuses the tension. Both fanbases laugh. The other artist even reshares it with laughing emojis. What could have been beef becomes a funny moment. Sometimes acknowledging criticism with confidence disarms it. Humor and confidence beat defensiveness.",
+                    cash: 0, fame: 8, wellBeing: 10, careerProgress: 6, hype: 20,
+                    lesson: {
+                        title: "Confidence Diffuses Criticism",
+                        explanation: "Responding to criticism with humor and confidence shows you're comfortable with yourself. It disarms accusers and makes you likable. Self-assuredness is more attractive than defensiveness.",
+                        realWorldExample: "Artists who respond to criticism with humor and confidence often turn controversies into positive moments. Lil Nas X mastered this strategy, turning potential criticism into viral marketing through confident, humorous responses.",
+                        tipForFuture: "When criticized, consider whether humor and confidence could work better than silence or defense. Owning criticism with personality can flip it to your advantage.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Equipment Financing Trap",
+        description: "A music store offers you a 'rent-to-own' deal on production equipment (laptop, interface, mic) worth $3,000. Monthly payments of $200 for 24 months ($4,800 total - 60% markup). You need the equipment now but don't have $3,000 cash. Alternatively, you could buy used equipment for $1,500, but it's riskier and might break down. Or save for 8 months and buy new with cash.",
+        conditions: { minFame: 12, maxCash: 2000 },
+        choices: [
+            {
+                text: "Take the rent-to-own deal - start producing now",
+                outcome: {
+                    text: "You sign the contract and get the equipment immediately. You start producing music right away. But the $200 monthly payments are crushing. For two years, a huge chunk of every performance payment goes to this debt. You end up paying $4,800 for $3,000 of equipment - a $1,800 poverty tax. The convenience cost you dearly.",
+                    cash: -200, fame: 5, wellBeing: -10, careerProgress: 6, hype: 10,
+                    lesson: {
+                        title: "The Poverty Tax",
+                        explanation: "Rent-to-own and financing schemes marketed to low-income people charge massive markups (30-100%). Not having capital upfront forces you to pay far more over time. This is how poverty perpetuates itself - you pay more for everything.",
+                        realWorldExample: "Many African artists get trapped in equipment financing deals that cost 150-200% of retail price. The inability to pay cash upfront means paying massive premiums that set them further behind financially.",
+                        tipForFuture: "Avoid rent-to-own and high-interest financing whenever possible. The total cost is almost always predatory. Save, buy used, or find alternatives before accepting these terms.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Buy used equipment for $1,500 - accept risk",
+                outcome: {
+                    text: "You buy used gear. It works well for 6 months, then the mic breaks. You spend another $400 on repairs/replacement. Your total is now $1,900 - still less than new, but the downtime when equipment broke cost you recording opportunities. Used gear is cheaper but riskier. You've learned the hidden costs of 'cheap' options.",
+                    cash: -1900, fame: 4, wellBeing: -5, careerProgress: 4, hype: 8,
+                    lesson: {
+                        title: "Used Equipment Risk Calculation",
+                        explanation: "Used equipment costs less upfront but carries breakdown risks. When equipment fails, you lose both money (repairs) and time (missed opportunities). Balance initial savings against reliability needs for your workflow.",
+                        realWorldExample: "Many artists start with used equipment to save money. Some get lucky with reliable gear; others spend almost as much on repairs as new equipment would have cost. Factor in risk and opportunity cost.",
+                        tipForFuture: "Buy used equipment for non-critical items, new equipment for items you depend on daily. A used MIDI keyboard is fine; your main recording interface should be reliable. Prioritize reliability for essentials.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Wait 8 months, save, buy new with cash",
+                outcome: {
+                    text: "You wait and save $400/month. After 8 months, you buy the equipment outright for $3,000 cash. No debt, no interest. But during those 8 months, you couldn't produce much. You lost momentum and opportunities. You saved money but lost time - time you can't get back. The waiting game has its own costs.",
+                    cash: -3000, fame: 2, wellBeing: 5, careerProgress: 2, hype: -5,
+                    lesson: {
+                        title: "Opportunity Cost of Waiting",
+                        explanation: "Delaying investments to avoid debt saves money but costs time and opportunities. In creative careers where momentum matters, waiting can mean missed windows. Balance financial prudence with strategic timing.",
+                        realWorldExample: "Some artists wait too long to invest in essential equipment, missing their momentum windows. Others finance rashly and get trapped in debt. The right balance depends on your specific opportunity landscape.",
+                        tipForFuture: "Evaluate whether waiting to save money costs you more in lost opportunities than financing would cost in interest. Sometimes strategic debt is worth it; sometimes waiting is smarter. Calculate both sides.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
     }
 ];
 

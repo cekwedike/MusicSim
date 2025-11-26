@@ -455,8 +455,8 @@ function gameReducer(state: GameState, action: any): GameState {
                 });
             });
 
-            // Advance current date by random 3-7 days
-            const daysToAdvance = Math.floor(Math.random() * 5) + 3; // 3-7 days
+            // Advance current date by exactly 7 days (1 week)
+            const daysToAdvance = 7; // Fixed: Each scenario choice = exactly 1 week
             const newCurrentDate = new Date(state.currentDate);
             newCurrentDate.setDate(newCurrentDate.getDate() + daysToAdvance);
 
@@ -1089,7 +1089,9 @@ function gameReducer(state: GameState, action: any): GameState {
             };
         }
         case 'SAVE_PENDING_OFFER': {
-            const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+            // Use currentDate for consistent week calculation
+            const currentGameDate = toGameDate(state.currentDate, state.startDate);
+            const totalWeeks = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
             const labelName = state.currentLabelOffer?.name || 'Unknown Label';
             return {
                 ...state,

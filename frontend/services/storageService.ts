@@ -23,15 +23,48 @@ export const serializeGameState = (state: GameState): any => {
 };
 
 /**
+ * Migrate old label names to new names
+ */
+const migrateLabel = (label: any): any => {
+  if (!label) return label;
+  
+  // Migrate "Vinyl Heart Records" to "SIRYUS A.M Collective"
+  if (label.name === 'Vinyl Heart Records') {
+    return {
+      ...label,
+      name: 'SIRYUS A.M Collective'
+    };
+  }
+  
+  return label;
+};
+
+/**
  * Deserialize GameState from storage (convert ISO strings back to Dates)
  */
 export const deserializeGameState = (data: any): GameState => {
+  // Migrate old label names in currentLabel and currentLabelOffer
+  const migratedCurrentLabel = migrateLabel(data.currentLabel);
+  const migratedCurrentLabelOffer = migrateLabel(data.currentLabelOffer);
+  
+  // Migrate pendingContractOffer if it exists
+  let migratedPendingOffer = data.pendingContractOffer;
+  if (migratedPendingOffer?.label) {
+    migratedPendingOffer = {
+      ...migratedPendingOffer,
+      label: migrateLabel(migratedPendingOffer.label)
+    };
+  }
+  
   return {
     ...data,
     currentDate: data.currentDate ? new Date(data.currentDate) : new Date(),
     startDate: data.startDate ? new Date(data.startDate) : new Date(),
     lastStaffPaymentDate: data.lastStaffPaymentDate ? new Date(data.lastStaffPaymentDate) : new Date(),
     contractStartDate: data.contractStartDate ? new Date(data.contractStartDate) : null,
+    currentLabel: migratedCurrentLabel,
+    currentLabelOffer: migratedCurrentLabelOffer,
+    pendingContractOffer: migratedPendingOffer,
     staff: data.staff ? data.staff.map((s: any) => ({
       ...s,
       contractExpiresDate: s.contractExpiresDate ? new Date(s.contractExpiresDate) : new Date()

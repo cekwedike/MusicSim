@@ -134,6 +134,7 @@ export const scenarioBank: Scenario[] = [
         description: "A respected creative collective and indie label, 'SIRYUS A.M Collective', wants to sign you. They've sent over a contract for you to review. Should you examine their terms or hold out for something bigger?",
         conditions: {
             requiresContractEligibility: true, // Requires sustained 40/50/65 fame for 3 weeks (beginner/realistic/hardcore)
+            noLabelRequired: true, // Only appears if player doesn't have a label
             maxFame: 100 // Can appear anytime after eligibility is unlocked
         }, // Contract unlock requires sustained fame based on difficulty
         // audio: first record deal voiceover
@@ -175,7 +176,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Major Label Bidding War",
         description: "Your success has attracted the big sharks. Two major labels have sent contracts for you to review. 'Global Records' and 'Visionary Music Group' are both interested. Which contract should you examine first?",
-        conditions: { minFame: 60, minCareerProgress: 50, requiredAchievementId: 'PROJECT_ALBUM_1' },
+        conditions: { minFame: 60, minCareerProgress: 50, requiredAchievementId: 'PROJECT_ALBUM_1', noLabelRequired: true },
         // audio: contract signing / label negotiation (informational, don't autoplay by default)
         audioFile: '/audio/scenarios/contract-signing.m4a',
         autoPlayAudio: false,
@@ -230,7 +231,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The 360 Deal Temptation",
         description: "Empire Sound Entertainment is offering you a lucrative 360 deal. They want a piece of EVERYTHING - your music, tours, merch, even brand deals. But they're offering $100,000 upfront and full career support. Is it worth it?",
-        conditions: { minFame: 45, minCareerProgress: 40, maxFame: 75 },
+        conditions: { minFame: 45, minCareerProgress: 40, maxFame: 75, noLabelRequired: true },
         audioFile: '/audio/scenarios/contract-signing.m4a',
         autoPlayAudio: false,
         once: true,
@@ -269,7 +270,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "Distribution vs Full Label",
         description: "You're weighing options: sign with DistroFlow Digital for just distribution (you keep control and most money) or go with a traditional label for full support but less control. What's your priority?",
-        conditions: { minFame: 35, minCareerProgress: 25 },
+        conditions: { minFame: 35, minCareerProgress: 25, noLabelRequired: true },
         once: true,
         choices: [
             {
@@ -394,7 +395,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Social Media Controversy",
         description: "An old, embarrassing photo of you surfaces online and goes viral. The media is having a field day. How do you respond?",
         conditions: { minFame: 30 },
-        once: true, // This scenario should only happen once per career
         choices: [
             {
                 text: "Lean into it with humor and self-awareness.",
@@ -444,7 +444,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Sellout Opportunity",
         description: "A massive soda company wants to use your hit song in their next global advertising campaign. The payday is enormous, but many of your early fans will see it as the ultimate betrayal.",
         conditions: { minFame: 50, minHype: 40 },
-        once: true,
         choices: [
             {
                 text: "Take the money. This is a business.",
@@ -482,7 +481,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Boomplay Decision",
         description: "Boomplay, Africa's biggest streaming platform, offers to feature you on their 'New Fire' playlist reaching 5 million users. The exposure is massive across Nigeria, Ghana, and Kenya. However, they pay $0.003 per stream compared to Spotify's $0.004. Your manager insists you should focus on Spotify to build international credibility, but Boomplay is where your fans actually listen to music.",
         conditions: { minFame: 15, maxFame: 50 },
-        once: true,
         choices: [
             {
                 text: "Take the Boomplay feature - my audience is in Africa",
@@ -535,7 +533,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Language Choice",
         description: "You're in the studio recording your breakthrough single. The producer stops you mid-session. 'This Igbo verse is fire, but if you want radio play and playlist adds, you need to do it in English. The international market won't understand Igbo.' But you know your community connects most when you rap in your native language. This decision will define your identity.",
         conditions: { minFame: 10, maxFame: 40, projectRequired: true },
-        once: true,
         choices: [
             {
                 text: "Keep it in Igbo/Yoruba/Kinyarwanda - stay authentic",
@@ -585,7 +582,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Piracy Problem",
         description: "It's 3 AM. Your phone explodes with messages. Your unreleased album just leaked on Naijaloaded and Tooxclusive. Thousands are downloading it for free. Your release strategy is ruined. Your manager is furious. The label is threatening to drop you, claiming you leaked it for publicity. You need to act fast.",
         conditions: { minFame: 30, projectRequired: true },
-        once: true,
         choices: [
             {
                 text: "Officially release it immediately on all platforms",
@@ -635,7 +631,6 @@ export const scenarioBank: Scenario[] = [
         title: "The WhatsApp Producer",
         description: "A producer slides into your WhatsApp claiming he made beats for Davido and Burna Boy. He sends you a fire beat and wants $500 upfront, no contract, just trust. He promises exclusive rights and says he'll have the stems ready in 24 hours. But your friend warns you: 'Bro, I've seen this guy sell the same beat to five different artists.' The beat is perfect for your next single, but the red flags are everywhere.",
         conditions: { minFame: 8, maxCash: 2000, projectRequired: true },
-        once: true,
         // shady producer / warning audio — don't autoplay
         audioFile: '/audio/scenarios/shady-contract-warning.m4a',
         autoPlayAudio: false,
@@ -688,7 +683,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Diaspora Tour Opportunity",
         description: "African diaspora communities in London, Atlanta, and Toronto want to book you for a three-city tour. The shows could pay $15,000 total, and the exposure to international African communities could be huge. But visa applications cost $2,000, flights another $3,000, and there's no guarantee the visas will be approved in time. Your local promoter says: 'Why risk it? We can make that money with five local shows.'",
         conditions: { minFame: 35, minHype: 25 },
-        once: true,
         choices: [
             {
                 text: "Take the risk - international exposure is worth it",
@@ -738,7 +732,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Radio Payola Request",
         description: "A popular radio DJ pulls you aside after your interview. 'Your song is hot, but playlist rotation is competitive. If you can show some love to help with my studio rent... let's say $300... I can guarantee heavy rotation during prime time.' You know this happens everywhere, but it feels wrong. Other artists warn you that refusing means your song never gets played.",
         conditions: { minFame: 20, maxFame: 60 },
-        once: true,
         choices: [
             {
                 text: "Pay the $300 - radio play is essential",
@@ -787,8 +780,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Feature Request",
         description: "A well-known artist with 500K followers wants you on their next single. They offer 60/40 split in their favor and second billing: 'It's my song, but your verse could make it special.' Your manager insists you should demand 50/50 and co-headline billing. But this collaboration could expose you to their massive fanbase. How do you handle this negotiation?",
-        conditions: { minFame: 25, maxFame: 70 },
-        once: true,
+        conditions: { minFame: 25 },
         choices: [
             {
                 text: "Accept their terms - exposure is worth more than money",
@@ -838,7 +830,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Festival Circuit Choice",
         description: "You have two festival offers for the same weekend. Afronation in Ghana offers $8,000, international exposure, and industry networking with global labels. Felabration in Lagos offers $3,000, massive local love, and deeper connection with your home audience. Your international booking agent pushes hard for Afronation: 'This is how you break globally.' But your heart says Felabration.",
         conditions: { minFame: 40, minHype: 30 },
-        once: true,
         choices: [
             {
                 text: "Choose Afronation - go for international breakthrough",
@@ -1187,7 +1178,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The International Collaboration Offer",
         description: "A mid-level American R&B artist wants to collaborate on a song for their upcoming album. They offer to fly you to Atlanta, cover all expenses, and split the song 50/50. But they want to own the master recording and handle all distribution through their US label. Your manager warns: 'You'll get writing credits but no control. If this song blows up, you won't own any of the recording.' The exposure could be massive, but the terms feel one-sided.",
-        conditions: { minFame: 40, maxFame: 80 },
+        conditions: { minFame: 40 },
         once: true,
         choices: [
             {
@@ -1337,7 +1328,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Religious Music Crossover",
         description: "You've been making secular Afrobeats, but a major gospel label offers you $100,000 to record a Christian album. Your mother, a pastor, is thrilled: 'Finally, use your gifts for the Lord!' But your secular fans love your party music and club anthems. Your manager warns: 'Gospel doesn't stream like Afrobeats. You'll lose your core audience.' Yet the gospel market in Africa is massive and loyal. This decision could redefine your entire brand.",
-        conditions: { minFame: 30, maxFame: 70 },
+        conditions: { minFame: 30 },
         once: true,
         choices: [
             {
@@ -1437,7 +1428,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Language Barrier in Collaboration",
         description: "A huge French artist wants to collaborate with you for the European market. You only speak English and Yoruba fluently. They want lyrics in French, which you don't speak. They offer a translator and suggest you phonetically sing French lyrics you don't understand. Your Nigerian fans wonder why you're singing in French when you rep Yoruba pride. Your international team sees this as your European breakthrough. You could learn some French, but the song needs to be recorded this week.",
-        conditions: { minFame: 40, maxFame: 85 },
+        conditions: { minFame: 40 },
         once: true,
         choices: [
             {
@@ -1687,7 +1678,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Intergenerational Collaboration Offer",
         description: "A legendary African artist from your parents' generation - think someone like Angelique Kidjo, Youssou N'Dour, or Salif Keita level - wants to collaborate with you. They see you as the future and want to bridge generations. But they insist on recording in their traditional style, using only organic instruments, and singing partially in languages you don't speak fluently. Your Gen Z fans might not understand it. Your producer thinks it'll hurt your streaming numbers. But this is a once-in-a-lifetime honor from a living legend.",
-        conditions: { minFame: 40, maxFame: 80 },
+        conditions: { minFame: 40 },
         once: true,
         choices: [
             {
@@ -1779,6 +1770,289 @@ export const scenarioBank: Scenario[] = [
                         realWorldExample: "Many artists have had to learn the hard way that their perceived fame doesn't match their actual ticket-selling ability. These expensive lessons often lead to more sustainable touring strategies going forward.",
                         tipForFuture: "Build venue size gradually. Book venues you're certain you can sell out, then scale up slowly. Underselling and upgrading is better than overselling and embarrassing yourself.",
                         conceptTaught: "market-awareness"
+                    }
+                }
+            }
+        ]
+    },
+
+    // --- HIGH-FAME SCENARIOS (60-100 Fame) ---
+    // These scenarios provide endgame variety for established artists
+    {
+        title: "The Presidential State Dinner Invitation",
+        description: "You've received a formal invitation to perform at a presidential state dinner hosting foreign dignitaries. It's a 30-minute acoustic set at the presidential palace. The honor is immense, but the payment is symbolic ($2,000) and the rules are strict - no political statements, no controversial songs, and you must clear your setlist in advance. This is pure prestige.",
+        conditions: { minFame: 85, minCareerProgress: 70 },
+        choices: [
+            {
+                text: "Accept - this is a historic honor",
+                outcome: {
+                    text: "You perform at the presidential palace before heads of state. The photos of you shaking hands with the president circulate globally. Your status as a cultural ambassador is cemented. While the payment is negligible, the prestige opens doors to international opportunities you never imagined.",
+                    cash: 2000, fame: 8, wellBeing: 5, careerProgress: 10, hype: 30,
+                    lesson: {
+                        title: "Prestige as Currency",
+                        explanation: "At the highest levels of success, prestige and access become more valuable than direct payment. Being recognized as culturally significant by governments creates opportunities that money can't buy.",
+                        realWorldExample: "Artists like Angelique Kidjo and Youssou N'Dour have performed for presidents and at UN events. These appearances position them as cultural ambassadors, leading to UNESCO positions and international recognition beyond music.",
+                        tipForFuture: "When you're already established, some opportunities are about legacy and positioning, not money. Choose what elevates your cultural significance.",
+                        conceptTaught: "legacy-building"
+                    }
+                }
+            },
+            {
+                text: "Decline - I don't perform for politicians",
+                outcome: {
+                    text: "You respectfully decline, citing your preference to keep art separate from politics. Your core fans applaud your principles, though some mainstream media criticize you as ungrateful. You maintain your artistic independence but miss a once-in-a-lifetime prestige moment.",
+                    cash: 0, fame: -3, wellBeing: 10, careerProgress: 0, hype: -10,
+                    lesson: {
+                        title: "Principled Refusals at High Fame",
+                        explanation: "Even prestigious opportunities can be declined if they conflict with your values. At your level, you can afford to say no to things that don't align with your artistic identity.",
+                        realWorldExample: "Several prominent artists have declined White House invitations based on political disagreements. These refusals often enhance their credibility with their core audience while potentially limiting mainstream appeal.",
+                        tipForFuture: "When you're established, protecting your artistic identity matters more than any single opportunity. Your brand is more valuable than any one event.",
+                        conceptTaught: "values-vs-opportunity"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Billionaire's Private Island Performance",
+        description: "A tech billionaire offers you $250,000 to perform a 90-minute private concert at their island estate for 50 guests. It's a birthday party. The money is extraordinary, but the performance won't be public - no recording, no posting, complete privacy. Your team says this is 'easy money,' but some fans might see it as 'selling out to the rich.'",
+        conditions: { minFame: 70, minCareerProgress: 60 },
+        choices: [
+            {
+                text: "Take the money - $250k for one show is smart business",
+                outcome: {
+                    text: "You perform for an intimate crowd of wealthy guests at a stunning tropical estate. The pay is incredible, the setting is surreal, and the host treats you like royalty. You bank a quarter million for a single day's work. Word eventually leaks, and reactions are mixed - some fans think you've 'made it,' others grumble about inequality.",
+                    cash: 250000, fame: 2, wellBeing: 5, careerProgress: 3, hype: -5,
+                    lesson: {
+                        title: "Private Corporate vs Public Art",
+                        explanation: "At the top level, private performances for wealthy clients pay exponentially more than public shows. These gigs fund your ability to take creative risks elsewhere and provide financial security.",
+                        realWorldExample: "Major artists regularly do private corporate shows and billionaire events. Beyoncé, Coldplay, and others have earned millions from private performances. It's a standard revenue stream for established acts.",
+                        tipForFuture: "Private bookings are legitimate income streams. As long as they don't define your public image, they provide financial freedom to pursue artistic projects that don't pay as well.",
+                        conceptTaught: "diversified-income"
+                    }
+                }
+            },
+            {
+                text: "Decline - I perform for the people, not for private wealth",
+                outcome: {
+                    text: "You turn down the quarter million, stating you prefer performing for real fans. Your core audience loves your integrity, and the story becomes a talking point about your values. You miss out on massive money, but your reputation as an artist 'of the people' strengthens.",
+                    cash: 0, fame: 5, wellBeing: 15, careerProgress: 0, hype: 15,
+                    lesson: {
+                        title: "Values Over Wealth",
+                        explanation: "Even at the highest levels, some artists prioritize public connection over private wealth. Turning down large sums for private shows can actually enhance your brand if authenticity is core to your identity.",
+                        realWorldExample: "Some politically conscious artists refuse private bookings for billionaires and corporations, preferring to maintain their image as artists for everyday people. This stance strengthens their connection with working-class audiences.",
+                        tipForFuture: "Your brand is your most valuable asset. If your image depends on being accessible and anti-elite, private shows for billionaires can damage what makes you valuable to your audience.",
+                        conceptTaught: "brand-consistency"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The International Music Award Nomination",
+        description: "You've been nominated for a major international music award (think Grammy/MOBO/BET equivalent). Attending the ceremony requires flying to another continent, buying expensive formal attire, and covering $15,000 in expenses. Your chances of winning are maybe 20%. But the networking and visibility could be massive.",
+        conditions: { minFame: 75, minCareerProgress: 65 },
+        choices: [
+            {
+                text: "Attend - being nominated is an honor itself",
+                outcome: {
+                    text: "You attend the ceremony in your finest attire. You don't win, but you network with industry legends, take photos that circulate globally, and perform a 2-minute medley on the pre-show. The visibility and connections you make are worth more than the trophy would have been. Months later, a collaboration opportunity emerges from a connection you made that night.",
+                    cash: -15000, fame: 6, wellBeing: 0, careerProgress: 8, hype: 25,
+                    lesson: {
+                        title: "Awards as Networking Platforms",
+                        explanation: "Major award ceremonies are as much about networking and visibility as about winning. Simply being in the room with industry power players creates opportunities that can change your career trajectory.",
+                        realWorldExample: "Many African artists credit Grammy nominations (even without wins) as career-turning points. The visibility from attending and being nominated opened doors to international collaborations and tours.",
+                        tipForFuture: "At your level, invest in face time with industry decision-makers. Being present at elite events matters more than you think for future opportunities.",
+                        conceptTaught: "networking-investment"
+                    }
+                }
+            },
+            {
+                text: "Skip it - not worth $15k to maybe lose",
+                outcome: {
+                    text: "You watch the ceremony from home as someone else wins your category. You saved the money and avoided the stress, but you also missed a room full of industry titans. Some collaborators you could have met that night will never cross your path. The photos and connections others made that night could have been yours.",
+                    cash: 0, fame: 1, wellBeing: 5, careerProgress: -2, hype: -10,
+                    lesson: {
+                        title: "The Cost of Not Showing Up",
+                        explanation: "In the music industry, being present at key moments creates serendipitous opportunities that can't be planned. Missing major events means missing chance encounters that could have changed your trajectory.",
+                        realWorldExample: "Many artists regret not attending ceremonies where they could have networked with legends. Random conversations at these events often lead to career-changing collaborations.",
+                        tipForFuture: "When you're at this level, invest in being where the industry gatekeepers are. The $15k could return 10x through connections made in one night.",
+                        conceptTaught: "opportunity-cost"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Elite Industry Gala",
+        description: "You're invited to an exclusive industry gala where record executives, producers, and A-list artists mingle. Entry requires donating $10,000 to a music education charity. It's expensive, but everyone who matters will be there. Your manager says 'This is where deals happen in side conversations.'",
+        conditions: { minFame: 70, minCash: 20000 },
+        choices: [
+            {
+                text: "Attend and network aggressively",
+                outcome: {
+                    text: "You work the room strategically, exchanging contacts with producers and executives. A legendary producer mentions they're looking for African artists for a new project. You exchange numbers. Two months later, they call. The $10,000 donation becomes the best investment you ever made. Plus, you supported music education.",
+                    cash: -10000, fame: 4, wellBeing: -5, careerProgress: 10, hype: 20,
+                    lesson: {
+                        title: "Strategic Access Investment",
+                        explanation: "At the highest levels, access to decision-makers costs money. Elite events with high entry barriers ensure only serious players attend, making them ideal for meaningful connections.",
+                        realWorldExample: "Industry galas and exclusive events have launched countless collaborations. Being in rooms with power players creates opportunities that can't happen through normal channels.",
+                        tipForFuture: "When you're established, invest in access. The right conversation at an elite event can generate more value than a year of regular networking.",
+                        conceptTaught: "access-economics"
+                    }
+                }
+            },
+            {
+                text: "Skip it - $10k for networking seems excessive",
+                outcome: {
+                    text: "You skip the gala. A week later, you hear that a major collaboration was born there between two artists at your level. You wonder what conversations you missed. The $10,000 you saved stays in your account, but the potential connections remain unmade.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: -5,
+                    lesson: {
+                        title: "Opportunity Windows",
+                        explanation: "Some networking opportunities are one-time events. Missing them means missing specific conversations and connections that will never happen again.",
+                        realWorldExample: "Industry veterans often talk about key moments - one conversation, one introduction - that changed everything. These moments usually happen at events you have to intentionally attend.",
+                        tipForFuture: "Evaluate if saving money now means losing potential future income. Sometimes the most expensive choice is not spending when you should.",
+                        conceptTaught: "investment-mindset"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Documentary Opportunity",
+        description: "A major streaming platform wants to make an intimate documentary about your rise to fame. They'll follow you for 3 months, film studio sessions, and interview your family. They're offering $100,000 for exclusive access. The exposure would be massive, but they'll see everything - your struggles, your doubts, your creative process. Are you ready to be that vulnerable?",
+        conditions: { minFame: 80, minCareerProgress: 70 },
+        choices: [
+            {
+                text: "Do it - full transparency builds deeper connection",
+                outcome: {
+                    text: "The documentary crew follows you through triumphs and breakdowns. When it airs, millions watch you at your most vulnerable. Some critics say you're brave, others say you overshared. But your existing fans feel closer to you than ever, and your story inspires aspiring artists worldwide. The $100k is nice, but the legacy impact is priceless.",
+                    cash: 100000, fame: 12, wellBeing: -10, careerProgress: 15, hype: 40,
+                    lesson: {
+                        title: "Vulnerability as Connection",
+                        explanation: "At the highest level of fame, showing vulnerability can deepen fan loyalty more than polished perfection. Documentaries that show real struggles create emotional connections that last.",
+                        realWorldExample: "Documentaries like 'Homecoming' (Beyoncé) and 'Miss Americana' (Taylor Swift) showed vulnerability that enhanced their brands. Fans appreciate seeing the human behind the success.",
+                        tipForFuture: "When you're secure in your success, strategic vulnerability can strengthen your connection with fans and inspire others. Authenticity sells at every level.",
+                        conceptTaught: "authentic-branding"
+                    }
+                }
+            },
+            {
+                text: "Decline - I want to protect my privacy",
+                outcome: {
+                    text: "You turn down the documentary, preferring to keep your creative process and personal life private. The filmmakers make a documentary about a different artist instead. You maintain your mystique, but you also miss a chance to control your own narrative and inspire others with your story.",
+                    cash: 0, fame: -2, wellBeing: 10, careerProgress: 0, hype: -10,
+                    lesson: {
+                        title: "Mystique vs Transparency Trade-off",
+                        explanation: "Some artists build brands on mystique and privacy. This can work, but it means others will control your narrative. Declining to tell your own story leaves space for others to tell it inaccurately.",
+                        realWorldExample: "Artists who avoid documentaries and deep profiles often find unauthorized biographies and inaccurate media narratives fill the void. When you don't tell your story, others will - often incorrectly.",
+                        tipForFuture: "Consider that declining to share your story doesn't mean no story gets told. It just means you won't control the narrative.",
+                        conceptTaught: "narrative-control"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Cross-Continental Festival Tour",
+        description: "A major promoter offers you a 8-week, 15-show tour across Africa, Europe, and North America - all major festivals. The payment is $500,000 total, but it's grueling: different city every 3 days, constant travel, living on tour buses. Your family worries about burnout. Your manager says 'This is the dream - take it while you can.'",
+        conditions: { minFame: 75, minCareerProgress: 65, minWellBeing: 50 },
+        choices: [
+            {
+                text: "Do the full tour - this is what I've worked for",
+                outcome: {
+                    text: "You spend 8 weeks on the road, performing to massive festival crowds across continents. The money is life-changing. You're exhausted to your core, but you've performed for hundreds of thousands of people. Your global profile expands massively. When you finally come home, you sleep for three days straight. Was it worth it? Yes. But you can't do this often.",
+                    cash: 500000, fame: 15, wellBeing: -35, careerProgress: 20, hype: 50,
+                    lesson: {
+                        title: "Peak Career Intensity",
+                        explanation: "At the top of your career, opportunities come that require extreme sacrifice. These intense periods can generate wealth and exposure that set you up for years, but they're not sustainable long-term.",
+                        realWorldExample: "Many top artists have done brutal touring schedules during their peak years. These tours generate financial security that allows them to be more selective later. But they often cite these periods as nearly breaking them.",
+                        tipForFuture: "When peak opportunities come, consider taking them knowing they're temporary. Bank the money and exposure, then recover. Just don't make this your permanent lifestyle.",
+                        conceptTaught: "strategic-intensity"
+                    }
+                }
+            },
+            {
+                text: "Negotiate a shorter tour - cut it to 4 weeks/8 shows",
+                outcome: {
+                    text: "You negotiate down to 4 weeks and 8 shows for $280,000. The promoter isn't thrilled, but agrees. The tour is still intense, but manageable. You come home tired but not destroyed. Your global reach expands significantly, and you preserved your health. Sometimes half the opportunity is still more than most artists ever get.",
+                    cash: 280000, fame: 10, wellBeing: -15, careerProgress: 12, hype: 30,
+                    lesson: {
+                        title: "Sustainable Success Negotiation",
+                        explanation: "You don't have to take every opportunity exactly as offered. Negotiating for sustainability often works, especially when you're in demand. Half of a massive opportunity is still massive.",
+                        realWorldExample: "Successful artists learn to negotiate tour lengths and intensity. Many have shortened offered tours to protect their health while still capitalizing on opportunities. Promoters often agree because they want you more than you need them.",
+                        tipForFuture: "When you're in demand, you have negotiating power. Use it to protect your wellbeing while still capitalizing on opportunities. Sustainable success beats burnout.",
+                        conceptTaught: "power-negotiation"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Masterclass Teaching Opportunity",
+        description: "A prestigious music academy wants you to teach a 6-week masterclass series for emerging artists. Pay is $80,000, but it requires 2 days per week commitment. Some artists at your level see teaching as 'career decline,' others see it as legacy-building. Your former mentor says 'The greatest artists teach. Don't be too proud.'",
+        conditions: { minFame: 70, minCareerProgress: 65 },
+        choices: [
+            {
+                text: "Accept - teaching is how I give back",
+                outcome: {
+                    text: "You spend 6 weeks teaching emerging artists. It's humbling and energizing. Their questions force you to articulate things you do instinctively. Three students go on to have breakthrough moments, crediting your mentorship. You've become part of their origin story. The $80k is good, but the legacy impact feels better.",
+                    cash: 80000, fame: 5, wellBeing: 15, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Teaching as Legacy",
+                        explanation: "At the highest levels, teaching isn't about needing money - it's about shaping the next generation. Great artists become greater when they mentor others. Your knowledge has value beyond just your own performances.",
+                        realWorldExample: "Quincy Jones, Hans Zimmer, and other legends teach masterclasses. This enhances their legacy and ensures their knowledge lives beyond them. Students carry forward their wisdom.",
+                        tipForFuture: "When you've achieved success, sharing knowledge elevates you further. Teaching forces you to refine your own understanding and builds goodwill in the industry.",
+                        conceptTaught: "legacy-mentorship"
+                    }
+                }
+            },
+            {
+                text: "Decline - I'm at my peak, this is performing time",
+                outcome: {
+                    text: "You decline, saying you're focused on your own career right now. The academy understands but is disappointed. You continue performing and creating. Years later, you wonder if you missed a chance to impact the next generation when you had the time and credibility to do so.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    lesson: {
+                        title: "Opportunity Windows for Impact",
+                        explanation: "Legacy-building opportunities come at specific moments in your career. Declining them isn't wrong, but recognize they might not come again. Teaching requires credibility you have now but might not always have.",
+                        realWorldExample: "Some artists regret not mentoring when they were at their peak credibility. Later in careers, teaching opportunities are still available but carry less weight because students want to learn from artists in their prime.",
+                        tipForFuture: "Consider that your time, energy, and credibility are at their peak now. Legacy opportunities taken now have more impact than the same opportunities taken later.",
+                        conceptTaught: "timing-awareness"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Controversial Political Endorsement Request",
+        description: "A major political party asks you to publicly endorse their presidential candidate and perform at a rally. They're offering $150,000 and promising your issues (arts funding, youth programs) will be campaign priorities. But endorsing will alienate roughly half your fanbase who oppose this party. Your team is divided on whether it's worth it.",
+        conditions: { minFame: 80, minCareerProgress: 70 },
+        choices: [
+            {
+                text: "Endorse - use my platform for issues I believe in",
+                outcome: {
+                    text: "You publicly endorse the candidate and perform at the rally. Your core political allies celebrate you, but roughly 40% of your fanbase is furious. You lose significant followers on social media. The $150k is immediate, but your streaming numbers drop 15% for months. Your political allies defend you, but your brand is now politically coded. You've used your platform for your beliefs, but it cost you commercial reach.",
+                    cash: 150000, fame: -8, wellBeing: -20, careerProgress: 5, hype: -25,
+                    lesson: {
+                        title: "Political Positioning Trade-offs",
+                        explanation: "Political endorsements can advance causes you believe in, but they fundamentally narrow your commercial appeal. At high fame levels, taking political stances means accepting you'll lose some audience to gain deeper connection with those who remain.",
+                        realWorldExample: "Artists like John Legend and Common have taken strong political stances. They've gained respect and influence in certain circles but narrowed their commercial appeal. This is a conscious trade-off of broad reach for deep alignment.",
+                        tipForFuture: "Political stances are legitimate uses of your platform, but understand they're business decisions too. You're trading some commercial reach for ideological consistency. Make sure the trade is worth it to you.",
+                        conceptTaught: "platform-responsibility"
+                    }
+                }
+            },
+            {
+                text: "Stay neutral - my music is for everyone",
+                outcome: {
+                    text: "You politely decline, saying you prefer to keep your music separate from politics. Both sides criticize you - one for not standing up for what's right, the other for being cowardly. But your fanbase remains intact. You've maintained commercial neutrality, but some politically engaged fans see you as taking the easy road. Your music remains accessible to everyone, but some question your courage.",
+                    cash: 0, fame: -2, wellBeing: 5, careerProgress: 0, hype: -5,
+                    lesson: {
+                        title: "Neutrality as Strategy",
+                        explanation: "Staying politically neutral preserves commercial reach but can be seen as avoiding responsibility. At your level of influence, some people expect you to use your platform for change. Neutrality is a choice too - and it has consequences.",
+                        realWorldExample: "Many massive artists (like Taylor Swift early in her career) remained politically neutral to preserve commercial appeal. This worked commercially but drew criticism from those who wanted them to speak out.",
+                        tipForFuture: "Neutrality isn't 'no choice' - it's choosing commercial reach over political positioning. Both stances have costs and benefits. Neither is objectively right.",
+                        conceptTaught: "strategic-neutrality"
                     }
                 }
             }

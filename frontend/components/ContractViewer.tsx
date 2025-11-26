@@ -5,9 +5,10 @@ interface ContractViewerProps {
   label: RecordLabel;
   onSign: () => void;
   onDecline: () => void;
+  onReviewLater?: () => void; // Optional: only shown when reviewing pending offer
 }
 
-export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, onDecline }) => {
+export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, onDecline, onReviewLater }) => {
   const [showCalculator, setShowCalculator] = useState(false);
   const [expectedStreams, setExpectedStreams] = useState(100000);
 
@@ -331,6 +332,14 @@ export const ContractViewer: React.FC<ContractViewerProps> = ({ label, onSign, o
             >
               Walk Away
             </button>
+            {onReviewLater && (
+              <button
+                onClick={onReviewLater}
+                className="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-all duration-200"
+              >
+                Decide Later
+              </button>
+            )}
           </section>
         </div>
       </div>

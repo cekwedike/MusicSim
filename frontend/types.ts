@@ -426,6 +426,7 @@ export interface ScenarioConditions {
   requiresStaff?: StaffRole[]; // Must have these staff roles
   missingStaff?: StaffRole[]; // Must NOT have these staff roles
   requiresContractEligibility?: boolean; // Requires sustained fame threshold to be unlocked
+  noLabelRequired?: boolean; // True if player must NOT have a current label (for contract offer scenarios)
 }
 
 export interface Scenario {

@@ -37,7 +37,7 @@ const LearningHub = lazy(() => import('./components/LearningHub'));
 const LearningPanel = lazy(() => import('./components/LearningPanel'));
 const ModuleViewer = lazy(() => import('./components/ModuleViewer'));
 // ContractViewer exports a named component; map it to `default` for React.lazy typing
-const ContractViewer = lazy(() => import('./components/ContractViewer').then(mod => ({ default: (mod as any).ContractViewer }))) as React.LazyExoticComponent<React.ComponentType<{ label: RecordLabel; onSign: () => void; onDecline: () => void }>>;
+const ContractViewer = lazy(() => import('./components/ContractViewer').then(mod => ({ default: (mod as any).ContractViewer }))) as React.LazyExoticComponent<React.ComponentType<{ label: RecordLabel; onSign: () => void; onDecline: () => void; onReviewLater?: () => void }>>;
 const SignedContractViewer = lazy(() => import('./components/SignedContractViewer'));
 import ManagementPanel from './components/ManagementPanel';
 import StatisticsPanel from './components/StatisticsPanel';
@@ -2735,6 +2735,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         label={state.currentLabelOffer}
                         onSign={handleSignContract}
                         onDecline={handleDeclineContract}
+                        onReviewLater={state.pendingContractOffer ? handleCloseModal : undefined}
                     />
                 </Suspense>
             )}

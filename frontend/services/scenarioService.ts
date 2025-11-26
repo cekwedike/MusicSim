@@ -12,12 +12,12 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
         return true; // No conditions, always available
     }
 
-    const { playerStats, artistGenre, achievements, currentProject, staff, difficulty, contractEligibilityUnlocked } = state;
+    const { playerStats, artistGenre, achievements, currentProject, staff, difficulty, contractEligibilityUnlocked, currentLabel } = state;
     const {
         minFame, maxFame, minFameByDifficulty, minCash, maxCash, minWellBeing, maxWellBeing,
         requiredGenre, minCareerProgress, minHype, maxHype,
         requiredAchievementId, projectRequired, noProjectRequired,
-        requiresStaff, missingStaff, requiresContractEligibility
+        requiresStaff, missingStaff, requiresContractEligibility, noLabelRequired
     } = scenario.conditions;
 
     // Check difficulty-based fame requirement (overrides minFame if present)
@@ -60,6 +60,9 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
     // Check contract eligibility (sustained fame threshold)
     if (requiresContractEligibility && !contractEligibilityUnlocked) return false;
 
+    // Check if scenario requires player to not have a label (for contract offers)
+    if (noLabelRequired && currentLabel) return false;
+
     return true;
 };
 
@@ -73,12 +76,19 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
 const getScenarioWeight = (scenario: Scenario, usedScenarioTitles: string[]): number => {
     const titleIndex = usedScenarioTitles.lastIndexOf(scenario.title);
 
-    // Special handling for "An Uneventful Week" - make it much less likely
+    // Special handling for fallback scenarios - make them EXTREMELY unlikely
     if (scenario.title === "An Uneventful Week") {
         // Count how many times it's appeared
         const count = usedScenarioTitles.filter(t => t === "An Uneventful Week").length;
-        // Each appearance makes it less likely: 0.3, 0.15, 0.05, etc.
-        return Math.max(0.02, 0.3 / (count + 1));
+        // Make it exponentially less likely each time: 0.05, 0.01, 0.002, etc.
+        return Math.max(0.001, 0.05 / Math.pow(count + 1, 2));
+    }
+
+    // Make early-game scenarios less likely to repeat
+    if (scenario.title === "The Open Mic Night") {
+        const count = usedScenarioTitles.filter(t => t === "The Open Mic Night").length;
+        // Reduce weight significantly after first appearance
+        return Math.max(0.1, 0.5 / (count + 1));
     }
 
     // Note: Contract Renewal scenario has been disabled in scenarioBank.ts

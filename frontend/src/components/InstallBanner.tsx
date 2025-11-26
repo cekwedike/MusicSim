@@ -10,17 +10,44 @@ const DISMISS_KEY = 'musicsim_install_banner_dismissed';
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 // Detect browser types
-const getBrowserType = (): 'safari' | 'firefox' | 'chromium' | 'unknown' => {
+const getBrowserType = (): 'safari' | 'firefox' | 'chromium' | 'opera-desktop' | 'arc' | 'unsupported' | 'unknown' => {
   const ua = navigator.userAgent;
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
   const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
   const isFirefox = /Firefox/i.test(ua);
-  const isChromium = /Chrome|Chromium|Edg|OPR/i.test(ua);
+  const isOperaDesktop = /OPR|Opera/i.test(ua) && !/Android|Mobile/i.test(ua);
+  const isArc = /Arc/i.test(ua);
+  const isChromium = /Chrome|Chromium|Edg/i.test(ua);
 
   if (isIOS || isSafari) return 'safari';
   if (isFirefox) return 'firefox';
+  if (isOperaDesktop) return 'opera-desktop';
+  if (isArc) return 'arc';
   if (isChromium) return 'chromium';
   return 'unknown';
+};
+
+// Check if browser supports PWA installation
+const browserSupportsPWA = (): boolean => {
+  const browserType = getBrowserType();
+  const ua = navigator.userAgent;
+  const isAndroid = /Android/i.test(ua);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
+  
+  // Desktop browsers that DON'T support PWA
+  if (browserType === 'opera-desktop') return false;
+  if (browserType === 'arc') return false;
+  if (browserType === 'firefox' && !isAndroid) return false; // Firefox desktop doesn't support PWA
+  
+  // Mobile browsers that DO support PWA
+  if (isAndroid || isIOS) return true;
+  
+  // Desktop browsers that DO support PWA
+  if (browserType === 'chromium') return true; // Chrome, Edge, Brave
+  if (browserType === 'safari') return true; // Safari on macOS
+  
+  // Unknown browsers - assume no support to avoid showing banner incorrectly
+  return false;
 };
 
 const isSafariOrIOS = (): boolean => {
@@ -154,6 +181,12 @@ const InstallBanner: React.FC = () => {
       const url_forced = new URLSearchParams(window.location.search).get('showInstall') === '1';
       const forced = localStorage_forced || url_forced;
 
+      // Check if browser supports PWA installation
+      if (!browserSupportsPWA() && !forced) {
+        setVisible(false);
+        return;
+      }
+
       // Check if app is installed (robust check)
       const installed = await isAppInstalled();
       if (installed && !unmounted) {
@@ -165,9 +198,9 @@ const InstallBanner: React.FC = () => {
       const dismissed = await isBannerDismissed();
 
       // Show if forced (for testing) or if banner is not dismissed
-      // For Safari/iOS and Firefox, always show banner if not dismissed (they don't have beforeinstallprompt)
+      // For Safari/iOS and Firefox mobile, always show banner if not dismissed (they don't have beforeinstallprompt)
       const browserType = getBrowserType();
-      const needsManualInstall = browserType === 'safari' || browserType === 'firefox';
+      const needsManualInstall = browserType === 'safari' || (browserType === 'firefox' && /Android/i.test(navigator.userAgent));
       if ((forced || !dismissed || needsManualInstall) && !unmounted) {
         setVisible(true);
       } else {
@@ -197,8 +230,9 @@ const InstallBanner: React.FC = () => {
 
     if (isInstalling) return; // Prevent double-clicks
 
-    // For Safari/iOS and Firefox, show instructions instead of trying to install
-    if ((browserType === 'safari' || browserType === 'firefox') && !deferredPrompt) {
+    // For Safari/iOS and Firefox mobile, show instructions instead of trying to install
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    if (((browserType === 'safari' || (browserType === 'firefox' && isAndroid))) && !deferredPrompt) {
       setShowInstructions(!showInstructions);
       return;
     }
@@ -300,7 +334,7 @@ const InstallBanner: React.FC = () => {
               className={`musicsim-install-banner-button flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-red-500 to-rose-500 text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 rounded-lg shadow-md hover:scale-105 transform transition-transform touch-manipulation ${isInstalling ? 'opacity-50 cursor-not-allowed' : ''}`}
               aria-label="Install MusicSim"
             >
-              {(browserType === 'safari' || browserType === 'firefox') && !deferredPrompt ? (
+              {((browserType === 'safari' || (browserType === 'firefox' && /Android/i.test(navigator.userAgent)))) && !deferredPrompt ? (
                 <>
                   <Share2 className="w-4 h-4" />
                   <span className="hidden sm:inline">How to Install</span>
@@ -337,19 +371,14 @@ const InstallBanner: React.FC = () => {
                 </ol>
               </>
             )}
-            {browserType === 'firefox' && (
+            {browserType === 'firefox' && /Android/i.test(navigator.userAgent) && (
               <>
-                <div className="text-sm font-semibold mb-2">To install on Firefox:</div>
-                <div className="text-xs space-y-1.5">
-                  <p><strong>On Android:</strong></p>
-                  <ol className="list-decimal list-inside ml-2 space-y-1">
-                    <li>Tap the three dots menu (⋮) at the top</li>
-                    <li>Tap <strong>"Install"</strong> or <strong>"Add to Home Screen"</strong></li>
-                    <li>Confirm by tapping <strong>"Add"</strong></li>
-                  </ol>
-                  <p className="mt-2"><strong>On Desktop:</strong></p>
-                  <p className="ml-2">Firefox desktop doesn't support PWA installation. Please use Chrome, Edge, or Opera.</p>
-                </div>
+                <div className="text-sm font-semibold mb-2">To install on Firefox (Android):</div>
+                <ol className="text-xs space-y-1.5 list-decimal list-inside">
+                  <li>Tap the three dots menu (⋮) at the top</li>
+                  <li>Tap <strong>"Install"</strong> or <strong>"Add to Home Screen"</strong></li>
+                  <li>Confirm by tapping <strong>"Add"</strong></li>
+                </ol>
               </>
             )}
           </div>

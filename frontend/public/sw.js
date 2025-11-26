@@ -80,6 +80,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip audio/video files - they use range requests (206) which can't be cached
+  if (url.pathname.match(/\.(mp3|wav|ogg|mp4|webm|m4a)$/)) {
+    return; // Let browser handle these normally
+  }
+
   // Network first for HTML/documents to avoid blank page on updates
   if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(
@@ -141,7 +146,8 @@ self.addEventListener('fetch', (event) => {
         if (cachedResponse) {
           // Update cache in background
           fetch(request).then((response) => {
-            if (response.ok) {
+            // Only cache full responses (status 200), not partial (206)
+            if (response.ok && response.status === 200) {
               caches.open(CACHE_NAME).then((cache) => {
                 cache.put(request, response);
               });
@@ -153,7 +159,8 @@ self.addEventListener('fetch', (event) => {
         }
 
         return fetch(request).then((response) => {
-          if (response.ok) {
+          // Only cache full responses (status 200), not partial (206)
+          if (response.ok && response.status === 200) {
             const responseToCache = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(request, responseToCache);
@@ -170,7 +177,8 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(request)
       .then((response) => {
-        if (response.ok) {
+        // Only cache full responses (status 200), not partial (206)
+        if (response.ok && response.status === 200) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(request, responseClone);

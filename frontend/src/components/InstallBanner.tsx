@@ -16,8 +16,16 @@ const getBrowserType = (): 'safari' | 'firefox' | 'chromium' | 'opera-desktop' |
   const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
   const isFirefox = /Firefox/i.test(ua);
   const isOperaDesktop = /OPR|Opera/i.test(ua) && !/Android|Mobile/i.test(ua);
-  const isArc = /Arc/i.test(ua);
-  const isChromium = /Chrome|Chromium|Edg/i.test(ua);
+  
+  // Arc browser detection - Arc doesn't modify user agent but we can check for Arc-specific APIs
+  // Arc is Chromium-based but doesn't support PWA installation
+  const isArc = typeof (window as any).arc !== 'undefined' || 
+                /Arc/i.test(ua) ||
+                (navigator.vendor === 'Google Inc.' && 
+                 /Chrome/i.test(ua) && 
+                 !('getInstalledRelatedApps' in navigator)); // Arc strips some PWA APIs
+  
+  const isChromium = /Chrome|Chromium|Edg/i.test(ua) && !isOperaDesktop;
 
   if (isIOS || isSafari) return 'safari';
   if (isFirefox) return 'firefox';
@@ -38,6 +46,16 @@ const browserSupportsPWA = (): boolean => {
   if (browserType === 'opera-desktop') return false;
   if (browserType === 'arc') return false;
   if (browserType === 'firefox' && !isAndroid) return false; // Firefox desktop doesn't support PWA
+  
+  // Additional check: if browser doesn't support beforeinstallprompt API and isn't mobile, likely doesn't support PWA
+  // This catches browsers like Arc that strip PWA APIs
+  if (!isAndroid && !isIOS) {
+    const hasBeforeInstallPrompt = 'onbeforeinstallprompt' in window;
+    if (!hasBeforeInstallPrompt && browserType !== 'safari') {
+      // Desktop Safari doesn't have beforeinstallprompt but still supports PWA
+      return false;
+    }
+  }
   
   // Mobile browsers that DO support PWA
   if (isAndroid || isIOS) return true;

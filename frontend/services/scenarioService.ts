@@ -84,8 +84,8 @@ const getScenarioWeight = (scenario: Scenario, usedScenarioTitles: string[]): nu
     // Make early-game scenarios less likely to repeat
     if (scenario.title === "The Open Mic Night") {
         const count = usedScenarioTitles.filter(t => t === "The Open Mic Night").length;
-        // Reduce weight significantly after first appearance
-        return Math.max(0.1, 0.5 / (count + 1));
+        // Reduce weight dramatically after each appearance
+        return Math.max(0.01, 0.3 / Math.pow(count + 1, 2));
     }
 
     // Note: Contract Renewal scenario has been disabled in scenarioBank.ts
@@ -161,7 +161,8 @@ export const getNewScenario = (state: GameState): Scenario => {
     const fittingScenarios = availableScenarios.filter(s => checkConditions(s, state));
 
     // FORCE contract scenarios if eligible but hasn't seen one recently
-    if (contractEligibilityUnlocked && !state.currentLabel) {
+    // Only force if player doesn't have a label AND no pending offers
+    if (contractEligibilityUnlocked && !state.currentLabel && state.pendingContractOffers.length === 0) {
         // Check if player has seen a contract scenario in last 5 scenarios (more aggressive)
         const recent5 = usedScenarioTitles.slice(-5);
         const hasRecentContract = recent5.some(title =>

@@ -2,7 +2,7 @@ import React from 'react';
 import type { PendingContractOffer } from '../types';
 
 interface OffersModalProps {
-    pendingOffer: PendingContractOffer;
+    pendingOffers: PendingContractOffer[];
     currentWeek: number;
     onViewContract: () => void;
     onDecline: () => void;
@@ -10,12 +10,16 @@ interface OffersModalProps {
 }
 
 const OffersModal: React.FC<OffersModalProps> = ({
-    pendingOffer,
+    pendingOffers,
     currentWeek,
     onViewContract,
     onDecline,
     onClose
 }) => {
+    // Show the first offer (oldest)
+    const pendingOffer = pendingOffers[0];
+    if (!pendingOffer) return null;
+    
     const weeksRemaining = Math.max(0, pendingOffer.expiresWeek - currentWeek);
     const isExpiringSoon = weeksRemaining <= 4;
     const isExpired = weeksRemaining === 0;
@@ -24,7 +28,9 @@ const OffersModal: React.FC<OffersModalProps> = ({
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
             <div className="bg-[#2D1115] border border-gray-700 rounded-xl shadow-2xl p-6 w-full max-w-md">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-red-300">Pending Contract Offer</h2>
+                    <h2 className="text-xl font-bold text-red-300">
+                        {pendingOffers.length > 1 ? `Pending Offers (${pendingOffers.length})` : 'Pending Contract Offer'}
+                    </h2>
                     <button
                         onClick={onClose}
                         className="text-gray-400 hover:text-white text-2xl leading-none"
@@ -32,6 +38,14 @@ const OffersModal: React.FC<OffersModalProps> = ({
                         ×
                     </button>
                 </div>
+
+                {pendingOffers.length > 1 && (
+                    <div className="bg-blue-900/30 border border-blue-700 rounded-lg p-3 mb-4">
+                        <p className="text-xs text-blue-300">
+                            You have {pendingOffers.length} contract offers. Reviewing the oldest offer first.
+                        </p>
+                    </div>
+                )}
 
                 <div className="bg-[#3D1820]/50 rounded-lg p-4 mb-4">
                     <div className="flex items-center justify-between mb-3">

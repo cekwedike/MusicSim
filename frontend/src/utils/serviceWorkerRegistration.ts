@@ -75,29 +75,80 @@ export function registerServiceWorker(onUpdateAvailable?: UpdateCallback) {
       .then((registration) => {
         console.log('SW registered:', registration);
 
-        // Check for updates every 30 minutes (more frequent for better mobile experience)
-        setInterval(() => {
-          registration.update();
-        }, 30 * 60 * 1000);
+        // Function to check for updates
+        const checkForUpdates = () => {
+          console.log('[SW] Manually checking for updates...');
+          registration.update().catch((err) => {
+            console.warn('[SW] Update check failed:', err);
+          });
+        };
 
-        // Also check for updates when page becomes visible again
+        // More aggressive update checking for mobile devices
+        const isMobile = browser.isIOS || browser.isAndroid || 
+                        window.matchMedia('(max-width: 768px)').matches;
+        
+        // Check for updates more frequently on mobile (every 5 minutes)
+        // Desktop checks every 30 minutes
+        const updateInterval = isMobile ? 5 * 60 * 1000 : 30 * 60 * 1000;
+        
+        console.log(`[SW] Update check interval: ${updateInterval / 1000 / 60} minutes (${isMobile ? 'mobile' : 'desktop'})`);
+        
+        // Initial check after 5 seconds (in case user just updated)
+        setTimeout(checkForUpdates, 5000);
+        
+        // Regular interval checks
+        setInterval(checkForUpdates, updateInterval);
+
+        // Check for updates when page becomes visible again
         document.addEventListener('visibilitychange', () => {
           if (!document.hidden) {
             console.log('[SW] Page visible - checking for updates');
-            registration.update();
+            checkForUpdates();
           }
         });
 
         // Check for updates when app gains focus (especially important for PWAs)
         window.addEventListener('focus', () => {
           console.log('[SW] Window focused - checking for updates');
-          registration.update();
+          checkForUpdates();
+        });
+
+        // For PWAs in standalone mode, also check on app resume (iOS/Android)
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+          console.log('[SW] Running in standalone mode - enabling app resume detection');
+          
+          // iOS Safari doesn't fire visibilitychange reliably in standalone mode
+          // Use pageshow event as backup
+          window.addEventListener('pageshow', (event) => {
+            // event.persisted means page was loaded from bfcache (back-forward cache)
+            if (event.persisted || performance.navigation.type === 2) {
+              console.log('[SW] Page restored from cache - checking for updates');
+              checkForUpdates();
+            }
+          });
+
+          // Additional check when online status changes (mobile networks)
+          window.addEventListener('online', () => {
+            console.log('[SW] Connection restored - checking for updates');
+            checkForUpdates();
+          });
+        }
+
+        // Listen for messages from the service worker
+        navigator.serviceWorker.addEventListener('message', (event) => {
+          if (event.data && event.data.type === 'SW_ACTIVATED') {
+            console.log('[SW] Service worker activated:', event.data.version);
+          }
         });
 
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
           if (newWorker) {
+            console.log('[SW] Update found - new worker installing...');
+            
             newWorker.addEventListener('statechange', () => {
+              console.log('[SW] New worker state:', newWorker.state);
+              
               // CRITICAL: Only show update prompt if:
               // 1. New worker is installed
               // 2. There's ALREADY an active controller (not first install)
@@ -109,7 +160,7 @@ export function registerServiceWorker(onUpdateAvailable?: UpdateCallback) {
                 registration.active !== newWorker
               ) {
                 // New service worker available - notify app
-                console.log('[SW] New version available!');
+                console.log('[SW] ✅ New version available!');
                 if (updateAvailableCallback) {
                   updateAvailableCallback();
                 } else {

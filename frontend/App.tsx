@@ -6,7 +6,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { LoginModal } from './components/LoginModal';
 import GuestDataMergeModal from './components/GuestDataMergeModal';
 import LandingPage from './components/LandingPage';
-import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, HiredStaff, StaffTemplate, ContractDuration, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry, SaveSlot } from './types';
+import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, HiredStaff, StaffTemplate, ContractDuration, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry, SaveSlot, PendingContractOffer } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
@@ -98,7 +98,7 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         lastStaffPaymentDate: new Date(),
         currentLabel: null,
         contractStartDate: null,
-        pendingContractOffer: null,
+        pendingContractOffers: [],
         currentLabelOffer: null,
         contractsViewed: [],
         debtTurns: 0,
@@ -420,17 +420,26 @@ function gameReducer(state: GameState, action: any): GameState {
             let newStats = { ...state.playerStats };
             let newStaff = [...state.staff];
             let eventsThisWeek: string[] = [];
-            let updatedPendingOffer = state.pendingContractOffer;
+            let updatedPendingOffers = [...state.pendingContractOffers];
 
             // Calculate total weeks played
             const currentGameDate = toGameDate(state.currentDate, state.startDate);
             const totalWeeksPlayed = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
 
-            // Check if pending contract offer has expired
-            if (updatedPendingOffer && totalWeeksPlayed >= updatedPendingOffer.expiresWeek) {
-                eventsThisWeek.push(`Contract offer from ${updatedPendingOffer.label.name} has expired. The label has moved on to other artists.`);
-                updatedPendingOffer = null;
-            }
+            // Check if any pending contract offers have expired
+            const expiredOffers: PendingContractOffer[] = [];
+            updatedPendingOffers = updatedPendingOffers.filter(offer => {
+                if (totalWeeksPlayed >= offer.expiresWeek) {
+                    expiredOffers.push(offer);
+                    return false;
+                }
+                return true;
+            });
+            
+            // Add events for expired offers
+            expiredOffers.forEach(offer => {
+                eventsThisWeek.push(`Contract offer from ${offer.label.name} has expired. The label has moved on to other artists.`);
+            });
 
             // Get base difficulty settings and calculate dynamic modifiers
             const settings = getDifficultySettings(state.difficulty);
@@ -893,7 +902,7 @@ function gameReducer(state: GameState, action: any): GameState {
                 currentHistory: newHistory,
                 fameThresholdWeeks,
                 contractEligibilityUnlocked,
-                pendingContractOffer: updatedPendingOffer,
+                pendingContractOffers: updatedPendingOffers,
             };
         }
         case 'RESTART': {
@@ -1079,7 +1088,7 @@ function gameReducer(state: GameState, action: any): GameState {
             return {
                 ...state,
                 currentLabelOffer: null,
-                pendingContractOffer: null,
+                pendingContractOffers: [],
                 modal: 'none',
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
@@ -1093,13 +1102,14 @@ function gameReducer(state: GameState, action: any): GameState {
             const currentGameDate = toGameDate(state.currentDate, state.startDate);
             const totalWeeks = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
             const labelName = state.currentLabelOffer?.name || 'Unknown Label';
+            const newOffer: PendingContractOffer = {
+                label: state.currentLabelOffer!,
+                receivedWeek: totalWeeks,
+                expiresWeek: totalWeeks + 4 // 4 weeks to decide
+            };
             return {
                 ...state,
-                pendingContractOffer: {
-                    label: state.currentLabelOffer!,
-                    receivedWeek: totalWeeks,
-                    expiresWeek: totalWeeks + 4 // 4 weeks to decide
-                },
+                pendingContractOffers: [...state.pendingContractOffers, newOffer],
                 currentLabelOffer: null,
                 currentScenario: null, // Clear scenario to allow next one to trigger
                 lastOutcome: null, // Clear the outcome modal
@@ -1115,13 +1125,13 @@ function gameReducer(state: GameState, action: any): GameState {
         case 'VIEW_PENDING_CONTRACT':
             return {
                 ...state,
-                currentLabelOffer: state.pendingContractOffer!.label,
+                currentLabelOffer: state.pendingContractOffers[0]?.label || null,
                 modal: 'contract'
             };
         case 'DECLINE_PENDING_OFFER':
             return {
                 ...state,
-                pendingContractOffer: null,
+                pendingContractOffers: state.pendingContractOffers.slice(1),
                 modal: 'none',
                 logs: appendLogToArray(state.logs, createLog(`Declined pending contract offer. The label has been notified.`, 'info', new Date(state.currentDate || new Date())))
             };
@@ -2492,7 +2502,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     const handleViewPendingContract = () => {
         // View the pending contract offer
-        if (!state.pendingContractOffer) return;
+        if (state.pendingContractOffers.length === 0) return;
         dispatch({ type: 'VIEW_PENDING_CONTRACT' });
     };
 
@@ -2689,7 +2699,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             )}
 
             <div className={`relative z-10 flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
-                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} onViewContract={state.currentLabel ? () => dispatch({ type: 'VIEW_SIGNED_CONTRACT' }) : undefined} pendingContractOffer={state.pendingContractOffer} currentWeek={(toGameDate(state.currentDate, state.startDate).year - 1) * 48 + (toGameDate(state.currentDate, state.startDate).month - 1) * 4 + toGameDate(state.currentDate, state.startDate).week} onViewPendingOffer={handleOpenOffers} />}
+                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} onViewContract={state.currentLabel ? () => dispatch({ type: 'VIEW_SIGNED_CONTRACT' }) : undefined} pendingContractOffers={state.pendingContractOffers} currentWeek={(toGameDate(state.currentDate, state.startDate).year - 1) * 48 + (toGameDate(state.currentDate, state.startDate).month - 1) * 4 + toGameDate(state.currentDate, state.startDate).week} onViewPendingOffer={handleOpenOffers} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
@@ -2735,7 +2745,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         label={state.currentLabelOffer}
                         onSign={handleSignContract}
                         onDecline={handleDeclineContract}
-                        onReviewLater={state.pendingContractOffer ? handleCloseModal : undefined}
+                        onReviewLater={state.currentScenario ? handleSavePendingOffer : undefined}
                     />
                 </Suspense>
             )}
@@ -2749,9 +2759,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     />
                 </Suspense>
             )}
-            {modal === 'offers' && state.pendingContractOffer && (
+            {modal === 'offers' && state.pendingContractOffers.length > 0 && (
                 <OffersModal
-                    pendingOffer={state.pendingContractOffer}
+                    pendingOffers={state.pendingContractOffers}
                     currentWeek={(toGameDate(state.currentDate, state.startDate).year - 1) * 48 + (toGameDate(state.currentDate, state.startDate).month - 1) * 4 + toGameDate(state.currentDate, state.startDate).week}
                     onViewContract={handleViewPendingContract}
                     onDecline={handleDeclinePendingOffer}

@@ -47,13 +47,20 @@ export const deserializeGameState = (data: any): GameState => {
   const migratedCurrentLabel = migrateLabel(data.currentLabel);
   const migratedCurrentLabelOffer = migrateLabel(data.currentLabelOffer);
   
-  // Migrate pendingContractOffer if it exists
-  let migratedPendingOffer = data.pendingContractOffer;
-  if (migratedPendingOffer?.label) {
-    migratedPendingOffer = {
-      ...migratedPendingOffer,
-      label: migrateLabel(migratedPendingOffer.label)
-    };
+  // Migrate pendingContractOffer (singular) to pendingContractOffers (array)
+  let migratedPendingOffers: any[] = [];
+  if (data.pendingContractOffers) {
+    // Already array format, just migrate label names
+    migratedPendingOffers = data.pendingContractOffers.map((offer: any) => ({
+      ...offer,
+      label: migrateLabel(offer.label)
+    }));
+  } else if (data.pendingContractOffer) {
+    // Old singular format, convert to array
+    migratedPendingOffers = [{
+      ...data.pendingContractOffer,
+      label: migrateLabel(data.pendingContractOffer.label)
+    }];
   }
   
   return {
@@ -64,7 +71,7 @@ export const deserializeGameState = (data: any): GameState => {
     contractStartDate: data.contractStartDate ? new Date(data.contractStartDate) : null,
     currentLabel: migratedCurrentLabel,
     currentLabelOffer: migratedCurrentLabelOffer,
-    pendingContractOffer: migratedPendingOffer,
+    pendingContractOffers: migratedPendingOffers,
     staff: data.staff ? data.staff.map((s: any) => ({
       ...s,
       contractExpiresDate: s.contractExpiresDate ? new Date(s.contractExpiresDate) : new Date()

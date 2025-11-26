@@ -48,7 +48,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ label, value, color, maxValue
     );
 }
 
-const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date, currentLabel?: RecordLabel | null, contractStartDate?: Date | null, onViewContract?: () => void, pendingContractOffer?: PendingContractOffer | null, currentWeek?: number, onViewPendingOffer?: () => void }> = ({ stats, project, date, currentDate, currentLabel, contractStartDate, onViewContract, pendingContractOffer, currentWeek, onViewPendingOffer }) => {
+const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date, currentLabel?: RecordLabel | null, contractStartDate?: Date | null, onViewContract?: () => void, pendingContractOffers?: PendingContractOffer[], currentWeek?: number, onViewPendingOffer?: () => void }> = ({ stats, project, date, currentDate, currentLabel, contractStartDate, onViewContract, pendingContractOffers = [], currentWeek, onViewPendingOffer }) => {
     const [isMobileCollapsed, setIsMobileCollapsed] = useState(true);
 
     const formatDate = (date: Date): string => {
@@ -183,16 +183,16 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                 </button>
             )}
 
-            {/* Pending Contract Offer - Always visible when there's a pending offer */}
-            {pendingContractOffer && pendingContractOffer.label && currentWeek !== undefined && (
+            {/* Pending Contract Offers - Always visible when there are pending offers */}
+            {pendingContractOffers.length > 0 && currentWeek !== undefined && (
                 <button
                     onClick={onViewPendingOffer}
                     className={`mt-2 w-full p-2 rounded-lg border transition-all ${
-                        currentWeek >= pendingContractOffer.expiresWeek
+                        pendingContractOffers.some(offer => currentWeek >= offer.expiresWeek)
                             ? 'border-red-600/50 bg-red-900/20 hover:bg-red-900/30 dark:border-red-600/50 dark:bg-red-900/20 light:border-red-500/70 light:bg-red-100/40 light:hover:bg-red-100/60'
-                            : (pendingContractOffer.expiresWeek - currentWeek) === 1
+                            : pendingContractOffers.some(offer => (offer.expiresWeek - currentWeek) === 1)
                                 ? 'border-red-600/50 bg-red-900/20 hover:bg-red-900/30 animate-pulse dark:border-red-600/50 dark:bg-red-900/20 light:border-red-500/70 light:bg-red-100/40 light:hover:bg-red-100/60'
-                                : (pendingContractOffer.expiresWeek - currentWeek) >= 2 && (pendingContractOffer.expiresWeek - currentWeek) <= 3
+                                : pendingContractOffers.some(offer => (offer.expiresWeek - currentWeek) >= 2 && (offer.expiresWeek - currentWeek) <= 3)
                                     ? 'border-yellow-600/50 bg-yellow-900/20 hover:bg-yellow-900/30 dark:border-yellow-600/50 dark:bg-yellow-900/20 light:border-amber-500/70 light:bg-amber-100/40 light:hover:bg-amber-100/60'
                                     : 'border-green-600/50 bg-green-900/20 hover:bg-green-900/30 dark:border-green-600/50 dark:bg-green-900/20 light:border-green-600/70 light:bg-green-100/40 light:hover:bg-green-100/60'
                     } ${onViewPendingOffer ? 'cursor-pointer hover:border-opacity-75' : 'cursor-default'}`}
@@ -201,27 +201,33 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Bell className="w-3 h-3 text-gray-400 dark:text-gray-400 light:text-gray-600" />
-                            <span className="text-xs font-semibold text-gray-300 dark:text-gray-300 light:text-gray-700">Pending Offer:</span>
-                            <span className="text-xs font-bold text-purple-300 dark:text-purple-300 light:text-purple-700">{pendingContractOffer.label.name}</span>
+                            <span className="text-xs font-semibold text-gray-300 dark:text-gray-300 light:text-gray-700">
+                                {pendingContractOffers.length === 1 ? 'Pending Offer:' : `${pendingContractOffers.length} Pending Offers`}
+                            </span>
+                            {pendingContractOffers.length === 1 && (
+                                <span className="text-xs font-bold text-purple-300 dark:text-purple-300 light:text-purple-700">{pendingContractOffers[0].label.name}</span>
+                            )}
                         </div>
                         <div className={`text-xs font-semibold ${
-                            currentWeek >= pendingContractOffer.expiresWeek
+                            pendingContractOffers.some(offer => currentWeek >= offer.expiresWeek)
                                 ? 'text-red-400 dark:text-red-400 light:text-red-700'
-                                : (pendingContractOffer.expiresWeek - currentWeek) === 1
+                                : pendingContractOffers.some(offer => (offer.expiresWeek - currentWeek) === 1)
                                     ? 'text-red-400 dark:text-red-400 light:text-red-700'
-                                    : (pendingContractOffer.expiresWeek - currentWeek) >= 2 && (pendingContractOffer.expiresWeek - currentWeek) <= 3
+                                    : pendingContractOffers.some(offer => (offer.expiresWeek - currentWeek) >= 2 && (offer.expiresWeek - currentWeek) <= 3)
                                         ? 'text-yellow-400 dark:text-yellow-400 light:text-amber-700'
                                         : 'text-green-400 dark:text-green-400 light:text-green-700'
                         }`}>
-                            {currentWeek >= pendingContractOffer.expiresWeek
+                            {pendingContractOffers.some(offer => currentWeek >= offer.expiresWeek)
                                 ? 'EXPIRED'
-                                : `${pendingContractOffer.expiresWeek - currentWeek}w remaining`
+                                : pendingContractOffers.length === 1
+                                    ? `${pendingContractOffers[0].expiresWeek - currentWeek}w remaining`
+                                    : 'View offers'
                             }
                         </div>
                     </div>
                     {onViewPendingOffer && (
                         <div className="text-[10px] text-gray-500 mt-1 text-center">
-                            Click to review contract offer
+                            Click to review {pendingContractOffers.length === 1 ? 'contract offer' : 'contract offers'}
                         </div>
                     )}
                 </button>

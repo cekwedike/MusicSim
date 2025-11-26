@@ -359,7 +359,7 @@ export interface GameState {
   lastStaffPaymentDate: Date; // Track when we last paid staff (monthly)
   currentLabel: RecordLabel | null;
   contractStartDate: Date | null; // When the current contract was signed
-  pendingContractOffer: PendingContractOffer | null; // Contract offer waiting for review
+  pendingContractOffers: PendingContractOffer[]; // Contract offers waiting for review (supports multiple offers)
   debtTurns: number;
   burnoutTurns: number;
   gameOverReason: 'debt' | 'burnout' | null;

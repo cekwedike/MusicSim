@@ -31,6 +31,11 @@ export const deserializeGameState = (data: any): GameState => {
     currentDate: data.currentDate ? new Date(data.currentDate) : new Date(),
     startDate: data.startDate ? new Date(data.startDate) : new Date(),
     lastStaffPaymentDate: data.lastStaffPaymentDate ? new Date(data.lastStaffPaymentDate) : new Date(),
+    contractStartDate: data.contractStartDate ? new Date(data.contractStartDate) : null,
+    staff: data.staff ? data.staff.map((s: any) => ({
+      ...s,
+      contractExpiresDate: s.contractExpiresDate ? new Date(s.contractExpiresDate) : new Date()
+    })) : [],
     logs: data.logs ? data.logs.map((log: any) => ({
       ...log,
       timestamp: new Date(log.timestamp)

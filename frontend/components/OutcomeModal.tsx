@@ -7,6 +7,7 @@ interface OutcomeModalProps {
     outcome: ChoiceOutcome;
     onClose: () => void;
     onViewContract?: () => void;
+    onReviewLater?: () => void;
 }
 
 const StatChange: React.FC<{ label: string, value: number }> = ({ label, value }) => {
@@ -23,7 +24,7 @@ const StatChange: React.FC<{ label: string, value: number }> = ({ label, value }
     );
 };
 
-const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose, onViewContract }) => {
+const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose, onViewContract, onReviewLater }) => {
     const hasLesson = outcome.lesson;
     const hasContract = outcome.viewContract;
 
@@ -115,7 +116,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose, onViewCon
                 )}
 
                 <button
-                    onClick={onClose}
+                    onClick={hasContract && onReviewLater ? onReviewLater : onClose}
                     className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-400 text-sm sm:text-base min-h-[44px]"
                 >
                     {hasContract ? 'Review Later' : 'Continue'}

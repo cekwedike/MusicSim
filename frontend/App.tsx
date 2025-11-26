@@ -27,6 +27,7 @@ import Dashboard from './components/Dashboard';
 import ScenarioCard from './components/ScenarioCard';
 import OutcomeModal from './components/OutcomeModal';
 import StaffTerminationModal from './components/StaffTerminationModal';
+import OffersModal from './components/OffersModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
 import AudioUnlockPrompt from './components/AudioUnlockPrompt';
@@ -97,6 +98,7 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         lastStaffPaymentDate: new Date(),
         currentLabel: null,
         contractStartDate: null,
+        pendingContractOffer: null,
         currentLabelOffer: null,
         contractsViewed: [],
         debtTurns: 0,
@@ -268,13 +270,26 @@ function gameReducer(state: GameState, action: any): GameState {
             
             // Track decision in statistics
             const updatedStatistics = recordDecision(state.statistics, action.payload.text);
-            
+
+            // Apply difficulty scaling to outcome values (except cash which stays realistic)
+            const difficultyMultiplier = state.difficulty === 'beginner' ? 1.0 :
+                                        state.difficulty === 'realistic' ? 0.5 :
+                                        0.3; // hardcore
+
+            const scaledOutcome = {
+                cash: outcome.cash, // Cash stays the same for all difficulties
+                fame: Math.round(outcome.fame * difficultyMultiplier),
+                wellBeing: outcome.wellBeing, // Well-being stays the same (it's already balanced)
+                careerProgress: Math.round(outcome.careerProgress * difficultyMultiplier),
+                hype: Math.round(outcome.hype * difficultyMultiplier)
+            };
+
             const newStats: PlayerStats = {
-                cash: Math.round(state.playerStats.cash + outcome.cash),
-                fame: Math.round(Math.min(100, Math.max(0, state.playerStats.fame + outcome.fame))),
-                wellBeing: Math.round(Math.min(100, Math.max(0, state.playerStats.wellBeing + outcome.wellBeing))),
-                careerProgress: Math.round(Math.min(100, Math.max(0, state.playerStats.careerProgress + outcome.careerProgress))),
-                hype: Math.round(Math.min(100, Math.max(0, state.playerStats.hype + outcome.hype))),
+                cash: Math.round(state.playerStats.cash + scaledOutcome.cash),
+                fame: Math.round(Math.min(100, Math.max(0, state.playerStats.fame + scaledOutcome.fame))),
+                wellBeing: Math.round(Math.min(100, Math.max(0, state.playerStats.wellBeing + scaledOutcome.wellBeing))),
+                careerProgress: Math.round(Math.min(100, Math.max(0, state.playerStats.careerProgress + scaledOutcome.careerProgress))),
+                hype: Math.round(Math.min(100, Math.max(0, state.playerStats.hype + scaledOutcome.hype))),
             };
 
             // Projects have been removed - no project handling needed
@@ -405,10 +420,17 @@ function gameReducer(state: GameState, action: any): GameState {
             let newStats = { ...state.playerStats };
             let newStaff = [...state.staff];
             let eventsThisWeek: string[] = [];
+            let updatedPendingOffer = state.pendingContractOffer;
 
             // Calculate total weeks played
             const currentGameDate = toGameDate(state.currentDate, state.startDate);
             const totalWeeksPlayed = (currentGameDate.year - 1) * 48 + (currentGameDate.month - 1) * 4 + currentGameDate.week;
+
+            // Check if pending contract offer has expired
+            if (updatedPendingOffer && totalWeeksPlayed >= updatedPendingOffer.expiresWeek) {
+                eventsThisWeek.push(`Contract offer from ${updatedPendingOffer.label.name} has expired. The label has moved on to other artists.`);
+                updatedPendingOffer = null;
+            }
 
             // Get base difficulty settings and calculate dynamic modifiers
             const settings = getDifficultySettings(state.difficulty);
@@ -871,6 +893,7 @@ function gameReducer(state: GameState, action: any): GameState {
                 currentHistory: newHistory,
                 fameThresholdWeeks,
                 contractEligibilityUnlocked,
+                pendingContractOffer: updatedPendingOffer,
             };
         }
         case 'RESTART': {
@@ -1056,6 +1079,7 @@ function gameReducer(state: GameState, action: any): GameState {
             return {
                 ...state,
                 currentLabelOffer: null,
+                pendingContractOffer: null,
                 modal: 'none',
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,
@@ -1064,6 +1088,38 @@ function gameReducer(state: GameState, action: any): GameState {
                 logs: appendLogToArray(state.logs, createLog(`Declined the contract offer from ${state.currentLabelOffer?.name || 'the record label'}. Sometimes the best deal is no deal.`, 'info', new Date(state.currentDate || new Date())))
             };
         }
+        case 'SAVE_PENDING_OFFER': {
+            const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+            return {
+                ...state,
+                pendingContractOffer: {
+                    label: state.currentLabelOffer!,
+                    receivedWeek: totalWeeks,
+                    expiresWeek: totalWeeks + 12 // 12 weeks = ~3 months
+                },
+                currentLabelOffer: null,
+                modal: 'none',
+                logs: appendLogToArray(state.logs, createLog(`Saved contract offer from ${state.currentLabelOffer?.name} for later review. You have 12 weeks to decide.`, 'info', new Date(state.currentDate || new Date())))
+            };
+        }
+        case 'OPEN_OFFERS_MODAL':
+            return {
+                ...state,
+                modal: 'offers'
+            };
+        case 'VIEW_PENDING_CONTRACT':
+            return {
+                ...state,
+                currentLabelOffer: state.pendingContractOffer!.label,
+                modal: 'contract'
+            };
+        case 'DECLINE_PENDING_OFFER':
+            return {
+                ...state,
+                pendingContractOffer: null,
+                modal: 'none',
+                logs: appendLogToArray(state.logs, createLog(`Declined pending contract offer. The label has been notified.`, 'info', new Date(state.currentDate || new Date())))
+            };
         case 'LOAD_GAME':
             return { ...action.payload, status: 'playing' };
         case 'START_TUTORIAL':
@@ -2419,6 +2475,27 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         dispatch({ type: 'DECLINE_CONTRACT' });
     };
 
+    const handleSavePendingOffer = () => {
+        // Save the offer to review later
+        dispatch({ type: 'SAVE_PENDING_OFFER' });
+    };
+
+    const handleOpenOffers = () => {
+        // No sound - just opening offers modal
+        dispatch({ type: 'OPEN_OFFERS_MODAL' });
+    };
+
+    const handleViewPendingContract = () => {
+        // View the pending contract offer
+        if (!state.pendingContractOffer) return;
+        dispatch({ type: 'VIEW_PENDING_CONTRACT' });
+    };
+
+    const handleDeclinePendingOffer = () => {
+        // Decline the pending contract offer
+        dispatch({ type: 'DECLINE_PENDING_OFFER' });
+    };
+
     const handleStartTutorial = () => {
         // No sound - just starting tutorial
         dispatch({ type: 'START_TUTORIAL' });
@@ -2607,7 +2684,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             )}
 
             <div className={`relative z-10 flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
-                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} onViewContract={state.currentLabel ? () => dispatch({ type: 'VIEW_SIGNED_CONTRACT' }) : undefined} />}
+                {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} onViewContract={state.currentLabel ? () => dispatch({ type: 'VIEW_SIGNED_CONTRACT' }) : undefined} pendingContractOffer={state.pendingContractOffer} currentWeek={(toGameDate(state.currentDate, state.startDate).year - 1) * 48 + (toGameDate(state.currentDate, state.startDate).month - 1) * 4 + toGameDate(state.currentDate, state.startDate).week} onViewPendingOffer={handleOpenOffers} />}
 
                 {/* History section right after stats */}
                 {showDashboard && <GameHistory logs={state.logs || []} />}
@@ -2630,7 +2707,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         onClose={handleContinue}
                     />
                 ) : (
-                    <OutcomeModal outcome={lastOutcome} onClose={handleContinue} onViewContract={handleViewContract} />
+                    <OutcomeModal outcome={lastOutcome} onClose={handleContinue} onViewContract={handleViewContract} onReviewLater={handleSavePendingOffer} />
                 )
             )}
             {modal === 'learning' && (
@@ -2665,6 +2742,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         onClose={() => dispatch({ type: 'CLOSE_MODAL' })}
                     />
                 </Suspense>
+            )}
+            {modal === 'offers' && state.pendingContractOffer && (
+                <OffersModal
+                    pendingOffer={state.pendingContractOffer}
+                    currentWeek={(toGameDate(state.currentDate, state.startDate).year - 1) * 48 + (toGameDate(state.currentDate, state.startDate).month - 1) * 4 + toGameDate(state.currentDate, state.startDate).week}
+                    onViewContract={handleViewPendingContract}
+                    onDecline={handleDeclinePendingOffer}
+                    onClose={handleCloseModal}
+                />
             )}
             {/* Management, Save/Load and Statistics are now available in the Sidebar panels. */}
 

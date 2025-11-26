@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import type { PlayerStats, Project, GameDate, RecordLabel } from '../types';
-import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import type { PlayerStats, Project, GameDate, RecordLabel, PendingContractOffer } from '../types';
+import { ChevronDown, ChevronUp, FileText, Bell } from 'lucide-react';
 
 interface StatDisplayProps {
     label: string;
@@ -48,7 +48,7 @@ const StatDisplay: React.FC<StatDisplayProps> = ({ label, value, color, maxValue
     );
 }
 
-const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date, currentLabel?: RecordLabel | null, contractStartDate?: Date | null, onViewContract?: () => void }> = ({ stats, project, date, currentDate, currentLabel, contractStartDate, onViewContract }) => {
+const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: GameDate, currentDate?: Date, currentLabel?: RecordLabel | null, contractStartDate?: Date | null, onViewContract?: () => void, pendingContractOffer?: PendingContractOffer | null, currentWeek?: number, onViewPendingOffer?: () => void }> = ({ stats, project, date, currentDate, currentLabel, contractStartDate, onViewContract, pendingContractOffer, currentWeek, onViewPendingOffer }) => {
     const [isMobileCollapsed, setIsMobileCollapsed] = useState(true);
 
     const formatDate = (date: Date): string => {
@@ -178,6 +178,46 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                     {onViewContract && (
                         <div className="text-[10px] text-gray-500 mt-1 text-center">
                             Click to view contract details
+                        </div>
+                    )}
+                </button>
+            )}
+
+            {/* Pending Contract Offer - Always visible when there's a pending offer */}
+            {pendingContractOffer && currentWeek !== undefined && (
+                <button
+                    onClick={onViewPendingOffer}
+                    className={`mt-2 w-full p-2 rounded-lg border transition-all ${
+                        currentWeek >= pendingContractOffer.expiresWeek
+                            ? 'border-red-600/50 bg-red-900/20 hover:bg-red-900/30'
+                            : (pendingContractOffer.expiresWeek - currentWeek) <= 4
+                                ? 'border-yellow-600/50 bg-yellow-900/20 hover:bg-yellow-900/30 animate-pulse'
+                                : 'border-purple-600/50 bg-purple-900/20 hover:bg-purple-900/30'
+                    } ${onViewPendingOffer ? 'cursor-pointer hover:border-opacity-75' : 'cursor-default'}`}
+                    disabled={!onViewPendingOffer}
+                >
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Bell className="w-3 h-3 text-gray-400" />
+                            <span className="text-xs font-semibold text-gray-300">Pending Offer:</span>
+                            <span className="text-xs font-bold text-purple-300">{pendingContractOffer.label.name}</span>
+                        </div>
+                        <div className={`text-xs font-semibold ${
+                            currentWeek >= pendingContractOffer.expiresWeek
+                                ? 'text-red-400'
+                                : (pendingContractOffer.expiresWeek - currentWeek) <= 4
+                                    ? 'text-yellow-400'
+                                    : 'text-purple-400'
+                        }`}>
+                            {currentWeek >= pendingContractOffer.expiresWeek
+                                ? 'EXPIRED'
+                                : `${pendingContractOffer.expiresWeek - currentWeek}w remaining`
+                            }
+                        </div>
+                    </div>
+                    {onViewPendingOffer && (
+                        <div className="text-[10px] text-gray-500 mt-1 text-center">
+                            Click to review contract offer
                         </div>
                     )}
                 </button>

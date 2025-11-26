@@ -2092,21 +2092,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         }
     }, [status, artistName, fetchNextScenario, state, currentScenario]);
 
-    // Auto-save effect with debouncing
+    // Auto-save effect with debouncing - only on week changes or significant stat changes
     useEffect(() => {
         // Only autosave during active gameplay
         if (status === 'playing' && isStorageAvailable()) {
             debouncedAutoSave(state);
         }
-    }, [state.date, state.playerStats, status, debouncedAutoSave]); // Auto-save when date or stats change (debounced)
-
-    // Immediate save for important game events (no debounce)
-    useEffect(() => {
-        if (status === 'playing' && isStorageAvailable() && lastOutcome) {
-            // Save immediately after making a choice and seeing the outcome
-            saveNow(state);
-        }
-    }, [lastOutcome, status, saveNow, state]);
+    }, [state.date, status, debouncedAutoSave]); // Auto-save when date changes (debounced to 5 seconds)
 
     // Clean up expired autosaves on mount
     useEffect(() => {

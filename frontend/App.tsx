@@ -1090,16 +1090,18 @@ function gameReducer(state: GameState, action: any): GameState {
         }
         case 'SAVE_PENDING_OFFER': {
             const totalWeeks = (state.date.year - 1) * 48 + (state.date.month - 1) * 4 + state.date.week;
+            const labelName = state.currentLabelOffer?.name || 'Unknown Label';
             return {
                 ...state,
                 pendingContractOffer: {
                     label: state.currentLabelOffer!,
                     receivedWeek: totalWeeks,
-                    expiresWeek: totalWeeks + 12 // 12 weeks = ~3 months
+                    expiresWeek: totalWeeks + 4 // 4 weeks to decide
                 },
                 currentLabelOffer: null,
+                lastOutcome: null, // Clear the outcome modal
                 modal: 'none',
-                logs: appendLogToArray(state.logs, createLog(`Saved contract offer from ${state.currentLabelOffer?.name} for later review. You have 12 weeks to decide.`, 'info', new Date(state.currentDate || new Date())))
+                logs: appendLogToArray(state.logs, createLog(`Saved contract offer from ${labelName} for later review. You have 4 weeks to decide.`, 'info', new Date(state.currentDate || new Date())))
             };
         }
         case 'OPEN_OFFERS_MODAL':

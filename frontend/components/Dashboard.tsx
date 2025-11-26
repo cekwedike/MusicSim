@@ -189,25 +189,29 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
                     onClick={onViewPendingOffer}
                     className={`mt-2 w-full p-2 rounded-lg border transition-all ${
                         currentWeek >= pendingContractOffer.expiresWeek
-                            ? 'border-red-600/50 bg-red-900/20 hover:bg-red-900/30'
-                            : (pendingContractOffer.expiresWeek - currentWeek) <= 4
-                                ? 'border-yellow-600/50 bg-yellow-900/20 hover:bg-yellow-900/30 animate-pulse'
-                                : 'border-purple-600/50 bg-purple-900/20 hover:bg-purple-900/30'
+                            ? 'border-red-600/50 bg-red-900/20 hover:bg-red-900/30 dark:border-red-600/50 dark:bg-red-900/20 light:border-red-500/70 light:bg-red-100/40 light:hover:bg-red-100/60'
+                            : (pendingContractOffer.expiresWeek - currentWeek) === 1
+                                ? 'border-red-600/50 bg-red-900/20 hover:bg-red-900/30 animate-pulse dark:border-red-600/50 dark:bg-red-900/20 light:border-red-500/70 light:bg-red-100/40 light:hover:bg-red-100/60'
+                                : (pendingContractOffer.expiresWeek - currentWeek) >= 2 && (pendingContractOffer.expiresWeek - currentWeek) <= 3
+                                    ? 'border-yellow-600/50 bg-yellow-900/20 hover:bg-yellow-900/30 dark:border-yellow-600/50 dark:bg-yellow-900/20 light:border-amber-500/70 light:bg-amber-100/40 light:hover:bg-amber-100/60'
+                                    : 'border-green-600/50 bg-green-900/20 hover:bg-green-900/30 dark:border-green-600/50 dark:bg-green-900/20 light:border-green-600/70 light:bg-green-100/40 light:hover:bg-green-100/60'
                     } ${onViewPendingOffer ? 'cursor-pointer hover:border-opacity-75' : 'cursor-default'}`}
                     disabled={!onViewPendingOffer}
                 >
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <Bell className="w-3 h-3 text-gray-400" />
-                            <span className="text-xs font-semibold text-gray-300">Pending Offer:</span>
-                            <span className="text-xs font-bold text-purple-300">{pendingContractOffer.label.name}</span>
+                            <Bell className="w-3 h-3 text-gray-400 dark:text-gray-400 light:text-gray-600" />
+                            <span className="text-xs font-semibold text-gray-300 dark:text-gray-300 light:text-gray-700">Pending Offer:</span>
+                            <span className="text-xs font-bold text-purple-300 dark:text-purple-300 light:text-purple-700">{pendingContractOffer.label.name}</span>
                         </div>
                         <div className={`text-xs font-semibold ${
                             currentWeek >= pendingContractOffer.expiresWeek
-                                ? 'text-red-400'
-                                : (pendingContractOffer.expiresWeek - currentWeek) <= 4
-                                    ? 'text-yellow-400'
-                                    : 'text-purple-400'
+                                ? 'text-red-400 dark:text-red-400 light:text-red-700'
+                                : (pendingContractOffer.expiresWeek - currentWeek) === 1
+                                    ? 'text-red-400 dark:text-red-400 light:text-red-700'
+                                    : (pendingContractOffer.expiresWeek - currentWeek) >= 2 && (pendingContractOffer.expiresWeek - currentWeek) <= 3
+                                        ? 'text-yellow-400 dark:text-yellow-400 light:text-amber-700'
+                                        : 'text-green-400 dark:text-green-400 light:text-green-700'
                         }`}>
                             {currentWeek >= pendingContractOffer.expiresWeek
                                 ? 'EXPIRED'

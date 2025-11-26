@@ -176,7 +176,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Major Label Bidding War",
         description: "Your success has attracted the big sharks. Two major labels have sent contracts for you to review. 'Global Records' and 'Visionary Music Group' are both interested. Which contract should you examine first?",
-        conditions: { minFame: 60, minCareerProgress: 50, noLabelRequired: true },
+        conditions: { minFame: 60, minCareerProgress: 50, requiredAchievementId: 'PROJECT_ALBUM_1', noLabelRequired: true },
         // audio: contract signing / label negotiation (informational, don't autoplay by default)
         audioFile: '/audio/scenarios/contract-signing.m4a',
         autoPlayAudio: false,
@@ -307,7 +307,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Contract Renegotiation Opportunity",
         description: "A major label that's been watching your success reaches out. They want to sign you to a fresh deal, and they're willing to offer better terms than standard contracts. Your recent achievements give you serious negotiating power.",
-        conditions: { minCareerProgress: 60, minFame: 60 },
+        conditions: { minCareerProgress: 60, minFame: 60, requiredAchievementId: 'PROJECT_ALBUM_1' },
         once: true,
         choices: [
             {
@@ -532,7 +532,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Language Choice",
         description: "You're in the studio recording your breakthrough single. The producer stops you mid-session. 'This Igbo verse is fire, but if you want radio play and playlist adds, you need to do it in English. The international market won't understand Igbo.' But you know your community connects most when you rap in your native language. This decision will define your identity.",
-        conditions: { minFame: 10, maxFame: 40 },
+        conditions: { minFame: 10, maxFame: 40, projectRequired: true },
         choices: [
             {
                 text: "Keep it in Igbo/Yoruba/Kinyarwanda - stay authentic",
@@ -581,7 +581,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Piracy Problem",
         description: "It's 3 AM. Your phone explodes with messages. Your unreleased album just leaked on Naijaloaded and Tooxclusive. Thousands are downloading it for free. Your release strategy is ruined. Your manager is furious. The label is threatening to drop you, claiming you leaked it for publicity. You need to act fast.",
-        conditions: { minFame: 30 },
+        conditions: { minFame: 30, projectRequired: true },
         choices: [
             {
                 text: "Officially release it immediately on all platforms",
@@ -630,7 +630,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The WhatsApp Producer",
         description: "A producer slides into your WhatsApp claiming he made beats for Davido and Burna Boy. He sends you a fire beat and wants $500 upfront, no contract, just trust. He promises exclusive rights and says he'll have the stems ready in 24 hours. But your friend warns you: 'Bro, I've seen this guy sell the same beat to five different artists.' The beat is perfect for your next single, but the red flags are everywhere.",
-        conditions: { minFame: 8, maxCash: 2000 },
+        conditions: { minFame: 8, maxCash: 2000, projectRequired: true },
         // shady producer / warning audio — don't autoplay
         audioFile: '/audio/scenarios/shady-contract-warning.m4a',
         autoPlayAudio: false,
@@ -878,7 +878,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Influencer Deal",
         description: "A TikTok influencer with 2 million followers wants to use your unreleased song for a dance challenge. They say: 'I'll make your song viral! Just give me the track for free - the exposure is payment enough.' Your manager calculates that 2 million views could be worth $10,000 in promotion value. But you believe your art has monetary value. How do you price exposure?",
-        conditions: { minFame: 15, maxFame: 50 },
+        conditions: { minFame: 15, maxFame: 50, projectRequired: true },
         once: true,
         choices: [
             {
@@ -928,7 +928,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Street Vendor Distribution",
         description: "An old-school street vendor network across Lagos and Abuja wants to sell your physical CDs. They guarantee 10,000 units sold at $2 profit per CD, but they want exclusive physical rights for six months. Your digital team says CDs are dead: 'Focus on streaming!' But the vendor leader insists: 'Young people still buy CDs for their cars and taxi drivers play them all day. This is money in your pocket today.'",
-        conditions: { minFame: 30 },
+        conditions: { minFame: 30, requiredAchievementId: 'PROJECT_ALBUM_1' },
         once: true,
         choices: [
             {
@@ -978,7 +978,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Producer's Royalty Demand",
         description: "The producer who made your biggest hit drops a bombshell: 'I want 50% of all streaming royalties, not just the beat sale price. This song is half my creation.' They threaten to block the release if you don't agree. Your lawyer says they might have a case since their production is so distinctive. But 50% seems excessive. The song could be your breakthrough.",
-        conditions: { minFame: 25 },
+        conditions: { minFame: 25, projectRequired: true },
         choices: [
             {
                 text: "Give them 50% - I need this song released",
@@ -1076,7 +1076,8 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Sample Clearance Nightmare",
         description: "You want to sample a classic Fela Kuti horn line for your new album's lead single. The sample is perfect - it gives your track instant credibility and connects you to Afrobeat royalty. But clearing the sample will cost $10,000 upfront plus 50% of your publishing. Fela's estate is notoriously difficult about clearances. Your producer suggests: 'Just replay it with different musicians. Who's going to notice?'",
-        conditions: { minFame: 30 },
+        conditions: { minFame: 30, projectRequired: true },
+        once: true,
         choices: [
             {
                 text: "Pay for proper sample clearance - do it legally",
@@ -1125,7 +1126,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Music Video Budget Decision",
         description: "Your breakthrough single needs a video, and you have three options. A high-end director wants $25,000 for a cinematic video with locations across Lagos and professional dancers. A mid-tier director offers $8,000 for a solid performance video. Your friend with a good camera says he'll do it for $1,000 plus food. YouTube success stories show both expensive flops and phone-shot viral hits. How much is the right investment?",
-        conditions: { minFame: 20, minHype: 30 },
+        conditions: { minFame: 20, minHype: 30, requiredAchievementId: 'PROJECT_SINGLE_1' },
         once: true,
         choices: [
             {
@@ -1225,7 +1226,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Traditional Instrument Fusion",
         description: "You're in the studio working on your new album when a master kora player stops by. He offers to collaborate, adding traditional West African harp melodies to your modern production. He says: 'Young artist, our ancestors' music shouldn't die. Let me teach you.' But your producer worries: 'Traditional instruments don't translate well to streaming platforms. It might sound too niche.' Your A&R rep is silent, waiting for your decision.",
-        conditions: { minFame: 25 },
+        conditions: { minFame: 25, projectRequired: true },
         once: true,
         choices: [
             {
@@ -1475,7 +1476,7 @@ export const scenarioBank: Scenario[] = [
     {
         title: "The Generational Sound Debate",
         description: "You're producing your new album when your father, a legendary highlife musician from the '70s, visits the studio. He listens and shakes his head: 'This electronic music has no soul. You've forgotten our musical heritage.' He challenges you to incorporate live horns, traditional percussion, and organic instrumentation. Your young producer argues the opposite: 'Old-school sounds won't connect with Gen Z. They want hard-hitting 808s and digital production.' Both have sold millions of records in their respective eras. Whose wisdom do you trust?",
-        conditions: { minFame: 30 },
+        conditions: { minFame: 30, projectRequired: true },
         once: true,
         choices: [
             {

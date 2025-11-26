@@ -421,8 +421,6 @@ export interface ScenarioConditions {
   minHype?: number;
   maxHype?: number;
   requiredAchievementId?: string;
-  projectRequired?: boolean; // True if a project must be active
-  noProjectRequired?: boolean; // True if no project should be active
   requiresStaff?: StaffRole[]; // Must have these staff roles
   missingStaff?: StaffRole[]; // Must NOT have these staff roles
   requiresContractEligibility?: boolean; // Requires sustained fame threshold to be unlocked

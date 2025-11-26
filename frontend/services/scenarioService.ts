@@ -12,11 +12,11 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
         return true; // No conditions, always available
     }
 
-    const { playerStats, artistGenre, achievements, currentProject, staff, difficulty, contractEligibilityUnlocked, currentLabel } = state;
+    const { playerStats, artistGenre, achievements, staff, difficulty, contractEligibilityUnlocked, currentLabel } = state;
     const {
         minFame, maxFame, minFameByDifficulty, minCash, maxCash, minWellBeing, maxWellBeing,
         requiredGenre, minCareerProgress, minHype, maxHype,
-        requiredAchievementId, projectRequired, noProjectRequired,
+        requiredAchievementId,
         requiresStaff, missingStaff, requiresContractEligibility, noLabelRequired
     } = scenario.conditions;
 
@@ -45,9 +45,6 @@ const checkConditions = (scenario: Scenario, state: GameState): boolean => {
         const achievement = achievements.find(a => a.id === requiredAchievementId);
         if (!achievement || !achievement.unlocked) return false;
     }
-
-    if (projectRequired !== undefined && projectRequired && !currentProject) return false;
-    if (noProjectRequired !== undefined && noProjectRequired && currentProject) return false;
 
     const currentStaffRoles = staff.map(s => s.role);
     if (requiresStaff) {

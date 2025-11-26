@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Installation Test - MusicSim</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #1A0A0F;
+            color: #fff;
+        }
+        .test-section {
+            background: #2D1115;
+            border: 2px solid #8B2635;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .test-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(139, 38, 53, 0.2);
+            border-radius: 4px;
+        }
+        .pass { color: #4ade80; }
+        .fail { color: #ef4444; }
+        .warn { color: #fbbf24; }
+        button {
+            background: #8B2635;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #93334a;
+        }
+        pre {
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 PWA Installation Diagnostics</h1>
+    
+    <div class="test-section">
+        <h2>Browser Detection</h2>
+        <div id="browserInfo"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Service Worker Status</h2>
+        <div id="swStatus"></div>
+        <button onclick="registerSW()">Register Service Worker</button>
+        <button onclick="checkSW()">Check SW Status</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Manifest Validation</h2>
+        <div id="manifestStatus"></div>
+        <button onclick="checkManifest()">Check Manifest</button>
+    </div>
+
+    <div class="test-section">
+        <h2>PWA Install Prompt</h2>
+        <div id="installStatus"></div>
+        <button id="installButton" style="display:none;">Install PWA</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Icon Validation</h2>
+        <div id="iconStatus"></div>
+        <button onclick="checkIcons()">Check Icons</button>
+    </div>
+
+    <script>
+        let deferredPrompt;
+
+        // Browser Detection
+        function detectBrowser() {
+            const ua = navigator.userAgent;
+            const info = {
+                isOpera: /OPR|Opera/.test(ua),
+                isChrome: /Chrome/.test(ua) && !/Edg/.test(ua),
+                isEdge: /Edg/.test(ua),
+                isFirefox: /Firefox/.test(ua),
+                isSafari: /^((?!chrome|android).)*safari/i.test(ua),
+                isIOS: /iPhone|iPad|iPod/.test(ua),
+                isAndroid: /Android/.test(ua),
+                userAgent: ua
+            };
+            
+            document.getElementById('browserInfo').innerHTML = `
+                <div class="test-item">
+                    <strong>Browser:</strong> 
+                    ${info.isOpera ? '<span class="pass">✓ Opera</span>' : ''}
+                    ${info.isChrome ? '<span class="pass">✓ Chrome</span>' : ''}
+                    ${info.isEdge ? '<span class="pass">✓ Edge</span>' : ''}
+                    ${info.isFirefox ? '<span class="pass">✓ Firefox</span>' : ''}
+                    ${info.isSafari ? '<span class="pass">✓ Safari</span>' : ''}
+                </div>
+                <div class="test-item">
+                    <strong>Platform:</strong> 
+                    ${info.isIOS ? '<span class="pass">iOS</span>' : ''}
+                    ${info.isAndroid ? '<span class="pass">Android</span>' : ''}
+                    ${!info.isIOS && !info.isAndroid ? '<span class="pass">Desktop</span>' : ''}
+                </div>
+                <div class="test-item">
+                    <strong>HTTPS:</strong> 
+                    ${location.protocol === 'https:' || location.hostname === 'localhost' ? 
+                        '<span class="pass">✓ Secure</span>' : 
+                        '<span class="fail">✗ Not Secure (HTTPS required)</span>'}
+                </div>
+                <pre>${ua}</pre>
+            `;
+        }
+
+        // Service Worker Check
+        async function checkSW() {
+            const status = document.getElementById('swStatus');
+            
+            if (!('serviceWorker' in navigator)) {
+                status.innerHTML = '<div class="test-item fail">✗ Service Workers not supported</div>';
+                return;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.getRegistration();
+                
+                if (!registration) {
+                    status.innerHTML = '<div class="test-item warn">⚠ No service worker registered</div>';
+                    return;
+                }
+
+                status.innerHTML = `
+                    <div class="test-item pass">✓ Service Worker registered</div>
+                    <div class="test-item">
+                        <strong>State:</strong> ${registration.active ? 
+                            '<span class="pass">Active</span>' : 
+                            '<span class="warn">Not Active</span>'}
+                    </div>
+                    <div class="test-item">
+                        <strong>Scope:</strong> ${registration.scope}
+                    </div>
+                    <div class="test-item">
+                        <strong>Controlling:</strong> ${navigator.serviceWorker.controller ? 
+                            '<span class="pass">✓ Page is controlled</span>' : 
+                            '<span class="fail">✗ Page not controlled</span>'}
+                    </div>
+                `;
+            } catch (error) {
+                status.innerHTML = `<div class="test-item fail">✗ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function registerSW() {
+            if (!('serviceWorker' in navigator)) {
+                alert('Service Workers not supported');
+                return;
+            }
+
+            try {
+                const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+                document.getElementById('swStatus').innerHTML = 
+                    '<div class="test-item pass">✓ Service Worker registration initiated</div>';
+                setTimeout(checkSW, 1000);
+            } catch (error) {
+                document.getElementById('swStatus').innerHTML = 
+                    `<div class="test-item fail">✗ Registration failed: ${error.message}</div>`;
+            }
+        }
+
+        // Manifest Check
+        async function checkManifest() {
+            const status = document.getElementById('manifestStatus');
+            
+            try {
+                const response = await fetch('/manifest.json');
+                const manifest = await response.json();
+                
+                const checks = [
+                    { name: 'name', value: manifest.name, required: true },
+                    { name: 'short_name', value: manifest.short_name, required: true },
+                    { name: 'start_url', value: manifest.start_url, required: true },
+                    { name: 'display', value: manifest.display, required: true },
+                    { name: 'icons', value: manifest.icons?.length, required: true },
+                    { name: 'theme_color', value: manifest.theme_color, required: false },
+                    { name: 'background_color', value: manifest.background_color, required: false }
+                ];
+
+                let html = '<div class="test-item pass">✓ Manifest loaded successfully</div>';
+                
+                checks.forEach(check => {
+                    const passed = check.value !== undefined && check.value !== null;
+                    html += `
+                        <div class="test-item ${passed ? 'pass' : (check.required ? 'fail' : 'warn')}">
+                            ${passed ? '✓' : '✗'} ${check.name}: ${JSON.stringify(check.value)}
+                        </div>
+                    `;
+                });
+
+                // Check icons
+                const validIcons = manifest.icons?.filter(icon => {
+                    const size = parseInt(icon.sizes);
+                    return size >= 192;
+                });
+
+                html += `
+                    <div class="test-item ${validIcons?.length >= 1 ? 'pass' : 'fail'}">
+                        ${validIcons?.length >= 1 ? '✓' : '✗'} Icons 192x192+: ${validIcons?.length || 0}
+                    </div>
+                `;
+
+                status.innerHTML = html;
+            } catch (error) {
+                status.innerHTML = `<div class="test-item fail">✗ Failed to load manifest: ${error.message}</div>`;
+            }
+        }
+
+        // Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            document.getElementById('installStatus').innerHTML = 
+                '<div class="test-item pass">✓ Install prompt available</div>';
+            document.getElementById('installButton').style.display = 'inline-block';
+        });
+
+        document.getElementById('installButton').addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                alert('Install prompt not available');
+                return;
+            }
+
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            document.getElementById('installStatus').innerHTML += 
+                `<div class="test-item ${outcome === 'accepted' ? 'pass' : 'warn'}">
+                    User ${outcome} the install prompt
+                </div>`;
+            
+            deferredPrompt = null;
+            document.getElementById('installButton').style.display = 'none';
+        });
+
+        // Check if already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            document.getElementById('installStatus').innerHTML = 
+                '<div class="test-item pass">✓ App is installed (running in standalone mode)</div>';
+        } else {
+            document.getElementById('installStatus').innerHTML = 
+                '<div class="test-item warn">⚠ Waiting for install prompt...</div>';
+        }
+
+        // Icon Check
+        async function checkIcons() {
+            const status = document.getElementById('iconStatus');
+            const iconPaths = [
+                '/favicon-16x16.png',
+                '/favicon-32x32.png',
+                '/android-chrome-192x192.png',
+                '/android-chrome-512x512.png',
+                '/apple-touch-icon.png'
+            ];
+
+            let html = '';
+            
+            for (const path of iconPaths) {
+                try {
+                    const response = await fetch(path, { method: 'HEAD' });
+                    html += `
+                        <div class="test-item ${response.ok ? 'pass' : 'fail'}">
+                            ${response.ok ? '✓' : '✗'} ${path} (${response.status})
+                        </div>
+                    `;
+                } catch (error) {
+                    html += `<div class="test-item fail">✗ ${path} (error)</div>`;
+                }
+            }
+
+            status.innerHTML = html;
+        }
+
+        // Run initial checks
+        detectBrowser();
+        checkSW();
+        checkManifest();
+        checkIcons();
+
+        // Auto-refresh SW status
+        setInterval(checkSW, 5000);
+    </script>
+</body>
+</html>

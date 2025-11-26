@@ -441,6 +441,23 @@ function gameReducer(state: GameState, action: any): GameState {
                 eventsThisWeek.push(`Contract offer from ${offer.label.name} has expired. The label has moved on to other artists.`);
             });
 
+            // Check if label contract has expired
+            let updatedCurrentLabel = state.currentLabel;
+            let updatedContractStartDate = state.contractStartDate;
+            if (state.currentLabel && state.contractStartDate && state.currentDate) {
+                const contractLengthYears = state.currentLabel.terms.contractLength;
+                const expiryDate = new Date(state.contractStartDate);
+                expiryDate.setFullYear(expiryDate.getFullYear() + contractLengthYears);
+                const timeRemaining = expiryDate.getTime() - state.currentDate.getTime();
+                
+                if (timeRemaining <= 0) {
+                    // Contract has expired - clear it
+                    eventsThisWeek.push(`Your contract with ${state.currentLabel.name} has ended. You are now a free agent!`);
+                    updatedCurrentLabel = null;
+                    updatedContractStartDate = null;
+                }
+            }
+
             // Get base difficulty settings and calculate dynamic modifiers
             const settings = getDifficultySettings(state.difficulty);
             const dynamicMods = calculateDynamicModifiers(
@@ -492,23 +509,20 @@ function gameReducer(state: GameState, action: any): GameState {
                 // Update staff contract time (recalculate monthsRemaining based on the advanced date)
                 newStaff = updateStaffContractTime(newStaff, newCurrentDate);
 
-                // Check for expiring contracts (< 1 month remaining)
+                // Check for expiring contracts
                 newStaff.forEach(s => {
                     if (s.monthsRemaining === 1) {
-                        eventsThisWeek.push(`${s.name}'s contract expires in 1 month! Consider extending or replacing them.`);
+                        eventsThisWeek.push(`⚠️ ${s.name}'s contract expires in 1 month! Go to Management to renew.`);
                     } else if (s.monthsRemaining === 0) {
-                        eventsThisWeek.push(`${s.name}'s contract has expired! They will leave unless extended.`);
+                        eventsThisWeek.push(`⚠️ ${s.name}'s contract has EXPIRED! They will leave next month unless you renew in Management.`);
+                    } else if (s.monthsRemaining < 0) {
+                        // Staff with negative monthsRemaining leave automatically
+                        eventsThisWeek.push(`${s.name} has left your team. You didn't renew their contract in time.`);
                     }
                 });
 
-                // Remove staff with expired contracts
-                const expiredStaff = newStaff.filter(s => s.monthsRemaining === 0);
-                if (expiredStaff.length > 0) {
-                    expiredStaff.forEach(s => {
-                        eventsThisWeek.push(`${s.name} has left your team. Their contract expired.`);
-                    });
-                    newStaff = newStaff.filter(s => s.monthsRemaining > 0);
-                }
+                // Remove staff with contracts that went negative (grace period expired)
+                newStaff = newStaff.filter(s => s.monthsRemaining >= 0);
             }
 
             // Apply minimum cash flow (living expenses) - scales with wealth
@@ -903,6 +917,8 @@ function gameReducer(state: GameState, action: any): GameState {
                 fameThresholdWeeks,
                 contractEligibilityUnlocked,
                 pendingContractOffers: updatedPendingOffers,
+                currentLabel: updatedCurrentLabel,
+                contractStartDate: updatedContractStartDate,
             };
         }
         case 'RESTART': {

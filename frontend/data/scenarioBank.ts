@@ -131,7 +131,7 @@ export const scenarioBank: Scenario[] = [
     // --- LABEL SIGNING ---
     {
         title: "The Indie Label Offer",
-        description: "A small but respected indie record label, 'Vinyl Heart Records', wants to sign you. They've sent over a contract for you to review. Should you examine their terms or hold out for something bigger?",
+        description: "A respected creative collective and indie label, 'SIRYUS A.M Collective', wants to sign you. They've sent over a contract for you to review. Should you examine their terms or hold out for something bigger?",
         conditions: {
             requiresContractEligibility: true, // Requires sustained 40/50/65 fame for 3 weeks (beginner/realistic/hardcore)
             maxFame: 100 // Can appear anytime after eligibility is unlocked
@@ -144,9 +144,9 @@ export const scenarioBank: Scenario[] = [
             {
                 text: "Review their contract carefully.",
                 outcome: {
-                    text: "You sit down to review Vinyl Heart Records' contract offer. Time to see what they're really offering.",
+                    text: "You sit down to review SIRYUS A.M Collective's contract offer. Time to see what they're really offering.",
                     cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
-                    viewContract: 'Vinyl Heart Records',
+                    viewContract: 'SIRYUS A.M Collective',
                     lesson: {
                         title: "Smart Contract Review",
                         explanation: "Always review contracts carefully before signing. Understanding terms, royalty rates, and creative control clauses can save your career from predatory deals.",
@@ -222,6 +222,132 @@ export const scenarioBank: Scenario[] = [
                         realWorldExample: "Frank Ocean famously walked away from his Def Jam contract to maintain creative control, eventually releasing 'Blonde' independently to critical and commercial success.",
                         tipForFuture: "Don't let FOMO (fear of missing out) pressure you into bad deals. There will always be other opportunities if you keep building your career.",
                         conceptTaught: "Contract Basics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The 360 Deal Temptation",
+        description: "Empire Sound Entertainment is offering you a lucrative 360 deal. They want a piece of EVERYTHING - your music, tours, merch, even brand deals. But they're offering $100,000 upfront and full career support. Is it worth it?",
+        conditions: { minFame: 45, minCareerProgress: 40, maxFame: 75 },
+        audioFile: '/audio/scenarios/contract-signing.m4a',
+        autoPlayAudio: false,
+        once: true,
+        choices: [
+            {
+                text: "Review the 360 deal contract.",
+                outcome: {
+                    text: "You examine Empire Sound Entertainment's 360 deal. The advance is tempting, but they want a percentage of EVERYTHING you earn.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Empire Sound Entertainment',
+                    lesson: {
+                        title: "Understanding 360 Deals",
+                        explanation: "360 deals give labels a percentage of ALL your income streams - music sales, touring, merchandise, endorsements, brand deals, and more. While they provide more support, you give up control and money from income you could manage independently.",
+                        realWorldExample: "Many artists have spoken out against 360 deals. While labels argue they invest more, artists often feel trapped giving away percentages of income streams they built themselves, especially touring and merch which traditionally belonged to artists.",
+                        tipForFuture: "360 deals can make sense for brand new artists who need everything managed, but are usually bad deals for artists who can handle some aspects independently. Calculate what percentage of your non-music income you're comfortable giving up permanently.",
+                        conceptTaught: "Predatory Deals"
+                    }
+                }
+            },
+            {
+                text: "Decline and stay independent.",
+                outcome: {
+                    text: "You pass on the 360 deal, choosing to maintain control over all your revenue streams. It's scary turning down that money, but you know your worth.",
+                    cash: 0, fame: 0, wellBeing: 5, careerProgress: 2, hype: 0,
+                    lesson: {
+                        title: "The Value of Independence",
+                        explanation: "Staying independent means more work and financial risk, but you keep control of all your income and decisions. Many successful artists have built empires by maintaining independence.",
+                        realWorldExample: "Chance the Rapper famously turned down major label deals to stay independent, maintaining ownership of his masters and all revenue streams. He became hugely successful and influential while keeping creative and financial control.",
+                        tipForFuture: "Independence requires discipline and business savvy, but the long-term rewards often outweigh short-term label support.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "Distribution vs Full Label",
+        description: "You're weighing options: sign with DistroFlow Digital for just distribution (you keep control and most money) or go with a traditional label for full support but less control. What's your priority?",
+        conditions: { minFame: 35, minCareerProgress: 25 },
+        once: true,
+        choices: [
+            {
+                text: "Review DistroFlow Digital's distribution deal.",
+                outcome: {
+                    text: "DistroFlow keeps it simple: they distribute your music worldwide, you keep 85% and all creative control. No strings attached.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'DistroFlow Digital',
+                    lesson: {
+                        title: "Modern Distribution Models",
+                        explanation: "Distribution deals are not traditional record deals. Distributors just get your music on platforms - you handle everything else. You keep ownership, control, and most revenue, but you're responsible for all costs and marketing.",
+                        realWorldExample: "Many independent artists use distributors like DistroKid, TuneCore, or CD Baby rather than labels. They maintain ownership and keep 80-90% of revenue, though they must fund and market everything themselves.",
+                        tipForFuture: "Distribution deals work best if you can afford recording/marketing costs and handle the business side yourself. They're the most artist-friendly financial arrangement.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Keep searching for a better full-service deal.",
+                outcome: {
+                    text: "You decide distribution alone isn't enough support. You'll keep building your career while looking for a label that offers real value without predatory terms.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 1, hype: 0,
+                    lesson: {
+                        title: "Patience in Deal-Making",
+                        explanation: "Not every opportunity is the right opportunity. Sometimes waiting for a better deal that aligns with your goals is smarter than jumping at the first offer.",
+                        realWorldExample: "H.E.R. took years building her fanbase independently before signing a favorable deal with RCA that gave her creative control and ownership. Her patience paid off with better terms than most new artists get.",
+                        tipForFuture: "Build leverage before signing. The more successful you are independently, the better deals you can negotiate.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Contract Renegotiation Opportunity",
+        description: "A major label that's been watching your success reaches out. They want to sign you to a fresh deal, and they're willing to offer better terms than standard contracts. Your recent achievements give you serious negotiating power.",
+        conditions: { minCareerProgress: 60, minFame: 60, requiredAchievementId: 'PROJECT_ALBUM_1' },
+        once: true,
+        choices: [
+            {
+                text: "Push for premium terms - 20% royalties and creative control.",
+                outcome: {
+                    text: "You come to the table confident and prepared. After tough negotiations, they agree to your terms: 20% royalty rate and significant creative control. Your leverage paid off!",
+                    cash: 0, fame: 5, wellBeing: 5, careerProgress: 10, hype: 5,
+                    lesson: {
+                        title: "The Power of Leverage in Negotiations",
+                        explanation: "Success gives you negotiating power. When you've proven your value with sales and streams, labels are motivated to keep you happy. Use this leverage to secure better terms.",
+                        realWorldExample: "Taylor Swift famously renegotiated her contracts multiple times as her success grew, each time securing better terms until she eventually signed an unprecedented deal with Republic Records where she owns her masters.",
+                        tipForFuture: "Track your metrics - streams, sales, social media growth. These numbers are your leverage in negotiations. Labels need successful artists more than successful artists need labels.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Demand ownership of your masters or walk away.",
+                outcome: {
+                    text: "You play hardball, making master ownership a dealbreaker. The label counters with 18% royalties and you keep ownership of future masters. Not perfect, but a major win.",
+                    cash: 0, fame: 3, wellBeing: 3, careerProgress: 12, hype: 3,
+                    lesson: {
+                        title: "Strategic Negotiation Tactics",
+                        explanation: "Being willing to walk away is your strongest negotiating position. Labels know you have options, especially in today's independent-friendly music landscape.",
+                        realWorldExample: "Prince's famous battles with Warner Bros. showed him standing firm on ownership and creative control. While it was painful short-term, his willingness to walk away eventually got him his masters back.",
+                        tipForFuture: "Never negotiate from fear. Know your worth, have alternatives lined up, and be genuinely willing to walk away. Desperation leads to bad deals.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Play it safe with standard improvements.",
+                outcome: {
+                    text: "You negotiate a modest bump to 16% royalties and standard terms. It's safe and comfortable, but you wonder if you left money and control on the table when you had maximum leverage.",
+                    cash: 0, fame: 0, wellBeing: -2, careerProgress: 3, hype: 0,
+                    lesson: {
+                        title: "The Cost of Playing It Safe",
+                        explanation: "Sometimes the comfortable choice isn't the best choice. When you have leverage and don't use it, you're leaving value on the table that you may never get back.",
+                        realWorldExample: "Many artists accept small increases rather than pushing for what they deserve. Years later, they realize they could have negotiated much better terms when they had momentum.",
+                        tipForFuture: "Strike while the iron is hot. Leverage doesn't last forever. When you have success and options, maximize your position.",
+                        conceptTaught: "Revenue Streams"
                     }
                 }
             }

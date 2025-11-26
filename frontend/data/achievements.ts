@@ -20,7 +20,7 @@ export const achievements: Omit<Achievement, 'unlocked'>[] = [
     { id: 'PROJECT_ALBUM_2', name: 'Sophomore Success', description: 'Release your second album.' },
 
     // Business Achievements
-    { id: 'SIGNED_VINYL_HEART_RECORDS', name: 'Indie Darling', description: 'Sign with Vinyl Heart Records, maintaining your creative independence.' },
+    { id: 'SIGNED_SIRYUS_AM_COLLECTIVE', name: 'Indie Darling', description: 'Sign with SIRYUS A.M Collective, maintaining your creative independence.' },
     { id: 'SIGNED_GLOBAL_RECORDS', name: 'Big Money', description: 'Sign with Global Records for a massive advance.' },
     { id: 'SIGNED_VISIONARY_MUSIC_GROUP', name: 'The Smart Deal', description: 'Sign with Visionary Music Group for fair terms and creative control.' },
     { id: 'STAFF_MANAGER', name: 'Got a Manager', description: 'Hire your first manager.'},

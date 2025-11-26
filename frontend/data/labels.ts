@@ -3,10 +3,10 @@ import type { RecordLabel } from '../types';
 export const labels: RecordLabel[] = [
     {
         id: 'INDIE',
-        name: 'Vinyl Heart Records',
+        name: 'SIRYUS A.M Collective',
         type: 'indie',
         reputation: 75,
-        description: 'We are an independent label focused on artist development. We believe in building careers, not just releasing singles. You will maintain creative control and own your masters after the contract period. We are selective about who we sign because we invest deeply in each artist.',
+        description: 'We are a creative collective and indie label focused on artist development. We believe in building careers, not just releasing singles. You will maintain creative control and own your masters after the contract period. We are selective about who we sign because we invest deeply in each artist.',
         terms: {
             advance: 5000,
             royaltyRate: 15,
@@ -115,6 +115,87 @@ export const labels: RecordLabel[] = [
             'Worldwide distribution with major label infrastructure',
             'Only 80% goes to recoupment - you keep 20% from dollar one',
             'Label has reputation for artist-friendly practices'
+        ],
+        dealBreakers: []
+    },
+    {
+        id: '360_DEAL',
+        name: 'Empire Sound Entertainment',
+        type: 'major',
+        reputation: 50,
+        description: 'Empire Sound Entertainment offers a comprehensive 360 deal where we invest in every aspect of your career. We take a percentage of ALL your income streams - music sales, touring, merch, endorsements, and more. In return, we provide full-service career management, marketing, touring support, and industry connections.',
+        terms: {
+            advance: 100000,
+            royaltyRate: 10,
+            albumCommitment: 4,
+            contractLength: 6,
+            creativeControl: 40,
+            recoupmentRate: 100,
+            crossCollateralized: true,
+            optionClause: true,
+            advanceRecoupable: true,
+            marketingBudget: 100000,
+            tourSupport: 40000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'CRITICAL: 360 deal means they take 20-30% of ALL income - touring, merch, endorsements, everything',
+            'MAJOR RED FLAG: Cross-collateralization means all projects are financially linked',
+            'Low royalty rate (10%) on music sales',
+            'Option clause gives them power to extend contract',
+            'Low creative control (40%) - they control most decisions',
+            '100% recoupment means every marketing dollar comes from YOUR earnings first',
+            'You must recoup $100,000 advance before ANY royalty payments'
+        ],
+        greenFlags: [
+            'Large advance ($100,000) provides immediate financial security',
+            'Strong marketing budget ($100,000) means serious promotional push',
+            'Significant tour support ($40,000) for live performances',
+            'Worldwide distribution and industry connections',
+            'Full-service career management included'
+        ],
+        dealBreakers: [
+            '360 deals are controversial - you give up percentage of income streams you could control yourself',
+            'Many artists regret 360 deals once they become successful and realize how much money they\'re losing',
+            'The label profits from your work even after the contract ends on some streams'
+        ]
+    },
+    {
+        id: 'DISTRIBUTION_ONLY',
+        name: 'DistroFlow Digital',
+        type: 'indie',
+        reputation: 70,
+        description: 'DistroFlow Digital is a modern distribution company, not a traditional label. We get your music on all platforms worldwide while you keep full ownership and control. We don\'t own your masters, we don\'t control your creative, and we don\'t recoup costs. You just pay us a percentage of distribution revenue.',
+        terms: {
+            advance: 0,
+            royaltyRate: 85,
+            albumCommitment: 1,
+            contractLength: 2,
+            creativeControl: 100,
+            recoupmentRate: 0,
+            crossCollateralized: false,
+            optionClause: false,
+            advanceRecoupable: false,
+            marketingBudget: 0,
+            tourSupport: 0,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'No advance - you fund everything yourself',
+            'No marketing budget - you handle all promotion',
+            'No tour support - you finance tours yourself',
+            'You take on all financial risk',
+            'Limited career support or industry connections'
+        ],
+        greenFlags: [
+            'HUGE: You keep 85% of streaming/sales revenue (we only take 15% distribution fee)',
+            'HUGE: 100% creative control - complete artistic freedom',
+            'You own your masters forever - the music is YOURS',
+            'No recoupment - every dollar earned goes straight to your pocket',
+            'Short 2-year contract - easy exit if you want to change',
+            'No cross-collateralization - financial independence',
+            'No option clause - you control your future',
+            'Only 1 album commitment - minimal obligation'
         ],
         dealBreakers: []
     }

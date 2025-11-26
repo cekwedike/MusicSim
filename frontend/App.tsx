@@ -1099,6 +1099,7 @@ function gameReducer(state: GameState, action: any): GameState {
                     expiresWeek: totalWeeks + 4 // 4 weeks to decide
                 },
                 currentLabelOffer: null,
+                currentScenario: null, // Clear scenario to allow next one to trigger
                 lastOutcome: null, // Clear the outcome modal
                 modal: 'none',
                 logs: appendLogToArray(state.logs, createLog(`Saved contract offer from ${labelName} for later review. You have 4 weeks to decide.`, 'info', new Date(state.currentDate || new Date())))

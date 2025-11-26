@@ -4,7 +4,7 @@
         <tile>
             <square150x150logo src="/android-chrome-192x192.png"/>
             <square310x310logo src="/android-chrome-512x512.png"/>
-            <TileColor>#dc2626</TileColor>
+            <TileColor>#8B2635</TileColor>
         </tile>
     </msapplication>
 </browserconfig>

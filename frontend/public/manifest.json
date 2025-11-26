@@ -2,7 +2,7 @@
   "name": "MusicSim - Music Business Simulation",
   "short_name": "MusicSim",
   "description": "Learn the music business through an interactive simulation game",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "fullscreen"],

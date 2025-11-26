@@ -44,15 +44,15 @@ const OffersModal: React.FC<OffersModalProps> = ({
                     <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                             <span className="text-gray-400">Advance:</span>
-                            <span className="text-green-400 font-bold">${pendingOffer.label.advance.toLocaleString()}</span>
+                            <span className="text-green-400 font-bold">${(pendingOffer.label.advance || 0).toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-400">Royalty Rate:</span>
-                            <span className="text-blue-400 font-bold">{pendingOffer.label.royaltyRate}%</span>
+                            <span className="text-blue-400 font-bold">{pendingOffer.label.royaltyRate || 0}%</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-400">Contract Length:</span>
-                            <span className="text-purple-400 font-bold">{pendingOffer.label.contractLength} years</span>
+                            <span className="text-purple-400 font-bold">{pendingOffer.label.contractLength || 0} years</span>
                         </div>
                     </div>
                 </div>

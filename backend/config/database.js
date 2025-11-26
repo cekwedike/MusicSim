@@ -21,7 +21,11 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
     acquire: 60000, // Increased to 60 seconds for slow connections
     idle: 10000, // Close idle connections after 10 seconds
     evict: 1000, // Check for idle connections every second
-    handleDisconnects: true // Automatically handle disconnections
+    handleDisconnects: true, // Automatically handle disconnections
+    // Validate connection before use
+    validate: (client) => {
+      return !client._ending;
+    }
   },
   retry: {
     max: 5, // Increased retries
@@ -30,8 +34,11 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
       /ECONNREFUSED/,
       /ETIMEDOUT/,
       /EHOSTUNREACH/,
+      /Connection terminated unexpectedly/,
+      /Connection terminated/,
       /SequelizeConnectionError/,
-      /SequelizeConnectionRefusedError/
+      /SequelizeConnectionRefusedError/,
+      /SequelizeDatabaseError/
     ],
     backoffBase: 1000, // Start with 1 second
     backoffExponent: 1.5 // Exponential backoff
@@ -52,6 +59,20 @@ sequelize.afterConnect(() => {
     console.log('[DB] Database connection established');
   }
 });
+
+// Periodic connection health check to prevent stale connections
+setInterval(async () => {
+  try {
+    await sequelize.authenticate();
+  } catch (error) {
+    console.error('[DB] Connection health check failed, reconnecting...', error.message);
+    try {
+      await sequelize.connectionManager.initPools();
+    } catch (reconnectError) {
+      console.error('[DB] Reconnection failed:', reconnectError.message);
+    }
+  }
+}, 300000); // Check every 5 minutes
 
 // Graceful connection error handling
 process.on('SIGINT', async () => {

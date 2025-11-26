@@ -184,7 +184,7 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
             )}
 
             {/* Pending Contract Offer - Always visible when there's a pending offer */}
-            {pendingContractOffer && currentWeek !== undefined && (
+            {pendingContractOffer && pendingContractOffer.label && currentWeek !== undefined && (
                 <button
                     onClick={onViewPendingOffer}
                     className={`mt-2 w-full p-2 rounded-lg border transition-all ${

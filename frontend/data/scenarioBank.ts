@@ -2662,6 +2662,428 @@ export const scenarioBank: Scenario[] = [
                 }
             }
         ]
+    },
+
+    // --- BATCH 2: NEW SCENARIOS (10 scenarios) ---
+    {
+        title: "The Radio Payola Reality",
+        description: "A major radio station DJ offers to put your song on rotation for ₦150,000 ($180). They play songs 5 times daily, reaching 2 million listeners. 'Everyone pays,' they say. 'How do you think songs get airplay?' Your distributor confirms this is standard practice in your market. But it's technically illegal and morally questionable. Pay-for-play or stay off the radio?",
+        conditions: { minFame: 20, minCash: 250, minFameByDifficulty: { beginner: 15, realistic: 20, hardcore: 28 } },
+        choices: [
+            {
+                text: "Pay the ₦150,000 for radio rotation",
+                outcome: {
+                    text: "You pay for rotation. Your song plays 5 times daily for a month. You gain 15K new followers and 100K streams. The exposure is real. But you've normalized corruption. You're now part of a system where only artists who can pay get heard. Quality doesn't matter - only money.",
+                    cash: -180, fame: 18, wellBeing: -12, careerProgress: 10, hype: 35,
+                    lesson: {
+                        title: "Payola Economics",
+                        explanation: "Pay-for-play radio is common in many markets but creates an unfair system where financial resources matter more than artistic merit. It's effective for exposure but perpetuates corruption and inequality.",
+                        realWorldExample: "Radio payola is standard practice across Africa. Major artists pay heavily for rotation. Independent artists without money struggle to get airplay regardless of quality. The system rewards wealth, not talent.",
+                        tipForFuture: "Payola works for exposure but reinforces corrupt systems. If you pay, know you're buying access to an unfair system. Consider whether digital platforms offer better ROI than corrupt radio.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Refuse to pay - pursue digital-first strategy",
+                outcome: {
+                    text: "You refuse to pay and focus on digital platforms instead. Your song never gets radio play. Older audiences who listen to radio don't discover you. But your Spotify/YouTube/TikTok numbers grow organically. You're building a younger, digital-native fanbase. Different strategy, different audience.",
+                    cash: 0, fame: 8, wellBeing: 10, careerProgress: 6, hype: 15,
+                    lesson: {
+                        title: "Digital-First Artist Strategy",
+                        explanation: "Skipping corrupt traditional media to focus on digital platforms is viable in 2025. You'll miss older radio audiences but reach younger digital audiences. Different distribution strategies reach different demographics.",
+                        realWorldExample: "Many successful African artists bypass radio entirely, building careers on YouTube, TikTok, and streaming platforms. Artists like Rema and Tems found success digitally before radio played them.",
+                        tipForFuture: "Radio isn't mandatory anymore. If payola feels wrong or too expensive, invest in digital strategy. You can build sustainable careers without traditional radio.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Report the DJ to media regulatory authorities",
+                outcome: {
+                    text: "You report the DJ. Nothing happens - the regulatory body is underfunded and corrupt. Word spreads that you reported someone. Now every radio DJ in your market blacklists you. You've been labeled a troublemaker. Your stand against corruption killed your traditional media access completely. Whistleblowing backfired.",
+                    cash: 0, fame: -15, wellBeing: -20, careerProgress: -10, hype: -25,
+                    lesson: {
+                        title: "Whistleblowing in Corrupt Systems",
+                        explanation: "Reporting corruption to authorities in corrupt systems rarely works and often backfires. The industry protects its own and punishes outsiders who report wrongdoing. Individual action can't fix systemic corruption.",
+                        realWorldExample: "Artists who've reported media corruption in African markets typically face industry-wide blacklisting while the corrupt figures continue business as usual. The system punishes whistleblowers more than wrongdoers.",
+                        tipForFuture: "Fighting systemic corruption requires collective action or policy change, not individual reports. Individual whistleblowing often just hurts you while changing nothing.",
+                        conceptTaught: "crisis-management"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Feature Verse Pricing Dilemma",
+        description: "An established artist offers to feature on your song for $3,000. Their name would boost your credibility and expose you to their 200K followers. But $3,000 is nearly your entire marketing budget. Alternative: collaborate with three smaller artists for $500 each. One big feature or multiple smaller collaborations?",
+        conditions: { minFame: 18, minCash: 3500, minCareerProgress: 12 },
+        choices: [
+            {
+                text: "Pay $3,000 for the big-name feature",
+                outcome: {
+                    text: "You pay for the feature. The song drops and gets attention from their fanbase. You gain 12K followers. The collaboration legitimizes you in the industry. But you spent your entire marketing budget on one feature. You have no money left to promote the song. Good feature, but no promotional plan.",
+                    cash: -3000, fame: 15, wellBeing: -5, careerProgress: 12, hype: 35,
+                    lesson: {
+                        title: "Feature Cost-Benefit Analysis",
+                        explanation: "Big features provide credibility and audience access but consume resources that could fund broader campaigns. Balance the value of one big collaboration against multiple smaller initiatives. Don't spend everything on one bet.",
+                        realWorldExample: "Many artists spend their entire budgets on expensive features, then can't afford to promote the resulting song. The feature helps, but without promotion, the song doesn't reach its potential.",
+                        tipForFuture: "Never spend your entire budget on one element. Reserve resources for promotion. A smaller feature with promotion often outperforms a bigger feature with no promotional push.",
+                        conceptTaught: "Revenue Streams"
+                    }
+                }
+            },
+            {
+                text: "Collaborate with three smaller artists for $500 each",
+                outcome: {
+                    text: "You work with three smaller artists, creating three different songs. Each brings 20-40K followers. Combined, you gain 15K new followers across three releases. You've diversified your collaborations, built multiple relationships, and still have $1,500 left for promotion. Strategic networking beats one big bet.",
+                    cash: -1500, fame: 12, wellBeing: 10, careerProgress: 15, hype: 30,
+                    lesson: {
+                        title: "Diversified Collaboration Strategy",
+                        explanation: "Multiple smaller collaborations can deliver comparable results to one expensive feature while building broader networks and keeping resources for other needs. Diversification reduces risk and builds more relationships.",
+                        realWorldExample: "Many successful artists built careers through numerous smaller collaborations rather than expensive features. Wizkid collaborated widely with peers before landing big international features.",
+                        tipForFuture: "Especially early in your career, multiple peer collaborations build more sustainable networks than expensive features. Save big features for when you have marketing budgets to match.",
+                        conceptTaught: "networking-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Piracy Platform Dilemma",
+        description: "Your music is being pirated on a popular local download site. They're offering free downloads of your songs - you get nothing while they profit from ads. The site gets 500K visitors monthly. You could: 1) DMCA takedown (costs $300, takes 2 months), 2) Negotiate with them to split ad revenue, or 3) Ignore it and focus on legitimate platforms. What's the move?",
+        conditions: { minFame: 25, minCareerProgress: 18 },
+        choices: [
+            {
+                text: "Pay $300 for DMCA takedown",
+                outcome: {
+                    text: "You hire a lawyer to issue DMCA notices. After 2 months and $300, your music is removed. Three weeks later, it's back up on a different domain. You've learned that piracy is a whack-a-mole game you can't win. You spent $300 and two months to solve nothing permanently. Fighting piracy is expensive and futile.",
+                    cash: -300, fame: 0, wellBeing: -15, careerProgress: -2, hype: -5,
+                    lesson: {
+                        title: "The Piracy Whack-A-Mole",
+                        explanation: "Piracy takedowns are expensive, time-consuming, and temporary. Pirates move domains faster than you can take them down. Fighting piracy directly is usually a losing battle that wastes resources better spent elsewhere.",
+                        realWorldExample: "Countless artists have spent thousands fighting piracy sites that simply re-upload or change domains. The economics favor the pirates. Very few artists successfully eliminate piracy through legal action.",
+                        tipForFuture: "Don't waste resources fighting piracy directly. Focus on making legitimate platforms more convenient and valuable than piracy. Accessibility beats enforcement.",
+                        conceptTaught: "piracy-reality"
+                    }
+                }
+            },
+            {
+                text: "Negotiate ad revenue split with the piracy site",
+                outcome: {
+                    text: "You reach out and negotiate a 50/50 ad revenue split. They agree. You start earning $200/month from their piracy of your music. You've turned piracy into a revenue stream. Unconventional, but pragmatic. If you can't stop them, profit with them. The music industry is changing.",
+                    cash: 200, fame: 5, wellBeing: 5, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Pragmatic Piracy Response",
+                        explanation: "If you can't stop piracy, monetizing it is pragmatic. Some artists negotiate with piracy platforms to share revenue rather than fighting expensive legal battles. It's not ideal, but it's better than nothing.",
+                        realWorldExample: "Some African artists have successfully negotiated revenue shares with piracy platforms. It legitimizes the platforms somewhat but puts money in artists' pockets that they'd otherwise never see.",
+                        tipForFuture: "Piracy exists whether you like it or not. Sometimes working with pirates to monetize your content is smarter than fighting them. Choose pragmatism over principle when resources are limited.",
+                        conceptTaught: "piracy-reality"
+                    }
+                }
+            },
+            {
+                text: "Ignore piracy - focus on streaming and live shows",
+                outcome: {
+                    text: "You ignore the piracy site and focus on making your music easily accessible on legitimate platforms. You invest in Spotify, YouTube, and live performances. People who want to support you use legitimate platforms. Pirates were never going to pay anyway. You're building where the revenue actually is.",
+                    cash: 0, fame: 8, wellBeing: 10, careerProgress: 10, hype: 15,
+                    lesson: {
+                        title: "Piracy Acceptance Strategy",
+                        explanation: "Accepting that piracy exists and focusing on legitimate revenue streams is often the most effective strategy. People who pirate were unlikely to pay anyway. Build your business where the willing customers are.",
+                        realWorldExample: "Most successful African artists don't fight piracy aggressively. They accept it as reality and focus on streaming, YouTube ads, and live performances where actual revenue exists. Fighting piracy wastes time and money.",
+                        tipForFuture: "Piracy is annoying but largely unavoidable. Accept it and focus on revenue streams you can control: streaming, live shows, merch, brand deals. Don't waste resources on unwinnable battles.",
+                        conceptTaught: "piracy-reality"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Mental Health Crisis Point",
+        description: "You've been grinding hard - 6 shows in 8 days, constant social media posting, studio sessions until 3 AM. You're exhausted and developing anxiety. Your therapist says you need to take 2 weeks off completely. But you have shows booked ($4,000 income) and your momentum is building. Taking time off could kill your momentum. Your health or your career?",
+        conditions: { minFame: 30, minCareerProgress: 25, maxWellBeing: 35, minFameByDifficulty: { beginner: 22, realistic: 30, hardcore: 38 } },
+        choices: [
+            {
+                text: "Cancel everything - prioritize mental health",
+                outcome: {
+                    text: "You cancel shows and social media. You rest for 2 weeks. Your anxiety decreases and you feel human again. But you lost $4,000 in show fees and some promoters are frustrated. When you return, you've lost some momentum. But you're healthier and sustainable. You chose long-term health over short-term gains.",
+                    cash: -4000, fame: -5, wellBeing: 40, careerProgress: -3, hype: -15,
+                    lesson: {
+                        title: "Mental Health Investment",
+                        explanation: "Burnout prevention is cheaper than burnout recovery. Taking breaks feels like losing momentum, but burning out completely ends careers. Your mental health is infrastructure - maintain it or everything collapses.",
+                        realWorldExample: "Many artists who ignored mental health warnings ended up with multi-month or permanent breakdowns. Artists like Kid Cudi and Kendrick Lamar have publicly taken mental health breaks, returning stronger.",
+                        tipForFuture: "Schedule rest before you collapse. Career longevity requires sustainable practices. Burning bright for two years then collapsing beats burning steadily for a decade.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Push through - maintain momentum",
+                outcome: {
+                    text: "You ignore your therapist and keep grinding. You complete the shows and earn $4,000. Two weeks later, you have a breakdown during a performance - panic attack on stage. You cancel the next month of shows. You're forced to take 6 weeks off for recovery. Pushing through short-term cost you far more long-term. Your body shut you down.",
+                    cash: 4000, fame: -12, wellBeing: -40, careerProgress: -15, hype: -35,
+                    lesson: {
+                        title: "Burnout Consequences",
+                        explanation: "Ignoring mental health warnings doesn't save your career - it delays the inevitable collapse and makes it worse. Your body will force you to rest eventually. Choosing when to rest is smarter than being forced to rest.",
+                        realWorldExample: "Numerous artists have had public mental health crises from ignoring warning signs. The resulting forced breaks are always longer and more damaging than preventive breaks would have been.",
+                        tipForFuture: "Mental health warnings are serious. If a professional tells you to rest, rest. Ignoring it won't save your career - it will make the eventual collapse worse and longer.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            },
+            {
+                text: "Compromise - take 1 week off, keep crucial shows",
+                outcome: {
+                    text: "You take 1 week off and reschedule what you can. You keep two of the biggest shows ($2,500) and cancel the smaller ones. You rest partially and complete some commitments. It's not perfect - you're still tired and you lost some income. But you've balanced health and career. Neither ideal, but both intact.",
+                    cash: -1500, fame: 0, wellBeing: 15, careerProgress: 3, hype: -5,
+                    lesson: {
+                        title: "Sustainable Compromise",
+                        explanation: "Sometimes full rest isn't possible, but partial rest is better than nothing. Finding middle ground between burnout and momentum loss is a valuable skill. Perfect solutions are rare - workable compromises are realistic.",
+                        realWorldExample: "Many working artists manage mental health through strategic partial breaks - canceling smaller commitments while keeping major ones, reducing social media while maintaining key performances.",
+                        tipForFuture: "When you can't fully rest, strategic partial rest is better than nothing. Prioritize the commitments that matter most and be willing to let smaller things go. Sustainability requires flexibility.",
+                        conceptTaught: "career-sustainability"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Sample Clearance Nightmare",
+        description: "You released a song sampling a classic Afrobeat track. The song went viral - 800K streams. Now the original artist's estate wants $15,000 for the uncleared sample or they'll sue and take all your royalties ($6,000 so far). Your lawyer says fighting costs $20,000. You didn't know you needed clearance. Ignorance of copyright law is expensive.",
+        conditions: { minFame: 28, minCareerProgress: 20, minCash: 2000 },
+        choices: [
+            {
+                text: "Pay the $15,000 settlement",
+                outcome: {
+                    text: "You borrow money and pay $15,000 for retroactive clearance. You keep your $6,000 in royalties and the song stays up. But you're $9,000 in debt. The viral song that should have been your breakthrough became a financial disaster. You've learned an expensive lesson about sample clearance.",
+                    cash: -15000, fame: 5, wellBeing: -20, careerProgress: 2, hype: 10,
+                    lesson: {
+                        title: "Sample Clearance Reality",
+                        explanation: "All samples require clearance before release, even small ones. Clearing samples after a song goes viral costs 10-100x more than clearing upfront. Always clear samples before release or don't sample at all.",
+                        realWorldExample: "Countless artists have lost viral songs or paid massive settlements for uncleared samples. The Verve lost all 'Bitter Sweet Symphony' royalties for decades over an uncleared sample. Sample clearance is not optional.",
+                        tipForFuture: "Never release music with uncleared samples. Clear samples before release or use royalty-free loops. One uncleared sample can destroy your profits and career.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            },
+            {
+                text: "Take down the song - avoid legal costs",
+                outcome: {
+                    text: "You remove the song from all platforms. The viral moment dies immediately. You keep your $6,000 in royalties earned so far, but you've lost future earnings. Your fans are confused why your biggest hit disappeared. The momentum is gone. You saved legal costs but lost your breakthrough moment.",
+                    cash: 6000, fame: -8, wellBeing: -15, careerProgress: -10, hype: -40,
+                    lesson: {
+                        title: "Viral Momentum Lost",
+                        explanation: "Removing viral content stops your momentum completely. The fans who discovered you through that song lose access to it. Taking down hits to avoid legal costs saves money but kills careers. Sample clearance should happen before release, not after virality.",
+                        realWorldExample: "Artists who remove viral songs for legal reasons rarely recover the momentum. The algorithmic boost disappears, fans lose interest, and the opportunity is gone. Prevention through clearance is always better than post-viral takedown.",
+                        tipForFuture: "Never put yourself in this position. Clear samples before release. If you can't afford clearance, don't sample. Using uncleared samples is gambling your entire career on not getting caught.",
+                        conceptTaught: "Rights and Royalties"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Brand Deal Values Conflict",
+        description: "A major alcohol brand offers you $25,000 to be their brand ambassador for a year. You'd need to post about their products monthly and appear at their events. Your music has a young fanbase (15-25 years old). Your family has a history of alcoholism. The money would change your life, but promoting alcohol to young fans conflicts with your values. Money or principles?",
+        conditions: { minFame: 35, minCareerProgress: 28, minFameByDifficulty: { beginner: 28, realistic: 35, hardcore: 42 } },
+        choices: [
+            {
+                text: "Accept the $25,000 - secure your financial future",
+                outcome: {
+                    text: "You take the money. You post about their alcohol products. Some fans unfollow, saying you've sold out and are promoting harmful products to young people. Your family is disappointed. The money helps, but you feel like you've compromised yourself. You chose financial security over personal values. The money doesn't feel as good as you hoped.",
+                    cash: 25000, fame: 8, wellBeing: -25, careerProgress: 10, hype: 15,
+                    lesson: {
+                        title: "Values vs Money Trade-offs",
+                        explanation: "Large paydays that conflict with your values create long-term discomfort and reputational damage. Money solves immediate problems but doesn't resolve the internal conflict of compromising principles. Some deals cost more than they pay.",
+                        realWorldExample: "Many artists regret brand deals that conflicted with their values. The money is temporary; the reputational damage and internal conflict can last careers. Artists like Macklemore have publicly refused alcohol sponsorships despite financial pressure.",
+                        tipForFuture: "Large paydays are tempting, but deals that conflict with core values create lasting damage to your brand and mental health. Know your boundaries before you're offered money to cross them.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            },
+            {
+                text: "Decline - protect your values and brand",
+                outcome: {
+                    text: "You turn down $25,000. You publicly explain that you can't promote alcohol to young fans given your family history. Your honesty resonates - your fanbase respects you more. Other brands notice. Three months later, a sports brand offers you $18,000 for a deal that aligns with your values. Integrity attracted better opportunities.",
+                    cash: 0, fame: 12, wellBeing: 20, careerProgress: 15, hype: 25,
+                    lesson: {
+                        title: "Values-Based Brand Building",
+                        explanation: "Turning down money that conflicts with your values strengthens your brand authenticity. Audiences respect artists with consistent principles. Value-aligned opportunities often follow when you demonstrate integrity.",
+                        realWorldExample: "Artists who've publicly declined deals that conflict with their values often attract better, value-aligned opportunities. Authenticity is a brand asset that attracts conscious brands willing to pay for genuine partnerships.",
+                        tipForFuture: "Your values are part of your brand. Protecting them attracts opportunities that fit who you are. Short-term money isn't worth long-term brand damage or internal conflict.",
+                        conceptTaught: "Branding and Image"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Influencer Promo Scam",
+        description: "An 'Instagram influencer' with 800K followers offers to promote your music for $1,500. They claim they'll create 5 posts featuring your song. You check their account - high follower count but very low engagement (20-50 likes per post). Their followers might be fake. But 800K is 800K. Is it worth the risk?",
+        conditions: { minFame: 16, minCash: 2000 },
+        choices: [
+            {
+                text: "Pay $1,500 - hope the reach is real",
+                outcome: {
+                    text: "You pay $1,500. They post about your music 5 times. Each post gets 30-40 likes from bot accounts. Your music gets zero new streams or followers. The 800K followers were fake. You've been scammed. You spent $1,500 on promotion that reached virtually no one. The low engagement should have warned you.",
+                    cash: -1500, fame: 0, wellBeing: -20, careerProgress: -2, hype: 0,
+                    lesson: {
+                        title: "Fake Influencer Detection",
+                        explanation: "High follower counts mean nothing without engagement. Check likes, comments, and engagement rates before paying influencers. Engagement rate below 1-2% suggests fake followers. Bots don't stream your music or buy tickets.",
+                        realWorldExample: "The fake influencer industry is massive. Accounts with hundreds of thousands of fake followers sell promotions to artists who don't check engagement rates. Thousands of artists lose money to fake influencer promotions monthly.",
+                        tipForFuture: "Always calculate engagement rate (likes+comments/followers) before paying influencers. Under 1% is suspicious, under 0.1% is definitely fake. Small accounts with real engagement beat large accounts with fake followers.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Decline - research their engagement first",
+                outcome: {
+                    text: "You calculate their engagement rate: 40 likes / 800K followers = 0.005% engagement. That's fake. You decline and search for smaller influencers with real engagement. You find one with 50K followers but 3-5% engagement (1,500-2,500 likes per post). You pay them $300 and get 2K new streams and 500 followers. Real engagement beats fake followers.",
+                    cash: -300, fame: 5, wellBeing: 10, careerProgress: 6, hype: 12,
+                    lesson: {
+                        title: "Real Engagement Value",
+                        explanation: "Small audiences with high engagement deliver better results than large fake audiences. Authenticity and real fans beat numbers on paper. Always prioritize engagement rate over follower count.",
+                        realWorldExample: "Micro-influencers (10K-100K followers) with real engagement consistently outperform fake mega-influencers. Smart brands and artists prioritize engagement quality over follower quantity.",
+                        tipForFuture: "Work with smaller influencers who have real, engaged audiences. Their recommendations actually influence behavior. Fake followers are worthless no matter how many there are.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The International Tour Visa Problem",
+        description: "You're invited to perform at a festival in Europe - $10,000 performance fee. But getting a visa costs $400, requires extensive documentation, and has a 50% rejection rate for artists from your country. If rejected, you lose the $400 and the show. Plus flights ($1,200) must be booked before visa approval or prices double. Risk $1,600 on a 50/50 visa gamble?",
+        conditions: { minFame: 32, minCareerProgress: 25, minCash: 3000 },
+        choices: [
+            {
+                text: "Apply for visa and book flight - take the risk",
+                outcome: {
+                    text: "You pay $400 for the visa application and book the $1,200 flight. Three weeks later: visa rejected, no explanation given. You've lost $1,600 and the show. The promoter finds another artist. You've learned that being from your country means European visa systems treat you as a risk. Geography is destiny.",
+                    cash: -1600, fame: 0, wellBeing: -20, careerProgress: -5, hype: -10,
+                    lesson: {
+                        title: "Visa Inequality Realities",
+                        explanation: "Artists from certain countries face systematic visa discrimination that costs money and opportunities. High rejection rates force expensive gambles. The global music industry's 'openness' has geographic barriers built in.",
+                        realWorldExample: "African artists routinely lose thousands on rejected visa applications for European/American shows. The visa rejection rates (often 40-60%) create financial risks that artists from Western countries never face.",
+                        tipForFuture: "Factor visa rejection risk into international opportunities. Demand visa support from promoters. Consider whether opportunities with high visa risk are worth the gamble. Geography shapes your career opportunities.",
+                        conceptTaught: "international-barriers"
+                    }
+                }
+            },
+            {
+                text: "Negotiate for promoter to cover visa costs",
+                outcome: {
+                    text: "You ask the promoter to cover visa costs since rejection risk is high. They agree - they've worked with artists from your region before and understand. Visa gets rejected. You lost nothing. The promoter reschedules you for their next festival and reapplies. Second time, approved. You perform and earn $10,000. Negotiation protected you from visa lottery losses.",
+                    cash: 10000, fame: 15, wellBeing: 10, careerProgress: 18, hype: 35,
+                    lesson: {
+                        title: "Smart International Negotiation",
+                        explanation: "Artists from visa-restricted countries should negotiate for promoters to cover visa costs due to high rejection risk. Good promoters understand this and budget for it. Protecting yourself from visa gambles is professional, not unreasonable.",
+                        realWorldExample: "Established African artists routinely negotiate visa cost coverage from international promoters. Promoters who work internationally understand rejection risks and build it into budgets. Don't absorb their costs.",
+                        tipForFuture: "Always negotiate visa support for international shows. Promoters inviting you should cover visa risks if your rejection rate is high. Don't gamble your money on visa lotteries - make them share the risk.",
+                        conceptTaught: "negotiation-basics"
+                    }
+                }
+            },
+            {
+                text: "Decline the show - visa risk too high",
+                outcome: {
+                    text: "You decline the opportunity. The risk is too high. You focus on regional tours with no visa barriers. You build your career in markets you can reliably access. You miss the $10,000 payday, but you also avoid potentially losing $1,600. Risk-averse strategy for a career with built-in geographic barriers.",
+                    cash: 0, fame: 0, wellBeing: -5, careerProgress: -2, hype: 0,
+                    lesson: {
+                        title: "Geographic Strategic Limitations",
+                        explanation: "For artists from visa-restricted countries, focusing on accessible markets is sometimes the safest strategy. International expansion carries risks that artists from other countries don't face. Playing where you can reliably access is valid.",
+                        realWorldExample: "Some African artists focus on building pan-African careers rather than fighting visa barriers to Western markets. Artists like Diamond Platnumz built massive careers touring Africa before attempting Western markets.",
+                        tipForFuture: "Don't let visa barriers prevent you from building regional success. Africa has 1.3 billion people. The West isn't the only path to success. Build where barriers are lowest first.",
+                        conceptTaught: "strategic-neutrality"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Social Media Algorithm Conspiracy",
+        description: "Your social media reach has dropped 70% over 3 months despite posting consistently. A 'social media expert' says: 'The algorithm is shadowbanning you because you don't post enough Reels.' Another expert says: 'You're posting too much and the algorithm thinks you're spam.' A third says: 'Buy this $800 course and I'll teach you the algorithm.' Everyone has different advice. What's real?",
+        conditions: { minFame: 22, minHype: 10 },
+        choices: [
+            {
+                text: "Buy the $800 algorithm course",
+                outcome: {
+                    text: "You buy the course. It's 8 hours of basic advice available on YouTube for free: 'post consistently,' 'use trending sounds,' 'engage with comments.' You've paid $800 for information you could have Googled. The algorithm mystery persists. You've been sold snake oil disguised as expertise.",
+                    cash: -800, fame: 1, wellBeing: -15, careerProgress: 0, hype: 2,
+                    lesson: {
+                        title: "Algorithm Snake Oil Industry",
+                        explanation: "Most 'algorithm experts' sell basic publicly-available information as secret knowledge. Social media algorithms are intentionally opaque. No one outside the platforms has secret access. Don't pay hundreds for free information.",
+                        realWorldExample: "The 'social media expert' industry is massive and largely fraudulent. Most courses contain generic advice repackaged as secrets. Real algorithm knowledge comes from platforms themselves or experimentation, not paid courses.",
+                        tipForFuture: "Algorithm advice should be free. Platforms publish their own creator guidelines. Expensive courses are almost always scams. Learn from free resources and experimentation, not paid 'experts.'",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            },
+            {
+                text: "Experiment yourself - test different strategies",
+                outcome: {
+                    text: "You run your own tests: posting at different times, varying content types, different caption lengths, Reels vs posts. After 6 weeks, you identify what works for YOUR audience: short-form video + behind-the-scenes content at 6 PM local time. Your reach recovers to 80% of previous levels. You taught yourself more than any course could.",
+                    cash: 0, fame: 6, wellBeing: 10, careerProgress: 8, hype: 18,
+                    lesson: {
+                        title: "Self-Directed Platform Learning",
+                        explanation: "Systematic self-experimentation teaches you more about algorithms than any course. Every audience is different. What works for one artist may not work for you. Develop your own platform expertise through testing.",
+                        realWorldExample: "Successful creators across platforms share a common trait: they experiment constantly and learn from data. They don't follow gurus - they test strategies and measure results for their specific audiences.",
+                        tipForFuture: "No expert knows your audience better than you will after systematic testing. Track your metrics, test strategies, learn what works. Build your own expertise through experimentation.",
+                        conceptTaught: "platform-strategy"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        title: "The Producer Credit Dispute",
+        description: "You worked with a producer on a song that's now blowing up (500K streams). You paid them $500 upfront for the beat. Now they want producer credit and 20% of the royalties, claiming they 'co-created' the song. Your agreement was 'beat purchase - full rights.' They're threatening to publicly claim you stole from them if you don't pay. No written contract exists. It's your word against theirs.",
+        conditions: { minFame: 26, minCareerProgress: 18 },
+        choices: [
+            {
+                text: "Give them 20% to avoid public drama",
+                outcome: {
+                    text: "You agree to give them 20% of royalties going forward. The drama stops, but you've set a precedent: anyone who worked on your music can retroactively demand more. Other producers hear about this and start making similar demands. Your 'generosity' became a liability. Being easy to pressure is expensive.",
+                    cash: -1000, fame: 2, wellBeing: -10, careerProgress: 3, hype: 5,
+                    lesson: {
+                        title: "Boundary Setting in Disputes",
+                        explanation: "Giving in to threats creates a pattern where everyone thinks they can pressure you for more money. Protecting boundaries is crucial even when drama is uncomfortable. Weakness invites exploitation.",
+                        realWorldExample: "Artists who give in to retroactive demands often face cascading claims from everyone they've worked with. Word spreads that you'll pay to avoid drama, making you a target for opportunistic claims.",
+                        tipForFuture: "Stand firm on agreed terms. If you paid for full rights, those are the terms. Don't let threats of drama make you renegotiate completed deals. Enforce boundaries consistently.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Refuse and document your purchase agreement",
+                outcome: {
+                    text: "You refuse and share proof of payment. You post screenshots of your conversation where they sold you 'full rights' for $500. The producer looks like they're retroactively changing terms after your success. The music community sides with you. You've protected yourself by documenting everything and standing firm.",
+                    cash: 0, fame: 5, wellBeing: 5, careerProgress: 8, hype: 10,
+                    lesson: {
+                        title: "Documentation Protects Rights",
+                        explanation: "When disputes arise, documentation determines outcomes. Payment receipts and message histories prove agreements when contracts don't exist. Always save communications about rights and payments.",
+                        realWorldExample: "Artists who document transactions and communications win disputes more often. Screenshots, receipts, and message histories serve as informal contracts when written agreements don't exist.",
+                        tipForFuture: "Document everything: payments, rights discussions, agreement terms. Screenshot conversations about ownership and credits. Documentation is your protection when disputes arise.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            },
+            {
+                text: "Offer a one-time settlement payment",
+                outcome: {
+                    text: "You offer a one-time $1,500 payment to settle all future claims. They accept. You pay more than the original $500 beat cost, but you've capped the liability. They get compensated for the success; you retain full control going forward. Expensive but clean resolution. Both parties leave somewhat satisfied.",
+                    cash: -1500, fame: 3, wellBeing: -5, careerProgress: 5, hype: 8,
+                    lesson: {
+                        title: "Strategic Dispute Settlement",
+                        explanation: "One-time settlements can be worth paying to avoid ongoing royalty splits and future disputes. Capping liability through lump sum payments gives you certainty and control. Sometimes paying more upfront costs less than ongoing percentages.",
+                        realWorldExample: "Many artists settle retroactive claims with lump sum payments rather than ongoing royalties. It's more expensive immediately but prevents years of split ownership and accounting complexity.",
+                        tipForFuture: "When facing retroactive claims, consider one-time settlements that cap your liability. Ongoing royalty splits create permanent financial entanglement. Buy out disputes when possible.",
+                        conceptTaught: "Contract Basics"
+                    }
+                }
+            }
+        ]
     }
 ];
 

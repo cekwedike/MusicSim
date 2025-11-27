@@ -63,11 +63,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Try to sync with backend in background (non-blocking)
     try {
-      // Get user profile from backend (with timeout)
+      // Get user profile from backend (with 10s timeout to handle cold starts)
       const profileResponse = await Promise.race([
         authServiceSupabase.getCurrentUser(),
         new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Backend sync timeout')), 5000)
+          setTimeout(() => reject(new Error('Backend sync timeout')), 10000)
         )
       ]) as any;
 
@@ -113,8 +113,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
       }
     } catch (error) {
-      // Backend is slow/unavailable, but user is already set with Supabase data
-      console.warn('[AuthContext] Backend sync failed (using Supabase data):', error);
+      // Backend is slow/unavailable (likely cold start on free tier), but user is already set with Supabase data
+      console.log('[AuthContext] Backend profile sync skipped (using Supabase data):', error instanceof Error ? error.message : error);
     }
   }, []);
 

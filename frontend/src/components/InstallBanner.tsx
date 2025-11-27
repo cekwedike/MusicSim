@@ -90,11 +90,13 @@ const isAppInstalled = async (): Promise<boolean> => {
   if ('getInstalledRelatedApps' in navigator) {
     try {
       const relatedApps = await (navigator as any).getInstalledRelatedApps();
+      console.log('[InstallBanner] getInstalledRelatedApps result:', relatedApps);
       if (relatedApps && relatedApps.length > 0) {
+        console.log('[InstallBanner] App is installed via getInstalledRelatedApps');
         return true;
       }
     } catch (e) {
-      // API not available or failed
+      console.warn('[InstallBanner] getInstalledRelatedApps failed:', e);
     }
   }
 
@@ -104,6 +106,7 @@ const isAppInstalled = async (): Promise<boolean> => {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && parsed.p === true) {
+        console.log('[InstallBanner] App marked as installed in localStorage');
         return true;
       }
     }
@@ -171,24 +174,33 @@ const InstallBanner: React.FC = () => {
 
   useEffect(() => {
     let unmounted = false;
+    let promptEventFired = false;
+    
     const onBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
+      promptEventFired = true;
+      console.log('[InstallBanner] beforeinstallprompt event fired');
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       // Check if app is installed before showing
       isBannerDismissed().then(dismissed => {
         if (!dismissed && !unmounted) {
+          console.log('[InstallBanner] Showing banner (not dismissed)');
           setVisible(true);
+        } else {
+          console.log('[InstallBanner] Banner dismissed or app installed');
         }
       });
     };
 
     const onAppInstalled = () => {
+      console.log('[InstallBanner] appinstalled event fired - marking as permanently installed');
       // Mark app as installed and hide banner permanently
       markAppInstalled();
       setVisible(false);
       setDeferredPrompt(null);
     };
 
+    // IMPORTANT: Listen for appinstalled GLOBALLY to catch installations from other tabs/windows
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener);
     window.addEventListener('appinstalled', onAppInstalled as EventListener);
 
@@ -199,29 +211,49 @@ const InstallBanner: React.FC = () => {
       const url_forced = new URLSearchParams(window.location.search).get('showInstall') === '1';
       const forced = localStorage_forced || url_forced;
 
+      console.log('[InstallBanner] Checking display conditions...', { forced });
+
       // Check if browser supports PWA installation
       if (!browserSupportsPWA() && !forced) {
+        console.log('[InstallBanner] Browser does not support PWA');
         setVisible(false);
         return;
       }
 
       // Check if app is installed (robust check)
       const installed = await isAppInstalled();
+      console.log('[InstallBanner] Installation check:', { installed });
       if (installed && !unmounted) {
+        console.log('[InstallBanner] App already installed, hiding banner');
         setVisible(false);
         return;
       }
 
       // Check if banner is dismissed
       const dismissed = await isBannerDismissed();
+      console.log('[InstallBanner] Dismissal check:', { dismissed });
+
+      // CRITICAL: Wait a moment for beforeinstallprompt to potentially fire
+      // If Chrome doesn't fire it within 500ms, it usually means the app is already installed
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // For Chromium browsers, if beforeinstallprompt hasn't fired by now, app is likely installed
+      const browserType = getBrowserType();
+      if (browserType === 'chromium' && !promptEventFired && !forced) {
+        console.log('[InstallBanner] Chrome did not fire beforeinstallprompt - app likely already installed');
+        markAppInstalled(); // Mark it to prevent future checks
+        setVisible(false);
+        return;
+      }
 
       // Show if forced (for testing) or if banner is not dismissed
       // For Safari/iOS and Firefox mobile, always show banner if not dismissed (they don't have beforeinstallprompt)
-      const browserType = getBrowserType();
       const needsManualInstall = browserType === 'safari' || (browserType === 'firefox' && /Android/i.test(navigator.userAgent));
       if ((forced || !dismissed || needsManualInstall) && !unmounted) {
+        console.log('[InstallBanner] Showing banner');
         setVisible(true);
       } else {
+        console.log('[InstallBanner] Hiding banner');
         setVisible(false);
       }
     };

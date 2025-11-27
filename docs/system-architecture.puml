@@ -1,0 +1,97 @@
+@startuml MusicSim System Architecture
+!define RECTANGLE class
+
+skinparam rectangle {
+    BackgroundColor<<frontend>> #61DAFB
+    BackgroundColor<<backend>> #68A063
+    BackgroundColor<<database>> #336791
+    BackgroundColor<<infrastructure>> #FF6B6B
+    BorderColor Black
+    FontSize 12
+}
+
+skinparam arrow {
+    Color #333333
+    Thickness 2
+}
+
+title MusicSim System Architecture
+
+' Presentation Layer
+package "Presentation Layer" <<frontend>> {
+    rectangle "React\n(UI Framework)" as React
+    rectangle "TypeScript\n(Type Safety)" as TS
+    rectangle "Vite\n(Build Tool)" as Vite
+    rectangle "Tailwind CSS\n(Styling)" as Tailwind
+    rectangle "Service Worker\n(PWA/Offline)" as SW
+}
+
+' Application Logic & Services Layer
+package "Backend & Services Layer" <<backend>> {
+    rectangle "Express.js\n(REST API)" as Express
+    rectangle "Node.js\n(Runtime)" as Node
+    rectangle "Supabase Auth\n(Authentication)" as SupabaseAuth
+    rectangle "Axios\n(HTTP Client)" as Axios
+}
+
+' Data Layer
+package "Data Layer" <<database>> {
+    rectangle "Supabase\n(Managed Service)" as Supabase
+    rectangle "PostgreSQL\n(Database)" as Postgres
+}
+
+' Infrastructure Layer
+package "Deployment & Infrastructure" <<infrastructure>> {
+    rectangle "Vercel\n(Frontend Hosting)" as Vercel
+    rectangle "Render\n(Backend Hosting)" as Render
+    rectangle "Hostinger\n(Domain & DNS)" as Hostinger
+}
+
+' User
+actor "User" as User
+
+' Connections - User to Frontend
+User --> Hostinger : "Access\nmusicsim.net"
+Hostinger --> Vercel : "DNS Routes to\nFrontend"
+Vercel --> React : "Serves"
+
+' Frontend connections
+React --> TS
+React --> Vite
+React --> Tailwind
+React --> SW
+
+' Frontend to Backend
+React --> Axios : "HTTP Requests"
+Axios --> Express : "API Calls"
+Express --> Node
+Express --> SupabaseAuth : "Authentication"
+
+' Backend to Database
+Express --> Supabase : "Database\nQueries"
+Supabase --> Postgres : "Manages"
+
+' Hosting connections
+Vercel ..> React : "Hosts"
+Render ..> Express : "Hosts"
+Supabase ..> Postgres : "Hosts"
+
+note right of React
+  PWA with offline support,
+  responsive design, and
+  real-time updates
+end note
+
+note right of Express
+  RESTful API handling
+  game state, user data,
+  and authentication
+end note
+
+note right of Postgres
+  Stores user profiles,
+  game saves, statistics,
+  and progress
+end note
+
+@enduml

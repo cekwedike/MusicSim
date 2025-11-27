@@ -1,0 +1,51 @@
+@startuml MusicSim Use Case Diagram
+top to bottom direction
+skinparam packageStyle rectangle
+skinparam usecaseMinWidth 200
+skinparam rectangleMinWidth 450
+skinparam rectangleMinHeight 700
+scale 1.2
+
+actor "Player" as player
+actor "Guest Player" as guest
+
+rectangle "MusicSim Platform" {
+  usecase "Start New Career" as UC1
+  usecase "Load Saved Game" as UC2
+  usecase "Make Music Decisions" as UC3
+  usecase "Review Contract Offers" as UC4
+  usecase "Sign Record Deal" as UC5
+  usecase "Release Music" as UC6
+  usecase "Manage Finances" as UC7
+  usecase "Access Learning Hub" as UC8
+  usecase "View Statistics" as UC9
+  usecase "Save Progress" as UC10
+  usecase "Create Account" as UC11
+  usecase "Login/Logout" as UC12
+  
+  ' Include relationships
+  UC3 .> UC7 : <<include>>
+  UC6 .> UC7 : <<include>>
+  
+  ' Extend relationships
+  UC4 <. UC5 : <<extend>>
+  UC3 <. UC8 : <<extend>>
+  UC1 <. UC11 : <<extend>>
+}
+
+' Actor relationships
+player --> UC1
+player --> UC2
+player --> UC3
+player --> UC4
+player --> UC6
+player --> UC8
+player --> UC9
+player --> UC10
+player --> UC12
+
+guest --> UC1
+guest --> UC3
+guest --> UC11
+
+@enduml

@@ -140,7 +140,6 @@ export const scenarioBank: Scenario[] = [
         // audio: first record deal voiceover
         audioFile: '/audio/scenarios/first-record-deal.m4a',
         autoPlayAudio: true,
-        once: true,
         choices: [
             {
                 text: "Review their contract carefully.",
@@ -180,7 +179,6 @@ export const scenarioBank: Scenario[] = [
         // audio: contract signing / label negotiation (informational, don't autoplay by default)
         audioFile: '/audio/scenarios/contract-signing.m4a',
         autoPlayAudio: false,
-        once: true,
         choices: [
             {
                 text: "Review Global Records' contract offer.",
@@ -234,7 +232,6 @@ export const scenarioBank: Scenario[] = [
         conditions: { minFame: 45, minCareerProgress: 40, maxFame: 75, noLabelRequired: true },
         audioFile: '/audio/scenarios/contract-signing.m4a',
         autoPlayAudio: false,
-        once: true,
         choices: [
             {
                 text: "Review the 360 deal contract.",
@@ -271,7 +268,6 @@ export const scenarioBank: Scenario[] = [
         title: "Distribution vs Full Label",
         description: "You're weighing options: sign with DistroFlow Digital for just distribution (you keep control and most money) or go with a traditional label for full support but less control. What's your priority?",
         conditions: { minFame: 35, minCareerProgress: 25, noLabelRequired: true },
-        once: true,
         choices: [
             {
                 text: "Review DistroFlow Digital's distribution deal.",
@@ -308,7 +304,6 @@ export const scenarioBank: Scenario[] = [
         title: "The Contract Renegotiation Opportunity",
         description: "A major label that's been watching your success reaches out. They want to sign you to a fresh deal, and they're willing to offer better terms than standard contracts. Your recent achievements give you serious negotiating power.",
         conditions: { minCareerProgress: 60, minFame: 60 },
-        once: true,
         choices: [
             {
                 text: "Push for premium terms - 20% royalties and creative control.",

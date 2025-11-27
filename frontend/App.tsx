@@ -18,6 +18,19 @@ import { startModule, completeModule } from './services/learningProgressService'
 import { getGenreLabel } from './constants/genres';
 import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } from './data/difficultySettings';
 import { achievements as allAchievements } from './data/achievements';
+
+// Helper function to extract clean save name from slot ID
+const getSaveName = (slotId: string): string => {
+  if (slotId === 'auto') return 'Autosave';
+  // Format: {timestamp}_{saveName} or just {saveName} for newer saves
+  const parts = slotId.split('_');
+  if (parts.length > 1 && /^\d+$/.test(parts[0])) {
+    // Has timestamp prefix - strip it and rejoin
+    return parts.slice(1).join('_').replace(/_/g, ' ');
+  }
+  // No timestamp prefix - just clean underscores
+  return slotId.replace(/_/g, ' ');
+};
 import { projects as allProjects } from './data/projects';
 import { staffTemplates, getStaffTemplate, getAvailableStaff } from './data/staff';
 import { labels as allLabels } from './data/labels';
@@ -1738,7 +1751,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         <div className="flex items-center justify-between">
                                             <div className="min-w-0 flex-1">
                                                 <div className="font-bold text-base text-red-300 truncate group-hover:text-red-200 transition-colors">
-                                                    {slot.slotName}
+                                                    {getSaveName(slot.slotName)}
                                                 </div>
                                                 <div className="text-sm text-gray-300 truncate mt-0.5">
                                                     {slot.artistName}
@@ -1812,10 +1825,10 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         {/* Header */}
                                         <div className="flex justify-between items-start">
                                             <div className="min-w-0 flex-1">
-                                                <div className="text-xs text-gray-500 mb-1">
-                                                    {slot.slotName}
-                                                </div>
                                                 <div className="font-bold text-red-300 group-hover:text-red-200 transition-colors">
+                                                    {getSaveName(slot.slotName)}
+                                                </div>
+                                                <div className="text-sm text-gray-300 mt-0.5">
                                                     {slot.artistName}
                                                 </div>
                                                 <div className="text-sm text-gray-400 capitalize">

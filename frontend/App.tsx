@@ -1084,6 +1084,7 @@ function gameReducer(state: GameState, action: any): GameState {
                 currentLabel: state.currentLabelOffer,
                 contractStartDate: new Date(state.currentDate || new Date()),
                 currentLabelOffer: null,
+                pendingContractOffers: state.pendingContractOffers.filter(offer => offer.label.id !== state.currentLabelOffer?.id),
                 modal: 'none',
                 achievements: updatedAchievements,
                 unseenAchievements: newUnseenAchievements,

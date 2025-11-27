@@ -485,9 +485,11 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         if (response.success && response.data) {
           console.log('[storageService] Backend returned', response.data.saves.length, 'saves');
           
-          // Clean up any orphaned local saves (deleted on another device)
+          // Clean up any orphaned local saves (deleted on another device) - non-blocking
           const backendSaveIds = response.data.saves.map((s: any) => s.slotName);
-          await cleanOrphanedLocalSaves(backendSaveIds);
+          cleanOrphanedLocalSaves(backendSaveIds).catch(err => 
+            console.error('[storageService] Failed to clean orphaned saves:', err)
+          );
 
           // OPTIMIZATION: Use metadata from getAllSaves (now includes stats and date)
           // No need to load full gameState for each save - much faster!

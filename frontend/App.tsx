@@ -1616,6 +1616,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
         const loadSaves = async () => {
             setLoadingSaves(true);
             try {
+                // Force fresh load by clearing any cached data
                 const slots = await getAllSaveSlots();
                 // Filter out autosave from the list
                 setSaveSlots(slots.filter(slot => slot.id !== 'auto'));
@@ -1892,7 +1893,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         <div className="space-y-3">
                                             {/* Header */}
                                             <div className="flex justify-between items-start">
-                                                <div className="min-w-0 flex-1 pr-8">
+                                                <div className="min-w-0 flex-1 pr-12">
                                                     <div className="font-bold text-red-300 group-hover:text-red-200 transition-colors">
                                                         {getSaveName(slot.slotName)}
                                                     </div>
@@ -2880,7 +2881,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         label={state.currentLabelOffer}
                         onSign={handleSignContract}
                         onDecline={handleDeclineContract}
-                        onReviewLater={state.currentScenario ? handleSavePendingOffer : undefined}
+                        onReviewLater={state.currentScenario && state.pendingContractOffers.findIndex(offer => offer.label.id === state.currentLabelOffer?.id) === -1 ? handleSavePendingOffer : undefined}
                     />
                 </Suspense>
             )}

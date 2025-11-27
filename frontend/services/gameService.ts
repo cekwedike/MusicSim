@@ -80,8 +80,9 @@ export const gameService = {
 
   // Get all saves with pagination
   getAllSaves: async (limit = 20, offset = 0): Promise<ApiResponse<SavesListResponse>> => {
+    // Add cache-busting timestamp to ensure fresh data
     const response = await api.get<ApiResponse<SavesListResponse>>('/game/saves', {
-      params: { limit, offset }
+      params: { limit, offset, _t: Date.now() }
     });
     return response.data;
   },

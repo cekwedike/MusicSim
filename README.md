@@ -20,9 +20,10 @@ Experience the complete gameplay from artist creation through career management,
 
 ### Core Gameplay Mechanics
 - **Career Management**: Guide your artist through realistic career progression spanning weeks, months, and years of industry challenges
-- **Strategic Decision Making**: Navigate over 100 complex scenarios with meaningful long-term consequences affecting cash flow, reputation, and industry relationships
+- **Strategic Decision Making**: Navigate over 150 complex scenarios with meaningful long-term consequences affecting cash flow, reputation, and industry relationships
 - **Three Difficulty Levels**: Easy, Realistic, and Hard modes with different starting conditions and industry pressures
 - **Dynamic Scenario System**: Extensive scenario bank featuring contract negotiations, marketing decisions, collaboration opportunities, and crisis management
+- **Contract Negotiation**: Choose from 15 unique record label contracts with realistic terms, royalty rates, and creative control options
 - **Achievement System**: Comprehensive achievement tracking for career milestones, learning goals, and strategic decisions
 - **Real-time Consequences**: Decisions affect multiple game metrics including cash, fame, well-being, and hype
 
@@ -62,97 +63,147 @@ MusicSim follows a modern full-stack architecture with a React frontend and Expr
 ```
 MusicSim/
 ├── frontend/                      # React + TypeScript application
-│   ├── components/                # UI Components (50+ components)
+│   ├── components/                # UI Components (55+ components)
 │   │   ├── Dashboard.tsx          # Main game dashboard
-│   │   ├── ArtistSetup.tsx        # Character creation
+│   │   ├── ArtistSetup.tsx        # Character creation & setup
 │   │   ├── ScenarioCard.tsx       # Scenario presentation
-│   │   ├── ContractViewer.tsx     # Contract visualization
-│   │   ├── LearningHub.tsx        # Educational modules
+│   │   ├── ContractViewer.tsx     # Contract detail viewer
+│   │   ├── SignedContractViewer.tsx # Active contract management
+│   │   ├── LearningHub.tsx        # Educational module hub
+│   │   ├── LearningPanel.tsx      # Learning progress display
+│   │   ├── ModuleViewer.tsx       # Individual module viewer
 │   │   ├── GameHistory.tsx        # Career history viewer
-│   │   ├── StatsDisplay.tsx       # Game statistics
-│   │   ├── SaveLoadMenu.tsx       # Save/load management
-│   │   ├── SettingsPanel.tsx      # Game settings
-│   │   ├── icons/                 # Custom icon components
-│   │   └── [modals, dialogs, UI elements...]
-│   ├── services/                  # Business logic & API integration
+│   │   ├── Header.tsx             # Main app header
+│   │   ├── Sidebar.tsx            # Navigation sidebar
+│   │   ├── LandingPage.tsx        # Game landing/welcome page
+│   │   ├── ManagementPanel.tsx    # Staff & resource management
+│   │   ├── ProjectsPanel.tsx      # Active projects display
+│   │   ├── StatisticsPanel.tsx    # Game statistics
+│   │   ├── ProfilePanel.tsx       # User profile management
+│   │   ├── SaveLoadPanel.tsx      # Save/load game interface
+│   │   ├── TutorialOverlay.tsx    # Interactive tutorial
+│   │   ├── WelcomeBackDialog.tsx  # Returning player dialog
+│   │   ├── LoginModal.tsx         # Authentication modal
+│   │   ├── GuestDataMergeModal.tsx # Guest data migration
+│   │   ├── OutcomeModal.tsx       # Scenario outcome display
+│   │   ├── OffersModal.tsx        # Contract offers display
+│   │   ├── StaffTerminationModal.tsx # Staff dismissal flow
+│   │   ├── DeleteSaveModal.tsx    # Save deletion confirmation
+│   │   ├── AlertDialog.tsx        # Generic alert dialog
+│   │   ├── ConfirmDialog.tsx      # Generic confirmation dialog
+│   │   ├── MistakeWarning.tsx     # Decision warning system
+│   │   ├── UnlockNotification.tsx # Achievement unlocks
+│   │   ├── AudioErrorBoundary.tsx # Audio error handling
+│   │   ├── AudioUnlockPrompt.tsx  # Mobile audio unlock
+│   │   ├── SidebarAudioSettings.tsx # Audio controls
+│   │   ├── ThemeToggle.tsx        # Theme switcher
+│   │   ├── ParallaxBackground.tsx # Animated background
+│   │   ├── MiniChart.tsx          # Small data visualization
+│   │   ├── Loader.tsx             # Loading states
+│   │   └── icons/                 # Custom SVG icon components
+│   ├── services/                  # Business logic & API integration (20 files)
 │   │   ├── api.ts                 # API client configuration
-│   │   ├── authService.supabase.ts # Authentication service
+│   │   ├── authService.supabase.ts # Supabase authentication
+│   │   ├── supabase.ts            # Supabase client setup
 │   │   ├── gameService.ts         # Game state management
 │   │   ├── learningProgressService.ts # Learning analytics
-│   │   ├── scenarioService.ts     # Scenario logic
-│   │   ├── audioService.ts        # Sound management
-│   │   └── storageService.ts      # Local/cloud storage
+│   │   ├── statisticsService.ts   # Player statistics tracking
+│   │   ├── scenarioService.ts     # Scenario selection & logic
+│   │   ├── storageService.ts      # Local/cloud storage management
+│   │   └── [test files...]        # Comprehensive test coverage
 │   ├── data/                      # Game content & configuration
-│   │   ├── scenarioBank.ts        # 100+ game scenarios
+│   │   ├── scenarioBank.ts        # 150+ game scenarios (6,500+ lines)
 │   │   ├── achievements.ts        # Achievement definitions
-│   │   ├── learningModules.ts     # Educational content
-│   │   ├── difficultySettings.ts  # Game difficulty configs
-│   │   ├── tutorialSteps.ts       # Tutorial flow
-│   │   ├── staff.ts               # Staff member data
-│   │   ├── labels.ts              # Record label data
-│   │   └── projects.ts            # Project types data
+│   │   ├── learningModules.ts     # Educational content modules
+│   │   ├── difficultySettings.ts  # Game difficulty configurations
+│   │   ├── tutorialSteps.ts       # Tutorial flow definitions
+│   │   ├── staff.ts               # Staff member templates
+│   │   ├── labels.ts              # 15 record label contracts
+│   │   └── projects.ts            # Project type definitions
 │   ├── contexts/                  # React Context providers
 │   │   ├── AuthContext.tsx        # Authentication state
 │   │   ├── AudioContext.tsx       # Audio/sound state
 │   │   ├── ThemeContext.tsx       # UI theme state
 │   │   └── ToastContext.tsx       # Notification system
 │   ├── hooks/                     # Custom React hooks
-│   │   ├── useGameState.ts        # Game state hook
-│   │   ├── useAuth.ts             # Authentication hook
-│   │   ├── useAudio.ts            # Audio management hook
-│   │   └── [additional hooks...]
+│   │   ├── useAudioManager.ts     # Audio management & preloading
+│   │   ├── useAutoSave.ts         # Automatic game saving
+│   │   └── useDebounce.ts         # Debounced value updates
 │   ├── constants/                 # Application constants
+│   │   └── genres.ts              # Music genre definitions
 │   ├── types/                     # TypeScript type definitions
 │   ├── scripts/                   # Build and utility scripts
 │   ├── public/                    # Static assets
 │   │   ├── audio/                 # Sound effects & music
-│   │   ├── sw.js                  # Service worker
+│   │   │   ├── scenarios/         # Scenario-specific audio
+│   │   │   └── [game sounds]      # UI sounds and music
+│   │   ├── sw.js                  # Service worker for PWA
 │   │   ├── manifest.json          # PWA manifest
-│   │   └── [images, icons...]
-│   ├── src/                       # Additional source files
-│   │   ├── components/            # Shared components
-│   │   ├── hooks/                 # Additional hooks
+│   │   └── [images, icons...]     # Visual assets
+│   ├── src/                       # Additional utilities
 │   │   └── utils/                 # Utility functions
-│   ├── App.tsx                    # Main application component
+│   │       ├── logUtils.ts        # Game logging utilities
+│   │       └── dateUtils.ts       # Date/time utilities
+│   ├── App.tsx                    # Main application component (3,100+ lines)
 │   ├── index.tsx                  # Application entry point
 │   ├── index.html                 # HTML template
 │   ├── types.ts                   # Global type definitions
-│   └── package.json               # Frontend dependencies (managed by root)
+│   ├── .env                       # Environment variables (gitignored)
+│   └── .env.example               # Environment template
 │
 ├── backend/                       # Express.js + PostgreSQL backend
 │   ├── routes/                    # API route definitions
-│   │   ├── auth.js                # Authentication endpoints
+│   │   ├── auth.js                # Authentication endpoints (register, login, OAuth)
 │   │   ├── gameState.js           # Game save/load endpoints
-│   │   ├── analytics.js           # Analytics endpoints
+│   │   ├── analytics.js           # Analytics & reporting endpoints
 │   │   ├── careerHistory.js       # Career tracking endpoints
 │   │   ├── learning.js            # Learning progress endpoints
 │   │   ├── lessons.js             # Lesson content endpoints
 │   │   └── migrate.js             # Migration utilities
 │   ├── models/                    # Sequelize database models
 │   │   ├── User.js                # User account model
-│   │   ├── GameSave.js            # Game save model
+│   │   ├── GameSave.js            # Game save state model
 │   │   ├── CareerHistory.js       # Career history model
 │   │   ├── LearningProgress.js    # Learning analytics model
 │   │   ├── PlayerStatistics.js    # Player stats model
-│   │   └── index.js               # Model exports
+│   │   └── index.js               # Model exports & associations
 │   ├── middleware/                # Express middleware
-│   │   ├── auth.js                # JWT authentication
-│   │   ├── errorHandler.js        # Error handling
-│   │   └── validation.js          # Request validation
+│   │   ├── auth.js                # JWT authentication middleware
+│   │   └── errorHandler.js        # Global error handling
 │   ├── config/                    # Configuration files
-│   │   ├── database.js            # Sequelize config (Supabase)
-│   │   ├── passport.js            # Passport.js setup
+│   │   ├── database.js            # Sequelize config (Supabase PostgreSQL)
+│   │   ├── supabase.js            # Supabase client setup
 │   │   └── swagger.js             # API documentation config
 │   ├── migrations/                # Database migrations
-│   │   └── migrate.js             # Migration runner
+│   │   ├── 002_add_displayName.sql
+│   │   ├── 003_remove_password_oauth_only.sql
+│   │   ├── 004_optimize_schema_remove_redundancies.sql
+│   │   ├── 005_create_achievements_system.sql
+│   │   ├── 006_add_performance_indexes.sql
+│   │   ├── 007_remove_additional_redundancies.sql
+│   │   ├── 008_remove_achievements_tables.sql
+│   │   ├── 009_add_gamesave_metadata_fields.sql
+│   │   ├── 010_add_username_unique_constraint.sql
+│   │   ├── migrate.js             # Migration runner
+│   │   ├── run-migration-002.js   # Legacy migration script
+│   │   ├── run-supabase-migration.js # Supabase migration script
+│   │   └── README.md              # Migration documentation
 │   ├── scripts/                   # Utility scripts
 │   │   ├── initDatabase.js        # Database initialization
-│   │   └── resetDatabase.js       # Database reset
+│   │   └── resetDatabase.js       # Database reset (caution)
 │   ├── tests/                     # Backend test suites
+│   │   ├── auth.test.js           # Authentication tests
+│   │   └── health.test.js         # Health check tests
 │   ├── utils/                     # Utility functions
+│   │   ├── environmentValidator.js # Environment validation
+│   │   └── validation.js          # Input validation
+│   ├── public/                    # Public assets
+│   │   └── migrate.html           # Migration UI
 │   ├── server.js                  # Express server entry point
 │   ├── package.json               # Backend dependencies
-│   └── .env                       # Environment variables (not in repo)
+│   ├── render.yaml                # Render deployment config
+│   ├── .env                       # Environment variables (gitignored)
+│   └── .env.example               # Environment template
 │
 ├── dist/                          # Production build (generated by Vite)
 ├── docs/                          # Project documentation
@@ -162,15 +213,24 @@ MusicSim/
 │   ├── TEST_PLAN.md               # Testing strategy and plan
 │   ├── TEST_RESULTS.md            # Test execution results
 │   └── ANALYSIS_REPORT.md         # Code analysis and metrics
-├── .github/                       # GitHub Actions & CI/CD
-│   └── workflows/                 # Automated workflows
-│       ├── pr.yml                 # Pull request checks
-│       └── [other workflows...]
+├── favicon/                       # Favicon assets
+├── scripts/                       # Root-level scripts
+│   └── check-pwa.ps1              # PWA validation script
+├── .github/                       # GitHub configuration
+│   └── workflows/                 # GitHub Actions (if present)
 │
 ├── vite.config.ts                 # Vite build configuration
 ├── tsconfig.json                  # TypeScript compiler config
+├── vercel.json                    # Vercel deployment config
 ├── package.json                   # Root dependencies & scripts
-└── .env.local                     # Local environment variables (not in repo)
+├── package-lock.json              # Dependency lock file
+├── Makefile                       # Make commands
+├── ci-cd-tools.ps1                # CI/CD PowerShell tools
+├── metadata.json                  # Project metadata
+├── scenario-analysis.md           # Scenario content analysis
+├── figma-design.png               # Design reference
+├── .env.local                     # Local environment (gitignored)
+└── .gitignore                     # Git ignore rules
 ```
 
 ### Technology Stack
@@ -326,7 +386,7 @@ npm run dev:backend   # Backend only (port 3001)
    - Set initial resources and goals
 
 3. **Navigate Your Career**
-   - Face 100+ unique scenarios
+   - Face 150+ unique scenarios
    - Make strategic decisions affecting:
      - Cash flow and financial stability
      - Fame and industry recognition

@@ -1596,6 +1596,8 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
     const [loadingSaves, setLoadingSaves] = useState(true);
     const [loadingSlotId, setLoadingSlotId] = useState<string | null>(null);
     const [loadingError, setLoadingError] = useState<string | null>(null);
+    const [deletingSlotId, setDeletingSlotId] = useState<string | null>(null);
+    const [deleteConfirmSlotId, setDeleteConfirmSlotId] = useState<string | null>(null);
 
     useEffect(() => {
         const checkAutosave = () => {
@@ -1673,6 +1675,39 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
         }
     };
 
+    const handleDeleteSave = async (slotId: string, e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent triggering load
+        
+        if (deletingSlotId) return; // Prevent double-clicking
+        
+        // Show confirmation
+        setDeleteConfirmSlotId(slotId);
+    };
+
+    const confirmDeleteSave = async () => {
+        if (!deleteConfirmSlotId || deletingSlotId) return;
+        
+        setDeletingSlotId(deleteConfirmSlotId);
+        setLoadingError(null);
+        
+        try {
+            await deleteSave(deleteConfirmSlotId);
+            // Reload save slots
+            const slots = await getAllSaveSlots();
+            setSaveSlots(slots.filter(slot => slot.id !== 'auto'));
+            setDeleteConfirmSlotId(null);
+        } catch (error) {
+            console.error(`Failed to delete save: ${deleteConfirmSlotId}`, error);
+            setLoadingError(`Failed to delete save: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        } finally {
+            setDeletingSlotId(null);
+        }
+    };
+
+    const cancelDeleteSave = () => {
+        setDeleteConfirmSlotId(null);
+    };
+
     return (
         <div className="text-center p-4 sm:p-6 flex flex-col items-center justify-center h-full animate-fade-in">
             <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500 mb-2">Welcome to MusicSim</h2>
@@ -1730,37 +1765,47 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                         {/* Desktop/Tablet Grid Layout */}
                         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                             {saveSlots.map((slot) => (
-                                <button
-                                    key={slot.id}
-                                    onClick={() => handleLoadSave(slot.id)}
-                                    disabled={loadingSlotId === slot.id}
-                                    className="bg-[#2D1115]/60 border border-[#3D1820] hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-red-500/10 group disabled:opacity-60 disabled:cursor-not-allowed relative"
-                                >
-                                    {/* Loading Overlay */}
-                                    {loadingSlotId === slot.id && (
-                                        <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
-                                            <div className="flex items-center gap-2 text-red-300">
-                                                <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
-                                                <span className="text-sm font-medium">Loading...</span>
-                                            </div>
-                                        </div>
-                                    )}
-                                    
-                                    <div className="space-y-2">
-                                        {/* Header with save name (primary) and artist name (secondary) */}
-                                        <div className="flex items-center justify-between">
-                                            <div className="min-w-0 flex-1">
-                                                <div className="font-bold text-base text-red-300 truncate group-hover:text-red-200 transition-colors">
-                                                    {getSaveName(slot.slotName)}
-                                                </div>
-                                                <div className="text-sm text-gray-300 truncate mt-0.5">
-                                                    {slot.artistName}
-                                                </div>
-                                                <div className="text-xs text-gray-400 capitalize">
-                                                    {getGenreLabel(slot.genre)}
+                                <div key={slot.id} className="relative group">
+                                    <button
+                                        onClick={() => handleLoadSave(slot.id)}
+                                        disabled={loadingSlotId === slot.id || deletingSlotId === slot.id}
+                                        className="w-full bg-[#2D1115]/60 border border-[#3D1820] hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-red-500/10 disabled:opacity-60 disabled:cursor-not-allowed relative"
+                                    >
+                                        {/* Loading Overlay */}
+                                        {loadingSlotId === slot.id && (
+                                            <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
+                                                <div className="flex items-center gap-2 text-red-300">
+                                                    <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
+                                                    <span className="text-sm font-medium">Loading...</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        )}
+                                        
+                                        {/* Deleting Overlay */}
+                                        {deletingSlotId === slot.id && (
+                                            <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
+                                                <div className="flex items-center gap-2 text-red-500">
+                                                    <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                                                    <span className="text-sm font-medium">Deleting...</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        <div className="space-y-2">
+                                            {/* Header with save name (primary) and artist name (secondary) */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="min-w-0 flex-1">
+                                                    <div className="font-bold text-base text-red-300 truncate group-hover:text-red-200 transition-colors">
+                                                        {getSaveName(slot.slotName)}
+                                                    </div>
+                                                    <div className="text-sm text-gray-300 truncate mt-0.5">
+                                                        {slot.artistName}
+                                                    </div>
+                                                    <div className="text-xs text-gray-400 capitalize">
+                                                        {getGenreLabel(slot.genre)}
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                         {/* Progress bar */}
                                         <div className="space-y-0.5">
@@ -1799,82 +1844,118 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         </div>
                                     </div>
                                 </button>
+                                
+                                {/* Delete Button */}
+                                <button
+                                    onClick={(e) => handleDeleteSave(slot.id, e)}
+                                    disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
+                                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600/80 hover:bg-red-600 text-white p-1.5 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                                    title="Delete save"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
                             ))}
                         </div>
 
                         {/* Mobile List Layout */}
                         <div className="md:hidden space-y-2">
                             {saveSlots.map((slot) => (
-                                <button
-                                    key={slot.id}
-                                    onClick={() => handleLoadSave(slot.id)}
-                                    disabled={loadingSlotId === slot.id}
-                                    className="w-full bg-[#2D1115]/60 border border-gray-700 hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
-                                >
-                                    {/* Loading Overlay */}
-                                    {loadingSlotId === slot.id && (
-                                        <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
-                                            <div className="flex items-center gap-2 text-red-300">
-                                                <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
-                                                <span className="text-sm font-medium">Loading...</span>
+                                <div key={slot.id} className="relative">
+                                    <button
+                                        onClick={() => handleLoadSave(slot.id)}
+                                        disabled={loadingSlotId === slot.id || deletingSlotId === slot.id}
+                                        className="w-full bg-[#2D1115]/60 border border-gray-700 hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
+                                    >
+                                        {/* Loading Overlay */}
+                                        {loadingSlotId === slot.id && (
+                                            <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
+                                                <div className="flex items-center gap-2 text-red-300">
+                                                    <div className="w-4 h-4 border-2 border-red-300 border-t-transparent rounded-full animate-spin"></div>
+                                                    <span className="text-sm font-medium">Loading...</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        {/* Deleting Overlay */}
+                                        {deletingSlotId === slot.id && (
+                                            <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
+                                                <div className="flex items-center gap-2 text-red-500">
+                                                    <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                                                    <span className="text-sm font-medium">Deleting...</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        <div className="space-y-3">
+                                            {/* Header */}
+                                            <div className="flex justify-between items-start">
+                                                <div className="min-w-0 flex-1 pr-8">
+                                                    <div className="font-bold text-red-300 group-hover:text-red-200 transition-colors">
+                                                        {getSaveName(slot.slotName)}
+                                                    </div>
+                                                    <div className="text-sm text-gray-300 mt-0.5">
+                                                        {slot.artistName}
+                                                    </div>
+                                                    <div className="text-sm text-gray-400 capitalize">
+                                                        {getGenreLabel(slot.genre)}
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col items-end text-xs text-gray-500">
+                                                    <div>Y{slot.date.year} W{slot.date.week}</div>
+                                                    <div>{new Date(slot.timestamp).toLocaleDateString()}</div>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Progress bar */}
+                                            <div className="space-y-1">
+                                                <div className="flex justify-between text-xs">
+                                                    <span className="text-gray-500">Career Progress</span>
+                                                    <span className="text-red-300 font-medium">{slot.careerProgress}%</span>
+                                                </div>
+                                                <div className="w-full bg-[#3D1820] rounded-full h-2">
+                                                    <div 
+                                                        className="bg-gradient-to-r from-red-700 to-rose-500 h-2 rounded-full transition-all duration-300"
+                                                        style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Stats */}
+                                            <div className="flex justify-between items-center">
+                                                <div className="flex gap-4 text-sm">
+                                                    <div>
+                                                        <span className="text-gray-500">Cash: </span>
+                                                        <span className="text-green-400 font-mono font-semibold">${slot.stats.cash.toLocaleString()}</span>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-gray-500">Fame: </span>
+                                                        <span className="text-yellow-400 font-semibold">{Math.round(slot.stats.fame)}</span>
+                                                    </div>
+                                                </div>
+                                                <div className="text-red-400 opacity-60 group-hover:opacity-100 transition-opacity">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
-                                    )}
+                                    </button>
                                     
-                                    <div className="space-y-3">
-                                        {/* Header */}
-                                        <div className="flex justify-between items-start">
-                                            <div className="min-w-0 flex-1">
-                                                <div className="font-bold text-red-300 group-hover:text-red-200 transition-colors">
-                                                    {getSaveName(slot.slotName)}
-                                                </div>
-                                                <div className="text-sm text-gray-300 mt-0.5">
-                                                    {slot.artistName}
-                                                </div>
-                                                <div className="text-sm text-gray-400 capitalize">
-                                                    {getGenreLabel(slot.genre)}
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col items-end text-xs text-gray-500">
-                                                <div>Y{slot.date.year} W{slot.date.week}</div>
-                                                <div>{new Date(slot.timestamp).toLocaleDateString()}</div>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Progress bar */}
-                                        <div className="space-y-1">
-                                            <div className="flex justify-between text-xs">
-                                                <span className="text-gray-500">Career Progress</span>
-                                                <span className="text-red-300 font-medium">{slot.careerProgress}%</span>
-                                            </div>
-                                            <div className="w-full bg-[#3D1820] rounded-full h-2">
-                                                <div 
-                                                    className="bg-gradient-to-r from-red-700 to-rose-500 h-2 rounded-full transition-all duration-300"
-                                                    style={{ width: `${Math.min(slot.careerProgress, 100)}%` }}
-                                                ></div>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Stats */}
-                                        <div className="flex justify-between items-center">
-                                            <div className="flex gap-4 text-sm">
-                                                <div>
-                                                    <span className="text-gray-500">Cash: </span>
-                                                    <span className="text-green-400 font-mono font-semibold">${slot.stats.cash.toLocaleString()}</span>
-                                                </div>
-                                                <div>
-                                                    <span className="text-gray-500">Fame: </span>
-                                                    <span className="text-yellow-400 font-semibold">{Math.round(slot.stats.fame)}</span>
-                                                </div>
-                                            </div>
-                                            <div className="text-red-400 opacity-60 group-hover:opacity-100 transition-opacity">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </button>
+                                    {/* Delete Button for Mobile */}
+                                    <button
+                                        onClick={(e) => handleDeleteSave(slot.id, e)}
+                                        disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
+                                        className="absolute top-2 right-2 bg-red-600/90 hover:bg-red-600 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                                        title="Delete save"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -1893,6 +1974,34 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                     </p>
                 )}
             </div>
+
+            {/* Delete Confirmation Dialog */}
+            {deleteConfirmSlotId && (
+                <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+                    <div className="bg-[#2D1115] border-2 border-red-500 rounded-lg p-6 max-w-md w-full animate-fade-in">
+                        <h3 className="text-xl font-bold text-red-400 mb-3">Delete Career?</h3>
+                        <p className="text-gray-300 mb-4">
+                            Are you sure you want to delete "{getSaveName(saveSlots.find(s => s.id === deleteConfirmSlotId)?.slotName || '')}"? This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={confirmDeleteSave}
+                                disabled={deletingSlotId !== null}
+                                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {deletingSlotId ? 'Deleting...' : 'Delete'}
+                            </button>
+                            <button
+                                onClick={cancelDeleteSave}
+                                disabled={deletingSlotId !== null}
+                                className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

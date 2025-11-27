@@ -99,6 +99,12 @@ export const gameService = {
     return response.data;
   },
 
+  // Delete save by slotName (more reliable for cross-device sync)
+  deleteSaveBySlotName: async (slotName: string): Promise<ApiResponse<{ saveId: string; slotName: string }>> => {
+    const response = await api.delete<ApiResponse<{ saveId: string; slotName: string }>>(`/game/save/slot/${encodeURIComponent(slotName)}`);
+    return response.data;
+  },
+
   // Rename save slot
   renameSave: async (saveId: string, newSlotName: string): Promise<ApiResponse<{ saveId: string; oldSlotName: string; newSlotName: string }>> => {
     const response = await api.post<ApiResponse<{ saveId: string; oldSlotName: string; newSlotName: string }>>('/game/save/rename', {

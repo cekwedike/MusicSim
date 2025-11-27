@@ -325,28 +325,45 @@ const syncWithBackendAsync = async (slotId: string, localSaveData: SaveData) => 
  * Delete game from both backend and localStorage
  */
 export const deleteSave = async (slotId: string): Promise<void> => {
+  console.log(`[storageService] deleteSave called for: ${slotId}`);
+  
   try {
     // Delete from backend if authenticated
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (isAuthenticated) {
-      const saves = await gameService.getAllSaves();
-      if (saves.success) {
-        const save = saves.data.saves.find((s: any) => s.slotName === slotId);
-        if (save) {
-          await gameService.deleteSave(save.id);
-          console.log(`Deleted from backend: ${slotId}`);
+      console.log(`[storageService] User authenticated, deleting from backend...`);
+      
+      try {
+        // Use the direct slotName-based delete (more reliable, no need to fetch all saves first)
+        const deleteResponse = await gameService.deleteSaveBySlotName(slotId);
+        console.log(`[storageService] Backend delete response:`, deleteResponse);
+        
+        if (deleteResponse.success) {
+          console.log(`[storageService] ✅ Deleted from backend: ${slotId}`);
+        } else {
+          console.error(`[storageService] ❌ Backend delete failed:`, deleteResponse);
+        }
+      } catch (error: any) {
+        // If save not found in backend (404), that's okay - it might have been deleted already
+        if (error.response?.status === 404) {
+          console.log(`[storageService] ℹ️ Save ${slotId} not found in backend (might be already deleted)`);
+        } else {
+          console.error('[storageService] ❌ Error deleting from backend:', error);
         }
       }
+    } else {
+      console.log(`[storageService] Not authenticated, skipping backend delete`);
     }
   } catch (error) {
-    console.error('Error deleting from backend:', error);
+    console.error('[storageService] ❌ Error in deleteSave:', error);
+    // Don't throw - still delete from localStorage
   }
 
   // Delete from localStorage
   const saves = loadLocalSaves();
   delete saves[slotId];
   localStorage.setItem('musicsim_saves', JSON.stringify(saves));
-  console.log(`Deleted from localStorage: ${slotId}`);
+  console.log(`[storageService] ✅ Deleted from localStorage: ${slotId}`);
 };
 
 /**

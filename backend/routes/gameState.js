@@ -538,6 +538,52 @@ router.delete('/saves/all', async (req, res, next) => {
 });
 
 /**
+ * @route   DELETE /api/game/save/slot/:slotName
+ * @desc    Delete save by slotName (alternative to UUID-based delete)
+ * @access  Private
+ */
+router.delete('/save/slot/:slotName', async (req, res, next) => {
+  try {
+    const { slotName } = req.params;
+    console.log(`[/game/save/slot/${slotName}] Delete request from user: ${req.userId}`);
+
+    const save = await GameSave.findOne({
+      where: {
+        slotName: slotName,
+        userId: req.userId
+      }
+    });
+
+    if (!save) {
+      console.log(`[/game/save/slot/${slotName}] Save not found`);
+      return res.status(404).json({
+        success: false,
+        message: 'Save not found'
+      });
+    }
+
+    const saveId = save.id;
+
+    // Hard delete - permanently remove from database
+    await save.destroy();
+
+    console.log(`[/game/save/slot/${slotName}] ✅ Successfully deleted`);
+
+    res.json({
+      success: true,
+      message: 'Save deleted successfully',
+      data: {
+        saveId,
+        slotName
+      }
+    });
+  } catch (error) {
+    console.error(`[/game/save/slot] ❌ Delete failed:`, error);
+    next(error);
+  }
+});
+
+/**
  * @swagger
  * /api/game/autosave:
  *   get:

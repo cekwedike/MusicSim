@@ -428,6 +428,41 @@ const loadLocalSaves = (): { [key: string]: SaveData } => {
 /**
  * Gets all saved game slots (for SaveLoadModal compatibility)
  */
+/**
+ * Clean up local saves that don't exist in backend (remove orphaned local saves)
+ * Backend is the source of truth for authenticated users
+ */
+async function cleanOrphanedLocalSaves(backendSaveIds: string[]): Promise<void> {
+  const localSaves = loadLocalSaves();
+  const localSaveIds = Object.keys(localSaves);
+  
+  // Find saves that exist locally but not in backend
+  const orphanedSaves = localSaveIds.filter(id => 
+    id !== 'auto' && !backendSaveIds.includes(id)
+  );
+  
+  if (orphanedSaves.length > 0) {
+    console.log('[storageService] Found', orphanedSaves.length, 'orphaned local saves (deleted on another device):', orphanedSaves);
+    
+    for (const slotId of orphanedSaves) {
+      try {
+        console.log(`[storageService] Removing orphaned local save: ${slotId}`);
+        delete localSaves[slotId];
+      } catch (error) {
+        console.error(`[storageService] Failed to remove orphaned save ${slotId}:`, error);
+      }
+    }
+    
+    // Save cleaned up saves back to localStorage
+    try {
+      localStorage.setItem('musicsim_saves', JSON.stringify(localSaves));
+      console.log('[storageService] ✅ Cleaned up', orphanedSaves.length, 'orphaned local saves');
+    } catch (error) {
+      console.error('[storageService] Failed to save cleaned localStorage:', error);
+    }
+  }
+}
+
 export async function getAllSaveSlots(): Promise<SaveSlot[]> {
   console.log('[storageService] getAllSaveSlots called');
   const saveSlots: SaveSlot[] = [];
@@ -449,6 +484,10 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 
         if (response.success && response.data) {
           console.log('[storageService] Backend returned', response.data.saves.length, 'saves');
+          
+          // Clean up any orphaned local saves (deleted on another device)
+          const backendSaveIds = response.data.saves.map((s: any) => s.slotName);
+          await cleanOrphanedLocalSaves(backendSaveIds);
 
           // OPTIMIZATION: Use metadata from getAllSaves (now includes stats and date)
           // No need to load full gameState for each save - much faster!

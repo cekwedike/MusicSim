@@ -349,6 +349,232 @@ export const scenarioBank: Scenario[] = [
             }
         ]
     },
+
+    // --- NEW INDIE LABEL CONTRACTS (1-3 years) ---
+    {
+        title: "The Local Indie Label Opportunity",
+        description: "Sunset Boulevard Records, a small but respected indie label in your city, wants to sign you. They're known for nurturing talent and have launched several successful local artists. The owner reaches out personally with a contract offer.",
+        conditions: { minFame: 25, minCareerProgress: 15, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review their contract offer.",
+                outcome: {
+                    text: "You sit down with the Sunset Boulevard Records team. They're passionate about music and seem genuinely invested in artist development. Let's see their terms.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Sunset Boulevard Records'
+                }
+            },
+            {
+                text: "Politely decline - you want bigger opportunities.",
+                outcome: {
+                    text: "You pass on the indie label, hoping for something bigger. Months go by with no other offers. You wonder if you should have taken the grassroots support.",
+                    cash: 0, fame: 0, wellBeing: -3, careerProgress: -1, hype: 0
+                }
+            }
+        ]
+    },
+    {
+        title: "The Genre-Specialist Label",
+        description: "Rhythm & Soul Collective, an indie label specializing in your genre, has been following your career. They have deep connections in the scene and a loyal fanbase. Their A&R wants to discuss a partnership.",
+        conditions: { minFame: 30, minCareerProgress: 20, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review their specialized offer.",
+                outcome: {
+                    text: "Rhythm & Soul Collective knows your genre inside and out. Their roster is impressive and their industry connections are real. Time to examine their contract terms.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Rhythm & Soul Collective'
+                }
+            },
+            {
+                text: "Keep building independently.",
+                outcome: {
+                    text: "You decide to continue independently. While maintaining creative freedom, you miss out on their genre-specific expertise and established fanbase network.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: -2, hype: -2
+                }
+            }
+        ]
+    },
+    {
+        title: "The Artist-First Indie Deal",
+        description: "Creative Alliance Records, a boutique indie label known for artist-friendly contracts, sends you an offer. They're small but mighty, with a reputation for transparency and fair treatment. Their roster is handpicked and successful.",
+        conditions: { minFame: 35, minCareerProgress: 25, maxFame: 60, noLabelRequired: true },
+        choices: [
+            {
+                text: "Examine their artist-friendly contract.",
+                outcome: {
+                    text: "Creative Alliance Records has a stellar reputation in the independent community. Artists praise their transparency and fair deals. Let's see if the contract matches the reputation.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Creative Alliance Records'
+                }
+            },
+            {
+                text: "Wait for major label interest.",
+                outcome: {
+                    text: "You hold out for major label offers. Time passes, and while you get some interest, nothing concrete materializes. The indie scene starts viewing you as standoffish.",
+                    cash: 0, fame: -2, wellBeing: -4, careerProgress: 0, hype: -3
+                }
+            }
+        ]
+    },
+
+    // --- MID-LEVEL LABELS (2-4 years) ---
+    {
+        title: "The Regional Powerhouse Offer",
+        description: "Atlantic Shores Entertainment, a mid-sized label with strong regional presence and growing national reach, wants you on their roster. They're not major label size, but they're hungry and well-funded.",
+        conditions: { minFame: 40, minCareerProgress: 35, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review their contract proposal.",
+                outcome: {
+                    text: "Atlantic Shores has impressive resources for a mid-level label - solid marketing budget, radio connections, and proven track record. Let's examine their offer closely.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Atlantic Shores Entertainment'
+                }
+            },
+            {
+                text: "Pass - aim for major label deals only.",
+                outcome: {
+                    text: "You decline, holding out for major label offers. Some industry insiders question your judgment - mid-level labels often provide better artist support than majors.",
+                    cash: 0, fame: 0, wellBeing: -5, careerProgress: -3, hype: -2
+                }
+            }
+        ]
+    },
+    {
+        title: "The Industry Veteran's Label",
+        description: "Legacy Sound Group, founded by a legendary producer, reaches out. It's a mid-sized label with major label connections but indie label values. Their founder personally wants to work with you.",
+        conditions: { minFame: 50, minCareerProgress: 40, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review their offer and meet the founder.",
+                outcome: {
+                    text: "Legacy Sound Group's founder has decades of industry experience and has launched multiple platinum artists. Their label combines resources with respect. Time to see their terms.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Legacy Sound Group'
+                }
+            },
+            {
+                text: "Decline - you prefer full independence.",
+                outcome: {
+                    text: "You turn down the opportunity to work with a legend. While you maintain independence, you lose access to invaluable mentorship and industry connections.",
+                    cash: 0, fame: 0, wellBeing: -2, careerProgress: -4, hype: 0
+                }
+            }
+        ]
+    },
+    {
+        title: "The Hybrid Label Model",
+        description: "NextWave Records offers a unique hybrid model - part label services, part partnership. They're mid-sized but innovative, giving artists more ownership while providing full support. It's the best of both worlds, maybe.",
+        conditions: { minFame: 45, minCareerProgress: 38, noLabelRequired: true },
+        choices: [
+            {
+                text: "Explore their hybrid partnership model.",
+                outcome: {
+                    text: "NextWave Records is pioneering a new approach to label deals - more partnership, less control. Their model is intriguing. Let's review the actual contract terms.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'NextWave Records'
+                }
+            },
+            {
+                text: "Stick with traditional options only.",
+                outcome: {
+                    text: "You decline the hybrid model, preferring traditional structures. Innovation in the music industry often leads to breakthroughs - you might have missed one.",
+                    cash: 0, fame: 0, wellBeing: -3, careerProgress: -2, hype: 0
+                }
+            }
+        ]
+    },
+
+    // --- LARGE/GLOBAL LABELS (3-5 years) ---
+    {
+        title: "The International Major Deal",
+        description: "Worldwide Music Corp, one of the big three major labels, wants you. They have unlimited resources, global reach, and can make you an international star. But the contract is complex and heavily in their favor.",
+        conditions: { minFame: 60, minCareerProgress: 50, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review their major label contract carefully.",
+                outcome: {
+                    text: "Worldwide Music Corp represents the pinnacle of the industry. Their resources are unmatched, but their contracts are notoriously artist-unfavorable. This requires careful examination.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Worldwide Music Corp'
+                }
+            },
+            {
+                text: "Decline and maintain independence.",
+                outcome: {
+                    text: "You turn down a major label deal - a bold move. You maintain control but sacrifice massive marketing budgets and global infrastructure. Time will tell if it was worth it.",
+                    cash: 0, fame: 0, wellBeing: 2, careerProgress: -2, hype: -3
+                }
+            }
+        ]
+    },
+    {
+        title: "The Premium Major Label Offer",
+        description: "Platinum Heights Records, known for treating established artists with respect, extends an offer. They're a major label that works differently - better terms, more control, but they're selective about who they sign.",
+        conditions: { minFame: 65, minCareerProgress: 55, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review their premium terms.",
+                outcome: {
+                    text: "Platinum Heights Records has a reputation for artist-friendly major label deals. They're selective, and being courted by them is an honor. Let's see if their contract matches the reputation.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Platinum Heights Records'
+                }
+            },
+            {
+                text: "Negotiate for even better terms first.",
+                outcome: {
+                    text: "You push back, asking for better terms before even reviewing their offer. They're insulted - their contracts are already generous by major label standards. The offer is withdrawn.",
+                    cash: 0, fame: -3, wellBeing: -5, careerProgress: -5, hype: -4
+                }
+            }
+        ]
+    },
+    {
+        title: "The Legacy Label Opportunity",
+        description: "Columbia Sound House, one of the most historic and prestigious labels in music history, wants you on their legendary roster. Artists have won countless Grammys under this label. The prestige is undeniable.",
+        conditions: { minFame: 70, minCareerProgress: 60, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review the legendary label's offer.",
+                outcome: {
+                    text: "Columbia Sound House has launched icons and legends. Being offered a contract by them is a career milestone. But prestige doesn't always mean fair terms. Time to read carefully.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Columbia Sound House'
+                }
+            },
+            {
+                text: "Decline - legacy doesn't guarantee good terms.",
+                outcome: {
+                    text: "You decline one of the most prestigious labels in music history. Some call it brave, others call it foolish. The industry watches your next move carefully.",
+                    cash: 0, fame: 2, wellBeing: 0, careerProgress: -3, hype: 5
+                }
+            }
+        ]
+    },
+    {
+        title: "The Billboard-Topping Label Offer",
+        description: "Chart Dynasty Records, the label behind dozens of Billboard #1 hits, sees superstar potential in you. They have the formula for hits and the machinery to make them happen. But their process is rigid and commercial-focused.",
+        conditions: { minFame: 68, minCareerProgress: 58, noLabelRequired: true },
+        choices: [
+            {
+                text: "Review their hit-making contract.",
+                outcome: {
+                    text: "Chart Dynasty Records has an impressive track record of creating chart-toppers. But their focus on commercial success often means creative compromises. Let's examine their terms.",
+                    cash: 0, fame: 0, wellBeing: 0, careerProgress: 0, hype: 0,
+                    viewContract: 'Chart Dynasty Records'
+                }
+            },
+            {
+                text: "Reject the commercial formula approach.",
+                outcome: {
+                    text: "You turn down the hit-makers, prioritizing artistry over commercial success. It's admirable, but charts and commercial success fund long-term careers. A risky stance.",
+                    cash: 0, fame: 0, wellBeing: 3, careerProgress: -4, hype: -2
+                }
+            }
+        ]
+    },
     
     // --- GENERAL SCENARIOS ---
     {
@@ -2596,7 +2822,7 @@ export const scenarioBank: Scenario[] = [
             {
                 text: "Lean into it with humor - make it your brand",
                 outcome: {
-                    text: "You post: 'If I'm copying [Artist], I'm doing a great job because my version is also fire 🔥' The humor diffuses the tension. Both fanbases laugh. The other artist even reshares it with laughing emojis. What could have been beef becomes a funny moment. Sometimes acknowledging criticism with confidence disarms it. Humor and confidence beat defensiveness.",
+                    text: "You post on social media: 'If I'm being a copycat, then I'm doing a great job because my version is also fire 🔥' The humor diffuses the tension. Both fanbases laugh. The other artist even reshares it with laughing emojis. What could have been beef becomes a funny moment. Sometimes acknowledging criticism with confidence disarms it. Humor and confidence beat defensiveness.",
                     cash: 0, fame: 8, wellBeing: 10, careerProgress: 6, hype: 20,
                     lesson: {
                         title: "Confidence Diffuses Criticism",

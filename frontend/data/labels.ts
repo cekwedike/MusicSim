@@ -198,5 +198,428 @@ export const labels: RecordLabel[] = [
             'Only 1 album commitment - minimal obligation'
         ],
         dealBreakers: []
+    },
+
+    // --- NEW INDIE LABELS (1-3 years) ---
+    {
+        id: 'SUNSET_BOULEVARD',
+        name: 'Sunset Boulevard Records',
+        type: 'indie',
+        reputation: 72,
+        description: 'A local indie label with a solid reputation for artist development. We focus on long-term careers rather than quick hits. Small advances, but fair royalties and genuine support.',
+        terms: {
+            advance: 8000,
+            royaltyRate: 16,
+            albumCommitment: 1,
+            contractLength: 2,
+            creativeControl: 80,
+            recoupmentRate: 75,
+            crossCollateralized: false,
+            optionClause: false,
+            advanceRecoupable: true,
+            marketingBudget: 12000,
+            tourSupport: 5000,
+            territories: ['United States', 'Canada']
+        },
+        redFlags: [
+            'Small advance ($8,000) - limited upfront capital',
+            'Regional focus only - no international reach',
+            'Must recoup $8,000 before royalty payments begin',
+            'Modest marketing budget limits promotional reach'
+        ],
+        greenFlags: [
+            'Strong royalty rate (16%) - fair for indie label',
+            'High creative control (80%) - your vision matters',
+            'Only 1 album commitment - low pressure',
+            'Short 2-year contract - flexibility to move on',
+            'No cross-collateralization - clean financial structure',
+            'No option clause - you control your future',
+            'Strong local connections and grassroots promotion skills',
+            '25% of revenue is yours immediately (75% recoupment rate)'
+        ],
+        dealBreakers: []
+    },
+    {
+        id: 'RHYTHM_SOUL',
+        name: 'Rhythm & Soul Collective',
+        type: 'indie',
+        reputation: 78,
+        description: 'Genre specialists with deep industry connections in your scene. We live and breathe this music. Our roster is curated, our fanbase is loyal, and our A&Rs actually understand the culture.',
+        terms: {
+            advance: 12000,
+            royaltyRate: 17,
+            albumCommitment: 2,
+            contractLength: 3,
+            creativeControl: 82,
+            recoupmentRate: 70,
+            crossCollateralized: false,
+            optionClause: false,
+            advanceRecoupable: true,
+            marketingBudget: 15000,
+            tourSupport: 8000,
+            territories: ['United States', 'United Kingdom', 'Canada']
+        },
+        redFlags: [
+            'Moderate advance ($12,000) - not life-changing money',
+            '2 album commitment in 3 years - consistent output required',
+            'Must recoup advance before royalties kick in',
+            'Limited to primarily English-speaking markets'
+        ],
+        greenFlags: [
+            'Excellent royalty rate (17%) - above average',
+            'Very high creative control (82%) - artistic freedom',
+            'Genre-specific expertise - they understand your music',
+            'No cross-collateralization - albums financially separate',
+            'No option clause - clean exit after 3 years',
+            'Strong genre-specific fanbase and connections',
+            'Better marketing budget than most indie labels',
+            '30% of revenue is yours immediately'
+        ],
+        dealBreakers: []
+    },
+    {
+        id: 'CREATIVE_ALLIANCE',
+        name: 'Creative Alliance Records',
+        type: 'indie',
+        reputation: 82,
+        description: 'A boutique indie label famous for transparency and artist-first philosophy. We publish our contract terms publicly, we pay on time, and we treat artists as partners. Our reputation speaks for itself.',
+        terms: {
+            advance: 10000,
+            royaltyRate: 19,
+            albumCommitment: 1,
+            contractLength: 2,
+            creativeControl: 88,
+            recoupmentRate: 65,
+            crossCollateralized: false,
+            optionClause: false,
+            advanceRecoupable: true,
+            marketingBudget: 18000,
+            tourSupport: 7000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'Moderate advance ($10,000) - not a huge upfront payment',
+            'Must recoup $10,000 before seeing royalty payments',
+            'Worldwide distribution but indie-level infrastructure',
+            'Only 1 album - might feel rushed to deliver'
+        ],
+        greenFlags: [
+            'EXCELLENT royalty rate (19%) - among the best in indie scene',
+            'VERY high creative control (88%) - near total freedom',
+            'Outstanding industry reputation - trusted by artists',
+            'Only 1 album commitment - minimal pressure',
+            'Short 2-year contract - maximum flexibility',
+            'No cross-collateralization - clean financials',
+            'No option clause - you\'re free after 2 years',
+            'Strong marketing budget for an indie label',
+            'Only 65% recoupment - you keep 35% from day one',
+            'Worldwide distribution despite indie status'
+        ],
+        dealBreakers: []
+    },
+
+    // --- MID-LEVEL LABELS (2-4 years) ---
+    {
+        id: 'ATLANTIC_SHORES',
+        name: 'Atlantic Shores Entertainment',
+        type: 'major',
+        reputation: 70,
+        description: 'A growing mid-sized label with regional dominance and expanding national reach. We have major label resources without the corporate bureaucracy. Well-funded, hungry, and ready to invest in hits.',
+        terms: {
+            advance: 35000,
+            royaltyRate: 13,
+            albumCommitment: 2,
+            contractLength: 3,
+            creativeControl: 55,
+            recoupmentRate: 85,
+            crossCollateralized: false,
+            optionClause: true,
+            advanceRecoupable: true,
+            marketingBudget: 45000,
+            tourSupport: 18000,
+            territories: ['United States', 'Canada', 'Mexico']
+        },
+        redFlags: [
+            'Moderate royalty rate (13%) - not the best',
+            'Option clause - they can extend, you cannot',
+            '$35,000 advance must be recouped before royalties',
+            'Moderate creative control (55%) - they have significant say',
+            '85% recoupment rate - most revenue goes to recoupment first',
+            'Limited to North American markets'
+        ],
+        greenFlags: [
+            'Solid advance ($35,000) - real money upfront',
+            'Strong marketing budget ($45,000) - serious promotional push',
+            'Good tour support ($18,000) - helps with live shows',
+            'No cross-collateralization - albums stand alone',
+            'Growing label with momentum and ambition',
+            '2 albums in 3 years - reasonable pace',
+            'North American coverage - strong regional infrastructure'
+        ],
+        dealBreakers: []
+    },
+    {
+        id: 'LEGACY_SOUND',
+        name: 'Legacy Sound Group',
+        type: 'major',
+        reputation: 80,
+        description: 'Founded by a legendary producer with 40+ years in the industry. We combine major label connections with boutique label attention. Our founder personally mentors every artist on our roster.',
+        terms: {
+            advance: 40000,
+            royaltyRate: 15,
+            albumCommitment: 2,
+            contractLength: 4,
+            creativeControl: 65,
+            recoupmentRate: 80,
+            crossCollateralized: false,
+            optionClause: false,
+            advanceRecoupable: true,
+            marketingBudget: 60000,
+            tourSupport: 25000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'Moderate advance ($40,000) - not major label money',
+            '4-year commitment is significant',
+            'Must recoup $40,000 before earning royalties',
+            '80% recoupment rate - most revenue to recoupment',
+            '2 albums in 4 years - steady output required'
+        ],
+        greenFlags: [
+            'Good royalty rate (15%) - fair for mid-level',
+            'Solid creative control (65%) - meaningful input',
+            'Access to legendary founder/producer mentorship',
+            'Major label connections without corporate control',
+            'Strong marketing budget ($60,000) per album',
+            'Excellent tour support ($25,000)',
+            'Worldwide distribution - global reach',
+            'No cross-collateralization - clean structure',
+            'No option clause - you control exit',
+            '20% of revenue is yours immediately'
+        ],
+        dealBreakers: []
+    },
+    {
+        id: 'NEXTWAVE',
+        name: 'NextWave Records',
+        type: 'major',
+        reputation: 75,
+        description: 'An innovative hybrid label pioneering artist-partnership models. We split profits more fairly, give artists ownership stakes, and operate transparently. It\'s the future of music business.',
+        terms: {
+            advance: 30000,
+            royaltyRate: 20,
+            albumCommitment: 2,
+            contractLength: 3,
+            creativeControl: 75,
+            recoupmentRate: 70,
+            crossCollateralized: false,
+            optionClause: false,
+            advanceRecoupable: true,
+            marketingBudget: 50000,
+            tourSupport: 20000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'Moderate advance ($30,000) - smaller upfront',
+            'Hybrid model is unproven long-term',
+            'Must recoup $30,000 advance first',
+            '3-year commitment to experimental model',
+            '2 albums required - steady work needed'
+        ],
+        greenFlags: [
+            'EXCELLENT royalty rate (20%) - profit-sharing partnership',
+            'High creative control (75%) - strong artist input',
+            'Innovative partnership model - you have ownership stake',
+            'Strong marketing budget ($50,000)',
+            'Good tour support ($20,000)',
+            'Worldwide distribution',
+            'Only 70% recoupment - 30% is yours immediately',
+            'No cross-collateralization',
+            'No option clause - freedom after 3 years',
+            'Transparent operations - you see the numbers'
+        ],
+        dealBreakers: []
+    },
+
+    // --- LARGE/GLOBAL LABELS (3-5 years) ---
+    {
+        id: 'WORLDWIDE_MUSIC',
+        name: 'Worldwide Music Corp',
+        type: 'major',
+        reputation: 55,
+        description: 'One of the big three major labels. Unlimited resources, global reach, and proven hit-making machinery. Our contracts heavily favor us, but we can make you a household name internationally.',
+        terms: {
+            advance: 200000,
+            royaltyRate: 9,
+            albumCommitment: 4,
+            contractLength: 5,
+            creativeControl: 30,
+            recoupmentRate: 100,
+            crossCollateralized: true,
+            optionClause: true,
+            advanceRecoupable: true,
+            marketingBudget: 180000,
+            tourSupport: 60000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'MAJOR RED FLAG: Cross-collateralization - all albums financially linked',
+            'MAJOR RED FLAG: Must recoup $200,000 before ANY royalty payments',
+            'Very low royalty rate (9%) - below industry standard',
+            'Very low creative control (30%) - they control your music',
+            'Option clause - they can extend indefinitely',
+            '4 albums in 5 years - extremely demanding',
+            '100% recoupment - every dollar of costs from your earnings',
+            'Most artists never recoup and never see royalties'
+        ],
+        greenFlags: [
+            'Massive advance ($200,000) - immediate financial security',
+            'Huge marketing budget ($180,000) - global promotional campaign',
+            'Excellent tour support ($60,000)',
+            'True worldwide distribution - every country',
+            'Access to top producers, studios, A-list features',
+            'Major label prestige and credibility',
+            'Resources to make you an international star'
+        ],
+        dealBreakers: [
+            'Artists often remain in debt despite success',
+            'Label can drop you but you cannot leave',
+            'Creative freedom is minimal'
+        ]
+    },
+    {
+        id: 'PLATINUM_HEIGHTS',
+        name: 'Platinum Heights Records',
+        type: 'major',
+        reputation: 83,
+        description: 'A major label that does things differently. We offer major resources with significantly better terms than competitors. We\'re selective - we only sign artists we believe in long-term.',
+        terms: {
+            advance: 120000,
+            royaltyRate: 14,
+            albumCommitment: 3,
+            contractLength: 4,
+            creativeControl: 58,
+            recoupmentRate: 85,
+            crossCollateralized: false,
+            optionClause: false,
+            advanceRecoupable: true,
+            marketingBudget: 140000,
+            tourSupport: 55000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'Large advance ($120,000) must be recouped',
+            '3 albums in 4 years - consistent output required',
+            'Moderate creative control (58%) - not full freedom',
+            '85% recoupment rate - most revenue to costs',
+            'Moderate royalty rate (14%) - not exceptional'
+        ],
+        greenFlags: [
+            'Generous advance ($120,000) - financial security',
+            'Better royalty rate (14%) than most majors',
+            'Reasonable creative control (58%) for a major',
+            'No cross-collateralization - rare for major label',
+            'No option clause - clean exit after 4 years',
+            'Massive marketing budget ($140,000)',
+            'Excellent tour support ($55,000)',
+            'Worldwide distribution and infrastructure',
+            'Reputation for treating artists fairly',
+            '15% of revenue is yours immediately',
+            'Selective roster - they invest in success'
+        ],
+        dealBreakers: []
+    },
+    {
+        id: 'COLUMBIA_SOUND',
+        name: 'Columbia Sound House',
+        type: 'major',
+        reputation: 88,
+        description: 'One of the most historic and prestigious labels in music. Legends have recorded here. Countless Grammys. The prestige is real, but so are the demanding expectations and traditional practices.',
+        terms: {
+            advance: 150000,
+            royaltyRate: 11,
+            albumCommitment: 3,
+            contractLength: 5,
+            creativeControl: 45,
+            recoupmentRate: 95,
+            crossCollateralized: true,
+            optionClause: true,
+            advanceRecoupable: true,
+            marketingBudget: 200000,
+            tourSupport: 75000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'RED FLAG: Cross-collateralization - albums financially linked',
+            'Option clause - they control contract length',
+            'Low royalty rate (11%) for this level',
+            'Moderate creative control (45%) - traditional control',
+            'Must recoup $150,000 advance before royalties',
+            '95% recoupment rate - almost everything to costs',
+            '3 albums in 5 years with high expectations',
+            'Traditional major label practices - less flexibility'
+        ],
+        greenFlags: [
+            'Huge advance ($150,000) - major financial boost',
+            'MASSIVE marketing budget ($200,000) - premium promotion',
+            'Excellent tour support ($75,000)',
+            'Ultimate industry prestige - legendary label',
+            'World-class studios and producers',
+            'Grammy-winning team and track record',
+            'Worldwide infrastructure and connections',
+            'Cultural cachet and credibility',
+            'Access to elite industry events and opportunities'
+        ],
+        dealBreakers: [
+            'Traditional major label structure with all the pros and cons',
+            'High expectations and pressure to perform'
+        ]
+    },
+    {
+        id: 'CHART_DYNASTY',
+        name: 'Chart Dynasty Records',
+        type: 'major',
+        reputation: 68,
+        description: 'The label behind countless Billboard #1 hits. We have the formula, the machinery, and the connections to create chart-toppers. Commercial success is our specialty, but artistic compromise is expected.',
+        terms: {
+            advance: 180000,
+            royaltyRate: 10,
+            albumCommitment: 4,
+            contractLength: 5,
+            creativeControl: 35,
+            recoupmentRate: 100,
+            crossCollateralized: true,
+            optionClause: true,
+            advanceRecoupable: true,
+            marketingBudget: 220000,
+            tourSupport: 70000,
+            territories: ['Worldwide']
+        },
+        redFlags: [
+            'MAJOR RED FLAG: Cross-collateralization across all albums',
+            'MAJOR RED FLAG: Option clause - they control your future',
+            'Very low creative control (35%) - heavy commercial pressure',
+            'Low royalty rate (10%) despite success focus',
+            'Must recoup $180,000 before any royalties',
+            '100% recoupment - every cost from your earnings',
+            '4 albums in 5 years - intense schedule',
+            'Formula-driven approach - artistic compromise expected',
+            'Commercial pressure over artistic integrity'
+        ],
+        greenFlags: [
+            'Large advance ($180,000) - substantial upfront',
+            'HIGHEST marketing budget ($220,000) - maximum exposure',
+            'Excellent tour support ($70,000)',
+            'Proven track record of creating hits',
+            'Radio connections and playlist placements',
+            'Major chart success infrastructure',
+            'Worldwide distribution',
+            'Access to hit-making producers and writers',
+            'Focus on commercial success and Billboard charts'
+        ],
+        dealBreakers: [
+            'Artistic vision will be compromised for commercial appeal',
+            'High pressure to deliver radio hits'
+        ]
     }
 ];

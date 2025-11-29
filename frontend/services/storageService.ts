@@ -2,6 +2,7 @@ import type { GameState, SaveSlot, LogEntry } from '../types';
 import { toGameDate } from '../src/utils/dateUtils';
 import { gameService } from './gameService';
 import authServiceSupabase from './authService.supabase';
+import storage from './dbStorage';
 
 const AUTOSAVE_EXPIRATION_MS = 30 * 60 * 1000; // 30 minutes (only for 'auto' slot)
 const MAX_SAVE_SLOTS = 5; // Maximum number of manual save slots allowed per user
@@ -102,7 +103,7 @@ const isAutosaveExpired = (timestamp: number): boolean => {
  * Check if user can create a new save slot
  */
 export const canCreateNewSave = async (): Promise<{ canSave: boolean; reason?: string }> => {
-  const saves = loadLocalSaves();
+  const saves = await loadLocalSaves();
   const manualSaves = Object.keys(saves).filter(key => key !== 'auto');
 
   if (manualSaves.length >= MAX_SAVE_SLOTS) {
@@ -118,8 +119,8 @@ export const canCreateNewSave = async (): Promise<{ canSave: boolean; reason?: s
 /**
  * Get count of manual save slots
  */
-export const getManualSaveCount = (): number => {
-  const saves = loadLocalSaves();
+export const getManualSaveCount = async (): Promise<number> => {
+  const saves = await loadLocalSaves();
   return Object.keys(saves).filter(key => key !== 'auto').length;
 };
 
@@ -131,7 +132,7 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
 
   // Check slot limit for manual saves (not for autosave or overwriting existing saves)
   if (slotId !== 'auto') {
-    const saves = loadLocalSaves();
+    const saves = await loadLocalSaves();
     const isNewSave = !saves[slotId];
 
     if (isNewSave) {
@@ -165,11 +166,11 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
         // Don't throw here - we'll still try localStorage
       }
     } else {
-      console.log('[storageService] Guest mode - saving to localStorage only');
+      console.log('[storageService] Guest mode - saving to IndexedDB only');
     }
 
-    // Always save to localStorage as backup
-    const saves = loadLocalSaves();
+    // Always save to IndexedDB as backup
+    const saves = await loadLocalSaves();
     console.log('[storageService] Current saves before adding new one:', Object.keys(saves));
 
     saves[slotId] = saveData;
@@ -178,46 +179,46 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     try {
       // Ensure we can stringify before writing — helps surface circular/reference errors
       const payload = JSON.stringify(saves);
-      localStorage.setItem('musicsim_saves', payload);
-      console.log(`[storageService] ✅ localStorage save successful: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      await storage.setItem('musicsim_saves', payload);
+      console.log(`[storageService] ✅ IndexedDB save successful: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
 
       // Verify the save was written
-      const verification = localStorage.getItem('musicsim_saves');
+      const verification = await storage.getItem('musicsim_saves');
       if (verification) {
         const verified = JSON.parse(verification);
         console.log('[storageService] Verification - saved slots:', Object.keys(verified));
         
         // Report save status
         if (backendSaveSuccess) {
-          console.log(`[storageService] ✅ Complete save success for ${slotId}: backend + localStorage`);
+          console.log(`[storageService] ✅ Complete save success for ${slotId}: backend + IndexedDB`);
         } else {
-          console.log(`[storageService] ⚠️ Partial save success for ${slotId}: localStorage only (backend failed)`);
+          console.log(`[storageService] ⚠️ Partial save success for ${slotId}: IndexedDB only (backend failed)`);
         }
       } else {
-        throw new Error('Save verification failed - localStorage empty after write');
+        throw new Error('Save verification failed - IndexedDB empty after write');
       }
     } catch (storageError) {
-      console.error('[storageService] ❌ localStorage save failed:', storageError);
+      console.error('[storageService] ❌ IndexedDB save failed:', storageError);
       
-      // If both backend and localStorage fail, this is critical
+      // If both backend and IndexedDB fail, this is critical
       if (!backendSaveSuccess) {
         throw new Error(`Save failed completely: ${storageError.message}`);
       } else {
-        console.warn('[storageService] Backend save succeeded but localStorage failed - continuing...');
+        console.warn('[storageService] Backend save succeeded but IndexedDB failed - continuing...');
       }
     }
   } catch (error) {
     console.error('[storageService] Save error:', error);
 
-    // Fallback to localStorage only
-    const saves = loadLocalSaves();
+    // Fallback to IndexedDB only
+    const saves = await loadLocalSaves();
     saves[slotId] = saveData;
     try {
       const payload = JSON.stringify(saves);
-      localStorage.setItem('musicsim_saves', payload);
-      console.log(`[storageService] Saved to localStorage (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      await storage.setItem('musicsim_saves', payload);
+      console.log(`[storageService] Saved to IndexedDB (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
     } catch (err) {
-      console.error('[storageService] Fallback: failed to write saves to localStorage (stringify error):', err);
+      console.error('[storageService] Fallback: failed to write saves to IndexedDB (stringify error):', err);
       // Re-throw so callers can surface the error if needed
       throw err;
     }
@@ -231,9 +232,9 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
 export const loadGame = async (slotId: string): Promise<GameState | null> => {
   console.log(`[loadGame] Starting load for slot: ${slotId}`);
   
-  // OPTIMIZATION: Try localStorage first for faster loading
+  // OPTIMIZATION: Try IndexedDB first for faster loading
   // This prevents the blank screen issue by loading local data immediately
-  const saves = loadLocalSaves();
+  const saves = await loadLocalSaves();
   const localSaveData = saves[slotId];
   
   // Check if we have local data and it's valid
@@ -269,15 +270,15 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
         console.log(`[loadGame] Loaded from backend: ${slotId}`);
         const gameState = deserializeGameState(response.data.gameState);
         
-        // Cache to localStorage for future fast access
+        // Cache to IndexedDB for future fast access
         const saveData: SaveData = {
           state: response.data.gameState,
           timestamp: new Date(response.data.lastPlayedAt).getTime(),
           version: '1.0'
         };
         saves[slotId] = saveData;
-        localStorage.setItem('musicsim_saves', JSON.stringify(saves));
-        console.log(`[loadGame] Cached backend save to localStorage: ${slotId}`);
+        await storage.setItem('musicsim_saves', JSON.stringify(saves));
+        console.log(`[loadGame] Cached backend save to IndexedDB: ${slotId}`);
         
         return gameState;
       }
@@ -306,13 +307,13 @@ const syncWithBackendAsync = async (slotId: string, localSaveData: SaveData) => 
       // If backend has newer data, update local storage
       if (backendTimestamp > localTimestamp) {
         console.log(`[syncWithBackendAsync] Backend has newer save for ${slotId}, updating local cache`);
-        const saves = loadLocalSaves();
+        const saves = await loadLocalSaves();
         saves[slotId] = {
           state: response.data.gameState,
           timestamp: backendTimestamp,
           version: '1.0'
         };
-        localStorage.setItem('musicsim_saves', JSON.stringify(saves));
+        await storage.setItem('musicsim_saves', JSON.stringify(saves));
       }
     }
   } catch (error) {
@@ -356,28 +357,28 @@ export const deleteSave = async (slotId: string): Promise<void> => {
     }
   } catch (error) {
     console.error('[storageService] ❌ Error in deleteSave:', error);
-    // Don't throw - still delete from localStorage
+    // Don't throw - still delete from IndexedDB
   }
 
-  // Delete from localStorage
-  const saves = loadLocalSaves();
+  // Delete from IndexedDB
+  const saves = await loadLocalSaves();
   delete saves[slotId];
-  localStorage.setItem('musicsim_saves', JSON.stringify(saves));
-  console.log(`[storageService] ✅ Deleted from localStorage: ${slotId}`);
+  await storage.setItem('musicsim_saves', JSON.stringify(saves));
+  console.log(`[storageService] ✅ Deleted from IndexedDB: ${slotId}`);
 };
 
 /**
  * Get all saves
  */
-export const getAllSaves = (): { [key: string]: SaveData } => {
-  return loadLocalSaves();
+export const getAllSaves = async (): Promise<{ [key: string]: SaveData }> => {
+  return await loadLocalSaves();
 };
 
 /**
  * Clean up expired autosaves
  */
 export const cleanupExpiredAutosaves = async (): Promise<void> => {
-  const saves = loadLocalSaves();
+  const saves = await loadLocalSaves();
   const autoSave = saves['auto'];
   
   if (autoSave && isAutosaveExpired(autoSave.timestamp)) {
@@ -389,8 +390,8 @@ export const cleanupExpiredAutosaves = async (): Promise<void> => {
 /**
  * Check if autosave exists and is valid
  */
-export const hasValidAutosave = (): boolean => {
-  const saves = loadLocalSaves();
+export const hasValidAutosave = async (): Promise<boolean> => {
+  const saves = await loadLocalSaves();
   const autoSave = saves['auto'];
   
   if (!autoSave) return false;
@@ -401,8 +402,8 @@ export const hasValidAutosave = (): boolean => {
 /**
  * Get autosave age in minutes
  */
-export const getAutosaveAge = (): number | null => {
-  const saves = loadLocalSaves();
+export const getAutosaveAge = async (): Promise<number | null> => {
+  const saves = await loadLocalSaves();
   const autoSave = saves['auto'];
   
   if (!autoSave) return null;
@@ -411,10 +412,10 @@ export const getAutosaveAge = (): number | null => {
 };
 
 /**
- * Helper: Load saves from localStorage
+ * Helper: Load saves from IndexedDB
  */
-const loadLocalSaves = (): { [key: string]: SaveData } => {
-  const saved = localStorage.getItem('musicsim_saves');
+const loadLocalSaves = async (): Promise<{ [key: string]: SaveData }> => {
+  const saved = await storage.getItem('musicsim_saves');
   if (!saved) return {};
   
   try {
@@ -433,7 +434,7 @@ const loadLocalSaves = (): { [key: string]: SaveData } => {
  * Backend is the source of truth for authenticated users
  */
 async function cleanOrphanedLocalSaves(backendSaveIds: string[]): Promise<void> {
-  const localSaves = loadLocalSaves();
+  const localSaves = await loadLocalSaves();
   const localSaveIds = Object.keys(localSaves);
   
   // Find saves that exist locally but not in backend
@@ -453,12 +454,12 @@ async function cleanOrphanedLocalSaves(backendSaveIds: string[]): Promise<void> 
       }
     }
     
-    // Save cleaned up saves back to localStorage
+    // Save cleaned up saves back to IndexedDB
     try {
-      localStorage.setItem('musicsim_saves', JSON.stringify(localSaves));
+      await storage.setItem('musicsim_saves', JSON.stringify(localSaves));
       console.log('[storageService] ✅ Cleaned up', orphanedSaves.length, 'orphaned local saves');
     } catch (error) {
-      console.error('[storageService] Failed to save cleaned localStorage:', error);
+      console.error('[storageService] Failed to save cleaned IndexedDB:', error);
     }
   }
 }
@@ -537,12 +538,12 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         console.warn('[storageService] Backend save load timed out, using localStorage:', error);
       }
     } else {
-      console.log('[storageService] Guest mode - loading from localStorage only');
+      console.log('[storageService] Guest mode - loading from IndexedDB only');
     }
 
-    // Always check localStorage as well
-    const localSaves = loadLocalSaves();
-    console.log('[storageService] LocalStorage has', Object.keys(localSaves).length, 'saves:', Object.keys(localSaves));
+    // Always check IndexedDB as well
+    const localSaves = await loadLocalSaves();
+    console.log('[storageService] IndexedDB has', Object.keys(localSaves).length, 'saves:', Object.keys(localSaves));
 
     for (const [slotId, saveData] of Object.entries(localSaves)) {
       // Skip if already added from backend
@@ -559,7 +560,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         continue;
       }
 
-      console.log('[storageService] Processing localStorage save:', slotId);
+      console.log('[storageService] Processing IndexedDB save:', slotId);
       // Deserialize the state to convert ISO strings back to Date objects
       const state = deserializeGameState(saveData.state);
       const gdLocal = toGameDate(state.currentDate, state.startDate);
@@ -599,17 +600,10 @@ export const autoSave = async (state: GameState): Promise<void> => {
 };
 
 /**
- * Checks if localStorage is available
+ * Checks if storage is available (IndexedDB or localStorage fallback)
  */
 export function isStorageAvailable(): boolean {
-  try {
-    const test = '__storage_test__';
-    localStorage.setItem(test, test);
-    localStorage.removeItem(test);
-    return true;
-  } catch {
-    return false;
-  }
+  return storage.isAvailable();
 }
 
 /**
@@ -652,16 +646,16 @@ export default {
 };
 
 /**
- * Retrieve all guest data (saves and statistics) from localStorage
+ * Retrieve all guest data (saves and statistics) from IndexedDB
  */
-export function getGuestData(): { saves: any[]; statistics: any } | null {
+export async function getGuestData(): Promise<{ saves: any[]; statistics: any } | null> {
   try {
     if (!isStorageAvailable()) {
       return null;
     }
 
-    // Get all saves from localStorage
-    const localSaves = loadLocalSaves();
+    // Get all saves from IndexedDB
+    const localSaves = await loadLocalSaves();
     const saves = Object.entries(localSaves)
       .filter(([slotId]) => slotId !== 'auto') // Exclude autosave
       .map(([slotId, saveData]) => ({
@@ -671,8 +665,8 @@ export function getGuestData(): { saves: any[]; statistics: any } | null {
         timestamp: saveData.timestamp
       }));
 
-    // Get statistics from localStorage
-    const statisticsStr = localStorage.getItem('musicsim_statistics');
+    // Get statistics from IndexedDB
+    const statisticsStr = await storage.getItem('musicsim_statistics');
     const statistics = statisticsStr ? JSON.parse(statisticsStr) : null;
 
     if (saves.length === 0 && !statistics) {
@@ -690,24 +684,24 @@ export function getGuestData(): { saves: any[]; statistics: any } | null {
 }
 
 /**
- * Clear guest data from localStorage
+ * Clear guest data from IndexedDB
  * @param clearSaves - Whether to clear save data
  * @param clearStatistics - Whether to clear statistics
  */
-export function clearGuestData(clearSaves: boolean = true, clearStatistics: boolean = false): void {
+export async function clearGuestData(clearSaves: boolean = true, clearStatistics: boolean = false): Promise<void> {
   try {
     if (!isStorageAvailable()) {
       return;
     }
 
     if (clearSaves) {
-      localStorage.removeItem('musicsim_saves');
-      console.log('[storageService] Guest saves cleared from localStorage');
+      await storage.removeItem('musicsim_saves');
+      console.log('[storageService] Guest saves cleared from IndexedDB');
     }
 
     if (clearStatistics) {
-      localStorage.removeItem('musicsim_statistics');
-      console.log('[storageService] Guest statistics cleared from localStorage');
+      await storage.removeItem('musicsim_statistics');
+      console.log('[storageService] Guest statistics cleared from IndexedDB');
     }
   } catch (error) {
     console.error('[storageService] Error clearing guest data:', error);

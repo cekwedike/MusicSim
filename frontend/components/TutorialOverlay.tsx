@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { TutorialStep } from '../types';
 import { getTutorialStepByIndex, getTutorialLength } from '../data/tutorialSteps';
 import { AudioPlayer } from '../src/components/AudioPlayer';
+import storage from '../services/dbStorage';
 
 interface TutorialOverlayProps {
   currentStep: number;
@@ -42,9 +43,12 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
 
   useEffect(() => {
     // Check if this is the first time user is seeing the tutorial
-    const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
-    const hasSeenBefore = localStorage.getItem(TUTORIAL_SEEN_KEY) === 'true';
-    isFirstTimeTutorial.current = !hasSeenBefore;
+    const checkFirstTime = async () => {
+      const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
+      const hasSeenBefore = await storage.getItem(TUTORIAL_SEEN_KEY) === 'true';
+      isFirstTimeTutorial.current = !hasSeenBefore;
+    };
+    checkFirstTime();
   }, []);
 
   useEffect(() => {

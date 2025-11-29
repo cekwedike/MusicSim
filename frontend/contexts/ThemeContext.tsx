@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import storage from '../services/dbStorage';
 
 type Theme = 'light' | 'dark';
 
@@ -25,18 +26,21 @@ interface ThemeProviderProps {
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>('dark');
 
-  // Load theme from localStorage on mount
+  // Load theme from IndexedDB on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('musicsim_theme') as Theme | null;
-    if (savedTheme === 'light' || savedTheme === 'dark') {
-      setThemeState(savedTheme);
-      document.documentElement.classList.toggle('light', savedTheme === 'light');
-    }
+    const loadTheme = async () => {
+      const savedTheme = await storage.getItem('musicsim_theme') as Theme | null;
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        setThemeState(savedTheme);
+        document.documentElement.classList.toggle('light', savedTheme === 'light');
+      }
+    };
+    loadTheme();
   }, []);
 
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = async (newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem('musicsim_theme', newTheme);
+    await storage.setItem('musicsim_theme', newTheme);
     document.documentElement.classList.toggle('light', newTheme === 'light');
   };
 

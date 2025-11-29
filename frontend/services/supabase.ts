@@ -1,5 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Add TypeScript declarations for import.meta.env (Vite)
+declare global {
+  interface ImportMetaEnv {
+    readonly VITE_SUPABASE_URL?: string;
+    readonly VITE_SUPABASE_ANON_KEY?: string;
+    [key: string]: string | undefined;
+  }
+
+  interface ImportMeta {
+    readonly env: ImportMetaEnv;
+  }
+}
+
 // Get Supabase credentials from environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -15,6 +28,8 @@ export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
+    // Note: Supabase auth requires synchronous storage, so we keep localStorage for auth
+    // The game data uses IndexedDB via dbStorage
     storage: window.localStorage,
     storageKey: 'musicsim_auth',
   }

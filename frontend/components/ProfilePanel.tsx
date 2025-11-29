@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import type { GameStatistics, Difficulty } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import AlertDialog from './AlertDialog';
 import { loadStatistics } from '../services/statisticsService';
 import authServiceSupabase from '../services/authService.supabase';
+import storage from '../services/dbStorage';
 
 interface ProfilePanelProps {
 	isGuestMode: boolean;
@@ -36,13 +37,22 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 	const [isEditingUsername, setIsEditingUsername] = useState(false);
 	const [editedUsername, setEditedUsername] = useState('');
 	const [usernameError, setUsernameError] = useState('');
-	const [guestName, setGuestName] = useState(() => {
-		return localStorage.getItem('guestPlayerName') || 'Guest Player';
-	});
+	const [guestName, setGuestName] = useState('Guest Player');
 	const [isEditingGuestName, setIsEditingGuestName] = useState(false);
 	const [editedGuestName, setEditedGuestName] = useState('');
 	const [isUploadingImage, setIsUploadingImage] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	// Load guest name from IndexedDB
+	useEffect(() => {
+		const loadGuestName = async () => {
+			const name = await storage.getItem('guestPlayerName');
+			if (name) {
+				setGuestName(name);
+			}
+		};
+		loadGuestName();
+	}, []);
 
 	const showAlert = (title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
 		setAlertDialog({ isOpen: true, title, message, type });
@@ -119,13 +129,13 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 		setIsEditingGuestName(true);
 	};
 
-	const handleSaveGuestName = () => {
+	const handleSaveGuestName = async () => {
 		if (!editedGuestName.trim()) {
 			showAlert('Invalid Name', 'Name cannot be empty', 'warning');
 			return;
 		}
 
-		localStorage.setItem('guestPlayerName', editedGuestName.trim());
+		await storage.setItem('guestPlayerName', editedGuestName.trim());
 		setGuestName(editedGuestName.trim());
 		setIsEditingGuestName(false);
 	};

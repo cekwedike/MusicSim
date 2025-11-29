@@ -11,9 +11,11 @@ import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, deserializeGameState, getGuestData, clearGuestData } from './services/storageService';
+import storage from './services/dbStorage';
+import { initializeMigration } from './services/migrationService';
 import authServiceSupabase from './services/authService.supabase';
 import { useAutoSave } from './hooks/useAutoSave';
-import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision } from './services/statisticsService';
+import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision, getDefaultStatistics } from './services/statisticsService';
 import { startModule, completeModule } from './services/learningProgressService';
 import { getGenreLabel } from './constants/genres';
 import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } from './data/difficultySettings';
@@ -118,7 +120,7 @@ const generateInitialState = (artistName = '', artistGenre = '', difficulty: Dif
         burnoutTurns: 0,
         gameOverReason: null,
         unlocksShown: [],
-        statistics: loadStatistics(),
+        statistics: getDefaultStatistics(), // Will be loaded asynchronously
         currentHistory: [],
         sessionStartTime: Date.now(),
         tutorial: {
@@ -1168,13 +1170,11 @@ function gameReducer(state: GameState, action: any): GameState {
         case 'LOAD_GAME':
             return { ...action.payload, status: 'playing' };
         case 'START_TUTORIAL':
-            // Mark tutorial as seen in localStorage (persistent)
+            // Mark tutorial as seen in IndexedDB (persistent)
             // This ensures even if user closes browser mid-tutorial, it won't show again
-            try {
-                localStorage.setItem('musicsim_tutorial_seen', 'true');
-            } catch (e) {
+            storage.setItem('musicsim_tutorial_seen', 'true').catch(e => {
                 console.error('Failed to save tutorial seen flag:', e);
-            }
+            });
             return {
                 ...state,
                 tutorial: {
@@ -1204,12 +1204,10 @@ function gameReducer(state: GameState, action: any): GameState {
                 }
             };
         case 'SKIP_TUTORIAL':
-            // Mark tutorial as seen in localStorage (persistent)
-            try {
-                localStorage.setItem('musicsim_tutorial_seen', 'true');
-            } catch (e) {
+            // Mark tutorial as seen in IndexedDB (persistent)
+            storage.setItem('musicsim_tutorial_seen', 'true').catch(e => {
                 console.error('Failed to save tutorial seen flag:', e);
-            }
+            });
             return {
                 ...state,
                 tutorial: {
@@ -1219,12 +1217,10 @@ function gameReducer(state: GameState, action: any): GameState {
                 }
             };
         case 'COMPLETE_TUTORIAL': {
-            // Mark tutorial as seen in localStorage (persistent)
-            try {
-                localStorage.setItem('musicsim_tutorial_seen', 'true');
-            } catch (e) {
+            // Mark tutorial as seen in IndexedDB (persistent)
+            storage.setItem('musicsim_tutorial_seen', 'true').catch(e => {
                 console.error('Failed to save tutorial seen flag:', e);
-            }
+            });
 
             const updatedStatistics = updateStatistics(state, state.statistics);
 
@@ -1561,6 +1557,12 @@ function gameReducer(state: GameState, action: any): GameState {
                 unlocksShown: [...state.unlocksShown, ...action.unlockIds]
             };
 
+        case 'UPDATE_STATS':
+            return {
+                ...state,
+                statistics: action.payload.statistics
+            };
+
         default:
             return state;
     }
@@ -1601,9 +1603,9 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
     const [deleteConfirmSlotId, setDeleteConfirmSlotId] = useState<string | null>(null);
 
     useEffect(() => {
-        const checkAutosave = () => {
-            setAutosaveExists(hasValidAutosave());
-            setAutosaveAge(getAutosaveAge());
+        const checkAutosave = async () => {
+            setAutosaveExists(await hasValidAutosave());
+            setAutosaveAge(await getAutosaveAge() ?? 0);
         };
 
         checkAutosave();
@@ -2045,6 +2047,20 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
 
+    // Initialize migration and load statistics on mount
+    useEffect(() => {
+        const initialize = async () => {
+            // Run data migration from localStorage to IndexedDB
+            await initializeMigration();
+            
+            // Load statistics from IndexedDB
+            const stats = await loadStatistics();
+            dispatch({ type: 'UPDATE_STATS', payload: { statistics: stats } });
+        };
+        
+        initialize();
+    }, []);
+
     // Initialize autosave hook with 5-second debounce
     const { autoSave: debouncedAutoSave, saveNow, status: autoSaveStatus, clearError: clearAutoSaveError } = useAutoSave(5000);
 
@@ -2063,10 +2079,16 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Audio unlock prompt state
     const [showAudioUnlock, setShowAudioUnlock] = useState(false);
-    const [hasShownAudioPrompt, setHasShownAudioPrompt] = useState(() => {
-        // Check if user has already seen the prompt
-        return localStorage.getItem('audioPromptShown') === 'true';
-    });
+    const [hasShownAudioPrompt, setHasShownAudioPrompt] = useState(false);
+
+    // Load audio prompt state from IndexedDB
+    useEffect(() => {
+        const loadAudioPromptState = async () => {
+            const shown = await storage.getItem('audioPromptShown');
+            setHasShownAudioPrompt(shown === 'true');
+        };
+        loadAudioPromptState();
+    }, []);
 
     // Unlock notification state
     interface UnlockNotif {
@@ -2365,30 +2387,35 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Auto-start tutorial for brand new players (only once ever, on their first gameplay)
     useEffect(() => {
-        // Check localStorage to see if tutorial was ever seen
-        const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
-        const tutorialEverSeen = localStorage.getItem(TUTORIAL_SEEN_KEY) === 'true';
+        const checkAndStartTutorial = async () => {
+            // Check IndexedDB to see if tutorial was ever seen
+            const TUTORIAL_SEEN_KEY = 'musicsim_tutorial_seen';
+            const tutorialSeenValue = await storage.getItem(TUTORIAL_SEEN_KEY);
+            const tutorialEverSeen = tutorialSeenValue === 'true';
 
-        // Only show tutorial if:
-        // 1. Never seen before (not in localStorage)
-        // 2. No games played yet (brand new user)
-        // 3. Currently playing (not just logged in - actually started playing)
-        // 4. Tutorial not already active
-        // 5. Has an artist name (started a career)
-        const isNewPlayer = !tutorialEverSeen &&
-                           state.statistics.totalGamesPlayed === 0 &&
-                           status === 'playing' &&
-                           !state.tutorial.active &&
-                           state.artistName.trim() !== '';
+            // Only show tutorial if:
+            // 1. Never seen before (not in IndexedDB)
+            // 2. No games played yet (brand new user)
+            // 3. Currently playing (not just logged in - actually started playing)
+            // 4. Tutorial not already active
+            // 5. Has an artist name (started a career)
+            const isNewPlayer = !tutorialEverSeen &&
+                               state.statistics.totalGamesPlayed === 0 &&
+                               status === 'playing' &&
+                               !state.tutorial.active &&
+                               state.artistName.trim() !== '';
 
-        if (isNewPlayer) {
-            localStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
+            if (isNewPlayer) {
+                await storage.setItem(TUTORIAL_SEEN_KEY, 'true');
 
-            // Delay tutorial start to let the game render first
-            setTimeout(() => {
-                dispatch({ type: 'START_TUTORIAL' });
-            }, 1000);
-        }
+                // Delay tutorial start to let the game render first
+                setTimeout(() => {
+                    dispatch({ type: 'START_TUTORIAL' });
+                }, 1000);
+            }
+        };
+
+        checkAndStartTutorial();
     }, [status, state.statistics.totalGamesPlayed, state.tutorial.active, state.artistName]);
 
     const handleChoiceSelect = (choice: Choice) => {
@@ -2443,7 +2470,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const handleAudioUnlock = async () => {
         setShowAudioUnlock(false);
         setHasShownAudioPrompt(true);
-        localStorage.setItem('audioPromptShown', 'true');
+        await storage.setItem('audioPromptShown', 'true');
 
         // Unlock audio system - this enables user interaction flag
         audioManager.unlockAudio();
@@ -2467,10 +2494,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         }
     };
 
-    const handleAudioSkip = () => {
+    const handleAudioSkip = async () => {
         setShowAudioUnlock(false);
         setHasShownAudioPrompt(true);
-        localStorage.setItem('audioPromptShown', 'true');
+        await storage.setItem('audioPromptShown', 'true');
 
         // Mute audio if user skips
         audioManager.setMusicMuted(true);
@@ -3020,7 +3047,7 @@ const AuthenticatedApp: React.FC = () => {
         const checkGuestDataOnLogin = async () => {
             // If user just logged in and was previously in guest mode
             if (isAuthenticated && wasGuestMode) {
-                const guestData = getGuestData();
+                const guestData = await getGuestData();
 
                 if (guestData && guestData.saves.length > 0) {
                     // Check if user has cloud saves
@@ -3088,7 +3115,7 @@ const AuthenticatedApp: React.FC = () => {
 
     // Handle guest data merge choice
     const handleGuestDataChoice = async (choice: 'merge' | 'cloud' | 'both') => {
-        const guestData = getGuestData();
+        const guestData = await getGuestData();
 
         if (!guestData) {
             console.warn('[App] No guest data found');
@@ -3097,7 +3124,7 @@ const AuthenticatedApp: React.FC = () => {
 
         try {
             if (choice === 'merge') {
-                // Merge: Sync guest data to cloud and clear localStorage
+                // Merge: Sync guest data to cloud and clear IndexedDB
                 console.log('[App] Merging guest data to cloud...');
                 const result = await authServiceSupabase.syncGuestData(guestData);
 
@@ -3105,18 +3132,18 @@ const AuthenticatedApp: React.FC = () => {
                     throw new Error(result.message);
                 }
 
-                // Clear guest data from localStorage after successful sync
-                clearGuestData(true, false); // Clear saves but keep statistics
+                // Clear guest data from IndexedDB after successful sync
+                await clearGuestData(true, false); // Clear saves but keep statistics
                 console.log('[App] Guest data merged successfully');
 
             } else if (choice === 'cloud') {
                 // Cloud: Discard guest data and load cloud saves
                 console.log('[App] Discarding guest data...');
-                clearGuestData(true, true); // Clear both saves and statistics
+                await clearGuestData(true, true); // Clear both saves and statistics
                 console.log('[App] Guest data cleared');
 
             } else if (choice === 'both') {
-                // Both: Keep guest data in localStorage AND sync statistics
+                // Both: Keep guest data in IndexedDB AND sync statistics
                 console.log('[App] Keeping both guest and cloud data...');
                 // Only sync statistics, not saves
                 const statsOnly = { statistics: guestData.statistics };
@@ -3126,7 +3153,7 @@ const AuthenticatedApp: React.FC = () => {
                     throw new Error(result.message);
                 }
 
-                console.log('[App] Statistics synced, guest saves preserved in localStorage');
+                console.log('[App] Statistics synced, guest saves preserved in IndexedDB');
             }
 
             // Reset guest mode state

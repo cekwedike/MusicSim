@@ -1,9 +1,10 @@
 import type { GameStatistics, GameState, CareerHistory } from '../types';
 import { toGameDate } from '../src/utils/dateUtils';
 import api from './api';
+import storage from './dbStorage';
 
-export const loadStatistics = (): GameStatistics => {
-  const saved = localStorage.getItem('musicsim_statistics');
+export const loadStatistics = async (): Promise<GameStatistics> => {
+  const saved = await storage.getItem('musicsim_statistics');
   if (!saved) {
     return getDefaultStatistics();
   }
@@ -15,7 +16,7 @@ export const loadStatistics = (): GameStatistics => {
   }
 };
 
-const getDefaultStatistics = (): GameStatistics => {
+export const getDefaultStatistics = (): GameStatistics => {
   return {
     totalWeeksPlayed: 0,
     totalGamesPlayed: 0,
@@ -58,9 +59,9 @@ const getDefaultStatistics = (): GameStatistics => {
   };
 };
 
-export const saveStatistics = (stats: GameStatistics): void => {
+export const saveStatistics = async (stats: GameStatistics): Promise<void> => {
   try {
-    localStorage.setItem('musicsim_statistics', JSON.stringify(stats));
+    await storage.setItem('musicsim_statistics', JSON.stringify(stats));
   } catch (error) {
     console.error('Failed to save statistics:', error);
   }
@@ -116,8 +117,8 @@ export const recordGameEnd = (state: GameState, stats: GameStatistics, outcome: 
   return updated;
 };
 
-export const loadCareerHistories = (): CareerHistory[] => {
-  const saved = localStorage.getItem('musicsim_careers');
+export const loadCareerHistories = async (): Promise<CareerHistory[]> => {
+  const saved = await storage.getItem('musicsim_careers');
   if (!saved) return [];
   try {
     return JSON.parse(saved);
@@ -129,12 +130,12 @@ export const loadCareerHistories = (): CareerHistory[] => {
 
 export const saveCareerHistory = async (career: CareerHistory): Promise<void> => {
   try {
-    // Save to localStorage first (immediate, for offline mode)
-    const histories = loadCareerHistories();
+    // Save to IndexedDB first (immediate, for offline mode)
+    const histories = await loadCareerHistories();
     histories.push(career);
     // Keep only last 20 careers to manage storage
     const recent = histories.slice(-20);
-    localStorage.setItem('musicsim_careers', JSON.stringify(recent));
+    await storage.setItem('musicsim_careers', JSON.stringify(recent));
 
     // Send to backend API (for persistent database storage)
     try {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { SoundEffect, BackgroundMusic, AudioState, AudioManager } from '../types/audio';
 import { SOUND_URLS, MUSIC_URLS, AUDIO_STORAGE_KEY } from '../types/audio';
+import storage from '../services/dbStorage';
 
 const DEFAULT_AUDIO_STATE: AudioState = {
   isMusicMuted: false,
@@ -11,10 +12,10 @@ const DEFAULT_AUDIO_STATE: AudioState = {
 };
 
 export const useAudioManager = (): AudioManager => {
-  // Load saved preferences from localStorage
-  const loadSavedPreferences = (): AudioState => {
+  // Load saved preferences from IndexedDB
+  const loadSavedPreferences = async (): Promise<AudioState> => {
     try {
-      const saved = localStorage.getItem(AUDIO_STORAGE_KEY);
+      const saved = await storage.getItem(AUDIO_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         return { ...DEFAULT_AUDIO_STATE, ...parsed };
@@ -25,7 +26,7 @@ export const useAudioManager = (): AudioManager => {
     return DEFAULT_AUDIO_STATE;
   };
 
-  const [audioState, setAudioState] = useState<AudioState>(loadSavedPreferences);
+  const [audioState, setAudioState] = useState<AudioState>(DEFAULT_AUDIO_STATE);
   const [isUserInteracted, setIsUserInteracted] = useState(false);
 
   // Playlist management for rotating background music - 11 tracks for variety
@@ -40,13 +41,25 @@ export const useAudioManager = (): AudioManager => {
   const isFadingRef = useRef(false);
   const isProgrammaticMuteRef = useRef(false); // Track when WE change muted state
 
-  // Save preferences to localStorage whenever they change
+  // Load audio preferences from IndexedDB on mount
   useEffect(() => {
-    try {
-      localStorage.setItem(AUDIO_STORAGE_KEY, JSON.stringify(audioState));
-    } catch (error) {
-      console.error('Failed to save audio preferences:', error);
-    }
+    const loadPreferences = async () => {
+      const savedState = await loadSavedPreferences();
+      setAudioState(savedState);
+    };
+    loadPreferences();
+  }, []);
+
+  // Save preferences to IndexedDB whenever they change
+  useEffect(() => {
+    const savePreferences = async () => {
+      try {
+        await storage.setItem(AUDIO_STORAGE_KEY, JSON.stringify(audioState));
+      } catch (error) {
+        console.error('Failed to save audio preferences:', error);
+      }
+    };
+    savePreferences();
   }, [audioState]);
 
   // Initialize music audio element

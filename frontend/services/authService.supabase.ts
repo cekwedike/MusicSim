@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import api from './api';
+import storage from './dbStorage';
 
 // Allowed redirect URLs for OAuth (security measure)
 const ALLOWED_REDIRECT_URLS = [
@@ -243,8 +244,9 @@ export const authServiceSupabase = {
       // Sign out locally after backend confirms deletion
       await supabase.auth.signOut();
 
-      // Clear all local storage
+      // Clear all storage (localStorage for auth + IndexedDB for game data)
       localStorage.clear();
+      await storage.clear();
 
       return {
         success: true,
@@ -264,8 +266,9 @@ export const authServiceSupabase = {
   },
 
   // Clear auth data
-  clearAuth: (): void => {
+  clearAuth: async (): Promise<void> => {
     localStorage.clear();
+    await storage.clear();
   },
 
   // Upload profile image to Supabase Storage

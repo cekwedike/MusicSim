@@ -99,16 +99,14 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 					throw new Error(result.message || 'Failed to delete account');
 				}
 
-				console.log('[ProfilePanel] Account deleted from backend successfully');
-			} else {
-				// Guest mode - just clear localStorage
-				console.log('[ProfilePanel] Guest mode - clearing localStorage...');
-				localStorage.clear();
-			}
+			console.log('[ProfilePanel] Account deleted from backend successfully');
+		} else {
+			// Guest mode - just clear IndexedDB storage
+			console.log('[ProfilePanel] Guest mode - clearing storage...');
+			await storage.clear();
+		}
 
-			console.log('[ProfilePanel] Profile deletion completed');
-
-			// Close the dialog
+		console.log('[ProfilePanel] Profile deletion completed');			// Close the dialog
 			setShowDeleteDialog(false);
 
 			// Close the panel

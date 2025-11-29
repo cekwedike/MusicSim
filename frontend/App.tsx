@@ -47,6 +47,8 @@ import OffersModal from './components/OffersModal';
 import Loader from './components/Loader';
 import ArtistSetup from './components/ArtistSetup';
 import AudioUnlockPrompt from './components/AudioUnlockPrompt';
+import OfflineIndicator from './components/OfflineIndicator';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 
 // Lazy load heavy components that aren't always needed
 const LearningHub = lazy(() => import('./components/LearningHub'));
@@ -2076,6 +2078,32 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [saveLoadPanelKey, setSaveLoadPanelKey] = useState(0);
 
+    // Keyboard shortcuts for better UX
+    useKeyboardShortcuts([
+        {
+            key: 'Escape',
+            handler: () => {
+                // Close modals and sidebar
+                if (showMistakeWarning) setShowMistakeWarning(false);
+                if (activeSidebarView) setActiveSidebarView(null);
+                if (isMobileSidebarOpen) setIsMobileSidebarOpen(false);
+            },
+            description: 'Close modals'
+        },
+        {
+            key: 's',
+            ctrl: true,
+            handler: () => {
+                // Open save panel if playing
+                if (state.status === 'playing') {
+                    setActiveSidebarView('saveload');
+                    setIsMobileSidebarOpen(true);
+                }
+            },
+            description: 'Quick save'
+        }
+    ]);
+
     // Welcome dialog state
     const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
     const [welcomeArtistName, setWelcomeArtistName] = useState('');
@@ -3225,6 +3253,9 @@ const AuthenticatedApp: React.FC = () => {
             <div className={`${!showLanding ? 'pt-16' : ''}`}>
                 <GameApp isGuestMode={guestMode} onResetToLanding={handleLogout} />
             </div>
+
+            {/* Offline Indicator */}
+            <OfflineIndicator />
 
             {/* Guest Data Merge Modal */}
             {guestDataInfo && (

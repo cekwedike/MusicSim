@@ -142,4 +142,4 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ scenario, onChoiceSelect, d
     );
 };
 
-export default ScenarioCard;
+export default React.memo(ScenarioCard);

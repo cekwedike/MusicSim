@@ -236,4 +236,4 @@ const Dashboard: React.FC<{ stats: PlayerStats, project: Project | null, date: G
     );
 };
 
-export default Dashboard;
+export default React.memo(Dashboard);

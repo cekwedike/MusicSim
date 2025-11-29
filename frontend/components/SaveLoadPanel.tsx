@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { SaveSlot, GameState } from '../types';
 import { getAllSaveSlots, saveGame, deleteSave, loadGame, formatSaveDate } from '../services/storageService';
 import DeleteSaveModal from './DeleteSaveModal';
+import LoadingSkeleton from './LoadingSkeleton';
 
 interface SaveLoadPanelProps {
   onLoadGame: (gameState: GameState) => void;
@@ -19,6 +20,10 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   const [activeTab, setActiveTab] = useState<'save' | 'load'>('load');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [saveToDelete, setSaveToDelete] = useState<{ slotId: string; artistName: string; slotName: string } | null>(null);
+  
+  // Request deduplication
+  const loadingRef = useRef(false);
+  const loadPromiseRef = useRef<Promise<SaveSlot[]> | null>(null);
 
   // Helper function to extract save name from slot ID
   const getSaveName = (slotId: string): string => {
@@ -44,43 +49,71 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   }, []);
 
   const loadSaveSlots = async () => {
+    // Request deduplication - if already loading, return existing promise
+    if (loadingRef.current && loadPromiseRef.current) {
+      console.log('[SaveLoadPanel] Request deduplicated - reusing existing load');
+      return loadPromiseRef.current;
+    }
+
     console.log('[SaveLoadPanel] Loading save slots...');
     setLoading(true);
     setError('');
-    try {
-      const slots = await getAllSaveSlots();
-      console.log('[SaveLoadPanel] Loaded', slots.length, 'save slots:', slots);
-      setSaveSlots(slots);
-    } catch (err) {
-      console.error('[SaveLoadPanel] Failed to load save slots:', err);
-      setError('Failed to load save slots');
-    } finally {
-      setLoading(false);
-    }
+    loadingRef.current = true;
+    
+    const promise = (async () => {
+      try {
+        const slots = await getAllSaveSlots();
+        console.log('[SaveLoadPanel] Loaded', slots.length, 'save slots:', slots);
+        setSaveSlots(slots);
+        return slots;
+      } catch (err) {
+        console.error('[SaveLoadPanel] Failed to load save slots:', err);
+        setError('Failed to load save slots');
+        throw err;
+      } finally {
+        setLoading(false);
+        loadingRef.current = false;
+        loadPromiseRef.current = null;
+      }
+    })();
+    
+    loadPromiseRef.current = promise;
+    return promise;
   };
 
   const handleSaveGame = async () => {
     setLoading(true);
     setError('');
     try {
-      // Use default save name if input is empty
       const saveName = newSaveName.trim() || getDefaultSaveName();
-      // Use just the save name without timestamp prefix for cleaner display
       const slotId = saveName.replace(/\s+/g, '_');
       console.log('[SaveLoadPanel] Saving game with slotId:', slotId);
 
+      // Optimistic update - add to UI immediately
+      const optimisticSave: SaveSlot = {
+        id: slotId,
+        slotName: slotId,
+        artistName: currentGameState.artistName,
+        genre: currentGameState.artistGenre,
+        date: currentGameState.date,
+        currentDate: currentGameState.currentDate,
+        stats: currentGameState.playerStats,
+        timestamp: Date.now(),
+        careerProgress: currentGameState.playerStats.careerProgress
+      };
+      setSaveSlots(prev => [optimisticSave, ...prev.filter(s => s.id !== slotId)]);
+
+      // Actual save in background
       await saveGame(currentGameState, slotId);
-      console.log('[SaveLoadPanel] Save completed, reloading save slots...');
+      console.log('[SaveLoadPanel] Save completed');
 
       setNewSaveName('');
       setShowSaveInput(false);
+      setActiveTab('load');
 
+      // Refresh to get backend data
       await loadSaveSlots();
-      console.log('[SaveLoadPanel] Save slots reloaded');
 
-      setActiveTab('load'); // Switch to load tab to see the new saves
-
-      // Notify parent component to refresh the panel
       if (onSaveComplete) {
         console.log('[SaveLoadPanel] Calling onSaveComplete callback');
         onSaveComplete();
@@ -88,6 +121,8 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
     } catch (err) {
       console.error('[SaveLoadPanel] Save failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to save game');
+      // Revert optimistic update on error
+      await loadSaveSlots();
     } finally {
       setLoading(false);
     }
@@ -251,10 +286,17 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
           </div>
 
           <div className="flex-1 overflow-y-auto -mx-4 px-4">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 mb-3"></div>
-              <p className="text-gray-400 text-sm">Loading saves...</p>
+          {loading && saveSlots.length === 0 ? (
+            <div className="space-y-3">
+              <LoadingSkeleton type="save-card" count={3} />
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <svg className="w-16 h-16 text-red-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-red-400 font-medium mb-2">Error loading saves</p>
+              <p className="text-gray-400 text-sm">{error}</p>
             </div>
           ) : saveSlots.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">

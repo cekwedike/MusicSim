@@ -168,9 +168,20 @@ export function processOfflineQueue() {
 // Auto-sync when coming back online
 let isOnlineEventAdded = false;
 if (!isOnlineEventAdded && typeof window !== 'undefined') {
-  window.addEventListener('online', () => {
-    console.log('Connection restored - processing offline queue...');
-    processOfflineQueue().catch(console.error);
+  window.addEventListener('online', async () => {
+    console.log('Connection restored - processing offline queue and syncing saves...');
+    
+    // Process queued API requests first
+    await processOfflineQueue().catch(console.error);
+    
+    // Then sync local saves to backend
+    // Use dynamic import to avoid circular dependency
+    try {
+      const { syncLocalSavesToBackend } = await import('./storageService');
+      await syncLocalSavesToBackend();
+    } catch (error) {
+      console.error('Failed to sync local saves:', error);
+    }
   });
   isOnlineEventAdded = true;
 }

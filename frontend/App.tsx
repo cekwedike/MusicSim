@@ -13,6 +13,7 @@ import { toGameDate } from './src/utils/dateUtils';
 import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, deserializeGameState, getGuestData, clearGuestData } from './services/storageService';
 import storage from './services/dbStorage';
 import { initializeMigration } from './services/migrationService';
+import { syncLocalSavesToBackend } from './services/storageService';
 import authServiceSupabase from './services/authService.supabase';
 import { useAutoSave } from './hooks/useAutoSave';
 import { loadStatistics, saveStatistics, updateStatistics, recordGameEnd, saveCareerHistory, recordDecision, getDefaultStatistics } from './services/statisticsService';
@@ -2056,6 +2057,12 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             // Load statistics from IndexedDB
             const stats = await loadStatistics();
             dispatch({ type: 'UPDATE_STATS', payload: { statistics: stats } });
+            
+            // Sync local saves to backend (in case user made saves offline in previous session)
+            // This runs in background and doesn't block app loading
+            syncLocalSavesToBackend().catch(error => {
+                console.error('[App] Failed to sync local saves on mount:', error);
+            });
         };
         
         initialize();

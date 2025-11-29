@@ -125,6 +125,73 @@ export const getManualSaveCount = async (): Promise<number> => {
 };
 
 /**
+ * Sync local saves to backend (for offline saves when connection is restored)
+ * This ensures saves made while offline are uploaded to the cloud
+ */
+export const syncLocalSavesToBackend = async (): Promise<void> => {
+  try {
+    const isAuthenticated = await authServiceSupabase.isAuthenticated();
+    if (!isAuthenticated) {
+      console.log('[storageService] Not authenticated, skipping local save sync');
+      return;
+    }
+
+    const localSaves = await loadLocalSaves();
+    const localSaveIds = Object.keys(localSaves);
+
+    if (localSaveIds.length === 0) {
+      console.log('[storageService] No local saves to sync');
+      return;
+    }
+
+    console.log('[storageService] Syncing', localSaveIds.length, 'local saves to backend:', localSaveIds);
+
+    // Get backend saves to check which ones need syncing
+    let backendSaveIds: string[] = [];
+    try {
+      const response = await gameService.getAllSaves();
+      if (response.success && response.data) {
+        backendSaveIds = response.data.saves.map((s: any) => s.slotName);
+      }
+    } catch (error) {
+      console.error('[storageService] Failed to fetch backend saves for sync comparison:', error);
+      // Continue anyway - we'll try to sync all local saves
+    }
+
+    let syncedCount = 0;
+    let failedCount = 0;
+
+    for (const slotId of localSaveIds) {
+      const saveData = localSaves[slotId];
+      const state = deserializeGameState(saveData.state);
+
+      // Check if this save needs syncing:
+      // 1. If it doesn't exist on backend, sync it
+      // 2. If local version is newer than backend, sync it
+      const needsSync = !backendSaveIds.includes(slotId);
+
+      if (needsSync) {
+        try {
+          console.log(`[storageService] Syncing ${slotId} to backend...`);
+          await gameService.saveGame(slotId, state);
+          syncedCount++;
+          console.log(`[storageService] ✅ Synced ${slotId} to backend`);
+        } catch (error) {
+          failedCount++;
+          console.error(`[storageService] ❌ Failed to sync ${slotId}:`, error);
+        }
+      } else {
+        console.log(`[storageService] ${slotId} already exists on backend, skipping`);
+      }
+    }
+
+    console.log(`[storageService] Sync complete: ${syncedCount} synced, ${failedCount} failed`);
+  } catch (error) {
+    console.error('[storageService] Failed to sync local saves to backend:', error);
+  }
+};
+
+/**
  * Save game with timestamp
  */
 export const saveGame = async (state: GameState, slotId: string): Promise<void> => {
@@ -552,10 +619,10 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         continue;
       }
 
-      // Check if autosave is expired
+      // Check if autosave is expired (only for LOCAL autosave, not backend ones)
       if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
-        console.log('[storageService] Autosave expired, cleaning up');
-        // Clean up expired autosave
+        console.log('[storageService] Local autosave expired, cleaning up');
+        // Clean up expired LOCAL autosave
         await deleteSave(slotId);
         continue;
       }

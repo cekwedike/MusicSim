@@ -24,6 +24,7 @@ interface SidebarButton {
   label: string;
   ariaLabel: string;
   badge?: boolean;
+  shortcut?: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children, isMobileOpen = false, onMobileToggle, artistName, difficulty }) => {
@@ -82,7 +83,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       id: 'saveload',
       icon: <SaveIcon />,
       label: 'Save & Load',
-      ariaLabel: 'Save/Load Game'
+      ariaLabel: 'Save/Load Game',
+      shortcut: 'Ctrl+S'
     }
     ,
     {
@@ -173,7 +175,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
               pointer-events-none transition-opacity duration-200
               shadow-lg
             ">
-              {button.label}
+              <div className="flex items-center gap-2">
+                <span>{button.label}</span>
+                {button.shortcut && (
+                  <span className="text-xs bg-gray-700 px-1.5 py-0.5 rounded font-mono text-gray-300">
+                    {button.shortcut}
+                  </span>
+                )}
+              </div>
               <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-[#1A0A0F]"></div>
             </div>
           </button>

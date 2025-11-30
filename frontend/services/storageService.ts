@@ -652,8 +652,26 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
     console.log('[storageService] Total saves to return:', saveSlots.length);
     console.log('[storageService] Save IDs:', saveSlots.map(s => s.id));
 
+    // Smart filtering: Show only the NEWER of autosave vs quicksave (not both)
+    // This ensures users get 4 slots for manual saves + 1 slot for system saves
+    const autoSave = saveSlots.find(s => s.id === 'auto');
+    const quickSave = saveSlots.find(s => s.id === 'quicksave');
+    
+    let filteredSlots = saveSlots;
+    
+    if (autoSave && quickSave) {
+      // Both exist - keep only the newer one
+      if (autoSave.timestamp > quickSave.timestamp) {
+        console.log('[storageService] Filtering out older quicksave (autosave is newer)');
+        filteredSlots = saveSlots.filter(s => s.id !== 'quicksave');
+      } else {
+        console.log('[storageService] Filtering out older autosave (quicksave is newer)');
+        filteredSlots = saveSlots.filter(s => s.id !== 'auto');
+      }
+    }
+
     // Sort by timestamp (newest first)
-    return saveSlots.sort((a, b) => b.timestamp - a.timestamp);
+    return filteredSlots.sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {
     console.error('[storageService] Failed to get save slots:', error);
     return [];

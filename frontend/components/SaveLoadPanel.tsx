@@ -28,7 +28,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
 
   // Helper function to extract save name from slot ID
   const getSaveName = (slotId: string): string => {
-    if (slotId === 'auto') return 'Autosave';
+    if (slotId === 'auto') return 'Auto Save';
     if (slotId === 'quicksave') return 'Quick Save';
     // Format: {timestamp}_{saveName}
     const parts = slotId.split('_');

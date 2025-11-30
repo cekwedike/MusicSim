@@ -30,6 +30,7 @@ interface SidebarButton {
 const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAchievements = false, children, isMobileOpen = false, onMobileToggle, artistName, difficulty }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const [showShortcutsModal, setShowShortcutsModal] = useState(false);
 
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
@@ -218,23 +219,40 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
           </div>
         </button>
 
-        {/* Spacer to push shortcuts info to bottom */}
+        {/* Spacer to push shortcuts button to bottom */}
         <div className="flex-1" />
 
-        {/* Keyboard Shortcuts Info - Desktop only, at bottom */}
-        <div className="hidden lg:block px-2 py-3 border-t border-[#3D1820]/50 mt-2">
-          <div className="text-xs text-gray-400 space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span>Quick Save</span>
-              <kbd className="bg-[#2D1115] px-1.5 py-0.5 rounded font-mono text-gray-500 text-[10px]">Ctrl+S</kbd>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Close Panels</span>
-              <kbd className="bg-[#2D1115] px-1.5 py-0.5 rounded font-mono text-gray-500 text-[10px]">Esc</kbd>
-            </div>
+        {/* Keyboard Shortcuts Button */}
+        <button
+          onClick={() => setShowShortcutsModal(true)}
+          className="px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-[#3D1820] flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0"
+          aria-label="View keyboard shortcuts"
+          title="Keyboard Shortcuts"
+        >
+          <div className="w-5 h-5 lg:w-6 lg:h-6 flex items-center justify-center flex-shrink-0">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
           </div>
-          <p className="text-[10px] text-gray-500 mt-2 text-center">Auto-saves every 5min</p>
-        </div>
+
+          {/* Label text - visible on mobile, hidden on desktop */}
+          <span className="lg:hidden text-xs sm:text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+            Shortcuts
+          </span>
+
+          {/* Hover tooltip - hidden on mobile, visible on desktop */}
+          <div className="
+            hidden lg:block
+            absolute left-[-8px] top-1/2 -translate-y-1/2 -translate-x-full
+            bg-[#1A0A0F] text-white text-sm px-3 py-2 rounded-lg
+            whitespace-nowrap opacity-0 group-hover:opacity-100
+            pointer-events-none transition-opacity duration-200
+            shadow-lg
+          ">
+            Keyboard Shortcuts
+            <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-[#1A0A0F]"></div>
+          </div>
+        </button>
       </div>
 
       {/* Expanded Panel */}
@@ -279,6 +297,42 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
       </div>
     </div>
     </div>
+
+    {/* Keyboard Shortcuts Modal */}
+    {showShortcutsModal && (
+      <>
+        <div 
+          className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm" 
+          onClick={() => setShowShortcutsModal(false)}
+        />
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#2D1115] border border-[#4D1F2A] rounded-lg shadow-2xl p-4 min-w-[300px] z-[70]">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-white font-semibold text-base">⌨️ Keyboard Shortcuts</h3>
+            <button 
+              onClick={() => setShowShortcutsModal(false)}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center justify-between py-2">
+              <span className="text-gray-300">Quick Save</span>
+              <kbd className="bg-[#4D1F2A] px-3 py-1.5 rounded font-mono text-gray-200 border border-[#5D2F3A]">Ctrl+S</kbd>
+            </div>
+            <div className="flex items-center justify-between py-2">
+              <span className="text-gray-300">Close Modals/Panels</span>
+              <kbd className="bg-[#4D1F2A] px-3 py-1.5 rounded font-mono text-gray-200 border border-[#5D2F3A]">Esc</kbd>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-[#4D1F2A] text-xs text-gray-400 text-center">
+            💡 Game auto-saves every 5 minutes & when closing
+          </div>
+        </div>
+      </>
+    )}
     </>
   );
 };

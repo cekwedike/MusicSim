@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
     }, [isNewSystem, autoSaveStatus?.lastSaveTime]);
 
     return (
-        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center bg-gradient-to-r from-red-900 via-rose-900 to-red-900 relative backdrop-blur-sm">
+        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center bg-gradient-to-r from-red-900 via-rose-900 to-red-900 relative backdrop-blur-sm z-[100]">
             {/* Mobile Menu Button */}
             {showMenuButton && (
                 <button
@@ -134,7 +134,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                         </div>
                         <div className="space-y-2.5 text-xs">
                             <div className="flex items-center justify-between py-1.5">
-                                <span className="text-gray-300">Manual Save</span>
+                                <span className="text-gray-300">Quick Save</span>
                                 <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-gray-200 border border-[#5D2F3A]">Ctrl+S</kbd>
                             </div>
                             <div className="flex items-center justify-between py-1.5">

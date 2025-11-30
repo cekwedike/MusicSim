@@ -2096,10 +2096,25 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         {
             key: 's',
             ctrl: true,
-            handler: () => {
-                // Trigger immediate autosave if playing
+            handler: async () => {
+                // Create a manual quick save with timestamp
                 if (state.status === 'playing') {
-                    saveNow(state);
+                    try {
+                        const timestamp = new Date().toLocaleString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric', 
+                            hour: '2-digit', 
+                            minute: '2-digit',
+                            hour12: true 
+                        });
+                        const saveName = `QuickSave_${timestamp.replace(/[,:\s]/g, '_')}`;
+                        await saveGame(state, saveName);
+                        // Also update autosave
+                        await saveGame(state, 'auto');
+                        console.log('Quick save created:', saveName);
+                    } catch (error) {
+                        console.error('Quick save failed:', error);
+                    }
                 }
             },
             description: 'Quick save'

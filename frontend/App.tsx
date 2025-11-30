@@ -1,5 +1,6 @@
 import React, { useReducer, useCallback, useEffect, useState, useRef, Suspense, lazy } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { useToast } from './contexts/ToastContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { AudioProvider } from './contexts/AudioContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -2051,6 +2052,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
     const [pendingChoice, setPendingChoice] = useState<Choice | null>(null);
     const [showMistakeWarning, setShowMistakeWarning] = useState(false);
+    const toast = useToast();
 
     // Initialize migration and load statistics on mount
     useEffect(() => {
@@ -2112,8 +2114,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                         // Also update autosave
                         await saveGame(state, 'auto');
                         console.log('Quick save created:', saveName);
+                        toast.show('Game saved successfully!', 'success', 3000);
                     } catch (error) {
                         console.error('Quick save failed:', error);
+                        toast.show('Failed to save game. Please try again.', 'error', 4000);
                     }
                 }
             },

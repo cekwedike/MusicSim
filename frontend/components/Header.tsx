@@ -120,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                         className="fixed inset-0 z-[60]" 
                         onClick={() => setShowShortcuts(false)}
                     />
-                    <div className="fixed top-12 right-2 sm:right-4 bg-[#2D1115] border border-[#4D1F2A] rounded-lg shadow-2xl p-4 min-w-[280px] z-[70]">
+                    <div className="fixed top-12 right-20 lg:right-24 bg-[#2D1115] border border-[#4D1F2A] rounded-lg shadow-2xl p-4 min-w-[280px] z-[70]">
                         <div className="flex items-center justify-between mb-3">
                             <h3 className="text-white font-semibold text-sm">⌨️ Keyboard Shortcuts</h3>
                             <button 
@@ -143,7 +143,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                             </div>
                         </div>
                         <div className="mt-3 pt-3 border-t border-[#4D1F2A] text-xs text-gray-400 text-center">
-                            💡 Game autosaves every 5min & when closing
+                            Game autosaves every 5min & when closing
                         </div>
                     </div>
                 </>

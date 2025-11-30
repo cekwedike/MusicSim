@@ -104,7 +104,7 @@ const OutcomeModal: React.FC<OutcomeModalProps> = ({ outcome, onClose, onViewCon
                 {hasContract && onViewContract && (
                     <div className="mb-3 bg-yellow-900/30 border border-yellow-700 rounded-lg p-3">
                         <p className="text-yellow-200 text-sm mb-2">
-                            📄 <strong>{outcome.viewContract}</strong> has sent you a contract offer!
+                            <strong>{outcome.viewContract}</strong> has sent you a contract offer!
                         </p>
                         <button
                             onClick={onViewContract}

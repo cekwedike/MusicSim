@@ -134,7 +134,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                         </div>
                         <div className="space-y-2.5 text-xs">
                             <div className="flex items-center justify-between py-1.5">
-                                <span className="text-gray-300">Autosave Now</span>
+                                <span className="text-gray-300">Manual Save</span>
                                 <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-gray-200 border border-[#5D2F3A]">Ctrl+S</kbd>
                             </div>
                             <div className="flex items-center justify-between py-1.5">

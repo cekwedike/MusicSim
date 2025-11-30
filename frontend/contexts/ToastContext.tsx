@@ -42,8 +42,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     <ToastContext.Provider value={value}>
       {children}
 
-  {/* Toast container (top-right) */}
-  <div aria-live="polite" className="fixed top-6 right-6 z-[70] flex flex-col gap-3 items-end">
+  {/* Toast container (top-left for better visibility) */}
+  <div aria-live="polite" className="fixed top-6 left-6 z-[100] flex flex-col gap-3 items-start">
         {toasts.map((t) => (
           <div key={t.id} className={`max-w-sm w-full px-4 py-3 rounded-lg shadow-lg border ${
             t.type === 'success' ? 'bg-green-600/95 border-green-700 text-white' :

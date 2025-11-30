@@ -26,6 +26,14 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   const loadingRef = useRef(false);
   const loadPromiseRef = useRef<Promise<SaveSlot[]> | null>(null);
 
+  // Calculate manual save slots used and available
+  const getManualSaveStats = () => {
+    const manualSaves = saveSlots.filter(s => s.id !== 'auto' && s.id !== 'quicksave');
+    const used = manualSaves.length;
+    const available = Math.max(0, 5 - used);
+    return { used, available, total: 5 };
+  };
+
   // Helper function to extract save name from slot ID
   const getSaveName = (slotId: string): string => {
     if (slotId === 'auto') return 'Auto Save';
@@ -218,7 +226,31 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
       {/* Save Tab */}
       {activeTab === 'save' && (
         <div className="space-y-4">
-          {!showSaveInput ? (
+          {/* Save Slot Counter */}
+          <div className="bg-[#3D1820]/30 border border-[#4D1F2A] rounded-lg p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-300">Manual Save Slots</span>
+              <span className="text-sm font-bold text-white">{getManualSaveStats().used} / {getManualSaveStats().total}</span>
+            </div>
+            <div className="flex gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`flex-1 h-2 rounded ${
+                    i < getManualSaveStats().used
+                      ? 'bg-red-600'
+                      : 'bg-[#2D1115]'
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-2">
+              {getManualSaveStats().available > 0
+                ? `${getManualSaveStats().available} slot${getManualSaveStats().available !== 1 ? 's' : ''} available`
+                : 'All manual save slots full'}
+            </p>
+          </div>
+\n          {!showSaveInput ? (
             <button
               onClick={() => setShowSaveInput(true)}
               disabled={loading}

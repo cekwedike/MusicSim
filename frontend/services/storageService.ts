@@ -652,30 +652,37 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
     console.log('[storageService] Total saves to return:', saveSlots.length);
     console.log('[storageService] Save IDs:', saveSlots.map(s => s.id));
 
-    // Smart filtering: Show only the NEWER of autosave vs quicksave (not both)
-    // This ensures users get 4 slots for manual saves + 1 slot for system saves
-    const autoSave = saveSlots.find(s => s.id === 'auto');
-    const quickSave = saveSlots.find(s => s.id === 'quicksave');
-    
-    let filteredSlots = saveSlots;
-    
-    if (autoSave && quickSave) {
-      // Both exist - keep only the newer one
-      if (autoSave.timestamp > quickSave.timestamp) {
-        console.log('[storageService] Filtering out older quicksave (autosave is newer)');
-        filteredSlots = saveSlots.filter(s => s.id !== 'quicksave');
-      } else {
-        console.log('[storageService] Filtering out older autosave (quicksave is newer)');
-        filteredSlots = saveSlots.filter(s => s.id !== 'auto');
-      }
-    }
-
     // Sort by timestamp (newest first)
-    return filteredSlots.sort((a, b) => b.timestamp - a.timestamp);
+    return saveSlots.sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {
     console.error('[storageService] Failed to get save slots:', error);
     return [];
   }
+}
+
+/**
+ * Get save slots for start screen with smart filtering:
+ * Shows only the NEWER of autosave/quicksave (not both)
+ * This gives users 1 system save slot + 4 manual save slots
+ */
+export async function getStartScreenSaves(): Promise<SaveSlot[]> {
+  const allSlots = await getAllSaveSlots();
+  
+  const autoSave = allSlots.find(s => s.id === 'auto');
+  const quickSave = allSlots.find(s => s.id === 'quicksave');
+  
+  if (autoSave && quickSave) {
+    // Both exist - keep only the newer one
+    if (autoSave.timestamp > quickSave.timestamp) {
+      console.log('[getStartScreenSaves] Showing autosave (newer than quicksave)');
+      return allSlots.filter(s => s.id !== 'quicksave');
+    } else {
+      console.log('[getStartScreenSaves] Showing quicksave (newer than autosave)');
+      return allSlots.filter(s => s.id !== 'auto');
+    }
+  }
+  
+  return allSlots;
 }
 
 /**
@@ -726,6 +733,7 @@ export default {
   hasValidAutosave,
   getAutosaveAge,
   getAllSaveSlots,
+  getStartScreenSaves,
   autoSave,
   isStorageAvailable,
   formatSaveDate,

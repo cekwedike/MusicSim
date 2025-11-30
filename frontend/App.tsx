@@ -13,7 +13,7 @@ import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDat
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
 import { toGameDate } from './src/utils/dateUtils';
-import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, deserializeGameState, getGuestData, clearGuestData } from './services/storageService';
+import { autoSave, loadGame, isStorageAvailable, saveGame, cleanupExpiredAutosaves, hasValidAutosave, getAutosaveAge, deleteSave, getAllSaveSlots, getStartScreenSaves, deserializeGameState, getGuestData, clearGuestData } from './services/storageService';
 import storage from './services/dbStorage';
 import { initializeMigration } from './services/migrationService';
 import { syncLocalSavesToBackend } from './services/storageService';
@@ -1625,10 +1625,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
         const loadSaves = async () => {
             setLoadingSaves(true);
             try {
-                // Force fresh load by clearing any cached data
-                const slots = await getAllSaveSlots();
-                // Filter out autosave from the list
-                setSaveSlots(slots.filter(slot => slot.id !== 'auto'));
+                // Use smart filtering for start screen - shows newer of autosave/quicksave
+                const slots = await getStartScreenSaves();
+                // Filter out the system save that was kept (auto or quicksave)
+                // We only show manual saves in the list, system saves shown separately
+                setSaveSlots(slots.filter(slot => slot.id !== 'auto' && slot.id !== 'quicksave'));
             } catch (error) {
                 console.error('Failed to load save slots:', error);
                 setSaveSlots([]);

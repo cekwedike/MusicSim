@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useAudioManager } from '../hooks/useAudioManager';
 import type { AudioManager } from '../types/audio';
+import { logger } from '../utils/logger';
 
 const AudioContext = createContext<AudioManager | null>(null);
 
@@ -19,7 +20,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // It will start playing after first user interaction
   useEffect(() => {
     return () => {
-      console.log('[AudioProvider] Unmounting, stopping music');
+      logger.log('[AudioProvider] Unmounting, stopping music');
       audioManager.stopMusic();
     };
   }, []); // Only run once on mount

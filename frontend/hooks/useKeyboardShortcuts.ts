@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface KeyboardShortcutConfig {
   key: string;
@@ -10,12 +10,19 @@ interface KeyboardShortcutConfig {
 }
 
 export const useKeyboardShortcuts = (shortcuts: KeyboardShortcutConfig[]) => {
+  // Store shortcuts in ref to avoid recreating listener on every render
+  const shortcutsRef = useRef(shortcuts);
+  
+  useEffect(() => {
+    shortcutsRef.current = shortcuts;
+  }, [shortcuts]);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Guard against undefined key (some browsers/scenarios)
       if (!event.key) return;
       
-      for (const shortcut of shortcuts) {
+      for (const shortcut of shortcutsRef.current) {
         const ctrlMatch = shortcut.ctrl === undefined || shortcut.ctrl === event.ctrlKey || shortcut.ctrl === event.metaKey;
         const altMatch = shortcut.alt === undefined || shortcut.alt === event.altKey;
         const shiftMatch = shortcut.shift === undefined || shortcut.shift === event.shiftKey;
@@ -31,5 +38,5 @@ export const useKeyboardShortcuts = (shortcuts: KeyboardShortcutConfig[]) => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [shortcuts]);
+  }, []);
 };

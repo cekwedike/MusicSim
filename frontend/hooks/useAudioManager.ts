@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import type { SoundEffect, BackgroundMusic, AudioState, AudioManager } from '../types/audio';
 import { SOUND_URLS, MUSIC_URLS, AUDIO_STORAGE_KEY } from '../types/audio';
 import storage from '../services/dbStorage';
+import { logger } from '../utils/logger';
 
 const DEFAULT_AUDIO_STATE: AudioState = {
   isMusicMuted: false,
@@ -95,7 +96,7 @@ export const useAudioManager = (): AudioManager => {
 
       // Handle successful load
       audio.addEventListener('canplaythrough', () => {
-        console.log('Music loaded successfully');
+        logger.log('Music loaded successfully');
       });
 
       // Detect when audio is muted externally (e.g., system audio controls, browser tab mute)
@@ -108,7 +109,7 @@ export const useAudioManager = (): AudioManager => {
 
         // If audio has been muted externally (not by us)
         if (audio.muted && !audioState.isMusicMuted) {
-          console.log('[Audio Manager] Audio muted externally, syncing game state...');
+          logger.log('[Audio Manager] Audio muted externally, syncing game state...');
           setAudioState((prev) => ({
             ...prev,
             isMusicMuted: true,
@@ -177,7 +178,7 @@ export const useAudioManager = (): AudioManager => {
       } else {
         if (musicAudioRef.current && audioState.currentTrack && isUserInteracted && !audioState.isMusicMuted) {
           musicAudioRef.current.play().catch((error) => {
-            console.log('Autoplay prevented:', error);
+            logger.log('Autoplay prevented:', error);
           });
         }
       }
@@ -191,7 +192,7 @@ export const useAudioManager = (): AudioManager => {
 
   // Manual audio unlock function - called only when user explicitly enables audio
   const unlockAudio = useCallback(() => {
-    console.log('[Audio Manager] Audio unlocked by user');
+    logger.log('[Audio Manager] Audio unlocked by user');
     setIsUserInteracted(true);
   }, []);
 
@@ -226,7 +227,7 @@ export const useAudioManager = (): AudioManager => {
   // Play sound effect
   const playSound = useCallback((sound: SoundEffect) => {
     if (audioState.isSfxMuted || !isUserInteracted) {
-      console.log(`Sound "${sound}" not played (muted: ${audioState.isSfxMuted}, interaction: ${isUserInteracted})`);
+      logger.log(`Sound "${sound}" not played (muted: ${audioState.isSfxMuted}, interaction: ${isUserInteracted})`);
       return;
     }
 
@@ -245,19 +246,19 @@ export const useAudioManager = (): AudioManager => {
       clone.muted = audioState.isSfxMuted;
       clone.volume = audioState.isSfxMuted ? 0 : audioState.sfxVolume;
       clone.play().catch((error) => {
-        console.error(`Failed to play sound "${sound}":`, error);
+        logger.error(`Failed to play sound "${sound}":`, error);
       });
     } catch (error) {
-      console.error(`Error playing sound "${sound}":`, error);
+      logger.error(`Error playing sound "${sound}":`, error);
     }
   }, [audioState.isSfxMuted, audioState.sfxVolume, isUserInteracted]);
 
   // Play background music with fade-in
   const playMusic = useCallback(async (track: BackgroundMusic) => {
-    console.log(`[Audio Manager] playMusic called with track: "${track}", isUserInteracted: ${isUserInteracted}`);
+    logger.log(`[Audio Manager] playMusic called with track: "${track}", isUserInteracted: ${isUserInteracted}`);
 
     if (!musicAudioRef.current || !isUserInteracted) {
-      console.log(`[Audio Manager] Music "${track}" queued for later (user interaction required)`);
+      logger.log(`[Audio Manager] Music "${track}" queued for later (user interaction required)`);
       nextTrackRef.current = track;
       return;
     }
@@ -266,22 +267,22 @@ export const useAudioManager = (): AudioManager => {
 
     // If same track is already playing, do nothing
     if (audioState.currentTrack === track && !audio.paused) {
-      console.log(`[Audio Manager] Track "${track}" already playing, skipping`);
+      logger.log(`[Audio Manager] Track "${track}" already playing, skipping`);
       return;
     }
 
     try {
-      console.log(`[Audio Manager] Starting playback of "${track}"`);
+      logger.log(`[Audio Manager] Starting playback of "${track}"`);
 
       // Fade out current track if playing
       if (!audio.paused && audioState.currentTrack) {
-        console.log(`[Audio Manager] Fading out current track: "${audioState.currentTrack}"`);
+        logger.log(`[Audio Manager] Fading out current track: "${audioState.currentTrack}"`);
         await fadeMusic(0, 500);
         audio.pause();
       }
 
       // Load new track
-      console.log(`[Audio Manager] Loading track from URL: ${MUSIC_URLS[track]}`);
+      logger.log(`[Audio Manager] Loading track from URL: ${MUSIC_URLS[track]}`);
       audio.src = MUSIC_URLS[track];
       audio.load();
 
@@ -292,16 +293,16 @@ export const useAudioManager = (): AudioManager => {
 
       // Start at 0 volume and fade in
       audio.volume = 0;
-      console.log(`[Audio Manager] Attempting to play "${track}"...`);
+      logger.log(`[Audio Manager] Attempting to play "${track}"...`);
       await audio.play();
-      console.log(`[Audio Manager] Playback started for "${track}"`);
+      logger.log(`[Audio Manager] Playback started for "${track}"`);
 
       if (!audioState.isMusicMuted) {
-        console.log(`[Audio Manager] Fading in to volume ${audioState.musicVolume}`);
+        logger.log(`[Audio Manager] Fading in to volume ${audioState.musicVolume}`);
         await fadeMusic(audioState.musicVolume, 1000);
       }
     } catch (error) {
-      console.error(`[Audio Manager] Failed to play music "${track}":`, error);
+      logger.error(`[Audio Manager] Failed to play music "${track}":`, error);
     }
   }, [audioState.currentTrack, audioState.musicVolume, audioState.isMusicMuted, isUserInteracted, fadeMusic]);
 

@@ -259,12 +259,15 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 							className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold text-white shadow-lg overflow-hidden flex-shrink-0 ${!user.profileImage ? 'bg-gradient-to-br from-red-500 to-red-600' : ''} ${!isUploadingImage ? 'cursor-pointer hover:ring-2 hover:ring-red-400 transition-all' : 'opacity-50'} group`}
 							onClick={handleImageClick}
 							title="Click to change profile image"
+							role="button"
+							aria-label="Change profile image"
+							tabIndex={0}
 						>
 							{isUploadingImage ? (
 								<div className="text-sm">⏳</div>
 							) : user.profileImage ? (
 								<>
-									<img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" />
+									<img src={user.profileImage} alt="Profile" className="w-full h-full object-cover" loading="lazy" />
 									<div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
 										<span className="text-xs">📷 Change</span>
 									</div>
@@ -345,14 +348,16 @@ const ProfilePanel: React.FC<ProfilePanelProps> = ({
 										autoFocus
 									/>
 									<button
-										onClick={handleSaveGuestName}
+										onClick={handleSaveUsername}
 										className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs flex-shrink-0"
+										aria-label="Save username"
 									>
 										✓
 									</button>
 									<button
-										onClick={handleCancelEditGuestName}
+										onClick={handleCancelEditUsername}
 										className="bg-[#4D1F2A] hover:bg-[#3D1820] text-white px-2 py-1 rounded text-xs flex-shrink-0"
+										aria-label="Cancel username edit"
 									>
 										✕
 									</button>

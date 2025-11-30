@@ -4,6 +4,8 @@ import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
 import { registerServiceWorker } from './src/utils/serviceWorkerRegistration';
 import UpdatePrompt from './src/components/UpdatePrompt';
+import { reportWebVitals } from './utils/webVitals';
+import { logger } from './utils/logger';
 import './src/index.css';
 
 const Root = () => {
@@ -13,9 +15,12 @@ const Root = () => {
   useEffect(() => {
     // Register service worker and show update prompt only when there's a real update
     registerServiceWorker(() => {
-      console.log('[App] Update callback triggered');
+      logger.log('[App] Update callback triggered');
       setUpdateAvailable(true);
     });
+    
+    // Report web vitals for performance monitoring
+    reportWebVitals();
   }, []);
 
 
@@ -32,23 +37,23 @@ const Root = () => {
 
           // Set a timeout fallback in case controllerchange doesn't fire
           const reloadTimeout = setTimeout(() => {
-            console.log('[App] Force reload after timeout');
+            logger.log('[App] Force reload after timeout');
             window.location.reload();
           }, 1000);
 
           // Wait for the new service worker to take control
           navigator.serviceWorker.addEventListener('controllerchange', () => {
             clearTimeout(reloadTimeout);
-            console.log('[App] Controller changed, reloading...');
+            logger.log('[App] Controller changed, reloading...');
             window.location.reload();
           }, { once: true });
         } else {
           // No waiting worker, just reload
-          console.log('[App] No waiting worker, force reload');
+          logger.log('[App] No waiting worker, force reload');
           window.location.reload();
         }
       } catch (error) {
-        console.error('[App] Error during update:', error);
+        logger.error('[App] Error during update:', error);
         window.location.reload();
       }
     } else {

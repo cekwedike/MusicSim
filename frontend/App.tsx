@@ -6,6 +6,8 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { LoginModal } from './components/LoginModal';
 import GuestDataMergeModal from './components/GuestDataMergeModal';
 import LandingPage from './components/LandingPage';
+import ErrorBoundary from './components/ErrorBoundary';
+import { logger } from './utils/logger';
 import type { GameState, Action, Choice, Scenario, PlayerStats, Project, GameDate, Staff, HiredStaff, StaffTemplate, ContractDuration, RecordLabel, LearningModule, CareerHistory, Difficulty, LogEntry, SaveSlot, PendingContractOffer } from './types';
 import { getNewScenario } from './services/scenarioService';
 import { createLog, appendLogToArray } from './src/utils/logUtils';
@@ -1665,17 +1667,17 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
         setLoadingError(null);
         
         try {
-            console.log(`Loading save: ${slotId}`);
+            logger.log(`Loading save: ${slotId}`);
             const save = await loadGame(slotId);
             if (save) {
-                console.log(`Successfully loaded: ${slotId}`);
+                logger.log(`Successfully loaded: ${slotId}`);
                 onContinue(save);
             } else {
-                console.error(`Failed to load save: ${slotId} - No save data returned`);
+                logger.error(`Failed to load save: ${slotId} - No save data returned`);
                 setLoadingError('Failed to load save - save data may be corrupted');
             }
         } catch (error) {
-            console.error(`Failed to load save: ${slotId}`, error);
+            logger.error(`Failed to load save: ${slotId}`, error);
             setLoadingError(`Failed to load save: ${error instanceof Error ? error.message : 'Unknown error'}`);
         } finally {
             setLoadingSlotId(null);
@@ -2147,16 +2149,16 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     const fetchNextScenario = useCallback(async (currentState: GameState) => {
         try {
-            const scenario = getNewScenario(currentState);
+            const scenario = await getNewScenario(currentState);
             if (!scenario) {
-                console.error('[Game] No scenario returned from getNewScenario');
+                logger.error('[Game] No scenario returned from getNewScenario');
                 return;
             }
             setTimeout(() => {
                 dispatch({ type: 'SCENARIO_LOADED', payload: scenario });
             }, 500);
         } catch (error) {
-            console.error('[Game] Error loading scenario:', error);
+            logger.error('[Game] Error loading scenario:', error);
             // Fallback to a safe scenario
             const fallbackScenario = {
                 title: "An Uneventful Week",
@@ -2243,7 +2245,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     // Generate scenario when loaded game has no current scenario
     useEffect(() => {
         if (status === 'playing' && !currentScenario && state.artistName) {
-            console.log('[App] Game loaded but no current scenario - generating new scenario');
+            logger.log('[App] Game loaded but no current scenario - generating new scenario');
             fetchNextScenario(state);
         }
     }, [status, currentScenario, state, fetchNextScenario]);
@@ -2514,7 +2516,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         try {
             await audioManager.playSound('buttonClick');
         } catch (error) {
-            console.log('Audio unlock attempt:', error);
+            logger.log('Audio unlock attempt:', error);
         }
 
         // Check if we have a pending game load
@@ -3153,14 +3155,14 @@ const AuthenticatedApp: React.FC = () => {
         const guestData = await getGuestData();
 
         if (!guestData) {
-            console.warn('[App] No guest data found');
+            logger.warn('[App] No guest data found');
             return;
         }
 
         try {
             if (choice === 'merge') {
                 // Merge: Sync guest data to cloud and clear IndexedDB
-                console.log('[App] Merging guest data to cloud...');
+                logger.log('[App] Merging guest data to cloud...');
                 const result = await authServiceSupabase.syncGuestData(guestData);
 
                 if (!result.success) {
@@ -3169,17 +3171,17 @@ const AuthenticatedApp: React.FC = () => {
 
                 // Clear guest data from IndexedDB after successful sync
                 await clearGuestData(true, false); // Clear saves but keep statistics
-                console.log('[App] Guest data merged successfully');
+                logger.log('[App] Guest data merged successfully');
 
             } else if (choice === 'cloud') {
                 // Cloud: Discard guest data and load cloud saves
-                console.log('[App] Discarding guest data...');
+                logger.log('[App] Discarding guest data...');
                 await clearGuestData(true, true); // Clear both saves and statistics
-                console.log('[App] Guest data cleared');
+                logger.log('[App] Guest data cleared');
 
             } else if (choice === 'both') {
                 // Both: Keep guest data in IndexedDB AND sync statistics
-                console.log('[App] Keeping both guest and cloud data...');
+                logger.log('[App] Keeping both guest and cloud data...');
                 // Only sync statistics, not saves
                 const statsOnly = { statistics: guestData.statistics };
                 const result = await authServiceSupabase.syncGuestData(statsOnly);
@@ -3188,7 +3190,7 @@ const AuthenticatedApp: React.FC = () => {
                     throw new Error(result.message);
                 }
 
-                console.log('[App] Statistics synced, guest saves preserved in IndexedDB');
+                logger.log('[App] Statistics synced, guest saves preserved in IndexedDB');
             }
 
             // Reset guest mode state
@@ -3251,7 +3253,9 @@ const AuthenticatedApp: React.FC = () => {
 
             {/* Game content with proper padding when header is visible */}
             <div className={`${!showLanding ? 'pt-16' : ''}`}>
-                <GameApp isGuestMode={guestMode} onResetToLanding={handleLogout} />
+                <ErrorBoundary>
+                    <GameApp isGuestMode={guestMode} onResetToLanding={handleLogout} />
+                </ErrorBoundary>
             </div>
 
             {/* Offline Indicator */}

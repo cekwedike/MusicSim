@@ -1,5 +1,19 @@
-import { scenarioBank, fallbackScenario } from '../data/scenarioBank';
 import type { GameState, Scenario } from '../types';
+
+// Lazy load scenario bank to reduce initial bundle size (646KB)
+let scenarioBank: Scenario[] | null = null;
+let fallbackScenario: Scenario | null = null;
+
+async function loadScenarioBank() {
+  if (scenarioBank && fallbackScenario) {
+    return { scenarioBank, fallbackScenario };
+  }
+  
+  const module = await import('../data/scenarioBank');
+  scenarioBank = module.scenarioBank;
+  fallbackScenario = module.fallbackScenario;
+  return { scenarioBank, fallbackScenario };
+}
 
 /**
  * Checks if a scenario's conditions are met by the current game state.
@@ -146,11 +160,14 @@ const weightedRandomSelect = (scenarios: Scenario[], usedScenarioTitles: string[
  * @param state The current game state.
  * @returns A new Scenario object.
  */
-export const getNewScenario = (state: GameState): Scenario => {
+export const getNewScenario = async (state: GameState): Promise<Scenario> => {
     const { usedScenarioTitles, contractEligibilityUnlocked } = state;
+    
+    // Load scenario bank if not already loaded
+    const { scenarioBank: bank, fallbackScenario: fallback } = await loadScenarioBank();
 
     // Filter out scenarios marked as 'once' that have already been used
-    const availableScenarios = scenarioBank.filter(s => {
+    const availableScenarios = bank.filter(s => {
         if (s.once) {
             return !usedScenarioTitles.includes(s.title);
         }
@@ -201,5 +218,5 @@ export const getNewScenario = (state: GameState): Scenario => {
     }
 
     // As a final resort, return the default fallback scenario
-    return fallbackScenario;
+    return fallback;
 };

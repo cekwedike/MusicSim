@@ -187,6 +187,8 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
               ? 'bg-red-600 text-white'
               : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
           }`}
+          aria-label="Switch to load game tab"
+          aria-pressed={activeTab === 'load'}
         >
           Load Game
         </button>
@@ -197,6 +199,8 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
               ? 'bg-red-600 text-white'
               : 'bg-[#3D1820] text-gray-300 hover:bg-[#4D1F2A]'
           }`}
+          aria-label="Switch to save game tab"
+          aria-pressed={activeTab === 'save'}
         >
           Save Game
         </button>

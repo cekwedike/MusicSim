@@ -3,6 +3,7 @@ import { toGameDate } from '../src/utils/dateUtils';
 import { gameService } from './gameService';
 import authServiceSupabase from './authService.supabase';
 import storage from './dbStorage';
+import { logger } from '../utils/logger';
 
 const AUTOSAVE_EXPIRATION_MS = 30 * 60 * 1000; // 30 minutes (only for 'auto' slot)
 const MAX_SAVE_SLOTS = 5; // Maximum number of manual save slots allowed per user
@@ -132,7 +133,7 @@ export const syncLocalSavesToBackend = async (): Promise<void> => {
   try {
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (!isAuthenticated) {
-      console.log('[storageService] Not authenticated, skipping local save sync');
+      logger.log('[storageService] Not authenticated, skipping local save sync');
       return;
     }
 
@@ -140,11 +141,11 @@ export const syncLocalSavesToBackend = async (): Promise<void> => {
     const localSaveIds = Object.keys(localSaves);
 
     if (localSaveIds.length === 0) {
-      console.log('[storageService] No local saves to sync');
+      logger.log('[storageService] No local saves to sync');
       return;
     }
 
-    console.log('[storageService] Syncing', localSaveIds.length, 'local saves to backend:', localSaveIds);
+    logger.log('[storageService] Syncing', localSaveIds.length, 'local saves to backend:', localSaveIds);
 
     // Get backend saves to check which ones need syncing
     let backendSaveIds: string[] = [];
@@ -154,7 +155,7 @@ export const syncLocalSavesToBackend = async (): Promise<void> => {
         backendSaveIds = response.data.saves.map((s: any) => s.slotName);
       }
     } catch (error) {
-      console.error('[storageService] Failed to fetch backend saves for sync comparison:', error);
+      logger.error('[storageService] Failed to fetch backend saves for sync comparison:', error);
       // Continue anyway - we'll try to sync all local saves
     }
 
@@ -172,22 +173,22 @@ export const syncLocalSavesToBackend = async (): Promise<void> => {
 
       if (needsSync) {
         try {
-          console.log(`[storageService] Syncing ${slotId} to backend...`);
+          logger.log(`[storageService] Syncing ${slotId} to backend...`);
           await gameService.saveGame(slotId, state);
           syncedCount++;
-          console.log(`[storageService] ✅ Synced ${slotId} to backend`);
+          logger.log(`[storageService] ✅ Synced ${slotId} to backend`);
         } catch (error) {
           failedCount++;
-          console.error(`[storageService] ❌ Failed to sync ${slotId}:`, error);
+          logger.error(`[storageService] ❌ Failed to sync ${slotId}:`, error);
         }
       } else {
-        console.log(`[storageService] ${slotId} already exists on backend, skipping`);
+        logger.log(`[storageService] ${slotId} already exists on backend, skipping`);
       }
     }
 
-    console.log(`[storageService] Sync complete: ${syncedCount} synced, ${failedCount} failed`);
+    logger.log(`[storageService] Sync complete: ${syncedCount} synced, ${failedCount} failed`);
   } catch (error) {
-    console.error('[storageService] Failed to sync local saves to backend:', error);
+    logger.error('[storageService] Failed to sync local saves to backend:', error);
   }
 };
 
@@ -195,7 +196,7 @@ export const syncLocalSavesToBackend = async (): Promise<void> => {
  * Save game with timestamp
  */
 export const saveGame = async (state: GameState, slotId: string): Promise<void> => {
-  console.log('[storageService] saveGame called with slotId:', slotId);
+  logger.log('[storageService] saveGame called with slotId:', slotId);
 
   // Check slot limit for manual saves (not for autosave or overwriting existing saves)
   if (slotId !== 'auto') {
@@ -223,55 +224,55 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
     // Only save to backend if authenticated (not guest mode)
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (isAuthenticated) {
-      console.log('[storageService] User authenticated, saving to backend...');
+      logger.log('[storageService] User authenticated, saving to backend...');
       try {
         await gameService.saveGame(slotId, state);
-        console.log(`[storageService] ✅ Backend save successful: ${slotId}`);
+        logger.log(`[storageService] ✅ Backend save successful: ${slotId}`);
         backendSaveSuccess = true;
       } catch (backendError) {
-        console.error(`[storageService] ❌ Backend save failed for ${slotId}:`, backendError);
+        logger.error(`[storageService] ❌ Backend save failed for ${slotId}:`, backendError);
         // Don't throw here - we'll still try localStorage
       }
     } else {
-      console.log('[storageService] Guest mode - saving to IndexedDB only');
+      logger.log('[storageService] Guest mode - saving to IndexedDB only');
     }
 
     // Always save to IndexedDB as backup
     const saves = await loadLocalSaves();
-    console.log('[storageService] Current saves before adding new one:', Object.keys(saves));
+    logger.log('[storageService] Current saves before adding new one:', Object.keys(saves));
 
     saves[slotId] = saveData;
-    console.log('[storageService] Saves after adding new one:', Object.keys(saves));
+    logger.log('[storageService] Saves after adding new one:', Object.keys(saves));
 
     try {
       // Ensure we can stringify before writing — helps surface circular/reference errors
       const payload = JSON.stringify(saves);
       await storage.setItem('musicsim_saves', payload);
-      console.log(`[storageService] ✅ IndexedDB save successful: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      logger.log(`[storageService] ✅ IndexedDB save successful: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
 
       // Verify the save was written
       const verification = await storage.getItem('musicsim_saves');
       if (verification) {
         const verified = JSON.parse(verification);
-        console.log('[storageService] Verification - saved slots:', Object.keys(verified));
+        logger.log('[storageService] Verification - saved slots:', Object.keys(verified));
         
         // Report save status
         if (backendSaveSuccess) {
-          console.log(`[storageService] ✅ Complete save success for ${slotId}: backend + IndexedDB`);
+          logger.log(`[storageService] ✅ Complete save success for ${slotId}: backend + IndexedDB`);
         } else {
-          console.log(`[storageService] ⚠️ Partial save success for ${slotId}: IndexedDB only (backend failed)`);
+          logger.log(`[storageService] ⚠️ Partial save success for ${slotId}: IndexedDB only (backend failed)`);
         }
       } else {
         throw new Error('Save verification failed - IndexedDB empty after write');
       }
     } catch (storageError) {
-      console.error('[storageService] ❌ IndexedDB save failed:', storageError);
+      logger.error('[storageService] ❌ IndexedDB save failed:', storageError);
       
       // If both backend and IndexedDB fail, this is critical
       if (!backendSaveSuccess) {
         throw new Error(`Save failed completely: ${storageError.message}`);
       } else {
-        console.warn('[storageService] Backend save succeeded but IndexedDB failed - continuing...');
+        logger.warn('[storageService] Backend save succeeded but IndexedDB failed - continuing...');
       }
     }
   } catch (error) {

@@ -3,6 +3,8 @@
  * Provides a localStorage-like API using IndexedDB for better storage capacity and performance
  */
 
+import { logger } from '../utils/logger';
+
 const DB_NAME = 'MusicSimDB';
 const DB_VERSION = 1;
 const STORE_NAME = 'keyValueStore';
@@ -21,7 +23,7 @@ function openDB(): Promise<IDBDatabase> {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => {
-      console.error('[dbStorage] Failed to open IndexedDB:', request.error);
+      logger.error('[dbStorage] Failed to open IndexedDB:', request.error);
       reject(request.error);
     };
 
@@ -35,7 +37,7 @@ function openDB(): Promise<IDBDatabase> {
       // Create object store if it doesn't exist
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME);
-        console.log('[dbStorage] Created object store:', STORE_NAME);
+        logger.log('[dbStorage] Created object store:', STORE_NAME);
       }
     };
   });
@@ -215,12 +217,12 @@ export async function migrateFromLocalStorage(): Promise<void> {
           migratedCount++;
         }
       } catch (error) {
-        console.warn(`[dbStorage] Failed to migrate key: ${key}`, error);
+        logger.warn(`[dbStorage] Failed to migrate key: ${key}`, error);
       }
     }
 
     if (migratedCount > 0) {
-      console.log(`[dbStorage] Successfully migrated ${migratedCount} items from localStorage to IndexedDB`);
+      logger.log(`[dbStorage] Successfully migrated ${migratedCount} items from localStorage to IndexedDB`);
       
       // Mark migration as complete
       await setItem('_migration_complete', 'true');

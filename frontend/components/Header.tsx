@@ -120,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
                         className="fixed inset-0 z-[60]" 
                         onClick={() => setShowShortcuts(false)}
                     />
-                    <div className="absolute top-12 right-2 sm:right-4 bg-[#2D1115] border border-[#4D1F2A] rounded-lg shadow-2xl p-4 min-w-[280px] z-[70]">
+                    <div className="fixed top-12 right-2 sm:right-4 bg-[#2D1115] border border-[#4D1F2A] rounded-lg shadow-2xl p-4 min-w-[280px] z-[70]">
                         <div className="flex items-center justify-between mb-3">
                             <h3 className="text-white font-semibold text-sm">⌨️ Keyboard Shortcuts</h3>
                             <button 

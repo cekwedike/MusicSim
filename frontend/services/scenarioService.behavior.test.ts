@@ -105,6 +105,7 @@ const baseState = (): GameState => ({
     highestHypeReached: 0,
     highestCareerProgressReached: 0,
     projectsReleased: 0,
+    contractsSigned: 0,
     firstGameDate: 0,
     lastGameDate: 0,
     favoriteGenre: 'afrobeats',
@@ -119,6 +120,10 @@ const baseState = (): GameState => ({
   mistakesMade: 0,
   lastMistakeWeek: 0,
   unlocksShown: [],
+  contractStartDate: null,
+  pendingContractOffers: [],
+  fameThresholdWeeks: 0,
+  contractEligibilityUnlocked: false,
 });
 
 const makeStaff = (role: HiredStaff['role']): HiredStaff => ({
@@ -145,37 +150,37 @@ afterEach(() => {
 });
 
 describe('scenarioService.getNewScenario', () => {
-  it('selects a staff-restricted scenario when requirements are met', () => {
+  it('selects a staff-restricted scenario when requirements are met', async () => {
     mathSpy!.mockReturnValue(0.0);
     const state = baseState();
     state.staff = [makeStaff('Manager')];
-    const s = getNewScenario(state);
+    const s = await getNewScenario(state);
     expect(s.title).toBe('A Needs Manager');
   });
 
-  it('respects minFameByDifficulty gating and returns fallback when not met', () => {
+  it('respects minFameByDifficulty gating and returns fallback when not met', async () => {
     mathSpy!.mockReturnValue(0.0);
     const state = baseState();
     state.playerStats.fame = 5; // below beginner 10
     // Exclude once-only so nothing fits
     state.usedScenarioTitles = ['C Once Only'];
-    let s = getNewScenario(state);
+    let s = await getNewScenario(state);
     expect(s.title).toBe('An Uneventful Week');
     state.playerStats.fame = 15; // meets beginner 10
-    s = getNewScenario(state);
+    s = await getNewScenario(state);
     expect(s.title).toBe('B Fame Gate');
   });
 
-  it('filters out once-only scenarios that were already used', () => {
+  it('filters out once-only scenarios that were already used', async () => {
     mathSpy!.mockReturnValue(0.0);
     const state = baseState();
     state.usedScenarioTitles = ['C Once Only'];
-    const s = getNewScenario(state);
+    const s = await getNewScenario(state);
     // With once-only excluded and no other fitting scenarios by default, expect fallback
     expect(s.title).toBe('An Uneventful Week');
   });
 
-  it('de-prioritizes very recently seen scenarios via weighted selection', () => {
+  it('de-prioritizes very recently seen scenarios via weighted selection', async () => {
     // Arrange used history so first candidate has very low weight
     // Bank order ensures 'X Recently Seen' precedes 'Y Fresh'
     const state = baseState();
@@ -185,18 +190,18 @@ describe('scenarioService.getNewScenario', () => {
     // total weight ~= 0.05 (X) + 1.0 (Y) = 1.05
     // Set random just above first weight to land in Y's region
     mathSpy!.mockReturnValue(0.9 / 1.05); // scale into [0,1) domain
-    const s = getNewScenario(state);
+    const s = await getNewScenario(state);
     expect(s.title).toBe('Y Fresh');
   });
 
-  it('forces a non-fallback scenario after repeated fallbacks', () => {
+  it('forces a non-fallback scenario after repeated fallbacks', async () => {
     // No fitting scenarios; after >=3 fallbacks, should pick a non-fitting available scenario
     const state = baseState();
     state.playerStats.fame = 0; // ensure 'NonFitting' does not fit
     state.consecutiveFallbackCount = 3;
     // Push random low so selection picks first non-fallback available ('A Needs Manager')
     mathSpy!.mockReturnValue(0.0);
-    const s = getNewScenario(state);
+    const s = await getNewScenario(state);
     expect(s.title).not.toBe('An Uneventful Week');
   });
 });

@@ -2076,7 +2076,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
     // Initialize autosave hook with 30-second debounce for state changes
     // (We also have periodic 5-minute saves and beforeunload save)
-    const { autoSave: debouncedAutoSave, saveNow, status: autoSaveStatus, clearError: clearAutoSaveError } = useAutoSave(30000);
+    const { autoSave: debouncedAutoSave, saveNow, status: autoSaveStatus, clearError: clearAutoSaveError } = useAutoSave(30000, isGuestMode);
 
     // Sidebar state
     const [activeSidebarView, setActiveSidebarView] = useState<SidebarView>(null);
@@ -2099,25 +2099,15 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             key: 's',
             ctrl: true,
             handler: async () => {
-                // Create a manual quick save with timestamp
+                // Quick save to single 'quicksave' slot (replaces itself each time)
                 if (state.status === 'playing') {
                     try {
-                        const timestamp = new Date().toLocaleString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric', 
-                            hour: '2-digit', 
-                            minute: '2-digit',
-                            hour12: true 
-                        });
-                        const saveName = `QuickSave_${timestamp.replace(/[,:\s]/g, '_')}`;
-                        await saveGame(state, saveName);
-                        // Also update autosave
-                        await saveGame(state, 'auto');
-                        console.log('Quick save created:', saveName);
-                        toast.show('Game saved successfully!', 'success', 3000);
+                        await saveGame(state, 'quicksave', isGuestMode);
+                        console.log('Quick save created: quicksave');
+                        toast.show('Quick save successful!', 'success', 2500);
                     } catch (error) {
                         console.error('Quick save failed:', error);
-                        toast.show('Failed to save game. Please try again.', 'error', 4000);
+                        toast.show('Quick save failed. Please try again.', 'error', 4000);
                     }
                 }
             },
@@ -2344,7 +2334,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             if (status === 'playing' && isStorageAvailable()) {
                 // Perform synchronous save using autoSave (not saveNow to avoid async issues)
-                autoSave(state).catch(err => {
+                autoSave(state, isGuestMode).catch(err => {
                     logger.error('[App] Failed to save on beforeunload:', err);
                 });
             }
@@ -2352,7 +2342,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
 
         window.addEventListener('beforeunload', handleBeforeUnload);
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-    }, [status, state]);
+    }, [status, state, isGuestMode]);
 
     // Check for new unlocks and show notifications
     useEffect(() => {
@@ -2429,11 +2419,11 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         if (status !== 'playing') return;
 
         const autoSaveInterval = setInterval(async () => {
-            await saveGame(state, 'auto');
+            await saveGame(state, 'auto', isGuestMode);
         }, 5 * 60 * 1000); // 5 minutes
 
         return () => clearInterval(autoSaveInterval);
-    }, [status, state]);
+    }, [status, state, isGuestMode]);
 
     // Clean up old autosaves only during active gameplay
     useEffect(() => {
@@ -2817,10 +2807,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             await deleteSave('auto');
 
             // Then save to the new slot
-            await saveGame(state, slotName);
+            await saveGame(state, slotName, isGuestMode);
 
             // Also create a new autosave that's a copy of this manual save
-            await saveGame(state, 'auto');
+            await saveGame(state, 'auto', isGuestMode);
 
             alert(`Game saved successfully to "${slotName}"!`);
         } catch (error) {
@@ -2891,6 +2881,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                             onSaveComplete={() => {
                                 setSaveLoadPanelKey((prev: number) => prev + 1);
                             }}
+                            isGuestMode={isGuestMode}
                         />
                     )}
 

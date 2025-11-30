@@ -218,8 +218,23 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
           </div>
         </button>
 
-        {/* Spacer to push any future controls toward center */}
+        {/* Spacer to push shortcuts info to bottom */}
         <div className="flex-1" />
+
+        {/* Keyboard Shortcuts Info - Desktop only, at bottom */}
+        <div className="hidden lg:block px-2 py-3 border-t border-[#3D1820]/50 mt-2">
+          <div className="text-xs text-gray-400 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span>Quick Save</span>
+              <kbd className="bg-[#2D1115] px-1.5 py-0.5 rounded font-mono text-gray-500 text-[10px]">Ctrl+S</kbd>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Close Panels</span>
+              <kbd className="bg-[#2D1115] px-1.5 py-0.5 rounded font-mono text-gray-500 text-[10px]">Esc</kbd>
+            </div>
+          </div>
+          <p className="text-[10px] text-gray-500 mt-2 text-center">Auto-saves every 5min</p>
+        </div>
       </div>
 
       {/* Expanded Panel */}

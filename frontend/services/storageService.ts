@@ -195,8 +195,8 @@ export const syncLocalSavesToBackend = async (): Promise<void> => {
 /**
  * Save game with timestamp
  */
-export const saveGame = async (state: GameState, slotId: string): Promise<void> => {
-  logger.log('[storageService] saveGame called with slotId:', slotId);
+export const saveGame = async (state: GameState, slotId: string, isGuestMode: boolean = false): Promise<void> => {
+  logger.log('[storageService] saveGame called with slotId:', slotId, 'isGuestMode:', isGuestMode);
 
   // Check slot limit for manual saves (not for autosave or overwriting existing saves)
   if (slotId !== 'auto') {
@@ -223,18 +223,22 @@ export const saveGame = async (state: GameState, slotId: string): Promise<void> 
   try {
     // Only save to backend if authenticated (not guest mode)
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
-    if (isAuthenticated) {
-      logger.log('[storageService] User authenticated, saving to backend...');
+    
+    // CRITICAL: Guest saves should NEVER go to backend
+    if (isAuthenticated && !isGuestMode) {
+      logger.log('[storageService] Authenticated user, saving to backend...');
       try {
         await gameService.saveGame(slotId, state);
         logger.log(`[storageService] ✅ Backend save successful: ${slotId}`);
         backendSaveSuccess = true;
       } catch (backendError) {
         logger.error(`[storageService] ❌ Backend save failed for ${slotId}:`, backendError);
-        // Don't throw here - we'll still try localStorage
+        // Don't throw here - we'll still try IndexedDB
       }
+    } else if (isGuestMode) {
+      logger.log('[storageService] Guest mode - saving to IndexedDB only (no backend sync)');
     } else {
-      logger.log('[storageService] Guest mode - saving to IndexedDB only');
+      logger.log('[storageService] Not authenticated - saving to IndexedDB only');
     }
 
     // Always save to IndexedDB as backup
@@ -659,9 +663,9 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 /**
  * Auto-saves the current game state
  */
-export const autoSave = async (state: GameState): Promise<void> => {
+export const autoSave = async (state: GameState, isGuestMode: boolean = false): Promise<void> => {
   try {
-    await saveGame(state, 'auto');
+    await saveGame(state, 'auto', isGuestMode);
   } catch (error) {
     console.warn('Auto-save failed:', error);
   }

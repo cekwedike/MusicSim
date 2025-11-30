@@ -9,9 +9,10 @@ interface SaveLoadPanelProps {
   currentGameState: GameState;
   onClose?: () => void;
   onSaveComplete?: () => void;
+  isGuestMode?: boolean;
 }
 
-const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameState, onClose, onSaveComplete }) => {
+const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameState, onClose, onSaveComplete, isGuestMode = false }) => {
   const [saveSlots, setSaveSlots] = useState<SaveSlot[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -28,6 +29,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   // Helper function to extract save name from slot ID
   const getSaveName = (slotId: string): string => {
     if (slotId === 'auto') return 'Autosave';
+    if (slotId === 'quicksave') return 'Quick Save';
     // Format: {timestamp}_{saveName}
     const parts = slotId.split('_');
     if (parts.length > 1) {
@@ -104,7 +106,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
       setSaveSlots(prev => [optimisticSave, ...prev.filter(s => s.id !== slotId)]);
 
       // Actual save in background
-      await saveGame(currentGameState, slotId);
+      await saveGame(currentGameState, slotId, isGuestMode);
       console.log('[SaveLoadPanel] Save completed');
 
       setNewSaveName('');
@@ -266,8 +268,10 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
           )}
 
           <div className="text-sm text-gray-400 bg-[#3D1820]/30 p-3 rounded-lg">
-            <p className="font-medium text-gray-300 mb-1">Quick Save Tip</p>
-            <p>Your game auto-saves every 5 minutes. Manual saves are great for backing up before risky decisions!</p>
+            <p className="font-medium text-gray-300 mb-1">💡 Save Tips</p>
+            <p className="text-xs mb-1"><strong>Auto-save:</strong> Happens every 5 minutes</p>
+            <p className="text-xs mb-1"><strong>Quick save (Ctrl+S):</strong> One-slot instant save</p>
+            <p className="text-xs"><strong>Manual save:</strong> Create backups before risky decisions!</p>
           </div>
         </div>
       )}
@@ -328,6 +332,11 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                             AUTO
                           </span>
                         )}
+                        {slot.id === 'quicksave' && (
+                          <span className="bg-green-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
+                            QUICK
+                          </span>
+                        )}
                       </div>
                       <p className="text-sm text-gray-300 mb-0.5">{slot.artistName}</p>
                       <p className="text-xs text-gray-400">{slot.genre}</p>
@@ -361,7 +370,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                       >
                         Load
                       </button>
-                      {slot.id !== 'auto' && (
+                      {slot.id !== 'auto' && slot.id !== 'quicksave' && (
                         <button
                           onClick={() => handleDeleteSave(slot.id, slot.artistName)}
                           disabled={loading}

@@ -12,9 +12,10 @@ export interface AutoSaveStatus {
 /**
  * Custom hook for managing autosave functionality with debouncing and status tracking
  * @param delay - Debounce delay in milliseconds (default: 5000 = 5 seconds)
+ * @param isGuestMode - Whether user is in guest mode (affects backend syncing)
  * @returns Object containing autosave function, status, and manual save trigger
  */
-export function useAutoSave(delay: number = 5000) {
+export function useAutoSave(delay: number = 5000, isGuestMode: boolean = false) {
   const [status, setStatus] = useState<AutoSaveStatus>({
     isInProgress: false,
     lastSaveTime: null,
@@ -41,7 +42,7 @@ export function useAutoSave(delay: number = 5000) {
       saveInProgressRef.current = true;
       setStatus(prev => ({ ...prev, isInProgress: true, error: null }));
 
-      await autoSave(gameState);
+      await autoSave(gameState, isGuestMode);
 
       setStatus(prev => ({
         ...prev,
@@ -60,7 +61,7 @@ export function useAutoSave(delay: number = 5000) {
     } finally {
       saveInProgressRef.current = false;
     }
-  }, []);
+  }, [isGuestMode]);
 
   // Debounced autosave function
   const debouncedAutoSave = useDebounce(performAutoSave, delay);

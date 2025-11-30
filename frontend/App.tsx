@@ -2072,8 +2072,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         initialize();
     }, []);
 
-    // Initialize autosave hook with 5-second debounce
-    const { autoSave: debouncedAutoSave, saveNow, status: autoSaveStatus, clearError: clearAutoSaveError } = useAutoSave(5000);
+    // Initialize autosave hook with 30-second debounce for state changes
+    // (We also have periodic 5-minute saves and beforeunload save)
+    const { autoSave: debouncedAutoSave, saveNow, status: autoSaveStatus, clearError: clearAutoSaveError } = useAutoSave(30000);
 
     // Sidebar state
     const [activeSidebarView, setActiveSidebarView] = useState<SidebarView>(null);
@@ -2096,10 +2097,9 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             key: 's',
             ctrl: true,
             handler: () => {
-                // Open save panel if playing
+                // Trigger immediate autosave if playing
                 if (state.status === 'playing') {
-                    setActiveSidebarView('saveload');
-                    setIsMobileSidebarOpen(true);
+                    saveNow(state);
                 }
             },
             description: 'Quick save'
@@ -2291,13 +2291,13 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         }
     }, [status, artistName, fetchNextScenario, state, currentScenario]);
 
-    // Auto-save effect with debouncing - only on week changes or significant stat changes
+    // Auto-save effect with debouncing - saves on state changes (debounced to 30 seconds)
     useEffect(() => {
         // Only autosave during active gameplay
         if (status === 'playing' && isStorageAvailable()) {
             debouncedAutoSave(state);
         }
-    }, [state.date, status, debouncedAutoSave]); // Auto-save when date changes (debounced to 5 seconds)
+    }, [state, status, debouncedAutoSave]); // Auto-save when state changes
 
     // Clean up expired autosaves on mount
     useEffect(() => {
@@ -2306,6 +2306,34 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         };
         cleanup();
     }, []);
+
+    // Periodic autosave every 5 minutes (300,000ms)
+    useEffect(() => {
+        if (status !== 'playing') return;
+
+        const intervalId = setInterval(() => {
+            if (status === 'playing' && isStorageAvailable()) {
+                saveNow(state);
+            }
+        }, 300000); // 5 minutes
+
+        return () => clearInterval(intervalId);
+    }, [status, state, saveNow]);
+
+    // Save on beforeunload (when user closes tab/window)
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (status === 'playing' && isStorageAvailable()) {
+                // Perform synchronous save using autoSave (not saveNow to avoid async issues)
+                autoSave(state).catch(err => {
+                    logger.error('[App] Failed to save on beforeunload:', err);
+                });
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [status, state]);
 
     // Check for new unlocks and show notifications
     useEffect(() => {

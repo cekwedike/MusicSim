@@ -27,16 +27,17 @@ import { getDifficultySettings, calculateDynamicModifiers, applyVolatility } fro
 import { achievements as allAchievements } from './data/achievements';
 
 // Helper function to extract clean save name from slot ID
+// Helper to parse career-specific slot IDs and extract display name
+// Format: {artistName}_{genre}_{slotType} -> returns formatted slotType
 const getSaveName = (slotId: string): string => {
-  if (slotId === 'auto') return 'Autosave';
-  // Format: {timestamp}_{saveName} or just {saveName} for newer saves
   const parts = slotId.split('_');
-  if (parts.length > 1 && /^\d+$/.test(parts[0])) {
-    // Has timestamp prefix - strip it and rejoin
-    return parts.slice(1).join('_').replace(/_/g, ' ');
-  }
-  // No timestamp prefix - just clean underscores
-  return slotId.replace(/_/g, ' ');
+  const slotType = parts[parts.length - 1];
+  
+  if (slotType === 'auto') return 'Auto Save';
+  if (slotType === 'quicksave') return 'Quick Save';
+  
+  // For manual saves, return the slot name cleaned up
+  return slotType.replace(/_/g, ' ');
 };
 import { projects as allProjects } from './data/projects';
 import { staffTemplates, getStaffTemplate, getAvailableStaff } from './data/staff';
@@ -1622,13 +1623,34 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
         return () => clearInterval(interval);
     }, []);
 
+    // Group saves by career for display
+    const groupedSaves = React.useMemo(() => {
+        const groups: Array<{ careerKey: string; artistName: string; genre: string; saves: SaveSlot[] }> = [];
+        const seenCareers = new Set<string>();
+        
+        for (const slot of saveSlots) {
+            const careerKey = `${slot.artistName}_${slot.genre}`;
+            if (!seenCareers.has(careerKey)) {
+                seenCareers.add(careerKey);
+                groups.push({
+                    careerKey,
+                    artistName: slot.artistName,
+                    genre: slot.genre,
+                    saves: saveSlots.filter(s => s.artistName === slot.artistName && s.genre === slot.genre)
+                });
+            }
+        }
+        
+        return groups;
+    }, [saveSlots]);
+
     useEffect(() => {
         const loadSaves = async () => {
             setLoadingSaves(true);
             try {
-                // Use smart filtering for start screen - shows newer of autosave/quicksave
+                // Use smart filtering for start screen - shows newer of autosave/quicksave per career
                 const slots = await getStartScreenSaves();
-                // Show ALL saves including auto/quicksave
+                // Show ALL saves grouped by career
                 setSaveSlots(slots);
             } catch (error) {
                 console.error('Failed to load save slots:', error);
@@ -1740,41 +1762,55 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
 
                 {/* Continue Game button removed - auto/quicksave now shown in the list below */}
 
-                {/* Existing Save Slots */}
+                {/* Existing Save Slots - Grouped by Career */}
                 {!loadingSaves && saveSlots.length > 0 && (
-                    <div className="mt-4">
-                        <h3 className="text-base font-semibold text-gray-300 mb-3 flex items-center justify-between">
-                            <span>Your Saves ({saveSlots.length})</span>
-                            <div className="hidden sm:flex text-xs text-gray-500">
-                                <span>Click to continue | 4 manual + 1 auto/quick slot</span>
-                            </div>
-                        </h3>
+                    <div className="mt-4 space-y-6">
+                        {groupedSaves.map((group, groupIndex) => (
+                            <div key={group.careerKey} className="space-y-3">
+                                {/* Career Group Header */}
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-base font-semibold text-red-300 flex items-center gap-2">
+                                        <span>{group.artistName}</span>
+                                        <span className="text-gray-500">|</span>
+                                        <span className="text-gray-400 font-normal capitalize">{getGenreLabel(group.genre)}</span>
+                                    </h3>
+                                    <div className="hidden sm:flex text-xs text-gray-500">
+                                        <span>{group.saves.length} save{group.saves.length !== 1 ? 's' : ''} | 4 manual + 1 auto/quick slot per career</span>
+                                    </div>
+                                </div>
 
                         {/* Desktop/Tablet Grid Layout */}
                         <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {saveSlots.map((slot) => (
+                            {group.saves.map((slot) => (
                                 <div key={slot.id} className="relative group">
                                     <button
                                         onClick={() => handleLoadSave(slot.id)}
                                         disabled={loadingSlotId === slot.id || deletingSlotId === slot.id}
                                         className="w-full bg-[#2D1115]/60 border border-[#3D1820] hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-red-500/10 disabled:opacity-60 disabled:cursor-not-allowed relative"
                                     >
-                                        {/* Save Type Badge */}
-                                        {slot.id === 'auto' && (
-                                            <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded font-medium">
-                                                AUTO
-                                            </div>
-                                        )}
-                                        {slot.id === 'quicksave' && (
-                                            <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded font-medium">
-                                                QUICK
-                                            </div>
-                                        )}
-                                        {slot.id !== 'auto' && slot.id !== 'quicksave' && (
-                                            <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-medium">
-                                                MANUAL
-                                            </div>
-                                        )}
+                                        {/* Save Type Badge - parse career-specific slot ID */}
+                                        {(() => {
+                                            const slotType = slot.id.split('_').pop();
+                                            if (slotType === 'auto') {
+                                                return (
+                                                    <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded font-medium">
+                                                        AUTO
+                                                    </div>
+                                                );
+                                            }
+                                            if (slotType === 'quicksave') {
+                                                return (
+                                                    <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded font-medium">
+                                                        QUICK
+                                                    </div>
+                                                );
+                                            }
+                                            return (
+                                                <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-medium">
+                                                    MANUAL
+                                                </div>
+                                            );
+                                        })()}
                                         
                                         {/* Loading Overlay */}
                                         {loadingSlotId === slot.id && (
@@ -1851,47 +1887,60 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                 </button>
                                 
                                 {/* Delete Button - only for manual saves */}
-                                {slot.id !== 'auto' && slot.id !== 'quicksave' && (
-                                    <button
-                                        onClick={(e) => handleDeleteSave(slot.id, e)}
-                                        disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
-                                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600/80 hover:bg-red-600 text-white p-1.5 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                                        title="Delete save"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                )}
+                                {(() => {
+                                    const slotType = slot.id.split('_').pop();
+                                    if (slotType !== 'auto' && slotType !== 'quicksave') {
+                                        return (
+                                            <button
+                                                onClick={(e) => handleDeleteSave(slot.id, e)}
+                                                disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
+                                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600/80 hover:bg-red-600 text-white p-1.5 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                                                title="Delete save"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        );
+                                    }
+                                    return null;
+                                })()}
                             </div>
                             ))}
                         </div>
 
                         {/* Mobile List Layout */}
                         <div className="md:hidden space-y-2">
-                            {saveSlots.map((slot) => (
+                            {group.saves.map((slot) => (
                                 <div key={slot.id} className="relative">
                                     <button
                                         onClick={() => handleLoadSave(slot.id)}
                                         disabled={loadingSlotId === slot.id || deletingSlotId === slot.id}
                                         className="w-full bg-[#2D1115]/60 border border-gray-700 hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                     >
-                                        {/* Save Type Badge */}
-                                        {slot.id === 'auto' && (
-                                            <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
-                                                AUTO
-                                            </div>
-                                        )}
-                                        {slot.id === 'quicksave' && (
-                                            <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
-                                                QUICK
-                                            </div>
-                                        )}
-                                        {slot.id !== 'auto' && slot.id !== 'quicksave' && (
-                                            <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
-                                                MANUAL
-                                            </div>
-                                        )}
+                                        {/* Save Type Badge - parse career-specific slot ID */}
+                                        {(() => {
+                                            const slotType = slot.id.split('_').pop();
+                                            if (slotType === 'auto') {
+                                                return (
+                                                    <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
+                                                        AUTO
+                                                    </div>
+                                                );
+                                            }
+                                            if (slotType === 'quicksave') {
+                                                return (
+                                                    <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
+                                                        QUICK
+                                                    </div>
+                                                );
+                                            }
+                                            return (
+                                                <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
+                                                    MANUAL
+                                                </div>
+                                            );
+                                        })()}
                                         
                                         {/* Loading Overlay */}
                                         {loadingSlotId === slot.id && (
@@ -1969,21 +2018,29 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     </button>
                                     
                                     {/* Delete Button for Mobile - only for manual saves */}
-                                    {slot.id !== 'auto' && slot.id !== 'quicksave' && (
-                                        <button
-                                            onClick={(e) => handleDeleteSave(slot.id, e)}
-                                            disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
-                                            className="absolute top-2 right-2 bg-red-600/90 hover:bg-red-600 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                                            title="Delete save"
-                                        >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                    )}
+                                    {(() => {
+                                        const slotType = slot.id.split('_').pop();
+                                        if (slotType !== 'auto' && slotType !== 'quicksave') {
+                                            return (
+                                                <button
+                                                    onClick={(e) => handleDeleteSave(slot.id, e)}
+                                                    disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
+                                                    className="absolute top-2 right-2 bg-red-600/90 hover:bg-red-600 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                                                    title="Delete save"
+                                                >
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+                                            );
+                                        }
+                                        return null;
+                                    })()}
                                 </div>
                             ))}
                         </div>
+                            </div>
+                        ))}
                     </div>
                 )}
 
@@ -1994,11 +2051,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                     Start New Career
                 </button>
 
-                {saveSlots.length >= 5 && (
-                    <p className="text-yellow-400 text-sm mt-2">
-                        Maximum save slots reached. Delete a career to create a new one.
-                    </p>
-                )}
+                {/* Note: Each career has its own 5 slots (4 manual + 1 auto/quick), so no global limit message needed */}
             </div>
 
             {/* Delete Confirmation Dialog */}

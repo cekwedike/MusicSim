@@ -9,6 +9,60 @@ const AUTOSAVE_EXPIRATION_MS = 30 * 60 * 1000; // 30 minutes (only for 'auto' sl
 const MAX_SAVE_SLOTS = 4; // Maximum number of manual save slots (1 slot reserved for auto/quicksave)
 
 /**
+ * Generate a unique career key from game state
+ * Format: {artistName}_{genre}
+ * Example: "ChidiebereEkwedike_RB", "JohnDoe_Electronic"
+ */
+function getCareerKey(state: GameState): string {
+  const artistName = state.artistName.replace(/[^a-zA-Z0-9]/g, '');
+  const genre = state.artistGenre.replace(/[^a-zA-Z0-9]/g, '');
+  return `${artistName}_${genre}`;
+}
+
+/**
+ * Generate a career-specific slot ID
+ * Format: {careerKey}_{slotType}
+ * Examples: "ChidiebereEkwedike_RB_auto", "ChidiebereEkwedike_Electronic_quicksave"
+ */
+function getCareerSlotId(state: GameState, slotId: string): string {
+  const careerKey = getCareerKey(state);
+  return `${careerKey}_${slotId}`;
+}
+
+/**
+ * Parse a career slot ID to extract career info and slot name
+ * Returns null if not a valid career slot ID (legacy format)
+ */
+function parseCareerSlotId(fullSlotId: string): { careerKey: string; artistName: string; genre: string; slotId: string } | null {
+  // Expected format: artistName_genre_slotId
+  // Need at least 3 parts
+  const lastUnderscoreIndex = fullSlotId.lastIndexOf('_');
+  if (lastUnderscoreIndex === -1) return null;
+  
+  const slotId = fullSlotId.substring(lastUnderscoreIndex + 1);
+  const careerKey = fullSlotId.substring(0, lastUnderscoreIndex);
+  
+  // Further parse career key into artistName_genre
+  const careerLastUnderscore = careerKey.lastIndexOf('_');
+  if (careerLastUnderscore === -1) return null;
+  
+  const artistName = careerKey.substring(0, careerLastUnderscore);
+  const genre = careerKey.substring(careerLastUnderscore + 1);
+  
+  return { careerKey, artistName, genre, slotId };
+}
+
+/**
+ * Get display name for slot ID
+ */
+function getSlotDisplayName(slotId: string): string {
+  if (slotId === 'auto') return 'Auto Save';
+  if (slotId === 'quicksave') return 'Quick Save';
+  // For manual saves, clean up the name
+  return slotId.replace(/_/g, ' ');
+}
+
+/**
  * Serialize GameState for storage (convert Dates to ISO strings)
  */
 export const serializeGameState = (state: GameState): any => {
@@ -193,20 +247,28 @@ export const syncLocalSavesToBackend = async (): Promise<void> => {
 };
 
 /**
- * Save game with timestamp
+ * Save game with timestamp - Now supports per-career saves
  */
 export const saveGame = async (state: GameState, slotId: string, isGuestMode: boolean = false): Promise<void> => {
-  logger.log('[storageService] saveGame called with slotId:', slotId, 'isGuestMode:', isGuestMode);
+  // Generate career-specific slot ID
+  const careerSlotId = getCareerSlotId(state, slotId);
+  logger.log('[storageService] saveGame called - slotId:', slotId, 'careerSlotId:', careerSlotId, 'isGuestMode:', isGuestMode);
 
-  // Check slot limit for manual saves (not for autosave or overwriting existing saves)
-  if (slotId !== 'auto') {
+  // Check slot limit for manual saves (not for autosave/quicksave or overwriting existing saves)
+  if (slotId !== 'auto' && slotId !== 'quicksave') {
     const saves = await loadLocalSaves();
-    const isNewSave = !saves[slotId];
+    const isNewSave = !saves[careerSlotId];
 
     if (isNewSave) {
-      const { canSave, reason } = await canCreateNewSave();
-      if (!canSave) {
-        throw new Error(reason);
+      // Count manual saves for THIS career only
+      const careerKey = getCareerKey(state);
+      const careerSaves = Object.keys(saves).filter(key => {
+        const parsed = parseCareerSlotId(key);
+        return parsed && parsed.careerKey === careerKey && parsed.slotId !== 'auto' && parsed.slotId !== 'quicksave';
+      });
+      
+      if (careerSaves.length >= MAX_SAVE_SLOTS) {
+        throw new Error(`Cannot create new save. This career already has ${MAX_SAVE_SLOTS} manual saves. Please delete an existing save first.`);
       }
     }
   }
@@ -228,11 +290,12 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
     if (isAuthenticated && !isGuestMode) {
       logger.log('[storageService] Authenticated user, saving to backend...');
       try {
-        await gameService.saveGame(slotId, state);
-        logger.log(`[storageService] ✅ Backend save successful: ${slotId}`);
+        // Backend uses the career-specific slot ID
+        await gameService.saveGame(careerSlotId, state);
+        logger.log(`[storageService] ✅ Backend save successful: ${careerSlotId}`);
         backendSaveSuccess = true;
       } catch (backendError) {
-        logger.error(`[storageService] ❌ Backend save failed for ${slotId}:`, backendError);
+        logger.error(`[storageService] ❌ Backend save failed for ${careerSlotId}:`, backendError);
         // Don't throw here - we'll still try IndexedDB
       }
     } else if (isGuestMode) {
@@ -241,18 +304,18 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
       logger.log('[storageService] Not authenticated - saving to IndexedDB only');
     }
 
-    // Always save to IndexedDB as backup
+    // Always save to IndexedDB as backup (using career-specific slot ID)
     const saves = await loadLocalSaves();
     logger.log('[storageService] Current saves before adding new one:', Object.keys(saves));
 
-    saves[slotId] = saveData;
+    saves[careerSlotId] = saveData;
     logger.log('[storageService] Saves after adding new one:', Object.keys(saves));
 
     try {
       // Ensure we can stringify before writing — helps surface circular/reference errors
       const payload = JSON.stringify(saves);
       await storage.setItem('musicsim_saves', payload);
-      logger.log(`[storageService] ✅ IndexedDB save successful: ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      logger.log(`[storageService] ✅ IndexedDB save successful: ${careerSlotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
 
       // Verify the save was written
       const verification = await storage.getItem('musicsim_saves');
@@ -262,9 +325,9 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
         
         // Report save status
         if (backendSaveSuccess) {
-          logger.log(`[storageService] ✅ Complete save success for ${slotId}: backend + IndexedDB`);
+          logger.log(`[storageService] ✅ Complete save success for ${careerSlotId}: backend + IndexedDB`);
         } else {
-          logger.log(`[storageService] ⚠️ Partial save success for ${slotId}: IndexedDB only (backend failed)`);
+          logger.log(`[storageService] ⚠️ Partial save success for ${careerSlotId}: IndexedDB only (backend failed)`);
         }
       } else {
         throw new Error('Save verification failed - IndexedDB empty after write');
@@ -284,11 +347,11 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
 
     // Fallback to IndexedDB only
     const saves = await loadLocalSaves();
-    saves[slotId] = saveData;
+    saves[careerSlotId] = saveData;
     try {
       const payload = JSON.stringify(saves);
       await storage.setItem('musicsim_saves', payload);
-      logger.log(`[storageService] Saved to IndexedDB (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      logger.log(`[storageService] Saved to IndexedDB (fallback): ${careerSlotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
     } catch (err) {
       logger.error('[storageService] Fallback: failed to write saves to IndexedDB (stringify error):', err);
       // Re-throw so callers can surface the error if needed
@@ -300,6 +363,7 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
 /**
  * Load game and check expiration for autosave
  * Optimized to try localStorage first for better performance
+ * NOTE: slotId parameter should be the FULL career-specific ID (e.g., "ChidiebereEkwedike_RB_auto")
  */
 export const loadGame = async (slotId: string): Promise<GameState | null> => {
   logger.log(`[loadGame] Starting load for slot: ${slotId}`);
@@ -311,8 +375,12 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
   
   // Check if we have local data and it's valid
   if (localSaveData) {
-    // IMPORTANT: Only autosave ('auto' slot) expires. Manual saves NEVER expire!
-    if (slotId === 'auto' && isAutosaveExpired(localSaveData.timestamp)) {
+    // Parse to check if this is an autosave
+    const parsed = parseCareerSlotId(slotId);
+    const isAutosave = parsed && parsed.slotId === 'auto';
+    
+    // IMPORTANT: Only autosave expires. Manual saves and quicksaves NEVER expire!
+    if (isAutosave && isAutosaveExpired(localSaveData.timestamp)) {
       logger.log(`[loadGame] Local autosave expired (${Math.round((Date.now() - localSaveData.timestamp) / 60000)} minutes old). Deleting...`);
       await deleteSave(slotId);
       return null;
@@ -325,7 +393,7 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
     const localGameState = deserializeGameState(localSaveData.state);
     
     // ASYNC: Try to sync with backend in background (don't block UI)
-    if (slotId !== 'auto') { // Skip backend sync for autosave to keep it fast
+    if (!isAutosave) { // Skip backend sync for autosave to keep it fast
       syncWithBackendAsync(slotId, localSaveData);
     }
     
@@ -625,8 +693,10 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
       }
 
       // Check if autosave is expired (only for LOCAL autosave, not backend ones)
-      if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
-        logger.log('[storageService] Local autosave expired, cleaning up');
+      const parsed = parseCareerSlotId(slotId);
+      const isAutosave = parsed && parsed.slotId === 'auto';
+      if (isAutosave && isAutosaveExpired(saveData.timestamp)) {
+        logger.log('[storageService] Local autosave expired, cleaning up:', slotId);
         // Clean up expired LOCAL autosave
         await deleteSave(slotId);
         continue;
@@ -661,63 +731,101 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 }
 
 /**
- * Get save slots for start screen with intelligent filtering:
+ * Get save slots for start screen - Returns ALL saves grouped by career
+ * Each career (artistName + genre) has its own set of saves:
+ * - Up to 1 autosave per career
+ * - Up to 1 quicksave per career (prioritized over autosave if identical)
+ * - Up to 4 manual saves per career
+ * 
+ * Intelligent filtering per career:
  * - If quicksave and autosave have identical game state → show only "Quick Save"
  * - If they differ → show both (most recent first)
- * - System saves (auto/quick) always listed before manual saves
- * This gives users up to 2 system save slots + 4 manual save slots
+ * - System saves (auto/quick) listed before manual saves within each career
  */
 export async function getStartScreenSaves(): Promise<SaveSlot[]> {
   const allSlots = await getAllSaveSlots();
   
-  const autoSave = allSlots.find(s => s.id === 'auto');
-  const quickSave = allSlots.find(s => s.id === 'quicksave');
+  // Group saves by career
+  const careerGroups = new Map<string, SaveSlot[]>();
   
-  let filteredSlots = [...allSlots];
-  
-  // If both exist, compare actual game state data
-  if (autoSave && quickSave) {
-    try {
-      // Load both save states to compare
-      const autoState = await loadGame('auto');
-      const quickState = await loadGame('quicksave');
-      
-      if (autoState && quickState) {
-        // Compare key game state properties to determine if they're the same
-        const sameData = (
-          autoState.currentDate.getTime() === quickState.currentDate.getTime() &&
-          autoState.playerStats.cash === quickState.playerStats.cash &&
-          autoState.playerStats.fame === quickState.playerStats.fame &&
-          autoState.playerStats.careerProgress === quickState.playerStats.careerProgress
-        );
-        
-        if (sameData) {
-          // Identical data - show Quick Save only (user's intentional save)
-          logger.log('[getStartScreenSaves] Auto and Quick saves are identical - showing Quick Save only');
-          filteredSlots = allSlots.filter(s => s.id !== 'auto');
-        } else {
-          // Different data - show both (most recent first happens naturally via sort)
-          logger.log('[getStartScreenSaves] Auto and Quick saves differ - showing both');
-        }
+  for (const slot of allSlots) {
+    const parsed = parseCareerSlotId(slot.id);
+    if (parsed) {
+      const { careerKey } = parsed;
+      if (!careerGroups.has(careerKey)) {
+        careerGroups.set(careerKey, []);
       }
-    } catch (error) {
-      logger.warn('[getStartScreenSaves] Error comparing saves:', error);
-      // On error, show both to be safe
+      careerGroups.get(careerKey)!.push(slot);
+    } else {
+      // Legacy save without career key - treat as its own career
+      logger.warn('[getStartScreenSaves] Legacy save without career key:', slot.id);
+      const legacyKey = `legacy_${slot.id}`;
+      careerGroups.set(legacyKey, [slot]);
     }
   }
   
-  // Sort: system saves (auto/quick) first, then manual saves, all by timestamp desc
-  return filteredSlots.sort((a, b) => {
-    const aIsSystem = a.id === 'auto' || a.id === 'quicksave';
-    const bIsSystem = b.id === 'auto' || b.id === 'quicksave';
+  // Process each career group to handle auto/quick save comparison
+  const processedSlots: SaveSlot[] = [];
+  
+  for (const [careerKey, slots] of careerGroups.entries()) {
+    const autoSave = slots.find(s => {
+      const parsed = parseCareerSlotId(s.id);
+      return parsed && parsed.slotId === 'auto';
+    });
+    const quickSave = slots.find(s => {
+      const parsed = parseCareerSlotId(s.id);
+      return parsed && parsed.slotId === 'quicksave';
+    });
     
-    // System saves always come first
-    if (aIsSystem && !bIsSystem) return -1;
-    if (!aIsSystem && bIsSystem) return 1;
+    let careerSlots = [...slots];
     
-    // Within same category, sort by timestamp (newest first)
-    return b.timestamp - a.timestamp;
-  });
+    // If both auto and quick exist for this career, compare them
+    if (autoSave && quickSave) {
+      try {
+        const autoState = await loadGame(autoSave.id);
+        const quickState = await loadGame(quickSave.id);
+        
+        if (autoState && quickState) {
+          // Compare key game state properties
+          const sameData = (
+            autoState.currentDate.getTime() === quickState.currentDate.getTime() &&
+            autoState.playerStats.cash === quickState.playerStats.cash &&
+            autoState.playerStats.fame === quickState.playerStats.fame &&
+            autoState.playerStats.careerProgress === quickState.playerStats.careerProgress
+          );
+          
+          if (sameData) {
+            // Identical data - show Quick Save only
+            logger.log(`[getStartScreenSaves] Career ${careerKey}: Auto and Quick saves identical - showing Quick Save only`);
+            careerSlots = slots.filter(s => s.id !== autoSave.id);
+          } else {
+            logger.log(`[getStartScreenSaves] Career ${careerKey}: Auto and Quick saves differ - showing both`);
+          }
+        }
+      } catch (error) {
+        logger.warn(`[getStartScreenSaves] Error comparing saves for career ${careerKey}:`, error);
+      }
+    }
+    
+    // Sort career's saves: system saves first, then manual, all by timestamp desc
+    careerSlots.sort((a, b) => {
+      const aParsed = parseCareerSlotId(a.id);
+      const bParsed = parseCareerSlotId(b.id);
+      
+      const aIsSystem = aParsed && (aParsed.slotId === 'auto' || aParsed.slotId === 'quicksave');
+      const bIsSystem = bParsed && (bParsed.slotId === 'auto' || bParsed.slotId === 'quicksave');
+      
+      if (aIsSystem && !bIsSystem) return -1;
+      if (!aIsSystem && bIsSystem) return 1;
+      
+      return b.timestamp - a.timestamp;
+    });
+    
+    processedSlots.push(...careerSlots);
+  }
+  
+  // Final sort: most recently played career first (by newest save timestamp in each career)
+  return processedSlots;
 }
 
 /**
@@ -752,6 +860,39 @@ function calculateTimeProgress(state: GameState): number {
 }
 
 /**
+ * Get saves for a specific career (for SaveLoadPanel)
+ * Filters saves to only show those belonging to the current career
+ */
+export async function getCurrentCareerSaves(currentState: GameState): Promise<SaveSlot[]> {
+  const allSlots = await getAllSaveSlots();
+  const currentCareerKey = getCareerKey(currentState);
+  
+  logger.log('[getCurrentCareerSaves] Filtering for career:', currentCareerKey);
+  
+  // Filter to only saves for this career
+  const careerSaves = allSlots.filter(slot => {
+    const parsed = parseCareerSlotId(slot.id);
+    return parsed && parsed.careerKey === currentCareerKey;
+  });
+  
+  logger.log(`[getCurrentCareerSaves] Found ${careerSaves.length} saves for current career`);
+  
+  // Sort: system saves first, then manual, all by timestamp desc
+  return careerSaves.sort((a, b) => {
+    const aParsed = parseCareerSlotId(a.id);
+    const bParsed = parseCareerSlotId(b.id);
+    
+    const aIsSystem = aParsed && (aParsed.slotId === 'auto' || aParsed.slotId === 'quicksave');
+    const bIsSystem = bParsed && (bParsed.slotId === 'auto' || bParsed.slotId === 'quicksave');
+    
+    if (aIsSystem && !bIsSystem) return -1;
+    if (!aIsSystem && bIsSystem) return 1;
+    
+    return b.timestamp - a.timestamp;
+  });
+}
+
+/**
  * Formats timestamp to human-readable date
  */
 export function formatSaveDate(timestamp: number): string {
@@ -769,6 +910,7 @@ export default {
   getAutosaveAge,
   getAllSaveSlots,
   getStartScreenSaves,
+  getCurrentCareerSaves,
   autoSave,
   isStorageAvailable,
   formatSaveDate,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { SaveSlot, GameState } from '../types';
-import { getAllSaveSlots, saveGame, deleteSave, loadGame, formatSaveDate } from '../services/storageService';
+import { getCurrentCareerSaves, saveGame, deleteSave, loadGame, formatSaveDate } from '../services/storageService';
 import DeleteSaveModal from './DeleteSaveModal';
 import LoadingSkeleton from './LoadingSkeleton';
 
@@ -28,22 +28,29 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
 
   // Calculate manual save slots used and available (4 manual + 1 for auto/quicksave = 5 total)
   const getManualSaveStats = () => {
-    const manualSaves = saveSlots.filter(s => s.id !== 'auto' && s.id !== 'quicksave');
+    // Filter to only count saves for current career
+    const manualSaves = saveSlots.filter(s => {
+      // Parse slot ID to check if it's system save
+      const parts = s.id.split('_');
+      const slotType = parts[parts.length - 1];
+      return slotType !== 'auto' && slotType !== 'quicksave';
+    });
     const used = manualSaves.length;
     const available = Math.max(0, 4 - used);
     return { used, available, total: 4 };
   };
 
-  // Helper function to extract save name from slot ID
+  // Helper function to extract save name from career-specific slot ID
+  // Format: {artistName}_{genre}_{slotType} -> extracts slotType and formats it
   const getSaveName = (slotId: string): string => {
-    if (slotId === 'auto') return 'Auto Save';
-    if (slotId === 'quicksave') return 'Quick Save';
-    // Format: {timestamp}_{saveName}
     const parts = slotId.split('_');
-    if (parts.length > 1) {
-      return parts.slice(1).join('_').replace(/_/g, ' ');
-    }
-    return 'Manual Save';
+    const slotType = parts[parts.length - 1];
+    
+    if (slotType === 'auto') return 'Auto Save';
+    if (slotType === 'quicksave') return 'Quick Save';
+    
+    // For manual saves, return the slot name cleaned up
+    return slotType.replace(/_/g, ' ');
   };
 
   // Generate default save name placeholder
@@ -65,15 +72,16 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
       return loadPromiseRef.current;
     }
 
-    console.log('[SaveLoadPanel] Loading save slots...');
+    console.log('[SaveLoadPanel] Loading save slots for current career...');
     setLoading(true);
     setError('');
     loadingRef.current = true;
     
     const promise = (async () => {
       try {
-        const slots = await getAllSaveSlots();
-        console.log('[SaveLoadPanel] Loaded', slots.length, 'save slots:', slots);
+        // Only load saves for the current career being played
+        const slots = await getCurrentCareerSaves(currentGameState);
+        console.log('[SaveLoadPanel] Loaded', slots.length, 'save slots for current career:', slots);
         setSaveSlots(slots);
         return slots;
       } catch (err) {

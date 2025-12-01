@@ -30,8 +30,10 @@ export const useKeyboardShortcuts = (shortcuts: KeyboardShortcutConfig[]) => {
 
         if (ctrlMatch && altMatch && shiftMatch && keyMatch) {
           // Always prevent default for modifier key combinations to avoid browser shortcuts
-          if (shortcut.ctrl || shortcut.alt || shortcut.shift) {
+          // Also prevent default for Escape to ensure it closes modals
+          if (shortcut.ctrl || shortcut.alt || shortcut.shift || shortcut.key.toLowerCase() === 'escape') {
             event.preventDefault();
+            event.stopPropagation();
           }
           shortcut.handler();
           break;

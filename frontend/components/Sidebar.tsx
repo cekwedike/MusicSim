@@ -222,10 +222,10 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         {/* Spacer to push shortcuts button to bottom */}
         <div className="flex-1" />
 
-        {/* Keyboard Shortcuts Button */}
+        {/* Keyboard Shortcuts Button - Hidden on mobile since keyboard shortcuts don't work on mobile */}
         <button
           onClick={() => setShowShortcutsModal(true)}
-          className="px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-[#3D1820] flex lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0"
+          className="hidden lg:flex px-2 py-2 lg:p-3 rounded-lg transition-all duration-200 group text-gray-400 hover:text-white hover:bg-[#3D1820] lg:justify-center items-center gap-2 lg:gap-0 mx-1 lg:mx-0"
           aria-label="View keyboard shortcuts"
           title="Keyboard Shortcuts"
         >
@@ -234,11 +234,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
             </svg>
           </div>
-
-          {/* Label text - visible on mobile, hidden on desktop */}
-          <span className="lg:hidden text-xs sm:text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-            Shortcuts
-          </span>
 
           {/* Hover tooltip - hidden on mobile, visible on desktop */}
           <div className="

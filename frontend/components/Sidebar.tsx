@@ -307,7 +307,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
         />
         <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#2D1115] border border-[#4D1F2A] rounded-lg shadow-2xl p-4 min-w-[300px] z-[70]">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-white font-semibold text-base">⌨️ Keyboard Shortcuts</h3>
+            <h3 className="text-white font-semibold text-base">Keyboard Shortcuts</h3>
             <button 
               onClick={() => setShowShortcutsModal(false)}
               className="text-gray-400 hover:text-white transition-colors"
@@ -317,17 +317,67 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
               </svg>
             </button>
           </div>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center justify-between py-2">
-              <span className="text-gray-300">Quick Save</span>
-              <kbd className="bg-[#4D1F2A] px-3 py-1.5 rounded font-mono text-gray-200 border border-[#5D2F3A]">Ctrl+S</kbd>
+          <div className="space-y-2 text-sm max-h-[60vh] overflow-y-auto">
+            {/* Game Actions */}
+            <div className="mb-2">
+              <div className="text-xs font-semibold text-gray-500 mb-1.5">GAME</div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Quick Save</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+S</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Advance Time (1 week)</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Space</kbd>
+              </div>
             </div>
-            <div className="flex items-center justify-between py-2">
-              <span className="text-gray-300">Close Modals/Panels</span>
-              <kbd className="bg-[#4D1F2A] px-3 py-1.5 rounded font-mono text-gray-200 border border-[#5D2F3A]">Esc</kbd>
+
+            {/* Panels */}
+            <div className="mb-2">
+              <div className="text-xs font-semibold text-gray-500 mb-1.5">PANELS</div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Save & Load</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+L</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Profile</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+P</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Management Hub</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+M</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Learning Hub</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+H</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Tutorial</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+T</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Audio Settings</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+A</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Career Analytics</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Ctrl+K</kbd>
+              </div>
+            </div>
+
+            {/* General */}
+            <div>
+              <div className="text-xs font-semibold text-gray-500 mb-1.5">GENERAL</div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Close Modals/Panels</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">Esc</kbd>
+              </div>
+              <div className="flex items-center justify-between py-1.5">
+                <span className="text-gray-300">Show Shortcuts</span>
+                <kbd className="bg-[#4D1F2A] px-2.5 py-1 rounded font-mono text-xs text-gray-200 border border-[#5D2F3A]">?</kbd>
+              </div>
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-[#4D1F2A] text-xs text-gray-400 text-center">
+          <div className="mt-3 pt-3 border-t border-[#4D1F2A] text-xs text-gray-400 text-center">
             Game auto-saves every 5 minutes & when closing
           </div>
         </div>

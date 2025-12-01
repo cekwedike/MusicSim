@@ -2152,16 +2152,25 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [saveLoadPanelKey, setSaveLoadPanelKey] = useState(0);
 
-    // Keyboard shortcuts state
+    // Modal states (declared before keyboard shortcuts to avoid scoping issues)
     const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+    const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
+    const [welcomeArtistName, setWelcomeArtistName] = useState('');
+    const [hasAutoLoaded, setHasAutoLoaded] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showAudioUnlock, setShowAudioUnlock] = useState(false);
+    const [hasShownAudioPrompt, setHasShownAudioPrompt] = useState(false);
 
     // Keyboard shortcuts for better UX
     useKeyboardShortcuts([
         {
             key: 'Escape',
             handler: () => {
-                // Close modals and sidebar (check all modal states)
+                // Close modals and sidebar in priority order (check all modal states)
                 if (showShortcutsHelp) setShowShortcutsHelp(false);
+                else if (showLoginModal) setShowLoginModal(false);
+                else if (showWelcomeDialog) setShowWelcomeDialog(false);
+                else if (showAudioUnlock) setShowAudioUnlock(false);
                 else if (showMistakeWarning) setShowMistakeWarning(false);
                 else if (state.modal !== 'none') dispatch({ type: 'CLOSE_MODAL' });
                 else if (activeSidebarView) setActiveSidebarView(null);
@@ -2275,18 +2284,6 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
             description: 'Show Keyboard Shortcuts'
         }
     ]);
-
-    // Welcome dialog state
-    const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
-    const [welcomeArtistName, setWelcomeArtistName] = useState('');
-    const [hasAutoLoaded, setHasAutoLoaded] = useState(false); // Prevent double-loading
-
-    // Login modal state for guest registration
-    const [showLoginModal, setShowLoginModal] = useState(false);
-
-    // Audio unlock prompt state
-    const [showAudioUnlock, setShowAudioUnlock] = useState(false);
-    const [hasShownAudioPrompt, setHasShownAudioPrompt] = useState(false);
 
     // Load audio prompt state from IndexedDB
     useEffect(() => {
@@ -3275,10 +3272,11 @@ const AuthenticatedApp: React.FC = () => {
     const [wasGuestMode, setWasGuestMode] = useState(false);
     const [showGuestDataModal, setShowGuestDataModal] = useState(false);
     const [guestDataInfo, setGuestDataInfo] = useState<{ saveCount: number; hasCloudData: boolean } | null>(null);
+    const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
     // Start with landing hidden if user is already authenticated (persistent login)
     const [showLanding, setShowLanding] = useState(!isAuthenticated);
     // Local control for keyboard shortcuts help modal (previously referenced but not defined)
-    const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+    // Note: showShortcutsHelp is already defined above near line 2156
 
     // Detect guest-to-authenticated transition and check for guest data
     useEffect(() => {

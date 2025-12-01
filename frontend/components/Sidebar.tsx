@@ -328,7 +328,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange, hasUnseenAc
             </div>
           </div>
           <div className="mt-4 pt-3 border-t border-[#4D1F2A] text-xs text-gray-400 text-center">
-            💡 Game auto-saves every 5 minutes & when closing
+            Game auto-saves every 5 minutes & when closing
           </div>
         </div>
       </>

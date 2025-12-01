@@ -6,7 +6,7 @@ import storage from './dbStorage';
 import { logger } from '../utils/logger';
 
 const AUTOSAVE_EXPIRATION_MS = 30 * 60 * 1000; // 30 minutes (only for 'auto' slot)
-const MAX_SAVE_SLOTS = 5; // Maximum number of manual save slots allowed per user
+const MAX_SAVE_SLOTS = 4; // Maximum number of manual save slots (1 slot reserved for auto/quicksave)
 
 /**
  * Serialize GameState for storage (convert Dates to ISO strings)
@@ -671,8 +671,8 @@ export async function getStartScreenSaves(): Promise<SaveSlot[]> {
   const autoSave = allSlots.find(s => s.id === 'auto');
   const quickSave = allSlots.find(s => s.id === 'quicksave');
   
+  // If both auto and quicksave exist, keep only the newer one
   if (autoSave && quickSave) {
-    // Both exist - keep only the newer one
     if (autoSave.timestamp > quickSave.timestamp) {
       logger.log('[getStartScreenSaves] Showing autosave (newer than quicksave)');
       return allSlots.filter(s => s.id !== 'quicksave');
@@ -682,6 +682,7 @@ export async function getStartScreenSaves(): Promise<SaveSlot[]> {
     }
   }
   
+  // Return all saves (including the single auto/quicksave if it exists)
   return allSlots;
 }
 

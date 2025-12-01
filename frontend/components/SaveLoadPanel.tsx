@@ -26,12 +26,12 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
   const loadingRef = useRef(false);
   const loadPromiseRef = useRef<Promise<SaveSlot[]> | null>(null);
 
-  // Calculate manual save slots used and available
+  // Calculate manual save slots used and available (4 manual + 1 for auto/quicksave = 5 total)
   const getManualSaveStats = () => {
     const manualSaves = saveSlots.filter(s => s.id !== 'auto' && s.id !== 'quicksave');
     const used = manualSaves.length;
-    const available = Math.max(0, 5 - used);
-    return { used, available, total: 5 };
+    const available = Math.max(0, 4 - used);
+    return { used, available, total: 4 };
   };
 
   // Helper function to extract save name from slot ID
@@ -233,7 +233,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
               <span className="text-sm font-bold text-white">{getManualSaveStats().used} / {getManualSaveStats().total}</span>
             </div>
             <div className="flex gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
+              {Array.from({ length: 4 }).map((_, i) => (
                 <div
                   key={i}
                   className={`flex-1 h-2 rounded ${
@@ -300,7 +300,7 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
           )}
 
           <div className="text-sm text-gray-400 bg-[#3D1820]/30 p-3 rounded-lg">
-            <p className="font-medium text-gray-300 mb-1">💡 Save Tips</p>
+            <p className="font-medium text-gray-300 mb-1">Save Tips</p>
             <p className="text-xs mb-1"><strong>Auto-save:</strong> Happens every 5 minutes</p>
             <p className="text-xs mb-1"><strong>Quick save (Ctrl+S):</strong> One-slot instant save</p>
             <p className="text-xs"><strong>Manual save:</strong> Create backups before risky decisions!</p>

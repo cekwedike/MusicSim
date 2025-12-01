@@ -1627,9 +1627,8 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
             try {
                 // Use smart filtering for start screen - shows newer of autosave/quicksave
                 const slots = await getStartScreenSaves();
-                // Filter out the system save that was kept (auto or quicksave)
-                // We only show manual saves in the list, system saves shown separately
-                setSaveSlots(slots.filter(slot => slot.id !== 'auto' && slot.id !== 'quicksave'));
+                // Show ALL saves including auto/quicksave
+                setSaveSlots(slots);
             } catch (error) {
                 console.error('Failed to load save slots:', error);
                 setSaveSlots([]);
@@ -1738,38 +1737,15 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                     </div>
                 )}
 
-                {autosaveExists && (
-                    <button
-                        onClick={handleContinue}
-                        disabled={loadingSlotId === 'auto'}
-                        className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-3 px-6 rounded-lg hover:scale-105 transition-transform text-base shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none relative"
-                    >
-                        {loadingSlotId === 'auto' ? (
-                            <div className="flex items-center justify-center gap-2">
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                <span>Loading...</span>
-                            </div>
-                        ) : (
-                            <>
-                                Continue Game
-                                {autosaveAge !== null && (
-                                    <span className="block text-xs mt-0.5 opacity-75">
-                                        Last saved {autosaveAge} {autosaveAge === 1 ? 'minute' : 'minutes'} ago
-                                        {autosaveAge >= 8 && ' (expires soon!)'}
-                                    </span>
-                                )}
-                            </>
-                        )}
-                    </button>
-                )}
+                {/* Continue Game button removed - auto/quicksave now shown in the list below */}
 
                 {/* Existing Save Slots */}
                 {!loadingSaves && saveSlots.length > 0 && (
                     <div className="mt-4">
                         <h3 className="text-base font-semibold text-gray-300 mb-3 flex items-center justify-between">
-                            <span>Your Careers ({saveSlots.length}/5)</span>
+                            <span>Your Careers ({saveSlots.length})</span>
                             <div className="hidden sm:flex text-xs text-gray-500">
-                                <span>Click to continue</span>
+                                <span>Click to continue | 4 manual + 1 auto/quick slot</span>
                             </div>
                         </h3>
 
@@ -1782,6 +1758,18 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         disabled={loadingSlotId === slot.id || deletingSlotId === slot.id}
                                         className="w-full bg-[#2D1115]/60 border border-[#3D1820] hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-red-500/10 disabled:opacity-60 disabled:cursor-not-allowed relative"
                                     >
+                                        {/* Save Type Badge */}
+                                        {slot.id === 'auto' && (
+                                            <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded font-medium">
+                                                AUTO
+                                            </div>
+                                        )}
+                                        {slot.id === 'quicksave' && (
+                                            <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded font-medium">
+                                                QUICK
+                                            </div>
+                                        )}
+                                        
                                         {/* Loading Overlay */}
                                         {loadingSlotId === slot.id && (
                                             <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
@@ -1856,17 +1844,19 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                     </div>
                                 </button>
                                 
-                                {/* Delete Button */}
-                                <button
-                                    onClick={(e) => handleDeleteSave(slot.id, e)}
-                                    disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
-                                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600/80 hover:bg-red-600 text-white p-1.5 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                                    title="Delete save"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
+                                {/* Delete Button - only for manual saves */}
+                                {slot.id !== 'auto' && slot.id !== 'quicksave' && (
+                                    <button
+                                        onClick={(e) => handleDeleteSave(slot.id, e)}
+                                        disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
+                                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-600/80 hover:bg-red-600 text-white p-1.5 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                                        title="Delete save"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                )}
                             </div>
                             ))}
                         </div>
@@ -1880,6 +1870,18 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         disabled={loadingSlotId === slot.id || deletingSlotId === slot.id}
                                         className="w-full bg-[#2D1115]/60 border border-gray-700 hover:border-red-400 hover:bg-[#2D1115]/80 text-left p-3 rounded-lg transition-all duration-200 active:scale-[0.98] group disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none relative"
                                     >
+                                        {/* Save Type Badge */}
+                                        {slot.id === 'auto' && (
+                                            <div className="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
+                                                AUTO
+                                            </div>
+                                        )}
+                                        {slot.id === 'quicksave' && (
+                                            <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
+                                                QUICK
+                                            </div>
+                                        )}
+                                        
                                         {/* Loading Overlay */}
                                         {loadingSlotId === slot.id && (
                                             <div className="absolute inset-0 bg-[#1A0A0F]/80 rounded-xl flex items-center justify-center">
@@ -1955,17 +1957,19 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         </div>
                                     </button>
                                     
-                                    {/* Delete Button for Mobile */}
-                                    <button
-                                        onClick={(e) => handleDeleteSave(slot.id, e)}
-                                        disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
-                                        className="absolute top-2 right-2 bg-red-600/90 hover:bg-red-600 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                                        title="Delete save"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
+                                    {/* Delete Button for Mobile - only for manual saves */}
+                                    {slot.id !== 'auto' && slot.id !== 'quicksave' && (
+                                        <button
+                                            onClick={(e) => handleDeleteSave(slot.id, e)}
+                                            disabled={deletingSlotId === slot.id || loadingSlotId === slot.id}
+                                            className="absolute top-2 right-2 bg-red-600/90 hover:bg-red-600 text-white p-2 rounded disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                                            title="Delete save"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    )}
                                 </div>
                             ))}
                         </div>

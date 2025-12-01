@@ -1742,11 +1742,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
     };
 
     return (
-        <div className="text-center p-4 sm:p-6 flex flex-col items-center justify-center h-full animate-fade-in">
+        <div className="text-center p-4 sm:p-6 flex flex-col items-center justify-start min-h-full animate-fade-in overflow-y-auto">
             <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500 mb-2">Welcome to MusicSim</h2>
             <p className="text-sm sm:text-base text-gray-300 max-w-md mb-4">Your journey in the music industry starts now. Make wise decisions to build a legendary career.</p>
 
-            <div className="space-y-4 w-full max-w-2xl">
+            <div className="space-y-4 w-full max-w-2xl pb-8">
                 {/* Error Display */}
                 {loadingError && (
                     <div className="bg-red-900/20 border border-red-500/50 rounded-lg p-4 mb-4">

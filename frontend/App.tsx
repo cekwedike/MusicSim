@@ -6,6 +6,7 @@ import { AudioProvider } from './contexts/AudioContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { LoginModal } from './components/LoginModal';
 import GuestDataMergeModal from './components/GuestDataMergeModal';
+import ShortcutsModal from './components/ShortcutsModal';
 import LandingPage from './components/LandingPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import { logger } from './utils/logger';
@@ -1769,6 +1770,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                                 QUICK
                                             </div>
                                         )}
+                                        {slot.id !== 'auto' && slot.id !== 'quicksave' && (
+                                            <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-medium">
+                                                MANUAL
+                                            </div>
+                                        )}
                                         
                                         {/* Loading Overlay */}
                                         {loadingSlotId === slot.id && (
@@ -1879,6 +1885,11 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                                         {slot.id === 'quicksave' && (
                                             <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
                                                 QUICK
+                                            </div>
+                                        )}
+                                        {slot.id !== 'auto' && slot.id !== 'quicksave' && (
+                                            <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded font-medium z-10">
+                                                MANUAL
                                             </div>
                                         )}
                                         
@@ -2088,17 +2099,21 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
     const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
     const [saveLoadPanelKey, setSaveLoadPanelKey] = useState(0);
 
+    // Keyboard shortcuts state
+    const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
+
     // Keyboard shortcuts for better UX
     useKeyboardShortcuts([
         {
             key: 'Escape',
             handler: () => {
                 // Close modals and sidebar
-                if (showMistakeWarning) setShowMistakeWarning(false);
-                if (activeSidebarView) setActiveSidebarView(null);
-                if (isMobileSidebarOpen) setIsMobileSidebarOpen(false);
+                if (showShortcutsHelp) setShowShortcutsHelp(false);
+                else if (showMistakeWarning) setShowMistakeWarning(false);
+                else if (activeSidebarView) setActiveSidebarView(null);
+                else if (isMobileSidebarOpen) setIsMobileSidebarOpen(false);
             },
-            description: 'Close modals'
+            description: 'Close modals/panels'
         },
         {
             key: 's',
@@ -2109,14 +2124,101 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     try {
                         await saveGame(state, 'quicksave', isGuestMode);
                         console.log('Quick save created: quicksave');
-                        toast.show('Quick save successful!', 'success', 2500);
+                        toast.show('Quick Save successful!', 'success', 2500);
                     } catch (error) {
                         console.error('Quick save failed:', error);
-                        toast.show('Quick save failed. Please try again.', 'error', 4000);
+                        toast.show('Quick Save failed. Please try again.', 'error', 4000);
                     }
                 }
             },
-            description: 'Quick save'
+            description: 'Quick Save'
+        },
+        {
+            key: 'l',
+            ctrl: true,
+            handler: () => {
+                if (state.status === 'playing') {
+                    setActiveSidebarView(activeSidebarView === 'saveload' ? null : 'saveload');
+                }
+            },
+            description: 'Open Save & Load'
+        },
+        {
+            key: 'p',
+            ctrl: true,
+            handler: () => {
+                if (state.status === 'playing') {
+                    setActiveSidebarView(activeSidebarView === 'profile' ? null : 'profile');
+                }
+            },
+            description: 'Open Profile'
+        },
+        {
+            key: 'm',
+            ctrl: true,
+            handler: () => {
+                if (state.status === 'playing') {
+                    setActiveSidebarView(activeSidebarView === 'achievements' ? null : 'achievements');
+                }
+            },
+            description: 'Open Management Hub'
+        },
+        {
+            key: 'h',
+            ctrl: true,
+            handler: () => {
+                if (state.status === 'playing') {
+                    setActiveSidebarView(activeSidebarView === 'learning' ? null : 'learning');
+                }
+            },
+            description: 'Open Learning Hub'
+        },
+        {
+            key: 't',
+            ctrl: true,
+            handler: () => {
+                if (state.status === 'playing') {
+                    setActiveSidebarView(activeSidebarView === 'tutorial' ? null : 'tutorial');
+                }
+            },
+            description: 'Open Tutorial'
+        },
+        {
+            key: 'a',
+            ctrl: true,
+            handler: () => {
+                if (state.status === 'playing') {
+                    setActiveSidebarView(activeSidebarView === 'audio' ? null : 'audio');
+                }
+            },
+            description: 'Open Audio Settings'
+        },
+        {
+            key: 'k',
+            ctrl: true,
+            handler: () => {
+                if (state.status === 'playing') {
+                    setActiveSidebarView(activeSidebarView === 'statistics' ? null : 'statistics');
+                }
+            },
+            description: 'Open Career Analytics'
+        },
+        {
+            key: ' ',
+            handler: () => {
+                // Advance time (Space bar) - only if no modal/panel open
+                if (state.status === 'playing' && !activeSidebarView && !showMistakeWarning) {
+                    dispatch({ type: 'DISMISS_OUTCOME' });
+                }
+            },
+            description: 'Advance Time (1 week)'
+        },
+        {
+            key: '?',
+            handler: () => {
+                setShowShortcutsHelp(true);
+            },
+            description: 'Show Keyboard Shortcuts'
         }
     ]);
 
@@ -3121,6 +3223,8 @@ const AuthenticatedApp: React.FC = () => {
     const [guestDataInfo, setGuestDataInfo] = useState<{ saveCount: number; hasCloudData: boolean } | null>(null);
     // Start with landing hidden if user is already authenticated (persistent login)
     const [showLanding, setShowLanding] = useState(!isAuthenticated);
+    // Local control for keyboard shortcuts help modal (previously referenced but not defined)
+    const [showShortcutsHelp, setShowShortcutsHelp] = useState(false);
 
     // Detect guest-to-authenticated transition and check for guest data
     useEffect(() => {
@@ -3314,6 +3418,12 @@ const AuthenticatedApp: React.FC = () => {
                     hasCloudData={guestDataInfo.hasCloudData}
                 />
             )}
+
+            {/* Keyboard Shortcuts Help Modal */}
+            <ShortcutsModal
+                isOpen={showShortcutsHelp}
+                onClose={() => setShowShortcutsHelp(false)}
+            />
         </div>
     );
 };

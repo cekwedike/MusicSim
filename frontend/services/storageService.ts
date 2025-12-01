@@ -661,9 +661,11 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
 }
 
 /**
- * Get save slots for start screen with smart filtering:
- * Shows only the NEWER of autosave/quicksave (not both)
- * This gives users 1 system save slot + 4 manual save slots
+ * Get save slots for start screen with intelligent filtering:
+ * - If quicksave and autosave have identical game state → show only "Quick Save"
+ * - If they differ → show both (most recent first)
+ * - System saves (auto/quick) always listed before manual saves
+ * This gives users up to 2 system save slots + 4 manual save slots
  */
 export async function getStartScreenSaves(): Promise<SaveSlot[]> {
   const allSlots = await getAllSaveSlots();
@@ -671,14 +673,51 @@ export async function getStartScreenSaves(): Promise<SaveSlot[]> {
   const autoSave = allSlots.find(s => s.id === 'auto');
   const quickSave = allSlots.find(s => s.id === 'quicksave');
   
-  // If both exist, ALWAYS prioritize quicksave (user's intentional save) over autosave
+  let filteredSlots = [...allSlots];
+  
+  // If both exist, compare actual game state data
   if (autoSave && quickSave) {
-    logger.log('[getStartScreenSaves] Both exist - showing quicksave, hiding autosave');
-    return allSlots.filter(s => s.id !== 'auto');
+    try {
+      // Load both save states to compare
+      const autoState = await loadGame('auto');
+      const quickState = await loadGame('quicksave');
+      
+      if (autoState && quickState) {
+        // Compare key game state properties to determine if they're the same
+        const sameData = (
+          autoState.currentDate.getTime() === quickState.currentDate.getTime() &&
+          autoState.playerStats.cash === quickState.playerStats.cash &&
+          autoState.playerStats.fame === quickState.playerStats.fame &&
+          autoState.playerStats.careerProgress === quickState.playerStats.careerProgress
+        );
+        
+        if (sameData) {
+          // Identical data - show Quick Save only (user's intentional save)
+          logger.log('[getStartScreenSaves] Auto and Quick saves are identical - showing Quick Save only');
+          filteredSlots = allSlots.filter(s => s.id !== 'auto');
+        } else {
+          // Different data - show both (most recent first happens naturally via sort)
+          logger.log('[getStartScreenSaves] Auto and Quick saves differ - showing both');
+        }
+      }
+    } catch (error) {
+      logger.warn('[getStartScreenSaves] Error comparing saves:', error);
+      // On error, show both to be safe
+    }
   }
   
-  // If only one exists, show it. If neither exists, show manual saves only
-  return allSlots;
+  // Sort: system saves (auto/quick) first, then manual saves, all by timestamp desc
+  return filteredSlots.sort((a, b) => {
+    const aIsSystem = a.id === 'auto' || a.id === 'quicksave';
+    const bIsSystem = b.id === 'auto' || b.id === 'quicksave';
+    
+    // System saves always come first
+    if (aIsSystem && !bIsSystem) return -1;
+    if (!aIsSystem && bIsSystem) return 1;
+    
+    // Within same category, sort by timestamp (newest first)
+    return b.timestamp - a.timestamp;
+  });
 }
 
 /**

@@ -369,6 +369,11 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                             QUICK
                           </span>
                         )}
+                        {slot.id !== 'auto' && slot.id !== 'quicksave' && (
+                          <span className="bg-purple-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
+                            MANUAL
+                          </span>
+                        )}
                       </div>
                       <p className="text-sm text-gray-300 mb-0.5">{slot.artistName}</p>
                       <p className="text-xs text-gray-400">{slot.genre}</p>

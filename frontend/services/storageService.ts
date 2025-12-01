@@ -556,12 +556,12 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
         ]);
 
         if (response.success && response.data) {
-          console.log('[storageService] Backend returned', response.data.saves.length, 'saves');
+          logger.log('[storageService] Backend returned', response.data.saves.length, 'saves');
           
           // Clean up any orphaned local saves (deleted on another device) - non-blocking
           const backendSaveIds = response.data.saves.map((s: any) => s.slotName);
           cleanOrphanedLocalSaves(backendSaveIds).catch(err => 
-            console.error('[storageService] Failed to clean orphaned saves:', err)
+            logger.error('[storageService] Failed to clean orphaned saves:', err)
           );
 
           // OPTIMIZATION: Use metadata from getAllSaves (now includes stats and date)
@@ -573,7 +573,7 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
               const startDate = save.startDate ? new Date(save.startDate) : new Date();
               const gd = toGameDate(currentDate, startDate);
 
-              console.log(`[storageService] Processing backend save ${save.slotName}:`, {
+              logger.log(`[storageService] Processing backend save ${save.slotName}:`, {
                 weeksPlayed: save.weeksPlayed,
                 currentDate: save.currentDate,
                 startDate: save.startDate,
@@ -598,41 +598,41 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
                 careerProgress: save.playerStats?.careerProgress || 0 // Use actual career progress from playerStats
               };
             } catch (error) {
-              console.warn(`[storageService] Failed to process save ${save.slotName}:`, error);
+              logger.warn(`[storageService] Failed to process save ${save.slotName}:`, error);
               return null;
             }
           }).filter((slot: any) => slot !== null);
 
           saveSlots.push(...backendSlots as SaveSlot[]);
-          console.log('[storageService] Added', saveSlots.length, 'backend saves (with metadata)');
+          logger.log('[storageService] Added', saveSlots.length, 'backend saves (with metadata)');
         }
       } catch (error) {
-        console.warn('[storageService] Backend save load timed out, using localStorage:', error);
+        logger.warn('[storageService] Backend save load timed out, using localStorage:', error);
       }
     } else {
-      console.log('[storageService] Guest mode - loading from IndexedDB only');
+      logger.log('[storageService] Guest mode - loading from IndexedDB only');
     }
 
     // Always check IndexedDB as well
     const localSaves = await loadLocalSaves();
-    console.log('[storageService] IndexedDB has', Object.keys(localSaves).length, 'saves:', Object.keys(localSaves));
+    logger.log('[storageService] IndexedDB has', Object.keys(localSaves).length, 'saves:', Object.keys(localSaves));
 
     for (const [slotId, saveData] of Object.entries(localSaves)) {
       // Skip if already added from backend
       if (saveSlots.find(slot => slot.id === slotId)) {
-        console.log('[storageService] Skipping', slotId, '- already loaded from backend');
+        logger.log('[storageService] Skipping', slotId, '- already loaded from backend');
         continue;
       }
 
       // Check if autosave is expired (only for LOCAL autosave, not backend ones)
       if (slotId === 'auto' && isAutosaveExpired(saveData.timestamp)) {
-        console.log('[storageService] Local autosave expired, cleaning up');
+        logger.log('[storageService] Local autosave expired, cleaning up');
         // Clean up expired LOCAL autosave
         await deleteSave(slotId);
         continue;
       }
 
-      console.log('[storageService] Processing IndexedDB save:', slotId);
+      logger.log('[storageService] Processing IndexedDB save:', slotId);
       // Deserialize the state to convert ISO strings back to Date objects
       const state = deserializeGameState(saveData.state);
       const gdLocal = toGameDate(state.currentDate, state.startDate);
@@ -649,13 +649,13 @@ export async function getAllSaveSlots(): Promise<SaveSlot[]> {
       });
     }
 
-    console.log('[storageService] Total saves to return:', saveSlots.length);
-    console.log('[storageService] Save IDs:', saveSlots.map(s => s.id));
+    logger.log('[storageService] Total saves to return:', saveSlots.length);
+    logger.log('[storageService] Save IDs:', saveSlots.map(s => s.id));
 
     // Sort by timestamp (newest first)
     return saveSlots.sort((a, b) => b.timestamp - a.timestamp);
   } catch (error) {
-    console.error('[storageService] Failed to get save slots:', error);
+    logger.error('[storageService] Failed to get save slots:', error);
     return [];
   }
 }
@@ -674,10 +674,10 @@ export async function getStartScreenSaves(): Promise<SaveSlot[]> {
   if (autoSave && quickSave) {
     // Both exist - keep only the newer one
     if (autoSave.timestamp > quickSave.timestamp) {
-      console.log('[getStartScreenSaves] Showing autosave (newer than quicksave)');
+      logger.log('[getStartScreenSaves] Showing autosave (newer than quicksave)');
       return allSlots.filter(s => s.id !== 'quicksave');
     } else {
-      console.log('[getStartScreenSaves] Showing quicksave (newer than autosave)');
+      logger.log('[getStartScreenSaves] Showing quicksave (newer than autosave)');
       return allSlots.filter(s => s.id !== 'auto');
     }
   }
@@ -692,7 +692,7 @@ export const autoSave = async (state: GameState, isGuestMode: boolean = false): 
   try {
     await saveGame(state, 'auto', isGuestMode);
   } catch (error) {
-    console.warn('Auto-save failed:', error);
+    logger.warn('Auto-save failed:', error);
   }
 };
 
@@ -776,7 +776,7 @@ export async function getGuestData(): Promise<{ saves: any[]; statistics: any } 
       statistics
     };
   } catch (error) {
-    console.error('[storageService] Error getting guest data:', error);
+    logger.error('[storageService] Error getting guest data:', error);
     return null;
   }
 }
@@ -794,14 +794,14 @@ export async function clearGuestData(clearSaves: boolean = true, clearStatistics
 
     if (clearSaves) {
       await storage.removeItem('musicsim_saves');
-      console.log('[storageService] Guest saves cleared from IndexedDB');
+      logger.log('[storageService] Guest saves cleared from IndexedDB');
     }
 
     if (clearStatistics) {
       await storage.removeItem('musicsim_statistics');
-      console.log('[storageService] Guest statistics cleared from IndexedDB');
+      logger.log('[storageService] Guest statistics cleared from IndexedDB');
     }
   } catch (error) {
-    console.error('[storageService] Error clearing guest data:', error);
+    logger.error('[storageService] Error clearing guest data:', error);
   }
 }

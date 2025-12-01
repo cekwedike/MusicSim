@@ -1,7 +1,16 @@
 # MusicSim Test Plan
 
+_Version: 2.0 | Last Updated: December 1, 2025_
+
 ## 1. Objectives
-Provide evidence of robust quality assurance across functionality, data variation, security, performance, accessibility, usability, and deployment verification to satisfy rubric requirements for Testing Results and Deployment.
+
+Provide comprehensive quality assurance across:
+- **Functionality**: Core gameplay and business logic
+- **Data Integrity**: Storage, synchronization, and migration
+- **Security**: Authentication, authorization, and data protection
+- **Performance**: Load times, bundle sizes, and API response times
+- **Accessibility**: WCAG 2.1 compliance and keyboard navigation
+- **Production Readiness**: Deployment verification and monitoring
 
 ## 2. Scope & Coverage Matrix
 | Layer | Areas | Tools | Goals |
@@ -12,7 +21,7 @@ Provide evidence of robust quality assurance across functionality, data variatio
 | Component Interaction | Modals, forms, scenario decisions | RTL user events | Ensure accessible interactive flows |
 | E2E / Cross‑Browser | Core user journey (register → play → save → view analytics) | Playwright (Chromium, Firefox, WebKit) | Pass across browsers + responsive breakpoints (360, 768, 1024, 1440) |
 | Performance | Key endpoints `/api/auth/login`, `/api/game/save`, `/api/analytics/overview` | k6 or autocannon | P95 < 600ms dev baseline; record comparisons |
-| Security Negative | Unauthorized access, JWT tamper, rate limit, input validation | Jest + Supertest | All blocked; proper 401/403/429 |
+| Security Negative | Unauthorized access, token tampering, rate limit, input validation | Jest + Supertest | All blocked; proper 401/403/429 |
 | Accessibility | Landmark roles, focus order, contrast, ARIA | axe-core + manual | Zero critical violations; document moderate/minor |
 | Deployment Verification | Health check, migrations applied, sample save works post deploy | Smoke script | All green before marking release |
 

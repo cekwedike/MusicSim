@@ -32,8 +32,8 @@ const swaggerDefinition = {
       bearerAuth: {
         type: 'http',
         scheme: 'bearer',
-        bearerFormat: 'JWT',
-        description: 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer {token}"'
+        bearerFormat: 'Supabase',
+        description: 'Supabase OAuth token. Obtain via Google OAuth login. Example: "Authorization: Bearer {supabase_access_token}"'
       }
     },
     schemas: {

@@ -4,6 +4,7 @@
  */
 
 import storage, { migrateFromLocalStorage, hasMigrated } from './dbStorage';
+import { logger } from '../utils/logger';
 
 let migrationPromise: Promise<void> | null = null;
 
@@ -22,14 +23,14 @@ export async function initializeMigration(): Promise<void> {
       const alreadyMigrated = await hasMigrated();
       
       if (!alreadyMigrated) {
-        console.log('[Migration] Starting data migration from localStorage to IndexedDB...');
+        logger.log('[Migration] Starting data migration from localStorage to IndexedDB...');
         await migrateFromLocalStorage();
-        console.log('[Migration] Migration completed successfully');
+        logger.log('[Migration] Migration completed successfully');
       } else {
-        console.log('[Migration] Data already migrated, skipping');
+        logger.log('[Migration] Data already migrated, skipping');
       }
     } catch (error) {
-      console.error('[Migration] Failed to migrate data:', error);
+      logger.error('[Migration] Failed to migrate data:', error);
       // Don't throw - app should still work with localStorage fallback
     }
   })();

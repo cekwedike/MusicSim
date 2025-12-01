@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { supabase } from './supabase';
+import { logger } from '../utils/logger';
 
 // Type-safe environment variable access
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001/api';
@@ -44,7 +45,7 @@ api.interceptors.response.use(
     );
 
     if (isActuallyOffline) {
-      console.log('Offline mode detected - request queued');
+      logger.log('Offline mode detected - request queued');
       // Queue request for later sync
       queueOfflineRequest(error.config);
       return Promise.reject({
@@ -55,7 +56,7 @@ api.interceptors.response.use(
 
     // Handle timeout errors (don't queue these)
     if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
-      console.error('Request timeout:', error.message);
+      logger.error('Request timeout:', error.message);
       return Promise.reject({
         timeout: true,
         message: 'Request timed out. Please try again.'
@@ -64,7 +65,7 @@ api.interceptors.response.use(
 
     // Handle CORS and other network errors (don't queue these)
     if (!error.response) {
-      console.error('Network error (not offline):', error.message, error.code);
+      logger.error('Network error (not offline):', error.message, error.code);
       return Promise.reject({
         networkError: true,
         message: error.message || 'Network error - please check your connection'
@@ -73,19 +74,19 @@ api.interceptors.response.use(
 
     // Handle authentication errors
     if (error.response?.status === 401) {
-      console.error('Authentication error (401):', error.config?.url, error.response?.data);
+      logger.error('Authentication error (401):', error.config?.url, error.response?.data);
 
       // Don't auto-sign out if the error message indicates the token is valid but user profile is missing
       const errorMessage = error.response?.data?.message?.toLowerCase() || '';
       if (errorMessage.includes('user not found') || errorMessage.includes('profile')) {
-        console.warn('User profile not found - may need to sync profile');
+        logger.warn('User profile not found - may need to sync profile');
         // Let the calling code handle this specific case
         return Promise.reject(error);
       }
 
       // Token expired or invalid - sign out from Supabase
-      console.log('Token invalid - signing out');
-      supabase.auth.signOut().catch(console.error);
+      logger.log('Token invalid - signing out');
+      supabase.auth.signOut().catch(logger.error);
 
       // Only redirect if we're not already on the login page
       if (window.location.pathname !== '/') {
@@ -95,7 +96,7 @@ api.interceptors.response.use(
 
     // Handle server errors
     if (error.response?.status >= 500) {
-      console.error('Server error:', error.response.data);
+      logger.error('Server error:', error.response.data);
       return Promise.reject({
         serverError: true,
         message: 'Server error - please try again later'
@@ -115,7 +116,7 @@ function queueOfflineRequest(config: any) {
     // Limit queue size to prevent localStorage quota issues
     const MAX_QUEUE_SIZE = 50;
     if (queue.length >= MAX_QUEUE_SIZE) {
-      console.warn('Offline queue full, removing oldest request');
+      logger.warn('Offline queue full, removing oldest request');
       queue.shift(); // Remove oldest request
     }
 
@@ -131,10 +132,10 @@ function queueOfflineRequest(config: any) {
   } catch (error: any) {
     // Handle quota exceeded or other localStorage errors
     if (error.name === 'QuotaExceededError' || error.code === 22) {
-      console.error('LocalStorage quota exceeded. Clearing offline queue.');
+      logger.error('LocalStorage quota exceeded. Clearing offline queue.');
       localStorage.removeItem('offline_queue'); // Clear the queue to free up space
     } else {
-      console.error('Error queuing offline request:', error);
+      logger.error('Error queuing offline request:', error);
     }
   }
 }
@@ -144,7 +145,7 @@ export function processOfflineQueue() {
   const queue = JSON.parse(localStorage.getItem('offline_queue') || '[]');
   if (queue.length === 0) return Promise.resolve();
 
-  console.log(`Processing ${queue.length} offline requests...`);
+  logger.log(`Processing ${queue.length} offline requests...`);
   
   const promises = queue.map((request: any) => {
     return api({
@@ -153,7 +154,7 @@ export function processOfflineQueue() {
       data: request.data,
       headers: request.headers
     }).catch((error) => {
-      console.error('Failed to sync offline request:', error);
+      logger.error('Failed to sync offline request:', error);
       return null; // Don't fail the entire batch
     });
   });
@@ -161,7 +162,7 @@ export function processOfflineQueue() {
   return Promise.all(promises).then(() => {
     // Clear the queue after processing
     localStorage.removeItem('offline_queue');
-    console.log('Offline queue processed successfully');
+    logger.log('Offline queue processed successfully');
   });
 }
 
@@ -169,10 +170,10 @@ export function processOfflineQueue() {
 let isOnlineEventAdded = false;
 if (!isOnlineEventAdded && typeof window !== 'undefined') {
   window.addEventListener('online', async () => {
-    console.log('Connection restored - processing offline queue and syncing saves...');
+    logger.log('Connection restored - processing offline queue and syncing saves...');
     
     // Process queued API requests first
-    await processOfflineQueue().catch(console.error);
+    await processOfflineQueue().catch(logger.error);
     
     // Then sync local saves to backend
     // Use dynamic import to avoid circular dependency
@@ -180,7 +181,7 @@ if (!isOnlineEventAdded && typeof window !== 'undefined') {
       const { syncLocalSavesToBackend } = await import('./storageService');
       await syncLocalSavesToBackend();
     } catch (error) {
-      console.error('Failed to sync local saves:', error);
+      logger.error('Failed to sync local saves:', error);
     }
   });
   isOnlineEventAdded = true;

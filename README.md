@@ -44,7 +44,7 @@ Experience the complete gameplay from artist creation through career management,
 ### Account and Authentication Features
 - **Guest Mode**: Full gameplay access without registration using secure local storage
 - **User Accounts**: Enhanced experience with cloud saves and cross-device progression
-- **JWT-based Security**: Industry-standard authentication with secure token management
+- **Supabase OAuth**: Google OAuth authentication with secure session management
 - **Progress Synchronization**: Seamless data sync across multiple devices and platforms
 - **Privacy Controls**: Comprehensive data management and privacy settings
 
@@ -55,6 +55,13 @@ Experience the complete gameplay from artist creation through career management,
 - **Mistake Prevention**: Intelligent warning system for potentially harmful decisions
 - **Accessibility Features**: Screen reader support and keyboard navigation
 - **Progressive Web App**: Installable application with offline capabilities
+
+### Performance and Production Optimization
+- **Smart Console Logging**: Development-only logging system with production-safe error handling
+- **Code Splitting**: Lazy-loaded components with Suspense boundaries for optimal load times
+- **Bundle Optimization**: Minified and tree-shaken production builds for fast delivery
+- **Service Worker Caching**: Intelligent asset caching for offline functionality
+- **Performance Monitoring**: Optimized service layer with reduced console overhead (~5% bundle reduction)
 
 ## Project Architecture
 
@@ -110,6 +117,8 @@ MusicSim/
 │   │   ├── statisticsService.ts   # Player statistics tracking
 │   │   ├── scenarioService.ts     # Scenario selection & logic
 │   │   ├── storageService.ts      # Local/cloud storage management
+│   │   ├── migrationService.ts    # Data migration utilities
+│   │   ├── dbStorage.ts           # IndexedDB storage wrapper
 │   │   └── [test files...]        # Comprehensive test coverage
 │   ├── data/                      # Game content & configuration
 │   │   ├── scenarioBank.ts        # 150+ game scenarios (6,500+ lines)
@@ -140,8 +149,10 @@ MusicSim/
 │   │   ├── sw.js                  # Service worker for PWA
 │   │   ├── manifest.json          # PWA manifest
 │   │   └── [images, icons...]     # Visual assets
+│   ├── utils/                     # Core utility functions
+│   │   └── logger.ts              # Production-safe logging utility
 │   ├── src/                       # Additional utilities
-│   │   └── utils/                 # Utility functions
+│   │   └── utils/                 # Game-specific utilities
 │   │       ├── logUtils.ts        # Game logging utilities
 │   │       └── dateUtils.ts       # Date/time utilities
 │   ├── App.tsx                    # Main application component (3,100+ lines)
@@ -168,7 +179,7 @@ MusicSim/
 │   │   ├── PlayerStatistics.js    # Player stats model
 │   │   └── index.js               # Model exports & associations
 │   ├── middleware/                # Express middleware
-│   │   ├── auth.js                # JWT authentication middleware
+│   │   ├── auth.js                # Supabase OAuth authentication middleware
 │   │   └── errorHandler.js        # Global error handling
 │   ├── config/                    # Configuration files
 │   │   ├── database.js            # Sequelize config (Supabase PostgreSQL)
@@ -241,13 +252,14 @@ MusicSim/
 - Tailwind CSS for styling
 - Lucide React for icons
 - Vitest for testing
-- Workbox for PWA capabilities
+- Workbox for PWA capabilities and service worker management
+- Custom logger utility for production-safe console management
 
 **Backend:**
 - Node.js with Express.js framework
 - PostgreSQL database via Supabase
 - Sequelize ORM for database operations
-- JWT for authentication
+- Supabase Auth for OAuth authentication
 - Passport.js for OAuth strategies
 - Jest & Supertest for API testing
 - Swagger for API documentation
@@ -315,10 +327,6 @@ VITE_API_URL=http://localhost:3001
 ```env
 # Database Connection (Supabase PostgreSQL)
 DATABASE_URL=postgresql://user:password@host:port/database
-
-# Authentication
-JWT_SECRET=your_jwt_secret_key_at_least_32_characters
-SESSION_SECRET=your_session_secret_key
 
 # Server Settings
 NODE_ENV=development
@@ -494,10 +502,10 @@ MusicSim provides a comprehensive REST API for game state management, user authe
 | Endpoint | Method | Purpose | Auth Required |
 |----------|--------|---------|---------------|
 | `/api/auth/register` | POST | Create new user account | No |
-| `/api/auth/login` | POST | User login (returns JWT) | No |
+| `/api/auth/login` | POST | User login (OAuth) | No |
 | `/api/auth/google` | GET | OAuth with Google | No |
 | `/api/auth/logout` | POST | User logout | Yes |
-| `/api/auth/validate` | GET | Validate JWT token | Yes |
+| `/api/auth/me` | GET | Get current user profile | Yes |
 
 **Game State Management**
 | Endpoint | Method | Purpose | Auth Required |
@@ -531,14 +539,15 @@ MusicSim provides a comprehensive REST API for game state management, user authe
 
 ### Authentication
 
-API uses JWT (JSON Web Tokens) for authentication:
+API uses Supabase OAuth tokens for authentication:
 
-1. Login via `/api/auth/login` to receive a token
+1. Login via Google OAuth to receive a Supabase access token
 2. Include token in subsequent requests:
    ```
-   Authorization: Bearer <your_jwt_token>
+   Authorization: Bearer <your_supabase_access_token>
    ```
-3. Tokens expire after 7 days (configurable)
+3. Tokens are managed by Supabase Auth and expire based on Supabase settings
+4. Frontend automatically handles token refresh
 
 ### Rate Limiting
 
@@ -579,9 +588,7 @@ The application is deployed using the following infrastructure:
 1. Deployed directly from the `backend/` directory
 2. Environment variables configured in Render dashboard:
    - `DATABASE_URL` (Supabase connection string)
-   - `JWT_SECRET`
    - `NODE_ENV=production`
-   - `SESSION_SECRET`
 3. Migrations run automatically on deployment via `npm start`
 4. Backend API health check: `/api/health`
 
@@ -731,9 +738,10 @@ npm run dev:frontend
 - Ensure IP is whitelisted in Supabase (or allow all for development)
 
 **Authentication not working:**
-- Check `JWT_SECRET` is set in `backend/.env`
+- Verify Supabase project is active and accessible
+- Check OAuth provider configuration in Supabase dashboard
 - Clear browser cookies and localStorage
-- Verify token expiration settings
+- Verify Supabase environment variables are set correctly
 
 **Build fails:**
 ```bash

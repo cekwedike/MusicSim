@@ -14,12 +14,21 @@ The backend serves as the central data management system for MusicSim, handling:
 - Learning analytics and performance insights
 - Achievement system and milestone tracking
 
+### Production Optimization
+
+The backend has been optimized for production deployment with:
+- **Error-Only Logging**: Production mode suppresses debug/info logs, only critical errors are logged
+- **Performance Monitoring**: Optimized query patterns and response times
+- **Security Hardening**: Rate limiting, Supabase token validation, and input sanitization
+- **Efficient Data Management**: Indexed queries and connection pooling for high performance
+- **Graceful Error Handling**: Comprehensive error boundaries prevent service disruption
+
 ## Technology Stack
 
 - **Runtime**: Node.js (v16+)
 - **Framework**: Express.js with middleware stack
 - **Database**: PostgreSQL with Sequelize ORM
-- **Authentication**: JWT (JSON Web Tokens)
+- **Authentication**: Supabase OAuth (Google)
 - **Documentation**: Swagger/OpenAPI 3.0
 - **Validation**: Express-validator middleware
 - **Error Handling**: Centralized error management
@@ -51,7 +60,6 @@ DB_PORT=5432
 DB_NAME=musicsim
 DB_USER=your_username
 DB_PASSWORD=your_password
-JWT_SECRET=your_super_secret_jwt_key
 NODE_ENV=development
 PORT=3001
 ```
@@ -74,7 +82,7 @@ The server will be available at http://localhost:3001
 
 The comprehensive API documentation includes:
 - Complete endpoint specifications with request/response schemas
-- Authentication examples with JWT token handling
+- Authentication examples with Supabase OAuth token handling
 - Interactive testing interface for all endpoints
 - Detailed data model definitions and relationships
 - Error response codes and troubleshooting guides
@@ -201,8 +209,8 @@ npm run test:coverage
 
 ## Security Features
 
-- **JWT Authentication**: Secure token-based authentication
-- **Password Hashing**: bcrypt for secure password storage
+- **Supabase OAuth**: Secure token-based authentication via Google OAuth
+- **Password Hashing**: bcrypt for secure password storage (if needed)
 - **Rate Limiting**: Protection against API abuse
 - **CORS Configuration**: Controlled cross-origin requests
 - **Input Validation**: Comprehensive request validation
@@ -229,10 +237,6 @@ DB_NAME=musicsim_production
 DB_USER=production_user
 DB_PASSWORD=secure_password
 
-# Security
-JWT_SECRET=production_jwt_secret
-JWT_EXPIRES_IN=7d
-
 # Server Configuration
 NODE_ENV=production
 PORT=3001
@@ -252,11 +256,27 @@ FRONTEND_URL=https://www.musicsim.net
 
 ## Monitoring and Logging
 
-- **Error Logging**: Comprehensive error tracking and reporting
-- **Access Logs**: Request/response logging for debugging
+### Production Logging Strategy
+
+The backend implements environment-aware logging:
+- **Development Mode**: Verbose logging for debugging (console.log, console.warn, console.error)
+- **Production Mode**: Error-only logging to reduce noise and improve performance
+- **Structured Logging**: Consistent log format for parsing and analysis
+
+### Logging Levels
+
+- **Error Logging**: Comprehensive error tracking and reporting (always active)
+- **Access Logs**: Request/response logging for debugging (development only)
 - **Performance Metrics**: Response time and throughput monitoring
 - **Database Monitoring**: Query performance and connection health
 - **Health Check Endpoint**: `/api/health` for uptime monitoring
+
+### Log Management
+
+- Production logs are structured for integration with monitoring tools
+- Error logs include stack traces and context for debugging
+- Performance logs help identify bottlenecks and optimize queries
+- Access logs respect user privacy and data protection regulations
 
 ## Contributing Guidelines
 

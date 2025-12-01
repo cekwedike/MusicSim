@@ -56,21 +56,6 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // JWT errors (backup in case they're not caught in auth middleware)
-  if (err.name === 'JsonWebTokenError') {
-    return res.status(401).json({
-      success: false,
-      message: 'Invalid authentication token'
-    });
-  }
-
-  if (err.name === 'TokenExpiredError') {
-    return res.status(401).json({
-      success: false,
-      message: 'Authentication token expired'
-    });
-  }
-
   // Validation errors from express-validator (if used later)
   if (err.type === 'validation') {
     return res.status(400).json({

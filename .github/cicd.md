@@ -1,16 +1,27 @@
 # CI/CD Configuration Guide for MusicSim
 
-This document outlines the CI/CD pipeline setup for MusicSim and how to configure it properly.
+_Last Updated: December 1, 2025_
+
+This document outlines the CI/CD pipeline setup for MusicSim and configuration instructions.
 
 ## 📋 Overview
 
-MusicSim uses GitHub Actions for CI/CD with the following workflows:
+MusicSim uses **GitHub Actions** for automated CI/CD with the following workflows:
 
-- **Continuous Integration (CI)** - Runs tests and builds on every push/PR
-- **Continuous Deployment (CD)** - Deploys to production on main branch
-- **Pull Request Validation** - Validates and creates preview deployments for PRs
-- **Security Scanning** - Regular security audits and vulnerability checks
-- **Maintenance** - Weekly automated maintenance and health checks
+### Active Workflows
+
+- **ci.yml** - Continuous Integration (tests and builds on every push/PR)
+- **cd.yml** - Continuous Deployment (deploys to production on main branch)
+- **pr.yml** - Pull Request Validation (validates and creates preview deployments)
+- **security.yml** - Security Scanning (regular audits and vulnerability checks)
+- **maintenance.yml** - Automated Maintenance (weekly health checks and updates)
+- **test-pipeline.yml** - Comprehensive Test Suite (full test matrix execution)
+
+### Deployment Targets
+
+- **Frontend**: Vercel (www.musicsim.net)
+- **Backend**: Render (API endpoint)
+- **Database**: Supabase (managed PostgreSQL)
 
 ## 🔧 Required Secrets Configuration
 
@@ -95,30 +106,64 @@ DISCORD_WEBHOOK=your_discord_webhook_url (for notifications)
 
 ## 🔄 Workflow Triggers
 
-### CI Workflow (`ci.yml`)
-- **Triggers:** Push to main/develop, PRs to main/develop
-- **Jobs:** Frontend build/test, Backend build/test, Security audit, Integration tests
-- **Duration:** ~10-15 minutes
-
-### CD Workflow (`cd.yml`)
-- **Triggers:** Push to main (after CI success)
-- **Jobs:** Deploy frontend (Vercel), Deploy backend (Render), Post-deployment tests
+### CI Workflow (ci.yml)
+- **Triggers:** Push to any branch, Pull requests to main
+- **Jobs:** 
+  - Frontend build and test (Vitest)
+  - Backend build and test (Jest)
+  - TypeScript type checking
+  - Lint and code quality checks
 - **Duration:** ~5-10 minutes
+- **Artifacts:** Test results, coverage reports
 
-### PR Workflow (`pr.yml`)
-- **Triggers:** PR opened/updated
-- **Jobs:** Validation, Preview deployment, Change analysis
-- **Duration:** ~8-12 minutes
-
-### Security Workflow (`security.yml`)
-- **Triggers:** Push to main, PRs, Tuesday 3 AM UTC (scheduled)
-- **Jobs:** Dependency scan, Secret detection, Code security analysis
+### CD Workflow (cd.yml)
+- **Triggers:** Push to main branch (after CI success)
+- **Jobs:**
+  - Deploy frontend to Vercel
+  - Deploy backend to Render
+  - Run database migrations
+  - Post-deployment health checks
 - **Duration:** ~5-8 minutes
+- **Artifacts:** Deployment logs, build outputs
 
-### Maintenance Workflow (`maintenance.yml`)
-- **Triggers:** Sunday 2 AM UTC (scheduled), Manual dispatch
-- **Jobs:** Dependency updates, Performance monitoring, Documentation updates
+### PR Workflow (pr.yml)
+- **Triggers:** Pull request opened, synchronized, reopened
+- **Jobs:**
+  - Code validation and linting
+  - Test execution
+  - Preview deployment (Vercel)
+  - Change impact analysis
+- **Duration:** ~8-12 minutes
+- **Artifacts:** Preview URL, test results
+
+### Security Workflow (security.yml)
+- **Triggers:** Push to main, Pull requests, Scheduled (weekly)
+- **Jobs:**
+  - npm audit for vulnerabilities
+  - Dependency scanning
+  - Secret detection
+  - SAST (Static Application Security Testing)
 - **Duration:** ~3-5 minutes
+- **Artifacts:** Security reports
+
+### Maintenance Workflow (maintenance.yml)
+- **Triggers:** Scheduled (weekly), Manual dispatch
+- **Jobs:**
+  - Dependency updates check
+  - Health monitoring
+  - Database backup verification
+  - Performance benchmarking
+- **Duration:** ~3-5 minutes
+- **Artifacts:** Maintenance reports
+
+### Test Pipeline (test-pipeline.yml)
+- **Triggers:** Push to main, Pull requests
+- **Jobs:**
+  - Comprehensive test suite execution
+  - Integration tests
+  - Coverage reporting
+- **Duration:** ~5-8 minutes
+- **Artifacts:** Test coverage reports
 
 ## 🏗️ Deployment Strategy
 
@@ -234,5 +279,4 @@ If you encounter issues:
 
 ---
 
-**Last Updated:** November 11, 2025
-**Version:** 1.0.0
+**CI/CD Version:** 2.0.0

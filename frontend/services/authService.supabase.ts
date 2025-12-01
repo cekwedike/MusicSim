@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import api from './api';
 import storage from './dbStorage';
+import { logger } from '../utils/logger';
 
 // Allowed redirect URLs for OAuth (security measure)
 const ALLOWED_REDIRECT_URLS = [
@@ -104,7 +105,7 @@ export const authServiceSupabase = {
 
       return { success: true };
     } catch (error: any) {
-      console.error('[authService] Google sign-in error:', error);
+      logger.error('[authService] Google sign-in error:', error);
       throw error;
     }
   },
@@ -116,7 +117,7 @@ export const authServiceSupabase = {
       // Only clear Supabase auth data, not guest data
       localStorage.removeItem('musicsim_auth');
     } catch (error) {
-      console.error('[authService] Logout error:', error);
+      logger.error('[authService] Logout error:', error);
       // Even if signOut fails, try to clear local auth data
       localStorage.removeItem('musicsim_auth');
       throw error;
@@ -136,7 +137,7 @@ export const authServiceSupabase = {
       const response = await api.get<ApiResponse<{ user: User }>>('/auth/me');
       return response.data;
     } catch (error: any) {
-      console.error('[authService] Get current user error:', error);
+      logger.error('[authService] Get current user error:', error);
       throw error;
     }
   },
@@ -207,7 +208,7 @@ export const authServiceSupabase = {
       const response = await api.post<ApiResponse<{ user: User }>>('/auth/sync-profile', data);
       return response.data;
     } catch (error: any) {
-      console.error('[authService] Sync profile error:', error);
+      logger.error('[authService] Sync profile error:', error);
       throw error;
     }
   },
@@ -230,7 +231,7 @@ export const authServiceSupabase = {
       const response = await api.patch<ApiResponse<{ user: User }>>('/auth/profile', data);
       return response.data;
     } catch (error: any) {
-      console.error('[authService] Update profile error:', error);
+      logger.error('[authService] Update profile error:', error);
       throw error;
     }
   },
@@ -253,7 +254,7 @@ export const authServiceSupabase = {
         message: response.data?.message || 'Account deleted successfully'
       };
     } catch (error: any) {
-      console.error('[authService] Delete account error:', error);
+      logger.error('[authService] Delete account error:', error);
 
       // If backend fails but we want to clear local data anyway
       const errorMessage = error?.response?.data?.message || error.message || 'Failed to delete account';
@@ -318,7 +319,7 @@ export const authServiceSupabase = {
         url: publicUrl
       };
     } catch (error: any) {
-      console.error('[authService] Upload profile image error:', error);
+      logger.error('[authService] Upload profile image error:', error);
       return {
         success: false,
         error: error.message || 'Failed to upload image'
@@ -355,7 +356,7 @@ export const authServiceSupabase = {
         message: 'Username updated successfully'
       };
     } catch (error: any) {
-      console.error('[authService] Update username error:', error);
+      logger.error('[authService] Update username error:', error);
       return {
         success: false,
         message: error.message || 'Failed to update username'
@@ -386,7 +387,7 @@ export const authServiceSupabase = {
         message: response.data.message || 'Guest data synced successfully'
       };
     } catch (error: any) {
-      console.error('[authService] Sync guest data error:', error);
+      logger.error('[authService] Sync guest data error:', error);
       return {
         success: false,
         message: error.response?.data?.message || error.message || 'Failed to sync guest data'

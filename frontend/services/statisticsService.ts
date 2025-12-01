@@ -2,6 +2,7 @@ import type { GameStatistics, GameState, CareerHistory } from '../types';
 import { toGameDate } from '../src/utils/dateUtils';
 import api from './api';
 import storage from './dbStorage';
+import { logger } from '../utils/logger';
 
 export const loadStatistics = async (): Promise<GameStatistics> => {
   const saved = await storage.getItem('musicsim_statistics');
@@ -11,7 +12,7 @@ export const loadStatistics = async (): Promise<GameStatistics> => {
   try {
     return JSON.parse(saved);
   } catch (error) {
-    console.error('Failed to load statistics:', error);
+    logger.error('Failed to load statistics:', error);
     return getDefaultStatistics();
   }
 };
@@ -63,7 +64,7 @@ export const saveStatistics = async (stats: GameStatistics): Promise<void> => {
   try {
     await storage.setItem('musicsim_statistics', JSON.stringify(stats));
   } catch (error) {
-    console.error('Failed to save statistics:', error);
+    logger.error('Failed to save statistics:', error);
   }
 };
 
@@ -123,7 +124,7 @@ export const loadCareerHistories = async (): Promise<CareerHistory[]> => {
   try {
     return JSON.parse(saved);
   } catch (error) {
-    console.error('Failed to load career histories:', error);
+    logger.error('Failed to load career histories:', error);
     return [];
   }
 };
@@ -149,14 +150,14 @@ export const saveCareerHistory = async (career: CareerHistory): Promise<void> =>
         achievements: career.achievementsEarned,
         finalScore: career.peakCareerProgress || 0
       });
-      console.log('Career history saved to database');
+      logger.log('Career history saved to database');
     } catch (apiError: any) {
       // API errors are handled by the api interceptor (offline queue, etc.)
-      console.warn('Failed to sync career history to database:', apiError?.message || apiError);
+      logger.warn('Failed to sync career history to database:', apiError?.message || apiError);
       // Don't throw - the localStorage save succeeded
     }
   } catch (error) {
-    console.error('Failed to save career history:', error);
+    logger.error('Failed to save career history:', error);
   }
 };
 

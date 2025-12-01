@@ -2187,7 +2187,17 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                     try {
                         await saveGame(state, 'quicksave', isGuestMode);
                         console.log('Quick save created: quicksave');
-                        toast.show('Quick Save successful!', 'success', 2500);
+                        // Show unlock notification style for quick save
+                        setUnlockNotifications(prev => [...prev, {
+                            id: `quicksave-${Date.now()}`,
+                            title: 'Quick Save Complete!',
+                            description: 'Your progress has been saved successfully.',
+                            icon: (
+                                <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
+                                </svg>
+                            )
+                        }]);
                     } catch (error) {
                         console.error('Quick save failed:', error);
                         toast.show('Quick Save failed. Please try again.', 'error', 4000);

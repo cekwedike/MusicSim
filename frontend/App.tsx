@@ -2160,9 +2160,10 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
         {
             key: 'Escape',
             handler: () => {
-                // Close modals and sidebar
+                // Close modals and sidebar (check all modal states)
                 if (showShortcutsHelp) setShowShortcutsHelp(false);
                 else if (showMistakeWarning) setShowMistakeWarning(false);
+                else if (state.modal !== 'none') dispatch({ type: 'CLOSE_MODAL' });
                 else if (activeSidebarView) setActiveSidebarView(null);
                 else if (isMobileSidebarOpen) setIsMobileSidebarOpen(false);
             },

@@ -519,11 +519,17 @@ export const getAllSaves = async (): Promise<{ [key: string]: SaveData }> => {
  */
 export const cleanupExpiredAutosaves = async (): Promise<void> => {
   const saves = await loadLocalSaves();
-  const autoSave = saves['auto'];
   
-  if (autoSave && isAutosaveExpired(autoSave.timestamp)) {
-    logger.log('Cleaning up expired autosave...');
-    await deleteSave('auto');
+  // Check all saves for expired autosaves (career-prefixed or legacy)
+  for (const [slotId, saveData] of Object.entries(saves)) {
+    // Parse career slot ID to check if it's an autosave
+    const parsed = parseCareerSlotId(slotId);
+    const isAutosave = parsed ? parsed.slotId === 'auto' : slotId === 'auto';
+    
+    if (isAutosave && isAutosaveExpired(saveData.timestamp)) {
+      logger.log(`Cleaning up expired autosave: ${slotId}...`);
+      await deleteSave(slotId);
+    }
   }
 };
 
@@ -532,23 +538,44 @@ export const cleanupExpiredAutosaves = async (): Promise<void> => {
  */
 export const hasValidAutosave = async (): Promise<boolean> => {
   const saves = await loadLocalSaves();
-  const autoSave = saves['auto'];
   
-  if (!autoSave) return false;
+  // Check for any autosave (career-prefixed or legacy)
+  for (const [slotId, saveData] of Object.entries(saves)) {
+    // Parse career slot ID to check if it's an autosave
+    const parsed = parseCareerSlotId(slotId);
+    const isAutosave = parsed ? parsed.slotId === 'auto' : slotId === 'auto';
+    
+    if (isAutosave && !isAutosaveExpired(saveData.timestamp)) {
+      return true;
+    }
+  }
   
-  return !isAutosaveExpired(autoSave.timestamp);
+  return false;
 };
 
 /**
- * Get autosave age in minutes
+ * Get autosave age in minutes (returns the newest autosave if multiple exist)
  */
 export const getAutosaveAge = async (): Promise<number | null> => {
   const saves = await loadLocalSaves();
-  const autoSave = saves['auto'];
+  let newestAutosaveTimestamp: number | null = null;
   
-  if (!autoSave) return null;
+  // Find the newest autosave among all careers
+  for (const [slotId, saveData] of Object.entries(saves)) {
+    // Parse career slot ID to check if it's an autosave
+    const parsed = parseCareerSlotId(slotId);
+    const isAutosave = parsed ? parsed.slotId === 'auto' : slotId === 'auto';
+    
+    if (isAutosave) {
+      if (newestAutosaveTimestamp === null || saveData.timestamp > newestAutosaveTimestamp) {
+        newestAutosaveTimestamp = saveData.timestamp;
+      }
+    }
+  }
   
-  return Math.round((Date.now() - autoSave.timestamp) / 60000);
+  if (newestAutosaveTimestamp === null) return null;
+  
+  return Math.round((Date.now() - newestAutosaveTimestamp) / 60000);
 };
 
 /**

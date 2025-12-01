@@ -29,7 +29,10 @@ export const useKeyboardShortcuts = (shortcuts: KeyboardShortcutConfig[]) => {
         const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();
 
         if (ctrlMatch && altMatch && shiftMatch && keyMatch) {
-          event.preventDefault();
+          // Always prevent default for modifier key combinations to avoid browser shortcuts
+          if (shortcut.ctrl || shortcut.alt || shortcut.shift) {
+            event.preventDefault();
+          }
           shortcut.handler();
           break;
         }

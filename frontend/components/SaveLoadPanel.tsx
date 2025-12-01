@@ -236,21 +236,9 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
         <div className="space-y-4">
           {/* Save Slot Counter */}
           <div className="bg-[#3D1820]/30 border border-[#4D1F2A] rounded-lg p-3">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-300">Manual Save Slots</span>
               <span className="text-sm font-bold text-white">{getManualSaveStats().used} / {getManualSaveStats().total}</span>
-            </div>
-            <div className="flex gap-1">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`flex-1 h-2 rounded ${
-                    i < getManualSaveStats().used
-                      ? 'bg-red-600'
-                      : 'bg-[#2D1115]'
-                  }`}
-                />
-              ))}
             </div>
             <p className="text-xs text-gray-400 mt-2">
               {getManualSaveStats().available > 0
@@ -258,7 +246,8 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                 : 'All manual save slots full'}
             </p>
           </div>
-\n          {!showSaveInput ? (
+
+          {!showSaveInput ? (
             <button
               onClick={() => setShowSaveInput(true)}
               disabled={loading}
@@ -367,21 +356,28 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                         <h4 className="font-semibold text-white text-base truncate">
                           {getSaveName(slot.id)}
                         </h4>
-                        {slot.id === 'auto' && (
-                          <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
-                            AUTO
-                          </span>
-                        )}
-                        {slot.id === 'quicksave' && (
-                          <span className="bg-green-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
-                            QUICK
-                          </span>
-                        )}
-                        {slot.id !== 'auto' && slot.id !== 'quicksave' && (
-                          <span className="bg-purple-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
-                            MANUAL
-                          </span>
-                        )}
+                        {(() => {
+                          const slotType = slot.id.split('_').pop();
+                          if (slotType === 'auto') {
+                            return (
+                              <span className="bg-blue-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
+                                AUTO
+                              </span>
+                            );
+                          }
+                          if (slotType === 'quicksave') {
+                            return (
+                              <span className="bg-green-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
+                                QUICK
+                              </span>
+                            );
+                          }
+                          return (
+                            <span className="bg-purple-600 text-white text-xs px-2 py-0.5 rounded flex-shrink-0">
+                              MANUAL
+                            </span>
+                          );
+                        })()}
                       </div>
                       <p className="text-sm text-gray-300 mb-0.5">{slot.artistName}</p>
                       <p className="text-xs text-gray-400">{slot.genre}</p>
@@ -415,15 +411,21 @@ const SaveLoadPanel: React.FC<SaveLoadPanelProps> = ({ onLoadGame, currentGameSt
                       >
                         Load
                       </button>
-                      {slot.id !== 'auto' && slot.id !== 'quicksave' && (
-                        <button
-                          onClick={() => handleDeleteSave(slot.id, slot.artistName)}
-                          disabled={loading}
-                          className="bg-red-600/80 hover:bg-red-600 disabled:bg-[#4D1F2A] text-white px-3 py-1 rounded text-xs font-medium transition-colors"
-                        >
-                          Delete
-                        </button>
-                      )}
+                      {(() => {
+                        const slotType = slot.id.split('_').pop();
+                        if (slotType !== 'auto' && slotType !== 'quicksave') {
+                          return (
+                            <button
+                              onClick={() => handleDeleteSave(slot.id, slot.artistName)}
+                              disabled={loading}
+                              className="bg-red-600/80 hover:bg-red-600 disabled:bg-[#4D1F2A] text-white px-3 py-1 rounded text-xs font-medium transition-colors"
+                            >
+                              Delete
+                            </button>
+                          );
+                        }
+                        return null;
+                      })()}
                     </div>
                   </div>
                 </div>

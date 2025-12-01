@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ artistName, difficulty, onMenuClick, sh
     }, [isNewSystem, autoSaveStatus?.lastSaveTime]);
 
     return (
-        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center bg-gradient-to-r from-red-900 via-rose-900 to-red-900 relative backdrop-blur-sm z-[100]">
+        <header className="py-2 sm:py-3 px-4 sm:px-4 md:px-6 lg:px-8 text-center bg-[#1A0A0F]/95 backdrop-blur-sm relative z-[100]">
             {/* Mobile Menu Button */}
             {showMenuButton && (
                 <button

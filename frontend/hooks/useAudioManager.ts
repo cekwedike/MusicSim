@@ -22,7 +22,7 @@ export const useAudioManager = (): AudioManager => {
         return { ...DEFAULT_AUDIO_STATE, ...parsed };
       }
     } catch (error) {
-      console.error('Failed to load audio preferences:', error);
+      logger.error('Failed to load audio preferences:', error);
     }
     return DEFAULT_AUDIO_STATE;
   };
@@ -57,7 +57,7 @@ export const useAudioManager = (): AudioManager => {
       try {
         await storage.setItem(AUDIO_STORAGE_KEY, JSON.stringify(audioState));
       } catch (error) {
-        console.error('Failed to save audio preferences:', error);
+        logger.error('Failed to save audio preferences:', error);
       }
     };
     savePreferences();
@@ -82,16 +82,16 @@ export const useAudioManager = (): AudioManager => {
           const nextUrl = MUSIC_URLS[nextKey];
           audio.src = nextUrl;
           audio.load();
-          audio.play().catch((e) => console.warn('Playlist autoplay prevented:', e));
+          audio.play().catch((e) => logger.warn('Playlist autoplay prevented:', e));
           setAudioState((prev) => ({ ...prev, currentTrack: nextKey }));
         } catch (e) {
-          console.error('Error rotating background track:', e);
+          logger.error('Error rotating background track:', e);
         }
       });
 
       // Handle audio loading errors
       audio.addEventListener('error', (e) => {
-        console.error('Music loading error:', e);
+        logger.error('Music loading error:', e);
       });
 
       // Handle successful load
@@ -139,7 +139,7 @@ export const useAudioManager = (): AudioManager => {
         audio.preload = 'auto';
 
         audio.addEventListener('error', (e) => {
-          console.error(`Sound effect "${soundKey}" failed to load:`, e);
+          logger.error(`Sound effect "${soundKey}" failed to load:`, e);
         });
 
         soundPoolRef.current.set(soundKey, audio);
@@ -178,7 +178,7 @@ export const useAudioManager = (): AudioManager => {
       } else {
         if (musicAudioRef.current && audioState.currentTrack && isUserInteracted && !audioState.isMusicMuted) {
           musicAudioRef.current.play().catch((error) => {
-            logger.log('Autoplay prevented:', error);
+            logger.warn('Autoplay prevented:', error);
           });
         }
       }
@@ -332,7 +332,7 @@ export const useAudioManager = (): AudioManager => {
   const resumeMusic = useCallback(() => {
     if (musicAudioRef.current && musicAudioRef.current.paused && audioState.currentTrack && isUserInteracted) {
       musicAudioRef.current.play().catch((error) => {
-        console.error('Failed to resume music:', error);
+        logger.error('Failed to resume music:', error);
       });
     }
   }, [audioState.currentTrack, isUserInteracted]);
@@ -436,7 +436,7 @@ export const useAudioManager = (): AudioManager => {
         await fadeMusic(audioState.musicVolume, 1000);
       }
     } catch (error) {
-      console.error(`[Audio Manager] Failed to skip to next track "${nextKey}":`, error);
+      logger.error(`[Audio Manager] Failed to skip to next track "${nextKey}":`, error);
     }
   }, [audioState.musicVolume, audioState.isMusicMuted, fadeMusic]);
 
@@ -478,7 +478,7 @@ export const useAudioManager = (): AudioManager => {
       await fadeMusic(target, 200);
       setAudioState((prev) => ({ ...prev, isMusicDucked: true }));
     } catch (e) {
-      console.error('Error while ducking music:', e);
+      logger.error('Error while ducking music:', e);
     }
   }, [audioState.musicVolume, audioState.isMusicMuted, fadeMusic]);
 
@@ -492,7 +492,7 @@ export const useAudioManager = (): AudioManager => {
       previousMusicVolumeRef.current = null;
       setAudioState((prev) => ({ ...prev, isMusicDucked: false }));
     } catch (e) {
-      console.error('Error while unducking music:', e);
+      logger.error('Error while unducking music:', e);
     }
   }, [audioState.musicVolume, audioState.isMusicMuted, fadeMusic]);
 

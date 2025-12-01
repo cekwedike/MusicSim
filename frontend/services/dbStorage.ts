@@ -61,12 +61,12 @@ export async function getItem(key: string): Promise<string | null> {
       };
 
       request.onerror = () => {
-        console.error('[dbStorage] Error getting item:', key, request.error);
+        logger.error('[dbStorage] Error getting item:', key, request.error);
         reject(request.error);
       };
     });
   } catch (error) {
-    console.error('[dbStorage] Failed to get item:', key, error);
+    logger.error('[dbStorage] Failed to get item:', key, error);
     return null;
   }
 }
@@ -87,12 +87,12 @@ export async function setItem(key: string, value: string): Promise<void> {
       };
 
       request.onerror = () => {
-        console.error('[dbStorage] Error setting item:', key, request.error);
+        logger.error('[dbStorage] Error setting item:', key, request.error);
         reject(request.error);
       };
     });
   } catch (error) {
-    console.error('[dbStorage] Failed to set item:', key, error);
+    logger.error('[dbStorage] Failed to set item:', key, error);
     throw error;
   }
 }
@@ -113,12 +113,12 @@ export async function removeItem(key: string): Promise<void> {
       };
 
       request.onerror = () => {
-        console.error('[dbStorage] Error removing item:', key, request.error);
+        logger.error('[dbStorage] Error removing item:', key, request.error);
         reject(request.error);
       };
     });
   } catch (error) {
-    console.error('[dbStorage] Failed to remove item:', key, error);
+    logger.error('[dbStorage] Failed to remove item:', key, error);
     throw error;
   }
 }
@@ -139,12 +139,12 @@ export async function clear(): Promise<void> {
       };
 
       request.onerror = () => {
-        console.error('[dbStorage] Error clearing store:', request.error);
+        logger.error('[dbStorage] Error clearing store:', request.error);
         reject(request.error);
       };
     });
   } catch (error) {
-    console.error('[dbStorage] Failed to clear store:', error);
+    logger.error('[dbStorage] Failed to clear store:', error);
     throw error;
   }
 }
@@ -165,12 +165,12 @@ export async function getAllKeys(): Promise<string[]> {
       };
 
       request.onerror = () => {
-        console.error('[dbStorage] Error getting all keys:', request.error);
+        logger.error('[dbStorage] Error getting all keys:', request.error);
         reject(request.error);
       };
     });
   } catch (error) {
-    console.error('[dbStorage] Failed to get all keys:', error);
+    logger.error('[dbStorage] Failed to get all keys:', error);
     return [];
   }
 }
@@ -191,7 +191,7 @@ export function isAvailable(): boolean {
  */
 export async function migrateFromLocalStorage(): Promise<void> {
   if (!isAvailable()) {
-    console.warn('[dbStorage] IndexedDB not available, skipping migration');
+    logger.warn('[dbStorage] IndexedDB not available, skipping migration');
     return;
   }
 
@@ -232,7 +232,7 @@ export async function migrateFromLocalStorage(): Promise<void> {
       // keysToMigrate.forEach(key => localStorage.removeItem(key));
     }
   } catch (error) {
-    console.error('[dbStorage] Migration failed:', error);
+    logger.error('[dbStorage] Migration failed:', error);
     throw error;
   }
 }
@@ -258,9 +258,9 @@ export const storage = {
       return localStorage.getItem(key);
     }
     try {
-      return await getItem(key);
+      return getItem(key);
     } catch (error) {
-      console.warn('[dbStorage] Falling back to localStorage for getItem');
+      logger.warn('[dbStorage] Falling back to localStorage for getItem');
       return localStorage.getItem(key);
     }
   },
@@ -271,9 +271,9 @@ export const storage = {
       return;
     }
     try {
-      await setItem(key, value);
+      return setItem(key, value);
     } catch (error) {
-      console.warn('[dbStorage] Falling back to localStorage for setItem');
+      logger.warn('[dbStorage] Falling back to localStorage for setItem');
       localStorage.setItem(key, value);
     }
   },
@@ -286,7 +286,7 @@ export const storage = {
     try {
       await removeItem(key);
     } catch (error) {
-      console.warn('[dbStorage] Falling back to localStorage for removeItem');
+      logger.warn('[dbStorage] Falling back to localStorage for removeItem');
       localStorage.removeItem(key);
     }
   },
@@ -299,7 +299,7 @@ export const storage = {
     try {
       await clear();
     } catch (error) {
-      console.warn('[dbStorage] Falling back to localStorage for clear');
+      logger.warn('[dbStorage] Falling back to localStorage for clear');
       localStorage.clear();
     }
   },

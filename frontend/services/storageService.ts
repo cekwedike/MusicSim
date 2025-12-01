@@ -280,7 +280,7 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
       }
     }
   } catch (error) {
-    console.error('[storageService] Save error:', error);
+    logger.error('[storageService] Save error:', error);
 
     // Fallback to IndexedDB only
     const saves = await loadLocalSaves();
@@ -288,9 +288,9 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
     try {
       const payload = JSON.stringify(saves);
       await storage.setItem('musicsim_saves', payload);
-      console.log(`[storageService] Saved to IndexedDB (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
+      logger.log(`[storageService] Saved to IndexedDB (fallback): ${slotId} at ${new Date(saveData.timestamp).toLocaleTimeString()}`);
     } catch (err) {
-      console.error('[storageService] Fallback: failed to write saves to IndexedDB (stringify error):', err);
+      logger.error('[storageService] Fallback: failed to write saves to IndexedDB (stringify error):', err);
       // Re-throw so callers can surface the error if needed
       throw err;
     }
@@ -302,7 +302,7 @@ export const saveGame = async (state: GameState, slotId: string, isGuestMode: bo
  * Optimized to try localStorage first for better performance
  */
 export const loadGame = async (slotId: string): Promise<GameState | null> => {
-  console.log(`[loadGame] Starting load for slot: ${slotId}`);
+  logger.log(`[loadGame] Starting load for slot: ${slotId}`);
   
   // OPTIMIZATION: Try IndexedDB first for faster loading
   // This prevents the blank screen issue by loading local data immediately
@@ -313,13 +313,13 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
   if (localSaveData) {
     // IMPORTANT: Only autosave ('auto' slot) expires. Manual saves NEVER expire!
     if (slotId === 'auto' && isAutosaveExpired(localSaveData.timestamp)) {
-      console.log(`[loadGame] Local autosave expired (${Math.round((Date.now() - localSaveData.timestamp) / 60000)} minutes old). Deleting...`);
+      logger.log(`[loadGame] Local autosave expired (${Math.round((Date.now() - localSaveData.timestamp) / 60000)} minutes old). Deleting...`);
       await deleteSave(slotId);
       return null;
     }
     
     const localAge = Math.round((Date.now() - localSaveData.timestamp) / 60000);
-    console.log(`[loadGame] Found local save: ${slotId} (${localAge} minutes old)`);
+    logger.log(`[loadGame] Found local save: ${slotId} (${localAge} minutes old)`);
     
     // Return local data immediately for better UX
     const localGameState = deserializeGameState(localSaveData.state);
@@ -336,10 +336,10 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
   try {
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (isAuthenticated) {
-      console.log(`[loadGame] No local save found, trying backend for: ${slotId}`);
+      logger.log(`[loadGame] No local save found, trying backend for: ${slotId}`);
       const response = await gameService.loadGame(slotId);
       if (response.success) {
-        console.log(`[loadGame] Loaded from backend: ${slotId}`);
+        logger.log(`[loadGame] Loaded from backend: ${slotId}`);
         const gameState = deserializeGameState(response.data.gameState);
         
         // Cache to IndexedDB for future fast access
@@ -350,16 +350,16 @@ export const loadGame = async (slotId: string): Promise<GameState | null> => {
         };
         saves[slotId] = saveData;
         await storage.setItem('musicsim_saves', JSON.stringify(saves));
-        console.log(`[loadGame] Cached backend save to IndexedDB: ${slotId}`);
+        logger.log(`[loadGame] Cached backend save to IndexedDB: ${slotId}`);
         
         return gameState;
       }
     }
   } catch (error) {
-    console.error(`[loadGame] Backend load failed for ${slotId}:`, error);
+    logger.error(`[loadGame] Backend load failed for ${slotId}:`, error);
   }
   
-  console.log(`[loadGame] No save found: ${slotId}`);
+  logger.log(`[loadGame] No save found: ${slotId}`);
   return null;
 };
 
@@ -378,7 +378,7 @@ const syncWithBackendAsync = async (slotId: string, localSaveData: SaveData) => 
       
       // If backend has newer data, update local storage
       if (backendTimestamp > localTimestamp) {
-        console.log(`[syncWithBackendAsync] Backend has newer save for ${slotId}, updating local cache`);
+        logger.log(`[syncWithBackendAsync] Backend has newer save for ${slotId}, updating local cache`);
         const saves = await loadLocalSaves();
         saves[slotId] = {
           state: response.data.gameState,
@@ -389,7 +389,7 @@ const syncWithBackendAsync = async (slotId: string, localSaveData: SaveData) => 
       }
     }
   } catch (error) {
-    console.log(`[syncWithBackendAsync] Background sync failed for ${slotId}:`, error);
+    logger.log(`[syncWithBackendAsync] Background sync failed for ${slotId}:`, error);
     // Fail silently - this is just background optimization
   }
 };
@@ -398,37 +398,37 @@ const syncWithBackendAsync = async (slotId: string, localSaveData: SaveData) => 
  * Delete game from both backend and localStorage
  */
 export const deleteSave = async (slotId: string): Promise<void> => {
-  console.log(`[storageService] deleteSave called for: ${slotId}`);
+  logger.log(`[storageService] deleteSave called for: ${slotId}`);
   
   try {
     // Delete from backend if authenticated
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
     if (isAuthenticated) {
-      console.log(`[storageService] User authenticated, deleting from backend...`);
+      logger.log(`[storageService] User authenticated, deleting from backend...`);
       
       try {
         // Use the direct slotName-based delete (more reliable, no need to fetch all saves first)
         const deleteResponse = await gameService.deleteSaveBySlotName(slotId);
-        console.log(`[storageService] Backend delete response:`, deleteResponse);
+        logger.log(`[storageService] Backend delete response:`, deleteResponse);
         
         if (deleteResponse.success) {
-          console.log(`[storageService] ✅ Deleted from backend: ${slotId}`);
+          logger.log(`[storageService] ✅ Deleted from backend: ${slotId}`);
         } else {
-          console.error(`[storageService] ❌ Backend delete failed:`, deleteResponse);
+          logger.error(`[storageService] ❌ Backend delete failed:`, deleteResponse);
         }
       } catch (error: any) {
         // If save not found in backend (404), that's okay - it might have been deleted already
         if (error.response?.status === 404) {
-          console.log(`[storageService] ℹ️ Save ${slotId} not found in backend (might be already deleted)`);
+          logger.log(`[storageService] ℹ️ Save ${slotId} not found in backend (might be already deleted)`);
         } else {
-          console.error('[storageService] ❌ Error deleting from backend:', error);
+          logger.error('[storageService] ❌ Error deleting from backend:', error);
         }
       }
     } else {
-      console.log(`[storageService] Not authenticated, skipping backend delete`);
+      logger.log(`[storageService] Not authenticated, skipping backend delete`);
     }
   } catch (error) {
-    console.error('[storageService] ❌ Error in deleteSave:', error);
+    logger.error('[storageService] ❌ Error in deleteSave:', error);
     // Don't throw - still delete from IndexedDB
   }
 
@@ -436,7 +436,7 @@ export const deleteSave = async (slotId: string): Promise<void> => {
   const saves = await loadLocalSaves();
   delete saves[slotId];
   await storage.setItem('musicsim_saves', JSON.stringify(saves));
-  console.log(`[storageService] ✅ Deleted from IndexedDB: ${slotId}`);
+  logger.log(`[storageService] ✅ Deleted from IndexedDB: ${slotId}`);
 };
 
 /**
@@ -454,7 +454,7 @@ export const cleanupExpiredAutosaves = async (): Promise<void> => {
   const autoSave = saves['auto'];
   
   if (autoSave && isAutosaveExpired(autoSave.timestamp)) {
-    console.log('Cleaning up expired autosave...');
+    logger.log('Cleaning up expired autosave...');
     await deleteSave('auto');
   }
 };
@@ -493,7 +493,7 @@ const loadLocalSaves = async (): Promise<{ [key: string]: SaveData }> => {
   try {
     return JSON.parse(saved);
   } catch (error) {
-    console.error('Error parsing saves:', error);
+    logger.error('Error parsing saves:', error);
     return {};
   }
 };
@@ -515,37 +515,37 @@ async function cleanOrphanedLocalSaves(backendSaveIds: string[]): Promise<void> 
   );
   
   if (orphanedSaves.length > 0) {
-    console.log('[storageService] Found', orphanedSaves.length, 'orphaned local saves (deleted on another device):', orphanedSaves);
+    logger.log('[storageService] Found', orphanedSaves.length, 'orphaned local saves (deleted on another device):', orphanedSaves);
     
     for (const slotId of orphanedSaves) {
       try {
-        console.log(`[storageService] Removing orphaned local save: ${slotId}`);
+        logger.log(`[storageService] Removing orphaned local save: ${slotId}`);
         delete localSaves[slotId];
       } catch (error) {
-        console.error(`[storageService] Failed to remove orphaned save ${slotId}:`, error);
+        logger.error(`[storageService] Failed to remove orphaned save ${slotId}:`, error);
       }
     }
     
     // Save cleaned up saves back to IndexedDB
     try {
       await storage.setItem('musicsim_saves', JSON.stringify(localSaves));
-      console.log('[storageService] ✅ Cleaned up', orphanedSaves.length, 'orphaned local saves');
+      logger.log('[storageService] ✅ Cleaned up', orphanedSaves.length, 'orphaned local saves');
     } catch (error) {
-      console.error('[storageService] Failed to save cleaned IndexedDB:', error);
+      logger.error('[storageService] Failed to save cleaned IndexedDB:', error);
     }
   }
 }
 
 export async function getAllSaveSlots(): Promise<SaveSlot[]> {
-  console.log('[storageService] getAllSaveSlots called');
+  logger.log('[storageService] getAllSaveSlots called');
   const saveSlots: SaveSlot[] = [];
 
   try {
     // Try to get saves from backend if authenticated (with 5s timeout - faster!)
     const isAuthenticated = await authServiceSupabase.isAuthenticated();
-    console.log('[storageService] Authentication status:', isAuthenticated);
+    logger.log('[storageService] Authentication status:', isAuthenticated);
     if (isAuthenticated) {
-      console.log('[storageService] User authenticated, loading from backend...');
+      logger.log('[storageService] User authenticated, loading from backend...');
       try {
         // Race against a 5 second timeout (reduced from 10s)
         const response = await Promise.race([

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { logger } from '../utils/logger';
 
 // Add TypeScript declarations for import.meta.env (Vite)
 declare global {
@@ -19,7 +20,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Validate that environment variables are set
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials not found. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env file.');
+  logger.warn('Supabase credentials not found. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env file.');
 }
 
 // Create Supabase client
@@ -39,7 +40,7 @@ export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
 export const getCurrentUser = async () => {
   const { data: { user }, error } = await supabase.auth.getUser();
   if (error) {
-    console.error('Error getting current user:', error);
+    logger.error('Error getting current user:', error);
     return null;
   }
   return user;
@@ -49,7 +50,7 @@ export const getCurrentUser = async () => {
 export const getCurrentSession = async () => {
   const { data: { session }, error } = await supabase.auth.getSession();
   if (error) {
-    console.error('Error getting session:', error);
+    logger.error('Error getting session:', error);
     return null;
   }
   return session;

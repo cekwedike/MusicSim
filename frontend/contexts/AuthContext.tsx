@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../services/supabase';
 import authServiceSupabase, { type User } from '../services/authService.supabase';
+import { logger } from '../utils/logger';
 
 interface AuthContextType {
   user: User | null;
@@ -86,14 +87,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         // If user signed in with Google and doesn't have a profile image yet, use Google image
         if (authProvider === 'google' && googleImageUrl && !backendUser.profileImage) {
-          console.log('[AuthContext] Setting Google profile image for OAuth user');
+          logger.log('[AuthContext] Setting Google profile image for OAuth user');
           try {
             // Update profile with Google image (background, don't wait)
             authServiceSupabase.updateProfile({ profileImage: googleImageUrl }).then(() => {
               setUser(prev => prev ? { ...prev, profileImage: googleImageUrl } : prev);
-            }).catch(console.error);
+            }).catch(logger.error);
           } catch (error) {
-            console.error('[AuthContext] Failed to set Google profile image:', error);
+            logger.error('[AuthContext] Failed to set Google profile image:', error);
           }
         }
       } else {
@@ -109,12 +110,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           profileImage,
           authProvider
         }).catch(err => {
-          console.warn('[AuthContext] Background profile sync failed:', err);
+          logger.warn('[AuthContext] Background profile sync failed:', err);
         });
       }
     } catch (error) {
       // Backend is slow/unavailable (likely cold start on free tier), but user is already set with Supabase data
-      console.log('[AuthContext] Backend profile sync skipped (using Supabase data):', error instanceof Error ? error.message : error);
+      logger.log('[AuthContext] Backend profile sync skipped (using Supabase data):', error instanceof Error ? error.message : error);
     }
   }, []);
 
@@ -134,7 +135,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const errorDescription = params.get('error_description') || hashParams.get('error_description');
 
         if (errorParam) {
-          console.error('[AuthContext] Auth error:', errorParam, errorCode, errorDescription);
+          logger.error('[AuthContext] Auth error:', errorParam, errorCode, errorDescription);
 
           // Clean up the URL by removing error parameters
           const cleanUrl = window.location.origin + window.location.pathname;
@@ -171,7 +172,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           await syncUserProfile(session.user);
         }
       } catch (error) {
-        console.error('Error initializing auth:', error);
+        logger.error('Error initializing auth:', error);
         setError('Failed to initialize authentication');
       } finally {
         if (mounted) {
@@ -184,7 +185,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Listen to auth changes (login, logout, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('[AuthContext] Auth state changed:', event);
+      logger.log('[AuthContext] Auth state changed:', event);
 
       if (!mounted) return;
 
@@ -253,9 +254,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Logout from Supabase (this triggers SIGNED_OUT event)
       await authServiceSupabase.logout();
 
-      console.log('[AuthContext] Logout completed successfully');
+      logger.log('[AuthContext] Logout completed successfully');
     } catch (error) {
-      console.warn('Logout error:', error);
+      logger.warn('Logout error:', error);
       // Even if logout fails, clear local state
       setUser(null);
       setToken(null);
@@ -284,13 +285,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (response.success && response.data) {
         // Confirm update with backend data
         setUser(response.data.user);
-        console.log('[AuthContext] Profile updated successfully');
+        logger.log('[AuthContext] Profile updated successfully');
         return true;
       } else {
         throw new Error(response.message || 'Failed to update profile');
       }
     } catch (error) {
-      console.error('[AuthContext] Update profile failed:', error);
+      logger.error('[AuthContext] Update profile failed:', error);
       const message = (error as any)?.message || 'Failed to update profile';
       setError(message);
 
@@ -301,7 +302,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(currentUserResponse.data.user);
         }
       } catch (revertError) {
-        console.warn('[AuthContext] Failed to revert profile update:', revertError);
+        logger.warn('[AuthContext] Failed to revert profile update:', revertError);
       }
 
       return false;
@@ -322,11 +323,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setToken(null);
       setError(null);
 
-      console.log('[AuthContext] Account deleted, state cleared');
+      logger.log('[AuthContext] Account deleted, state cleared');
 
       return result;
     } catch (error) {
-      console.error('[AuthContext] Delete account failed:', error);
+      logger.error('[AuthContext] Delete account failed:', error);
       const message = (error as any)?.message || 'Failed to delete account';
       setError(message);
 

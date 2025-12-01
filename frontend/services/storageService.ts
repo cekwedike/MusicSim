@@ -671,18 +671,13 @@ export async function getStartScreenSaves(): Promise<SaveSlot[]> {
   const autoSave = allSlots.find(s => s.id === 'auto');
   const quickSave = allSlots.find(s => s.id === 'quicksave');
   
-  // If both auto and quicksave exist, keep only the newer one
+  // If both exist, ALWAYS prioritize quicksave (user's intentional save) over autosave
   if (autoSave && quickSave) {
-    if (autoSave.timestamp > quickSave.timestamp) {
-      logger.log('[getStartScreenSaves] Showing autosave (newer than quicksave)');
-      return allSlots.filter(s => s.id !== 'quicksave');
-    } else {
-      logger.log('[getStartScreenSaves] Showing quicksave (newer than autosave)');
-      return allSlots.filter(s => s.id !== 'auto');
-    }
+    logger.log('[getStartScreenSaves] Both exist - showing quicksave, hiding autosave');
+    return allSlots.filter(s => s.id !== 'auto');
   }
   
-  // Return all saves (including the single auto/quicksave if it exists)
+  // If only one exists, show it. If neither exists, show manual saves only
   return allSlots;
 }
 

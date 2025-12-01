@@ -1743,7 +1743,7 @@ const StartScreen: React.FC<{ onStart: () => void, onContinue: (save: GameState)
                 {!loadingSaves && saveSlots.length > 0 && (
                     <div className="mt-4">
                         <h3 className="text-base font-semibold text-gray-300 mb-3 flex items-center justify-between">
-                            <span>Your Careers ({saveSlots.length})</span>
+                            <span>Your Saves ({saveSlots.length})</span>
                             <div className="hidden sm:flex text-xs text-gray-500">
                                 <span>Click to continue | 4 manual + 1 auto/quick slot</span>
                             </div>

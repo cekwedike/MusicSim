@@ -3095,7 +3095,7 @@ const GameApp: React.FC<{ isGuestMode: boolean; onResetToLanding: () => void }> 
                 </Sidebar>
             )}
 
-            <div className={`relative z-10 flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 overflow-y-auto min-h-0 ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
+            <div className={`relative z-10 flex-1 w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col transition-all duration-300 min-h-0 ${status === 'start' || status === 'setup' ? '' : 'overflow-y-auto'} ${artistName ? 'lg:pr-20' : 'lg:px-6'} ${activeSidebarView ? 'lg:pr-[28rem]' : ''}`}>
                 {showDashboard && <Dashboard stats={playerStats} project={null} date={date} currentDate={state.currentDate} currentLabel={state.currentLabel} contractStartDate={state.contractStartDate} onViewContract={state.currentLabel ? () => dispatch({ type: 'VIEW_SIGNED_CONTRACT' }) : undefined} pendingContractOffers={state.pendingContractOffers} currentWeek={(toGameDate(state.currentDate, state.startDate).year - 1) * 48 + (toGameDate(state.currentDate, state.startDate).month - 1) * 4 + toGameDate(state.currentDate, state.startDate).week} onViewPendingOffer={handleOpenOffers} />}
 
                 {/* History section right after stats */}
